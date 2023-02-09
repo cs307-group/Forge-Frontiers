@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 127.0.0.1
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1675921128404
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1675920765955
+  login: 1675921107771
+money: '0'
+last-account-name: BubbleKitty13426
+lastlocation:
+  world: 8129001e-fb9c-4b12-9cd9-bfbcf5dcde0d
+  world-name: world
+  x: 299.30000001192093
+  y: 68.0
+  z: 109.94090205222432
+  yaw: 76.79940032958984
+  pitch: 12.899962425231934
+logoutlocation:
+  world: 8129001e-fb9c-4b12-9cd9-bfbcf5dcde0d
+  world-name: world
+  x: 278.90950647693245
+  y: 68.0
+  z: 117.6705835400752
+  yaw: 24.899871826171875
+  pitch: 20.699975967407227
