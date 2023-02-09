@@ -1,0 +1,5 @@
+MC-Server/bundler/*
+MC-Server/world/*
+MC-Server/world_nether/*
+MC-Server/world_the_end/*
+MC-Server/logs/*
