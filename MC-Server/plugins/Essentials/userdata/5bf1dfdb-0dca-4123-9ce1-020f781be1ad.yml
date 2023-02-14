@@ -1,0 +1,30 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 127.0.0.1
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 0
+  login: 1676350495314
+money: '0'
+last-account-name: Piiro
+lastlocation:
+  world: f3493a3d-6f35-46cd-9f02-1c20089114c8
+  world-name: world
+  x: 217.5
+  y: 71.0
+  z: -152.5
+  yaw: 6.155553340911865
+  pitch: 0.0
