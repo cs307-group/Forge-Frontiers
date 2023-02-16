@@ -1,0 +1,5 @@
+main: com.sample.sample.Sample
+name: SampleTest
+version: 1.0
+description: The test plugin
+api-version: 1.18
