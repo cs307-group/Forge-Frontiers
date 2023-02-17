@@ -53,28 +53,4 @@ public abstract class GearItem extends CustomItem {
         quality = QualityEnum.UNASSIGNED.getQuality();
     }
 
-    /**
-     * onInteract() overridable method from CustomItem
-     *
-     * Defines what occurs when the player used the item to interact, i.e. left or right click with the item
-     * selected in their hotbar
-     *
-     * @param e the PlayerInteractEvent which defines the event which occurred in game
-     */
-    @Override
-    public void onInteract(PlayerInteractEvent e) {
-
-    }
-
-    /**
-     * asItemStack() overridable method from CustomItem
-     *
-     * Returns null, as it is not expected this will ever be called
-     *
-     * @return the in game representation of the item as an ItemStack object
-     */
-    @Override
-    protected ItemStack asItemStack() {
-        return null;
-    }
 }
