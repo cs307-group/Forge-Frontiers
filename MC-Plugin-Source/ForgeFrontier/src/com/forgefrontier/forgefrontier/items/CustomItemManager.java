@@ -4,9 +4,13 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,98 +23,77 @@ public class CustomItemManager implements Listener {
 
     ForgeFrontier plugin;
 
+    // Map of every registered custom item and their respective code.
     Map<String, CustomItem> items;
 
+    // Initialize fields in here. DO NOT ACCESS OTHER MODULES HERE.
     public CustomItemManager(ForgeFrontier plugin) {
         this.plugin = plugin;
         this.items = new HashMap<>();
     }
 
+    // Ran whenever the plugin enabled the module. You can safely access other modules here, but no guarantees data will be in them.
     public void init() {
 
     }
 
+    // Method to run to register a new CustomItem. If not run, the custom item will not be able to be identified.
+    public void registerCustomItem(CustomItem customItem) {
+        this.items.put(customItem.getCode(), customItem);
+    }
+
+    // Check when a player interacts with a custom item, if it's a custom item, run the interact event on it.
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         ItemStack item = e.getItem();
         if(item == null)
             return;
-        CustomItem customItem = asCustomItem(item);
-        if(customItem == null)
+        CustomItemInstance customItemInst = asCustomItemInstance(item);
+        if(customItemInst == null)
             return;
-        customItem.onInteract(e);
+        customItemInst.getBaseItem().onInteract(e, customItemInst);
     }
 
+    // Check when a player attacks with a custom item, if it's a custom item, run the attack event on it.
+    @EventHandler
+    public void onAttack(EntityDamageByEntityEvent e) {
+        if(!(e.getDamager() instanceof Player)) {
+            return;
+        }
+        Player p = (Player) e.getDamager();
+        CustomItemInstance customItemInst = asCustomItemInstance(p.getInventory().getItem(EquipmentSlot.HAND));
+        if(customItemInst == null)
+            return;
+        customItemInst.getBaseItem().onAttack(e, customItemInst);
+    }
+
+    // Get the custom item associated with the specified code.
     public static CustomItem getCustomItem(String code) {
-        //code = code.replaceAll("[0-9a-fl-oA-FL-O]", "_");
         return ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
     }
 
-    public static CustomItem asCustomItem(ItemStack itemStack) {
+    // Convert an ItemStack into a CustomItemInstance of the appropriate custom item.
+    public static CustomItemInstance asCustomItemInstance(ItemStack itemStack) {
         String code = extractCode(itemStack);
         if(code == null)
             return null;
-        System.out.println(code);
-        return ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
+        CustomItem customItem = ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
+        if(customItem == null)
+            return null;
+        return customItem.asInstance(itemStack);
     }
 
-    public static ItemStack asItemStack(CustomItem customItem, int amt) {
-        ItemStack item = customItem.asItemStack();
-        String code = customItem.getCode();
-        /*
-        code = code.replaceAll("[0-9a-fl-oA-FL-O]", "_");
-        String encodedCode = (code + "|").replaceAll("(.)", ChatColor.COLOR_CHAR + "$0");
-        System.out.println(encodedCode);
-        ItemMeta meta = item.getItemMeta();
-        List<String> lore = meta.getLore();
-        if(lore == null) lore = new ArrayList<>();
-        lore.add(encodedCode);
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-         */
-
-        net.minecraft.world.item.ItemStack item2 = CraftItemStack.asNMSCopy(item);
-
-        System.out.println("Code: "+ code);
-        item2.t().a("customitem-code", code);
-
-        item = CraftItemStack.asBukkitCopy(item2);
-
-        item.setAmount(amt);
-
-        return item;
-    }
-
+    // Helper method to get the code from an ItemStack that identifies the custom item it is.
     private static String extractCode(ItemStack itemStack) {
-
         net.minecraft.world.item.ItemStack item2 = CraftItemStack.asNMSCopy(itemStack);
-        return item2.t().l("customitem-code");
-        /*
-        StringBuilder code = new StringBuilder();
-        boolean sectionSeen = false;
-        for(char c: itemStack.getItemMeta().getLore().get(itemStack.getItemMeta().getLore().size() - 1).toCharArray()) {
-            if(c == ChatColor.COLOR_CHAR) {
-                sectionSeen = true;
-                continue;
-            }
-            if(!sectionSeen)
-                return null;
-            if(c == '|') {
-                break;
-            }
-            code.append(c);
-            sectionSeen = false;
+        if(item2.t() == null) {
+            return null;
         }
-        return code.toString();
-         */
+        return item2.t().l("base-code");
     }
 
     public Map<String, CustomItem> getItems() {
         return this.items;
     }
 
-    public void registerCustomItem(CustomItem customItem) {
-        //customItem.code = customItem.getCode().replaceAll("[0-9a-fl-oA-FL-O]", "_");
-        this.items.put(customItem.getCode(), customItem);
-    }
 }

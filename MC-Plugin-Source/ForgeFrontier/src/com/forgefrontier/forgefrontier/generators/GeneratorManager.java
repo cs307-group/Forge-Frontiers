@@ -49,4 +49,9 @@ public class GeneratorManager implements Listener {
     public void addGeneratorInstance(GeneratorInstance generatorInstance) {
         this.generatorInstances.add(generatorInstance);
     }
+
+    public void removeGeneratorInstance(GeneratorInstance generatorInstance) {
+        this.generatorInstances.remove(generatorInstance);
+    }
+
 }

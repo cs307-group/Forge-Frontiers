@@ -4,9 +4,9 @@ import org.bukkit.inventory.Inventory;
 
 public class ConfirmationHolder extends BaseInventoryHolder {
 
-    public ConfirmationHolder(Inventory previousInventory, Runnable confirm) {
+    public ConfirmationHolder(String message, Inventory previousInventory, Runnable confirm) {
         super(27);
-
+        this.fillPanes();
     }
 
 }
