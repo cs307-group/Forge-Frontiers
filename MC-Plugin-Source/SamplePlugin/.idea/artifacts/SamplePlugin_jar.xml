@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="SamplePlugin:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/SamplePlugin_jar</output-path>
+    <output-path>$PROJECT_DIR$/../../MC-Server/plugins</output-path>
     <root id="archive" name="SamplePlugin.jar">
       <element id="module-output" name="SamplePlugin" />
     </root>
