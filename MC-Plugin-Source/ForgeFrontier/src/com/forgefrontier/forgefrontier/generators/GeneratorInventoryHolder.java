@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.generators;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
+import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -31,12 +32,13 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
         ItemMeta meta = removeItem.getItemMeta();
         meta.setDisplayName(ChatColor.RED + "Remove Generator");
 
-        //Inventory baseInventory = this.getInventory();
-        //this.setItem(9+6, (e) -> {
-            //BaseInventoryHolder baseHolder = new BaseInventoryHolder();
-            //baseHolder.fillPanes();
-            // Are you sure?
-        //});
+        Inventory baseInventory = this.getInventory();
+        this.addHandler(9+6, (e) -> {
+            ConfirmationHolder confirmHolder = new ConfirmationHolder("Are you sure you want to pickup this generator?", baseInventory, () -> {
+                ForgeFrontier.getInstance().getGeneratorManager().removeGeneratorInstance(generatorInstance);
+            });
+            e.getWhoClicked().openInventory(confirmHolder.getInventory());
+        });
     }
 
     public void setCollectItem() {

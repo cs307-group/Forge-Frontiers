@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class GeneratorCommandExecutor implements CommandExecutor {
 
@@ -17,7 +18,14 @@ public class GeneratorCommandExecutor implements CommandExecutor {
             return true;
         }
         Player p = (Player) commandSender;
-        p.getInventory().addItem(CustomItemManager.asItemStack(CustomItemManager.getCustomItem("GenPlace-Diamond"), 1));
+        if(strings.length > 2) {
+            ItemStack item = CustomItemManager.getCustomItem("Zombie").asInstance(null).asItemStack();
+            p.getInventory().addItem(item);
+            commandSender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Zombie sword item added to your inventory.");
+            return true;
+        }
+        ItemStack item = CustomItemManager.getCustomItem("GenPlace-Diamond").asInstance(null).asItemStack();
+        p.getInventory().addItem(item);
         commandSender.sendMessage(ForgeFrontier.CHAT_PREFIX + "PlaceGen item added to your inventory.");
 
         return true;

@@ -8,6 +8,4 @@ public class MaterialDrop {
     int amount;
     double chance;
 
-
-
 }
