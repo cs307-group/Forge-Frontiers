@@ -6,6 +6,8 @@ import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ExampleZombieSword;
+import com.forgefrontier.forgefrontier.shop.Shop;
+import com.forgefrontier.forgefrontier.shop.ShopCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
@@ -19,6 +21,7 @@ public class ForgeFrontier extends JavaPlugin {
 
     GeneratorManager generatorManager;
     CustomItemManager customItemManager;
+    Shop itemShop;
 
     @Override
     public void onEnable() {
@@ -31,6 +34,8 @@ public class ForgeFrontier extends JavaPlugin {
 
         this.generatorManager.init();
         this.customItemManager.init();
+        this.itemShop = new Shop();
+
 
         // TODO: Debug code for the Zombie Sword example custom item.
         this.getCustomItemManager().registerCustomItem(new ExampleZombieSword());
@@ -46,6 +51,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand genCmd = Bukkit.getPluginCommand("gen");
         if(genCmd != null)
             genCmd.setExecutor(new GeneratorCommandExecutor());
+        PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
+        if (shopCmd != null)
+            shopCmd.setExecutor(itemShop.getCommandExecutor());
     }
 
     @Override

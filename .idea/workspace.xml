@@ -4,16 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6200e15b-23e0-4f2d-a3ed-b7b0c1da8abb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../ForgeFrontier/ForgeFrontier.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../ForgeFrontier/ForgeFrontier.iml" afterDir="false" />
-    </list>
+    <list default="true" id="7fab69f8-5743-4284-80f5-97fb10bbfa59" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2Lq7Qx6e5cwuGTwC4mAi5gmJzPr" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -25,6 +23,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/MC-Plugin-Source/ForgeFrontier" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.54121304" />

@@ -7,3 +7,5 @@ api-version: 1.18
 commands:
   gen:
     description: "Command for accessing generators."
+  shop:
+    description: "Command for accessing shop GUI."
