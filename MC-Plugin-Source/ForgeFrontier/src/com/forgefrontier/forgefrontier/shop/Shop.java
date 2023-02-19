@@ -1,8 +1,6 @@
 package com.forgefrontier.forgefrontier.shop;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,19 +17,19 @@ public class Shop {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Epic Item");
         item.setItemMeta(meta);
-        create_listing(null,99.99,5,item);
-        shopGUI = new ShopHolder();
+        createListing(null,99.99,5,item);
+        shopGUI = new ShopHolder(this.listings);
         shopCommands = new ShopCommandExecutor(shopGUI);
         this.updateGUI();
     }
 
-    public void create_listing(Player p, double price, int amt, ItemStack i) {
+    public void createListing(Player p, double price, int amt, ItemStack i) {
         int k = (int) (price * 10) + amt + i.hashCode();
         ShopListing sl = new ShopListing(p, i, price, amt, new UUID(k, i.hashCode()));
         listings.put(sl.getID(), sl);
     }
 
-    public ShopListing delete_listing(UUID listingID) {
+    public ShopListing deleteListing(UUID listingID) {
         return listings.remove(listingID);
     }
 

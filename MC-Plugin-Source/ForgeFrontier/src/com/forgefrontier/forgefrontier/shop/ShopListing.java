@@ -24,13 +24,17 @@ public class ShopListing {
     double getPrice() { return this.price; }
     int getAmt() { return this.amt; }
     UUID getID() { return this.listingID; }
-    // SHOULD NOT NEED TO USE THIS
-    void _set_player(Player p) { lister = p; }
 
-    void set_price(double p) { price = p; }
-    void set_amt(int n) { amt = n; }
+
+    @Deprecated
+    void setPlayer(Player p) { lister = p; }
+
+    void setPrice(double p) { price = p; }
+    void setAmt(int n) { amt = n; }
 
     ItemStack getItem() { return this.item; }
     void setItem(ItemStack ci) { item = ci; }
+
+
 
 }
