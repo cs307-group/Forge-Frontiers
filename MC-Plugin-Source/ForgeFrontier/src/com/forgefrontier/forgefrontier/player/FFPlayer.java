@@ -18,8 +18,6 @@ public class FFPlayer {
     /** the unique ID of the player this FFPlayer represents */
     UUID playerID;
 
-    /** the current level of the player */
-    float currentLevel;
 
     double currentHealth;
 
@@ -35,7 +33,8 @@ public class FFPlayer {
     }
 
     /**
-     * Constructs the FFPlayer class given a player object (sets the stats to a level 1 character)
+     * Constructs the FFPlayer class given a player object (sets the stats to a level 1 character if the character
+     * does not exist in the database)
      *
      * @param player the player that this instance of FFPlayer will represent
      */
@@ -68,10 +67,16 @@ public class FFPlayer {
      */
     public double convertDamage(double ffDamage, double mcMaxHealth) {
         currentHealth -= ffDamage;
+        if (currentHealth < 0) {
+            currentHealth = 0;
+        }
         return mcMaxHealth * (ffDamage / getHP());
     }
 
-    public void die() {
+    /**
+     * Updates the ForgeFrontier current health value when the player respawns
+     */
+    public void respawn() {
         currentHealth = getHP();
     }
 

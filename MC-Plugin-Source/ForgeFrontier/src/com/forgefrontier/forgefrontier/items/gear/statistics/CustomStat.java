@@ -17,8 +17,23 @@ public abstract class CustomStat {
      * @param maxValue maximum possible value for the statValue
      */
     public CustomStat(int minValue, int maxValue) {
-        this.statValue = (int) (Math.random() * (maxValue - minValue + 1)) + minValue;
         this.statType = StatEnum.getRandStatEnum();
+        while (statType == StatEnum.CRATE || statType == StatEnum.CDMG) {
+            this.statType = StatEnum.getRandStatEnum();
+        }
+        this.statValue = (int) (Math.random() * (maxValue - minValue + 1)) + minValue;
+    }
+
+    /**
+     * Default Constructor with Random values
+     *
+     * @param minValue minimum possible value for the statValue
+     * @param maxValue maximum possible value for the statValue
+     * @param statType to be assigned to corresponding attribute
+     */
+    public CustomStat(int minValue, int maxValue, StatEnum statType) {
+        this.statType = statType;
+        this.statValue = (int) (Math.random() * (maxValue - minValue + 1)) + minValue;
     }
 
     /**

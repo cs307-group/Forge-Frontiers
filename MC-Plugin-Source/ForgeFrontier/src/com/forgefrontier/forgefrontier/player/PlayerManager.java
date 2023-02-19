@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,8 +82,7 @@ public class PlayerManager implements Listener {
     @EventHandler
     public void onEntityDamageByEntity (EntityDamageEvent event) {
         //ensures the entity with the incoming damages is a player
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
+        if (event.getEntity() instanceof Player player) {
             double damage = event.getDamage();
             FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
             AttributeInstance maxHealthAttr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
@@ -96,10 +95,15 @@ public class PlayerManager implements Listener {
         }
     }
 
+    /**
+     * handles updating player health accordingly on respawn
+     *
+     * @param event the respawn event
+     */
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = (Player) event.getEntity();
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
         FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
-        ffPlayer.die();
+        ffPlayer.respawn();
     }
 }

@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -73,7 +74,11 @@ public abstract class CustomItem {
     public CustomItemInstance asInstance(ItemStack item) {
         CustomItemInstance instance = null;
         for(CustomItemInstanceAccumulator accumulator: this.instanceAccumulators) {
-            instance = accumulator.accumulate(instance, item);
+            try {
+                instance = accumulator.accumulate(instance, item);
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
@@ -94,16 +99,28 @@ public abstract class CustomItem {
      * Register a new item stack accumulator to add a new layer to create the item stack from the instance.
      * The later it is added, the earlier it will run. At the start, the itemstack passed in will be null.
      *
-     * @param accumulator
+     * @param accumulator the accumulator to be added to the list
      */
     public void registerItemStackAccumulator(ItemStackAccumulator accumulator) {
-        this.itemStackAccumulators.add(0, accumulator);
+        try {
+            this.itemStackAccumulators.add(0, accumulator);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Register a new item stack accumulator to add a new layer to create the instance from the item stack.
-    // The later it is added, the earlier it will run. At the start, the instance passed in will be null.
+    /**
+     * Register a new item stack accumulator to add a new layer to create the instance from the item stack.
+     * The later it is added, the earlier it will run. At the start, the instance passed in will be null.
+     *
+     * @param accumulator the accumulator to be added to the list
+     */
     public void registerInstanceAccumulator(CustomItemInstanceAccumulator accumulator) {
-        this.instanceAccumulators.add(0, accumulator);
+        try {
+            this.instanceAccumulators.add(0, accumulator);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
 }
