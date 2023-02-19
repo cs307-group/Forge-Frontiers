@@ -2,12 +2,15 @@ package com.forgefrontier.forgefrontier;
 
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
-import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ExampleZombieSword;
+import com.forgefrontier.forgefrontier.items.ItemCommandExecutor;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.WoodenBow;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.WoodenSword;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGem;
+import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
-import com.forgefrontier.forgefrontier.shop.ShopCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
@@ -21,6 +24,7 @@ public class ForgeFrontier extends JavaPlugin {
 
     GeneratorManager generatorManager;
     CustomItemManager customItemManager;
+    PlayerManager playerManager;
     Shop itemShop;
 
     @Override
@@ -31,6 +35,7 @@ public class ForgeFrontier extends JavaPlugin {
         // Managers
         this.generatorManager = new GeneratorManager(this);
         this.customItemManager = new CustomItemManager(this);
+        this.playerManager = new PlayerManager(this);
 
         this.generatorManager.init();
         this.customItemManager.init();
@@ -39,6 +44,9 @@ public class ForgeFrontier extends JavaPlugin {
 
         // TODO: Debug code for the Zombie Sword example custom item.
         this.getCustomItemManager().registerCustomItem(new ExampleZombieSword());
+        this.getCustomItemManager().registerCustomItem(new UpgradeGem());
+        this.getCustomItemManager().registerCustomItem(new WoodenSword());
+        this.getCustomItemManager().registerCustomItem(new WoodenBow());
 
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);
@@ -54,6 +62,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
         if (shopCmd != null)
             shopCmd.setExecutor(itemShop.getCommandExecutor());
+        PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
+        if (customItemCmd != null)
+            customItemCmd.setExecutor(new ItemCommandExecutor());
     }
 
     @Override

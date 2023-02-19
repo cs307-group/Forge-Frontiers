@@ -1,5 +1,7 @@
 package com.forgefrontier.forgefrontier.items;
 
+import java.util.UUID;
+
 /**
  * UniqueItemIdentifier
  *
@@ -10,40 +12,34 @@ public class UniqueItemIdentifier {
     /**
      * The value of the item's universal ID
      */
-    int baseItemID;
+    String baseItemID;
 
     /**
      * The unique value specific to this particular item
      */
-    int uniqueIdentifier;
+    UUID uniqueIdentifier;
 
     /**
      * Default constructor for a UniqueItemIdentifier
+     *
+     * @param baseItemID the baseItemID to be set for this identifier
      */
-    public UniqueItemIdentifier(int baseItemID) {
+    public UniqueItemIdentifier(String baseItemID) {
         this.baseItemID = baseItemID;
-        this.uniqueIdentifier = generateIdentification();
-    }
-
-    /**
-     * @return a unique ID to store in the uniqueIdentifier attribute
-     */
-    public static int generateIdentification() {
-        //TODO: Implement unique code generation
-        return 0;
+        this.uniqueIdentifier = UUID.randomUUID();
     }
 
     /**
      * @return the BaseItemID
      */
-    public int getBaseItemID() {
+    public String getBaseItemID() {
         return baseItemID;
     }
 
     /**
      * @return the UniqueIdentifier
      */
-    public int getUniqueIdentifier() {
+    public UUID getUniqueIdentifier() {
         return uniqueIdentifier;
     }
 

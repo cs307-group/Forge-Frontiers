@@ -17,9 +17,10 @@ public class GeneratorCommandExecutor implements CommandExecutor {
             commandSender.sendMessage("You must be a player to use this command.");
             return true;
         }
+
         Player p = (Player) commandSender;
         if(strings.length > 2) {
-            ItemStack item = CustomItemManager.getCustomItem("Zombie").asInstance(null).asItemStack();
+            ItemStack item = CustomItemManager.getCustomItem("ZombieSword").asInstance(null).asItemStack();
             p.getInventory().addItem(item);
             commandSender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Zombie sword item added to your inventory.");
             return true;

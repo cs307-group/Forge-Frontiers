@@ -4,7 +4,7 @@ package com.forgefrontier.forgefrontier.items.gear.statistics;
  * Enum to represent the different types of statistics
  */
 public enum StatEnum {
-    UNASSIGNED, HP, ATK, STR , DEX, DEF;
+    UNASSIGNED, HP, ATK, STR, DEX, CRATE, CDMG, DEF;
 
     /**
      * Returns an Enum type based on an integer value
@@ -18,7 +18,9 @@ public enum StatEnum {
             case 1 -> ATK;
             case 2 -> STR;
             case 3 -> DEX;
-            case 4 -> DEF;
+            case 4 -> CRATE;
+            case 5 -> CDMG;
+            case 6 -> DEF;
             default -> UNASSIGNED;
         };
     }

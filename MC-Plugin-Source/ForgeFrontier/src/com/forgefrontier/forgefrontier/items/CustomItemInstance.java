@@ -6,14 +6,20 @@ import org.json.simple.JSONObject;
 
 public class CustomItemInstance {
 
-    // The base custom item the instance is an instance of
+    /** The base custom item the instance is an instance of */
     CustomItem base;
-    // The amount of the item in the stack
+
+    /** The amount of the item in the stack */
     int amount;
+
     // Additional data for the item
     //JSONObject data;
 
-    // Convert an instance into an ItemStack using the accumulator functions.
+    /**
+     * asItemStack converts an instance into an ItemStack using the accumulator functions.
+     *
+     * @return the CustomItemInstance as an ItemStack
+     */
     public ItemStack asItemStack() {
         ItemStack itemStack = null;
         for(ItemStackAccumulator accumulator: base.getItemStackAccumulators()) {

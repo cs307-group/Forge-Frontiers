@@ -42,7 +42,7 @@ public class ShopListing {
     @Deprecated
     void setPlayer(Player p) { lister = p; }
     /**
-     * Edits itemstack's display name to have price amount
+     * Edits ItemStack's display name to have price amount
      */
     public void shopifyItem(ItemStack itemStack) {
         ItemMeta im = itemStack.getItemMeta();
