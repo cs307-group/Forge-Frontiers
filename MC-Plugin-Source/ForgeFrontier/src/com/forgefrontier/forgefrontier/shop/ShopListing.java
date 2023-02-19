@@ -1,4 +1,6 @@
 package com.forgefrontier.forgefrontier.shop;
+import com.forgefrontier.forgefrontier.utils.ItemRename;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,12 +44,12 @@ public class ShopListing {
      */
     public void shopifyItem(ItemStack itemStack) {
         ItemMeta im = itemStack.getItemMeta();
-        String s = im.getDisplayName();
-        if (s == null) {
-            System.err.print("[ShopListing.shopifyItem] NULL Display Name");
-            return;
-        }
-        s = s + " §e(" + price + ")";
+        assert im != null;
+
+        String s = (im.hasDisplayName()) ? im.getDisplayName() : ItemRename.getFriendlyName(itemStack,true);
+
+        System.out.println("Shopifying Item: " + s);
+        s = s + " §§§e(" + price + ")";
         im.setDisplayName(s);
         itemStack.setItemMeta(im);
     }
@@ -57,12 +59,9 @@ public class ShopListing {
      */
     public void unshopifyItem(ItemStack itemStack) {
         ItemMeta im = itemStack.getItemMeta();
+        assert im != null;
         String s = im.getDisplayName();
-        if (s == null) {
-            System.err.print("[ShopListing.unshopifyItem] NULL Display Name");
-            return;
-        }
-        int split = s.indexOf("§e");
+        int split = s.indexOf("§§");
         if (split == -1) {
             System.err.print("[ShopListing.unshopifyItem] Failure to restore item's display name");
         }

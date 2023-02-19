@@ -30,8 +30,8 @@ public class ShopHolder extends BaseInventoryHolder {
         super(27);
         this.fillPanes();
         this.listings = listings;
-        this.updateGUI();
         this.remove = remove;
+        this.updateGUI();
     }
 
     public void updateGUI() {
@@ -41,9 +41,13 @@ public class ShopHolder extends BaseInventoryHolder {
             if (i > 9) break;
             this.setItem(i, listings.get(k).getItem());
             if (remove) {
+                System.out.println("Setting Remove");
                 int finalI = i;
-                this.addHandler(i, (e) -> this.setItem(finalI,new ItemStackBuilder(Material.AIR).build()));
-                this.listings.remove(k);
+                this.addHandler(i, (e) -> {
+                    this.setItem(finalI,new ItemStackBuilder(Material.AIR).build());
+                    System.out.println("Attempting to remove from index: " + finalI);
+                    this.listings.remove(k);
+                });
             }
             i++;
         }
