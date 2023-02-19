@@ -32,7 +32,7 @@ public class CustomItemManager implements Listener {
         this.items = new HashMap<>();
     }
 
-    // Ran whenever the plugin enabled the module. You can safely access other modules here, but no guarantees data will be in them.
+    // Ran whenever the plugin enabled the module. You can safely access other modules here, but no guarantee data will be in them.
     public void init() {
 
     }

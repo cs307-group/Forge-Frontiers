@@ -47,6 +47,15 @@ public abstract class CustomStat {
     }
 
     /**
+     * sets the value of statValue to the parameter's value
+     *
+     * @param statValue the updated value for statValue
+     */
+    public void setStatValue(int statValue) {
+        this.statValue = statValue;
+    }
+
+    /**
      * @return a string representation of a statistic
      */
     @Override

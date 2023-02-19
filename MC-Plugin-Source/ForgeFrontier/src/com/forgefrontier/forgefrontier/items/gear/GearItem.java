@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.items.gear;
 
 import com.forgefrontier.forgefrontier.items.CustomItem;
+import com.forgefrontier.forgefrontier.items.UniqueCustomItem;
 import com.forgefrontier.forgefrontier.items.UniqueItemIdentifier;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
@@ -13,12 +14,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 /**
  * GearItem
  *
- * A class derivative of CustomItem which is used as a base to derive different custom gear types, which
+ * A class derivative of UniqueCustomItem which is used as a base to derive different custom gear types, which
  * each have their own statistics which affect the player who is equipping it. It is linked to its own custom appearance
  * as well.
  */
 
-public abstract class GearItem extends CustomItem {
+public abstract class GearItem extends UniqueCustomItem {
 
     /** The ID specific to this type of item */
     final int BASE_ID = 0;
@@ -28,9 +29,6 @@ public abstract class GearItem extends CustomItem {
 
     /** The quality of the gear */
     Quality quality;
-
-    /** The Unique Item ID which contains the BaseID and UniqueID for the item */
-    UniqueItemIdentifier UUID;
 
     /** The number of base statistics associated with this type of gear */
     int numBaseStats;

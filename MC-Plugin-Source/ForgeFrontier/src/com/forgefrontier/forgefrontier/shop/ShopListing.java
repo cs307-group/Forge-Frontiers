@@ -38,7 +38,7 @@ public class ShopListing {
     void setItem(ItemStack ci) { item = ci; }
 
     /**
-     * Edits itemstack's display name to have price amount
+     * Edits ItemStack's display name to have price amount
      */
     public void shopifyItem(ItemStack itemStack) {
         ItemMeta im = itemStack.getItemMeta();

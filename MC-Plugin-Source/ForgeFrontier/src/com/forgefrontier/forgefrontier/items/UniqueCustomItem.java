@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public abstract class UniqueCustomItem extends CustomItem {
 
-
     // CustomItemInstance for unique items. They will have their own unique id to identify them.
     public static abstract class UniqueCustomItemInstance extends CustomItemInstance {
 
