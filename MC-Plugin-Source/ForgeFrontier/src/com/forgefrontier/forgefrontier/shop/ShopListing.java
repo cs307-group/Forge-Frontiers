@@ -12,7 +12,9 @@ import java.util.UUID;
  */
 public class ShopListing {
 
+    /** Original Item **/
     private ItemStack item;
+    private ItemStack displayItem;
     private double price;
     private int amt;
     private Player lister;
@@ -25,11 +27,13 @@ public class ShopListing {
         this.amt = item.getAmount();
         this.item = item;
         this.listingID = listingID;
-        this.shopifyItem(item);
+        displayItem = this.shopifyItem(item);
     }
 
     /** Getters **/
     ItemStack getItem() { return this.item; }
+    ItemStack getDisplayItem() { return this.displayItem; }
+
     double getPrice() { return this.price; }
     int getAmt() { return this.amt; }
     UUID getID() { return this.listingID; }
@@ -44,22 +48,24 @@ public class ShopListing {
     /**
      * Edits ItemStack's display name to have price amount
      */
-    public void shopifyItem(ItemStack itemStack) {
+    public ItemStack shopifyItem(ItemStack itemStack) {
+        ItemStack i2 = new ItemStack(itemStack);
         ItemMeta im = itemStack.getItemMeta();
-        assert im != null;
 
-        uniqueName = im.hasDisplayName();
+
         String s = (im.hasDisplayName()) ? im.getDisplayName() : ItemRename.getFriendlyName(itemStack,true);
 
-        System.out.println("Shopifying Item: " + s);
-        s = s + " §§§e(" + price + ")";
+        s = s + " §§§e(" + price + "g)";
         im.setDisplayName(s);
-        itemStack.setItemMeta(im);
+        i2.setItemMeta(im);
+        return i2;
     }
+
 
     /**
      * Removes shopify item rename
      */
+    @Deprecated
     public void unshopifyItem(ItemStack itemStack) {
         ItemMeta im = itemStack.getItemMeta();
         assert im != null;

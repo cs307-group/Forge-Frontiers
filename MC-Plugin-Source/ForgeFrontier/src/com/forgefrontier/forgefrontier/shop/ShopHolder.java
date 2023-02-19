@@ -66,13 +66,14 @@ public class ShopHolder extends BaseInventoryHolder {
             return;
         }
         ItemStack itm = this.getInventory().getItem(i);
+        if (itm == null || itm.getType().equals(Material.AIR)) {
+            return;
+        }
         Player p = (Player) e.getWhoClicked();
         this.setItem(i,new ItemStackBuilder(Material.AIR).build());
         ShopListing l = this.listings.remove(k);
+        ItemStack origItem = l.getItem();
 
-        if (itm == null || l == null) return;
-        l.unshopifyItem(l.getItem());
-        itm = l.getItem();
 
 
 
