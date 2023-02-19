@@ -7,13 +7,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.UUID;
 
+/**
+ * Stores relevent information about a shop listing, and modifies input items to be of a valid listing type.
+ */
 public class ShopListing {
+
     private ItemStack item;
     private double price;
     private int amt;
     private Player lister;
     UUID listingID;
-
+    Boolean uniqueName = false;
 
     public ShopListing(Player p, ItemStack item, double price, int amt, UUID listingID) {
         this.lister = p;
@@ -24,21 +28,19 @@ public class ShopListing {
         this.shopifyItem(item);
     }
 
-    Player getLister() { return this.lister; }
+    /** Getters **/
+    ItemStack getItem() { return this.item; }
     double getPrice() { return this.price; }
     int getAmt() { return this.amt; }
     UUID getID() { return this.listingID; }
+    Player getLister() { return this.lister; }
 
-
-    @Deprecated
-    void setPlayer(Player p) { lister = p; }
-
+    /** Setters **/
     void setPrice(double p) { price = p; }
     void setAmt(int n) { amt = n; }
-
-    ItemStack getItem() { return this.item; }
     void setItem(ItemStack ci) { item = ci; }
-
+    @Deprecated
+    void setPlayer(Player p) { lister = p; }
     /**
      * Edits itemstack's display name to have price amount
      */
@@ -46,6 +48,7 @@ public class ShopListing {
         ItemMeta im = itemStack.getItemMeta();
         assert im != null;
 
+        uniqueName = im.hasDisplayName();
         String s = (im.hasDisplayName()) ? im.getDisplayName() : ItemRename.getFriendlyName(itemStack,true);
 
         System.out.println("Shopifying Item: " + s);
@@ -55,17 +58,20 @@ public class ShopListing {
     }
 
     /**
-     * Removes shopify item rename.
+     * Removes shopify item rename
      */
     public void unshopifyItem(ItemStack itemStack) {
         ItemMeta im = itemStack.getItemMeta();
         assert im != null;
-        String s = im.getDisplayName();
-        int split = s.indexOf("§§");
-        if (split == -1) {
-            System.err.print("[ShopListing.unshopifyItem] Failure to restore item's display name");
+        String s = "";
+        if (!uniqueName) {
+            s = im.getDisplayName();
+            int split = s.indexOf("§§");
+            if (split == -1) {
+                System.err.print("[ShopListing.unshopifyItem] Failure to restore item's display name");
+            }
+            s = s.substring(0, split);
         }
-        s = s.substring(0, split);
         im.setDisplayName(s);
         itemStack.setItemMeta(im);
     }

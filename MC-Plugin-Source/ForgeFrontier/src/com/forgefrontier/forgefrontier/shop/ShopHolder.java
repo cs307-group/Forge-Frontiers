@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
@@ -42,15 +43,46 @@ public class ShopHolder extends BaseInventoryHolder {
             this.setItem(i, listings.get(k).getItem());
             if (remove) {
                 System.out.println("Setting Remove");
-                int finalI = i;
+                int i2 = i;
                 this.addHandler(i, (e) -> {
-                    this.setItem(finalI,new ItemStackBuilder(Material.AIR).build());
-                    System.out.println("Attempting to remove from index: " + finalI);
-                    this.listings.remove(k);
+                    removeListingCallback(e, i2, k);
                 });
             }
             i++;
         }
+    }
+
+    /**
+     * GUI click callback the removes item from GUI and Shop
+     * Intended to be called when item is clicked in GUI
+     * If the listing is null, we do not do anything.
+     * @param e event
+     * @param i slot index
+     * @param k item uuid
+     */
+    public void removeListingCallback(InventoryClickEvent e, int i, UUID k) {
+        if (this.listings.get(k) == null) {
+            this.updateGUI();
+            return;
+        }
+        ItemStack itm = this.getInventory().getItem(i);
+        Player p = (Player) e.getWhoClicked();
+        this.setItem(i,new ItemStackBuilder(Material.AIR).build());
+        ShopListing l = this.listings.remove(k);
+
+        if (itm == null || l == null) return;
+        l.unshopifyItem(l.getItem());
+        itm = l.getItem();
+
+
+
+        HashMap<Integer, ItemStack> left = p.getInventory().addItem(itm);
+        if (left.size() == 0) return;
+        for (Integer lk : left.keySet()) {
+            System.out.println("Player Overflow! Dropping Item");
+            p.getWorld().dropItem(p.getLocation().add(0,1,0),left.get(lk));
+        }
+
     }
 
 

@@ -8,26 +8,38 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
+/**
+ * Implements functionality to buy/sell items through a GUI interface
+ */
 public class Shop {
     private Hashtable<UUID, ShopListing> listings;
     ShopHolder shopGUI;
     ShopCommandExecutor shopCommands;
+
+    /** Basic Constructor. */
     public Shop() {
         listings = new Hashtable<>();
         shopGUI = new ShopHolder(this.listings);
         shopCommands = new ShopCommandExecutor(this);
     }
 
+    /**
+     * List an item
+     * @param p     Player who is making listing
+     * @param price Price of item
+     * @param amt   Amount of items to list
+     * @param i     Itemstack to list
+     * @return      Success?
+     */
     public Boolean createListing(Player p, double price, int amt, ItemStack i) {
-        int k = (int) (price * 10) + amt + i.hashCode();
-        UUID id = new UUID(k, i.hashCode());
+        UUID id = UUID.randomUUID();
         if (listings.get(id) != null) return false;
         ShopListing sl = new ShopListing(p, i, price, amt, id);
         listings.put(sl.getID(), sl);
         return true;
     }
 
-    public ShopListing deleteListing(UUID listingID) {
+    public ShopListing removeListing(UUID listingID) {
         return listings.remove(listingID);
     }
 

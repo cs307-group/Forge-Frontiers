@@ -16,6 +16,7 @@ public class ItemStackBuilder {
     public ItemStackBuilder(Material m) {
         this.m = m;
     }
+    /** Does nothing, can pass in null safely **/
     public ItemStackBuilder(ItemStack m) {}
 
     /** Setter */
@@ -37,6 +38,12 @@ public class ItemStackBuilder {
         return itm;
     }
 
+    /**
+     * Used to copy build a itemstack
+     * @param other Itemstack to copy
+     * @param amt   Amount of items of this item stack
+     * @return  New Itemstack
+     */
     public ItemStack build(ItemStack other, int amt) {
         ItemStack i = new ItemStack(other.getType());
         i.setItemMeta(other.getItemMeta());
