@@ -77,7 +77,7 @@ public class ShopHolder extends BaseInventoryHolder {
 
 
 
-        HashMap<Integer, ItemStack> left = p.getInventory().addItem(itm);
+        HashMap<Integer, ItemStack> left = p.getInventory().addItem(origItem);
         if (left.size() == 0) return;
         for (Integer lk : left.keySet()) {
             System.out.println("Player Overflow! Dropping Item");
