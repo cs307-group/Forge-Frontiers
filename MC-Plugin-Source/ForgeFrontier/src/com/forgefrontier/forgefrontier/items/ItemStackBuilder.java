@@ -11,17 +11,31 @@ public class ItemStackBuilder {
 
     Material m;
     String displayName;
+    int amt;
+    ItemStack copy;
+    boolean copyBuild;
 
     /** Begin Building w/ material of itemstack */
     public ItemStackBuilder(Material m) {
         this.m = m;
+        this.amt = 1;
+        copyBuild = false;
     }
-    /** Does nothing, can pass in null safely **/
-    public ItemStackBuilder(ItemStack m) {}
+    /** Copies some references from itemstack **/
+    public ItemStackBuilder(ItemStack m) {
+        copy = m;
+        amt = m.getAmount();
+        copyBuild = true;
+    }
 
     /** Setter */
-    public void setDisplayName(String name) {
+    public ItemStackBuilder setDisplayName(String name) {
         displayName = name;
+        return this;
+    }
+    public ItemStackBuilder setAmount(int amt) {
+        this.amt = amt;
+        return this;
     }
 
     /**
@@ -29,7 +43,10 @@ public class ItemStackBuilder {
      *
      * */
     public ItemStack build() {
+        if (copyBuild) return copy(copy, amt);
+
         ItemStack itm = new ItemStack(m);
+        itm.setAmount(amt);
         ItemMeta meta = itm.getItemMeta();
 
         if (displayName != null && meta != null)
@@ -44,10 +61,16 @@ public class ItemStackBuilder {
      * @param amt   Amount of items of this item stack
      * @return  New Itemstack
      */
-    public ItemStack build(ItemStack other, int amt) {
+    public ItemStack copy(ItemStack other, int amt) {
         ItemStack i = new ItemStack(other.getType());
         i.setItemMeta(other.getItemMeta());
         i.setAmount(amt);
+        return i;
+    }
+
+    public ItemStack copy(ItemStack other) {
+        ItemStack i = new ItemStack(other.getType());
+        i.setItemMeta(other.getItemMeta());
         return i;
     }
 

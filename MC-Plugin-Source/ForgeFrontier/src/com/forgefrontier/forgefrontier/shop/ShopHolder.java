@@ -40,7 +40,7 @@ public class ShopHolder extends BaseInventoryHolder {
         int i = 0;
         for (UUID k : keys) {
             if (i > 9) break;
-            this.setItem(i, listings.get(k).getItem());
+            this.setItem(i, listings.get(k).getDisplayItem());
             if (remove) {
                 System.out.println("Setting Remove");
                 int i2 = i;
@@ -73,10 +73,6 @@ public class ShopHolder extends BaseInventoryHolder {
         this.setItem(i,new ItemStackBuilder(Material.AIR).build());
         ShopListing l = this.listings.remove(k);
         ItemStack origItem = l.getItem();
-
-
-
-
         HashMap<Integer, ItemStack> left = p.getInventory().addItem(origItem);
         if (left.size() == 0) return;
         for (Integer lk : left.keySet()) {

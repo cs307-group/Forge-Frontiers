@@ -1,7 +1,6 @@
 package com.forgefrontier.forgefrontier.shop;
 
-import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -10,8 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Set;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ShopCommandExecutor implements CommandExecutor {
     private Shop shop;
@@ -71,11 +69,15 @@ public class ShopCommandExecutor implements CommandExecutor {
 
                 // TODO: Add confirmation gui, pricing, etc.
 
-                ItemStack shopitm = new ItemStackBuilder(itm).build(itm,amt);
-                if (shop.createListing(p,price,amt,shopitm)) {
-                    itm.setAmount(itm.getAmount()-amt);
-                    p.getInventory().setItemInMainHand(itm);
-                }
+                int finalAmt = amt;
+                double finalPrice = price;
+                p.openInventory(new ConfirmationHolder("Confirm?",null,()->{
+                    ItemStack shopitm = new ItemStackBuilder(itm).copy(itm, finalAmt);
+                    if (shop.createListing(p, finalPrice, finalAmt,shopitm)) {
+                        itm.setAmount(itm.getAmount()- finalAmt);
+                        p.getInventory().setItemInMainHand(itm);
+                    }
+                }).getInventory());
                 break;
             }
             case "view": {

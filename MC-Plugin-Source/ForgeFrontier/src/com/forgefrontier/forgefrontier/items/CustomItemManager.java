@@ -100,6 +100,7 @@ public class CustomItemManager implements Listener {
 
     // Helper method to get the code from an ItemStack that identifies the custom item it is.
     private static String extractCode(ItemStack itemStack) {
+
         net.minecraft.world.item.ItemStack item2 = CraftItemStack.asNMSCopy(itemStack);
         if(item2.t() == null) {
             return null;

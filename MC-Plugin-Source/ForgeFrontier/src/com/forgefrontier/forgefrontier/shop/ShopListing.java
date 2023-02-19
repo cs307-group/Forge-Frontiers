@@ -1,4 +1,5 @@
 package com.forgefrontier.forgefrontier.shop;
+import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemRename;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -49,12 +50,11 @@ public class ShopListing {
      * Edits ItemStack's display name to have price amount
      */
     public ItemStack shopifyItem(ItemStack itemStack) {
-        ItemStack i2 = new ItemStack(itemStack);
+        ItemStack i2 = new ItemStackBuilder(itemStack).build();
         ItemMeta im = itemStack.getItemMeta();
 
-
-        String s = (im.hasDisplayName()) ? im.getDisplayName() : ItemRename.getFriendlyName(itemStack,true);
-
+        String s = (im.hasDisplayName()) ? im.getDisplayName() :
+                                            ItemRename.getFriendlyName(itemStack,true);
         s = s + " §§§e(" + price + "g)";
         im.setDisplayName(s);
         i2.setItemMeta(im);

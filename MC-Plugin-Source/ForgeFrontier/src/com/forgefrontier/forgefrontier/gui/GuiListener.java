@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public class GuiListener implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryOpen(InventoryOpenEvent e) {
         if(e.getInventory().getHolder() instanceof BaseInventoryHolder) {
             BaseInventoryHolder holder = (BaseInventoryHolder) e.getInventory().getHolder();
@@ -16,7 +16,7 @@ public class GuiListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent e) {
         if(e.getInventory().getHolder() instanceof BaseInventoryHolder) {
             BaseInventoryHolder holder = (BaseInventoryHolder) e.getInventory().getHolder();
@@ -24,7 +24,7 @@ public class GuiListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent e) {
         if(e.getInventory().getHolder() instanceof BaseInventoryHolder) {
             BaseInventoryHolder holder = (BaseInventoryHolder) e.getInventory().getHolder();
