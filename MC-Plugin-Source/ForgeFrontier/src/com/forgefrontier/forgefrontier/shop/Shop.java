@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.shop;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,38 +14,36 @@ public class Shop {
     ShopCommandExecutor shopCommands;
     public Shop() {
         listings = new Hashtable<>();
-        ItemStack item = new ItemStack(Material.DIAMOND_ORE);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Epic Item");
-        item.setItemMeta(meta);
-        createListing(null,99.99,5,item);
         shopGUI = new ShopHolder(this.listings);
-        shopCommands = new ShopCommandExecutor(shopGUI);
-        this.updateGUI();
+        shopCommands = new ShopCommandExecutor(this);
     }
 
-    public void createListing(Player p, double price, int amt, ItemStack i) {
+    public Boolean createListing(Player p, double price, int amt, ItemStack i) {
         int k = (int) (price * 10) + amt + i.hashCode();
-        ShopListing sl = new ShopListing(p, i, price, amt, new UUID(k, i.hashCode()));
+        UUID id = new UUID(k, i.hashCode());
+        if (listings.get(id) != null) return false;
+        ShopListing sl = new ShopListing(p, i, price, amt, id);
         listings.put(sl.getID(), sl);
+        return true;
     }
 
     public ShopListing deleteListing(UUID listingID) {
         return listings.remove(listingID);
     }
 
-    public void updateGUI() {
-        Set<UUID> keys = listings.keySet();
-        int i = 0;
-        for (UUID k : keys) {
-            if (i > 9) break;
-            shopGUI.setItem(i, listings.get(k).getItem());
-            i++;
-        }
-    }
-
     public ShopCommandExecutor getCommandExecutor() {
         return this.shopCommands;
+    }
+
+    /**
+     *  Creates a new ShopHolder GUI for viewing
+     * */
+    public Inventory getGUI() {
+        return new ShopHolder(listings).getInventory();
+    }
+
+    public Hashtable<UUID, ShopListing> getListings() {
+        return this.listings;
     }
 
 
