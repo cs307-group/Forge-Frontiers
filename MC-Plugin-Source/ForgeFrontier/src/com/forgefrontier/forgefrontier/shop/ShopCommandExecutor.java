@@ -83,6 +83,7 @@ public class ShopCommandExecutor implements CommandExecutor {
                 return true;
             }
             case "remove": {
+                System.out.println("Opening Remove Shop");
                 p.openInventory(new ShopHolder(shop.getListings(),true).getInventory());
                 return true;
             }
