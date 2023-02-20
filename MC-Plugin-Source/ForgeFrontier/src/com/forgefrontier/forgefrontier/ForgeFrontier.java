@@ -30,6 +30,9 @@ public class ForgeFrontier extends JavaPlugin {
     @Override
     public void onEnable() {
         inst = this;
+        if (!this.getDataFolder().exists()) {
+            this.getDataFolder().mkdirs();
+        }
         CHAT_PREFIX = ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.BOLD + "Forge" + ChatColor.GOLD + ChatColor.BOLD + "Frontier" + ChatColor.GRAY + "] " + ChatColor.YELLOW;
 
         // Managers
