@@ -42,10 +42,11 @@ public class ForgeFrontier extends JavaPlugin {
 
         this.generatorManager.init();
         this.customItemManager.init();
+        this.playerManager.init();
+
         this.itemShop = new Shop();
 
-
-        // TODO: Debug code for the Zombie Sword example custom item.
+        // TODO: Remove testing code for the Zombie Sword example custom item.
         this.getCustomItemManager().registerCustomItem(new ExampleZombieSword());
         this.getCustomItemManager().registerCustomItem(new UpgradeGem());
         this.getCustomItemManager().registerCustomItem(new WoodenSword());
@@ -72,7 +73,9 @@ public class ForgeFrontier extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        this.generatorManager.disable();
+        this.customItemManager.disable();
+        this.playerManager.disable();
     }
 
     public CustomItemManager getCustomItemManager() {
@@ -81,6 +84,10 @@ public class ForgeFrontier extends JavaPlugin {
 
     public GeneratorManager getGeneratorManager() {
         return this.generatorManager;
+    }
+
+    public PlayerManager getPlayerManager() {
+        return this.playerManager;
     }
 
     // Singleton Pattern

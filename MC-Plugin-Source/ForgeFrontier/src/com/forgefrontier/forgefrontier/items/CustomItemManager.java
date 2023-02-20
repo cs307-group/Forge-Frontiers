@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.items;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
 import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
+import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,23 +17,27 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomItemManager implements Listener {
+public class CustomItemManager extends Manager implements Listener {
 
-    ForgeFrontier plugin;
-
-    // Map of every registered custom item and their respective code.
+    /** Map of every registered custom item and their respective code. */
     Map<String, CustomItem> items;
 
     // Initialize fields in here. DO NOT ACCESS OTHER MODULES HERE.
     public CustomItemManager(ForgeFrontier plugin) {
-        this.plugin = plugin;
+        super(plugin);
         this.items = new HashMap<>();
     }
 
-    // Ran whenever the plugin enabled the module. You can safely access other modules here, but no guarantee data will be in them.
+    @Override
     public void init() {
 
     }
+
+    @Override
+    public void disable() {
+
+    }
+
 
     // Method to run to register a new CustomItem. If not run, the custom item will not be able to be identified.
     public void registerCustomItem(CustomItem customItem) {
