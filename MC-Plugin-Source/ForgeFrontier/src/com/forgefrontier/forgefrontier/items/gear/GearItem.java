@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -38,9 +39,9 @@ public abstract class GearItem extends UniqueCustomItem {
      * @param lore the lore description of the gear
      */
     public GearItem(String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum,
-                    Material material, int durability, String lore, Class<? extends GearItemInstance> instanceClass) {
+                    Material material, int durability, String lore) {
         super(name);
-        registerAccumulators(name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore, instanceClass);
+        registerAccumulators(name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
     }
 
     /**
@@ -69,10 +70,9 @@ public abstract class GearItem extends UniqueCustomItem {
      * @param lore the lore description of the gear
      */
     private void registerAccumulators(String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum,
-                                      Material material, int durability, String lore,
-                                      Class<? extends GearItemInstance> instanceClass) {
-        this.registerInstanceAccumulator((__, itemStack) -> {
-            GearItemInstance gearItemInstance = instanceClass.getConstructor().newInstance();
+                                      Material material, int durability, String lore) {
+        this.registerInstanceAccumulator((instance, itemStack) -> {
+            GearItemInstance gearItemInstance = (GearItemInstance) instance;
 
             if (itemStack == null) {
                 gearItemInstance.name = name;
@@ -110,31 +110,29 @@ public abstract class GearItem extends UniqueCustomItem {
             ItemMeta meta = item.getItemMeta();
 
             meta.setDisplayName(gearItemInstance.quality.getColor() + gearItemInstance.name);
-            String[] loreArr = new String[6 + gearItemInstance.numBaseStats + gearItemInstance.numGemSlots];
-            int ind = 0;
-            loreArr[ind] = ChatColor.GRAY + gearItemInstance.lore;
-            ind++;
-            loreArr[ind] = gearItemInstance.quality.getColor() + "Base Stats";
-            ind++;
+            ArrayList<String> loreArr = new ArrayList<>();
+            loreArr.add(ChatColor.GRAY + gearItemInstance.lore);
+            loreArr.add("");
+            loreArr.add(gearItemInstance.quality.getColor() + gearItemInstance.quality.toString());
+            loreArr.add("");
+            loreArr.add(ChatColor.WHITE + "Base Stats");
             for (int i = 0; i < gearItemInstance.numBaseStats; i++) {
-                loreArr[ind] = gearItemInstance.quality.getColor() + gearItemInstance.baseStats[i].toString();
-                ind++;
+                loreArr.add(gearItemInstance.quality.getColor() + gearItemInstance.baseStats[i].toString());
             }
-            loreArr[ind] = gearItemInstance.quality.getColor() + "Reforge Stats";
-            ind++;
+            loreArr.add("");
+            loreArr.add(ChatColor.WHITE + "Reforge Stats");
             for (int i = 0; i < 3; i++) {
-                loreArr[ind] = gearItemInstance.quality.getColor() + gearItemInstance.reforgeStats[i].toString();
-                ind++;
+                loreArr.add(gearItemInstance.quality.getColor() + gearItemInstance.reforgeStats[i].toString());
             }
+            loreArr.add("");
             for (int i = 0; i < gearItemInstance.numGemSlots; i++) {
                 if (gearItemInstance.gems[i] == null) {
-                    loreArr[ind] = ChatColor.DARK_GRAY + "Empty Slot";
+                    loreArr.add(ChatColor.DARK_GRAY + "Empty Slot");
                 } else {
-                    loreArr[ind] = gearItemInstance.gems[i].toString();
+                    loreArr.add(gearItemInstance.gems[i].toString());
                 }
-                ind++;
             }
-            meta.setLore(Arrays.asList(loreArr));
+            meta.setLore(loreArr);
 
             //sets the durability of the item to the specified durability
             Damageable damageable = (Damageable) meta;
