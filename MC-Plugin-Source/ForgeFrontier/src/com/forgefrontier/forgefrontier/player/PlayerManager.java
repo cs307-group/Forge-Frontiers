@@ -1,6 +1,8 @@
 package com.forgefrontier.forgefrontier.player;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.utils.Manager;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -20,10 +22,7 @@ import java.util.UUID;
  *
  * Manages the players which join and leave the server and the custom data associated with them
  */
-public class PlayerManager implements Listener {
-
-    /** an instance of the ForgeFrontier plugin used for referencing events */
-    ForgeFrontier plugin;
+public class PlayerManager extends Manager implements Listener {
 
     /** a map for the FFPlayers which store custom data */
     Map<UUID, FFPlayer> ffPlayers;
@@ -36,17 +35,19 @@ public class PlayerManager implements Listener {
      * @param plugin the plugin instance which the server is using to run
      */
     public PlayerManager(ForgeFrontier plugin) {
-        this.plugin = plugin;
+        super(plugin);
         ffPlayers = new HashMap<>();
         players = new HashMap<>();
     }
 
-    /**
-     * Ran whenever the plugin enabled the module. You can safely access other modules here,
-     * but no guarantee data will be in them.
-     */
+    @Override
     public void init() {
+        // TODO: Add all players online into the hashmap.
+    }
 
+    @Override
+    public void disable() {
+        // TODO: Save all players in the hashmap in some sort of persistent storage.
     }
 
     /**
