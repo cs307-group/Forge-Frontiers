@@ -35,6 +35,12 @@ public class BaseInventoryHolder implements InventoryHolder {
         this.inventory = Bukkit.createInventory(this, size);
         this.handlers = new InventoryClickHandler[size];
     }
+    public BaseInventoryHolder(int size, String name) {
+        this.size = size;
+        this.inventory = Bukkit.createInventory(this, size, name);
+        this.handlers = new InventoryClickHandler[size];
+    }
+
 
     public BaseInventoryHolder addHandler(int slot, InventoryClickHandler handler) {
         this.handlers[slot] = handler;
@@ -62,6 +68,7 @@ public class BaseInventoryHolder implements InventoryHolder {
 
     public void onClick(InventoryClickEvent e) {
         e.setCancelled(true);
+        if (e.getSlot() < 0 || e.getSlot() > size) return;
         if(handlers[e.getSlot()] != null)
             handlers[e.getSlot()].onClick(e);
     }

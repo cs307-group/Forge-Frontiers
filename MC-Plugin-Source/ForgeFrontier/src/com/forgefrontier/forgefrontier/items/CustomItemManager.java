@@ -1,22 +1,19 @@
 package com.forgefrontier.forgefrontier.items;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
-import org.bukkit.ChatColor;
+
+import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CustomItemManager implements Listener {
@@ -32,7 +29,7 @@ public class CustomItemManager implements Listener {
         this.items = new HashMap<>();
     }
 
-    // Ran whenever the plugin enabled the module. You can safely access other modules here, but no guarantees data will be in them.
+    // Ran whenever the plugin enabled the module. You can safely access other modules here, but no guarantee data will be in them.
     public void init() {
 
     }
@@ -67,6 +64,24 @@ public class CustomItemManager implements Listener {
         customItemInst.getBaseItem().onAttack(e, customItemInst);
     }
 
+    /**
+     * Is called when an item being used by a player is set to take damage
+     *
+     * @param event the event specifying the specific
+     */
+    @EventHandler
+    public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
+        Player player = event.getPlayer();
+        CustomItemInstance customItemInstance = asCustomItemInstance(player.getInventory().getItem(EquipmentSlot.HAND));
+        if (customItemInstance == null) {
+            return;
+        }
+
+        if (customItemInstance instanceof GearItemInstance) {
+            event.setCancelled(true);
+        }
+    }
+
     // Get the custom item associated with the specified code.
     public static CustomItem getCustomItem(String code) {
         return ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
@@ -85,6 +100,7 @@ public class CustomItemManager implements Listener {
 
     // Helper method to get the code from an ItemStack that identifies the custom item it is.
     private static String extractCode(ItemStack itemStack) {
+
         net.minecraft.world.item.ItemStack item2 = CraftItemStack.asNMSCopy(itemStack);
         if(item2.t() == null) {
             return null;

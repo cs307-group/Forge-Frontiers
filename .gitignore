@@ -7,3 +7,5 @@ MC-Server/logs/*
 MC-Plugin-Source/ForgeFrontier/.idea
 MC-Plugin-Source/ForgeFrontier/out
 MC-Plugin-Source/ForgeFrontier/target
+./idea
+

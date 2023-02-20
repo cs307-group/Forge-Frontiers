@@ -15,6 +15,11 @@ import java.util.Arrays;
 // Extends UniqueCustomItem to include a unique code in it.
 public final class ExampleZombieSword extends UniqueCustomItem {
 
+    // The CustomItemInstance specifically for the ZombieSword, containing the specific data for the Zombie Sword.
+    public static class ExampleZombieSwordInstance extends UniqueCustomItemInstance {
+        double extraDamagePercent;
+    }
+
     public ExampleZombieSword() {
         super("ZombieSword");
 
@@ -25,13 +30,14 @@ public final class ExampleZombieSword extends UniqueCustomItem {
             // Because at the start the instance will be null, it must be instantiated here.
             ExampleZombieSwordInstance zombieSwordInstance = new ExampleZombieSwordInstance();
             // Set the attributes relevant to it being specifically the zombie sword.
-            if(itemStack == null) {
+            if (itemStack == null) {
                 // Set default value for a brand new Zombie Sword.
                 zombieSwordInstance.extraDamagePercent = 100.0;
             } else {
                 // TODO: Access itemstack data and set based off that data.
                 zombieSwordInstance.extraDamagePercent = 100.0;
             }
+
             // Return it to rise up to the accumulator for UniqueCustomItem (giving it a unique id)
             return zombieSwordInstance;
         });
@@ -56,11 +62,6 @@ public final class ExampleZombieSword extends UniqueCustomItem {
             // Return the item to give it to the UniqueCustomItem's accumulator, which will add the unique id to the itemstack.
             return item;
         });
-    }
-
-    // The CustomItemInstance specifically for the ZombieSword, containing the specific data for the Zombie Sword.
-    public static class ExampleZombieSwordInstance extends UniqueCustomItemInstance {
-        double extraDamagePercent;
     }
 
     // Zombie Sword doesn't have any abilities, so doesn't matter. Can stay blank.

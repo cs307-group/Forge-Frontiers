@@ -1,1 +1,1 @@
-java -jar ./spigot-1.18.2.jar --nogui
+java -jar ./paper-1.18.2.jar --nogui
