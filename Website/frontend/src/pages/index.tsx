@@ -1,7 +1,7 @@
 import Head from "next/head";
 
 import {Inter, Raleway} from "@next/font/google";
-
+import Login from "./Login";
 
 const inter = Inter({subsets: ["latin"]});
 const raleway = Raleway({preload: false})
@@ -16,12 +16,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
         <link href="../styles/global.css" rel="stylesheet"></link>
       </Head>
-      <main className="">
-        <div className="global_background full_page">
-          <div className="login_super_content vertical_center">
-            <p style={raleway.style} className="login_title">Hello World</p>
-          </div>
-        </div>
+      <main>
+        {Login()}
       </main>
     </>
   );
