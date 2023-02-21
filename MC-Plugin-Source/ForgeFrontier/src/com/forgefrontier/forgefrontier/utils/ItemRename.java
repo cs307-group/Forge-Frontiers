@@ -6,6 +6,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
+
+
+
 /**
  * THIS IS CODE FROM A ONLINE FORUM FOR UTILITY PURPOSES
  * SOURCE: https://bukkit.org/threads/reflection-friendly-item-names.339467/
@@ -31,6 +34,15 @@ public class ItemRename {
         }
     }
 
+    public static String simpleRename(Material material) {
+        String[] strs = material.toString().toLowerCase().split("_");
+        StringBuilder out = new StringBuilder();
+        for (String s : strs) {
+            out.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
+        }
+        out.deleteCharAt(out.length()-1);
+        return out.toString();
+    }
     public static String getFriendlyName(Material material) {
         return material == null ? "Air" : getFriendlyName(new ItemStack(material), false);
     }

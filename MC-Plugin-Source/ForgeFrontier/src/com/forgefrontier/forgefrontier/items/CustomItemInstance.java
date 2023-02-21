@@ -7,10 +7,10 @@ import org.json.simple.JSONObject;
 public class CustomItemInstance {
 
     /** The base custom item the instance is an instance of */
-    CustomItem base;
+    private CustomItem base;
 
     /** The amount of the item in the stack */
-    int amount;
+    private int amount;
 
     // Additional data for the item
     //JSONObject data;
@@ -30,6 +30,18 @@ public class CustomItemInstance {
 
     public CustomItem getBaseItem() {
         return base;
+    }
+
+    public int getAmount() {
+        return this.amount;
+    }
+
+    protected void setBase(CustomItem base) {
+        this.base = base;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     /*

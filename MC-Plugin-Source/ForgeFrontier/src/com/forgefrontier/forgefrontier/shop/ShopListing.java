@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.shop;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemRename;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,10 +53,12 @@ public class ShopListing {
     public ItemStack shopifyItem(ItemStack itemStack) {
         ItemStack i2 = new ItemStackBuilder(itemStack).build();
         ItemMeta im = itemStack.getItemMeta();
+        final String invisibleChar = "" + ChatColor.COLOR_CHAR + ChatColor.COLOR_CHAR;
 
         String s = (im.hasDisplayName()) ? im.getDisplayName() :
-                                            ItemRename.getFriendlyName(itemStack,true);
-        s = s + " §§§e(" + price + "g)";
+                                            ItemRename.simpleRename(itemStack.getType());
+        s = ChatColor.RESET + s +  " " + invisibleChar + ChatColor.GOLD  + "(" + price + "g)";
+
         im.setDisplayName(s);
         i2.setItemMeta(im);
         return i2;
@@ -72,7 +75,8 @@ public class ShopListing {
         String s = "";
         if (!uniqueName) {
             s = im.getDisplayName();
-            int split = s.indexOf("§§");
+            String invisible = "" + ChatColor.COLOR_CHAR + ChatColor.COLOR_CHAR;
+            int split = s.indexOf(invisible);
             if (split == -1) {
                 System.err.print("[ShopListing.unshopifyItem] Failure to restore item's display name");
             }

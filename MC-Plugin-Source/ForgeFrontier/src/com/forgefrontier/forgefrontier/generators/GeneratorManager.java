@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.generators;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,16 +12,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GeneratorManager implements Listener {
+public class GeneratorManager extends Manager implements Listener {
 
-    ForgeFrontier plugin;
     List<GeneratorInstance> generatorInstances;
     List<Generator> generators;
 
     public GeneratorManager(ForgeFrontier plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
+    @Override
     public void init() {
         this.generatorInstances = new ArrayList<>();
         this.generators = new ArrayList<>();
@@ -31,6 +32,11 @@ public class GeneratorManager implements Listener {
 
         this.generators.add(generator);
         plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem(generator));
+
+    }
+
+    @Override
+    public void disable() {
 
     }
 
