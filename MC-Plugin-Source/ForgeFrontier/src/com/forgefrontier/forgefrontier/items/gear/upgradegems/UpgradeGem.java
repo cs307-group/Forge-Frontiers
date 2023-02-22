@@ -30,7 +30,7 @@ public class UpgradeGem extends UniqueCustomItem {
         this.registerInstanceAccumulator((__, itemStack) -> {
 
             // Because at the start the instance will be null, it must be instantiated here.
-            UpgradeGemInstance gemInstance = new UpgradeGemInstance();
+            UpgradeGemInstance gemInstance = new UpgradeGemInstance(itemStack);
             // Set the attributes relevant to it being specifically the UpgradeGem.
             if (itemStack == null) {
                 // Set default value for a brand new UpgradeGem.
@@ -88,7 +88,7 @@ public class UpgradeGem extends UniqueCustomItem {
         // itemStack could be null, or could be an existing UpgradeGem you wish to get the instance of.
         this.registerInstanceAccumulator((__, itemStack) -> {
             // Because at the start the instance will be null, it must be instantiated here.
-            UpgradeGemInstance gemInstance = new UpgradeGemInstance();
+            UpgradeGemInstance gemInstance = new UpgradeGemInstance(itemStack);
             // Set the attributes relevant to it being specifically the UpgradeGem.
             if (itemStack == null) {
                 // Set default value for a brand new UpgradeGem.

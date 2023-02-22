@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.items;
 
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -11,6 +12,9 @@ public abstract class UniqueCustomItem extends CustomItem {
 
         UUID uniqueId;
 
+        public UniqueCustomItemInstance(ItemStack itemStack) {
+            super(itemStack);
+        }
     }
 
     public UniqueCustomItem(String code) {

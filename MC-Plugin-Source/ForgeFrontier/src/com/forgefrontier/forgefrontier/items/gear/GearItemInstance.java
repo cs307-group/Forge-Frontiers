@@ -7,6 +7,7 @@ import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGemInstance;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Instance class for the GearItem class
@@ -39,4 +40,9 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
 
     /** The lore specific to this item */
     String lore;
+
+    public GearItemInstance(ItemStack itemStack) {
+        super(itemStack);
+    }
+
 }

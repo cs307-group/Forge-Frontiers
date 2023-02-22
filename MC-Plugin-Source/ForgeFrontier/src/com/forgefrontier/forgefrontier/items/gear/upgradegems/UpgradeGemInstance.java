@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.items.gear.upgradegems;
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem.UniqueCustomItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * A class representing the UpgradeGems, which can be applied to special gear in their inventory. Once applied to an
@@ -18,6 +19,10 @@ public class UpgradeGemInstance extends UniqueCustomItemInstance {
 
     /** the quality associated with the gem */
     Quality quality;
+
+    public UpgradeGemInstance(ItemStack itemStack) {
+        super(itemStack);
+    }
 
     @Override
     public String toString() {

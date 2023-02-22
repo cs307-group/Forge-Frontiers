@@ -1,8 +1,14 @@
 package com.forgefrontier.forgefrontier.items;
 
-import org.bukkit.event.player.PlayerInteractEvent;
+import com.forgefrontier.forgefrontier.ForgeFrontier;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import javax.annotation.Nullable;
+import java.util.logging.Level;
 
 public class CustomItemInstance {
 
@@ -13,7 +19,33 @@ public class CustomItemInstance {
     private int amount;
 
     // Additional data for the item
-    //JSONObject data;
+    JSONObject data;
+
+    /** JSON Parser to parse the custom data of the item.*/
+    private static final JSONParser parser;
+
+    /* Ran whenever the class is first accessed */
+    static {
+        parser = new JSONParser();
+    }
+
+    public CustomItemInstance(@Nullable ItemStack itemStack) {
+        this.amount = 1;
+
+        if(itemStack == null) {
+            this.data = new JSONObject();
+            return;
+        }
+
+        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        try {
+            this.data = (JSONObject) parser.parse(nmsItem.t().l("custom-data"));
+        } catch (ParseException e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "Unable to parse JSON data of item: " + itemStack);
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "Item has data: " + nmsItem.t().l("custom-data"));
+        }
+
+    }
 
     /**
      * asItemStack converts an instance into an ItemStack using the accumulator functions.
@@ -44,10 +76,8 @@ public class CustomItemInstance {
         this.amount = amount;
     }
 
-    /*
     public JSONObject getData() {
         return this.data;
     }
-    */
 
 }

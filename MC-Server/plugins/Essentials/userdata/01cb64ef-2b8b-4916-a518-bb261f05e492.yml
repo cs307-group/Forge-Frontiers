@@ -16,15 +16,15 @@ timestamps:
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1676496535624
-  login: 1676496525714
+  logout: 1677092411187
+  login: 1677092388278
 money: '0'
 logoutlocation:
   world: 8129001e-fb9c-4b12-9cd9-bfbcf5dcde0d
   world-name: world
-  x: 473.0412319965303
-  y: 83.64723885850987
-  z: -670.10410429199
-  yaw: -103.94865417480469
-  pitch: 25.500083923339844
+  x: 378.30000001192093
+  y: 112.0
+  z: -720.3000000119209
+  yaw: 65.10186767578125
+  pitch: 30.000160217285156
 last-account-name: BubbleKitty13426

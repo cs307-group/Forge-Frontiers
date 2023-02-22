@@ -18,6 +18,10 @@ public final class ExampleZombieSword extends UniqueCustomItem {
     // The CustomItemInstance specifically for the ZombieSword, containing the specific data for the Zombie Sword.
     public static class ExampleZombieSwordInstance extends UniqueCustomItemInstance {
         double extraDamagePercent;
+
+        public ExampleZombieSwordInstance(ItemStack itemStack) {
+            super(itemStack);
+        }
     }
 
     public ExampleZombieSword() {
@@ -28,15 +32,13 @@ public final class ExampleZombieSword extends UniqueCustomItem {
         this.registerInstanceAccumulator((__, itemStack) -> {
 
             // Because at the start the instance will be null, it must be instantiated here.
-            ExampleZombieSwordInstance zombieSwordInstance = new ExampleZombieSwordInstance();
+            ExampleZombieSwordInstance zombieSwordInstance = new ExampleZombieSwordInstance(itemStack);
             // Set the attributes relevant to it being specifically the zombie sword.
             if (itemStack == null) {
                 // Set default value for a brand new Zombie Sword.
-                zombieSwordInstance.extraDamagePercent = 100.0;
-            } else {
-                // TODO: Access itemstack data and set based off that data.
-                zombieSwordInstance.extraDamagePercent = 100.0;
+                zombieSwordInstance.data.put("extra-dmg", Math.random() * 2);
             }
+            zombieSwordInstance.extraDamagePercent = (double) zombieSwordInstance.data.get("extra-dmg");
 
             // Return it to rise up to the accumulator for UniqueCustomItem (giving it a unique id)
             return zombieSwordInstance;
@@ -48,17 +50,11 @@ public final class ExampleZombieSword extends UniqueCustomItem {
             // Because this accumulator is being ran, it is guaranteed it is a safe cast, because all ZombieSword Custom Items will be of this instance (or a subclass).
             ExampleZombieSwordInstance zombieSwordInstance = (ExampleZombieSwordInstance) customItemInstance;
             // Create the actual ItemStack.
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.WHITE + "Zombie Sword");
-            // Set the data based off the item's attributes.
-            meta.setLore(
-                Arrays.asList(
-                    ChatColor.GRAY + "Extra damage against Zombies:",
-                    ChatColor.GREEN + " + " + ((int) (zombieSwordInstance.extraDamagePercent * 100)) + "%"
-                )
-            );
-            item.setItemMeta(meta);
+            ItemStack item = new ItemStackBuilder(Material.IRON_SWORD)
+                .setDisplayName(ChatColor.WHITE + "Zombie Sword")
+                .addLoreLine(ChatColor.GRAY + "Extra damage against Zombies:")
+                .addLoreLine(ChatColor.GREEN + " + " + (((int) (zombieSwordInstance.extraDamagePercent * 1000)) / 10.0) + "%")
+                .build();
             // Return the item to give it to the UniqueCustomItem's accumulator, which will add the unique id to the itemstack.
             return item;
         });

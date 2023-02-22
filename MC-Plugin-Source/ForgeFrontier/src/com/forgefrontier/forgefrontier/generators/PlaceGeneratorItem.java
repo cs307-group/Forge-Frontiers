@@ -29,7 +29,7 @@ public class PlaceGeneratorItem extends CustomItem {
             return item;
         });
 
-        this.registerInstanceAccumulator((__, itemStack) -> new CustomItemInstance());
+        this.registerInstanceAccumulator((__, itemStack) -> new CustomItemInstance(itemStack));
 
     }
 
