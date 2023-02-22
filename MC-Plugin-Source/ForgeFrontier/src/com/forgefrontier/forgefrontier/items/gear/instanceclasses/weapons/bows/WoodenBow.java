@@ -26,7 +26,11 @@ public class WoodenBow extends GearItem {
     public WoodenBow() {
         super ("WoodenBow", QualityEnum.UNASSIGNED.getQuality(), 3, 3,
                 GemEnum.WEAPON, Material.BOW, Material.BOW.getMaxDurability(),
-                "A handy wooden bow, crafted with oak", WoodenBow.WoodenBowInstance.class);
+                "A handy wooden bow, crafted with oak");
+
+        this.registerInstanceAccumulator((__, itemStack) -> {
+            return new WoodenBowInstance();
+        });
     }
 
     /**
