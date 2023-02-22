@@ -54,10 +54,12 @@ public class GeneratorManager extends Manager implements Listener {
 
     public void addGeneratorInstance(GeneratorInstance generatorInstance) {
         this.generatorInstances.add(generatorInstance);
+        generatorInstance.getBoundingBox().getLocation().getBlock().setType(Material.GOLD_BLOCK);
     }
 
     public void removeGeneratorInstance(GeneratorInstance generatorInstance) {
         this.generatorInstances.remove(generatorInstance);
+        generatorInstance.getBoundingBox().getLocation().getBlock().setType(Material.AIR);
     }
 
 }

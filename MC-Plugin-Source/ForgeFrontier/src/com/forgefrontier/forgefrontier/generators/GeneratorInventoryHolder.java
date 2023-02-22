@@ -3,6 +3,8 @@ package com.forgefrontier.forgefrontier.generators;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,9 +14,6 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Arrays;
 
 public class GeneratorInventoryHolder extends BaseInventoryHolder {
     GeneratorInstance generatorInstance;
@@ -28,36 +27,34 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
         this.addHandler(9+2, (e) -> {
             generatorInstance.collect((Player) e.getWhoClicked());
         });
-        ItemStack removeItem = new ItemStack(Material.RED_WOOL);
-        ItemMeta meta = removeItem.getItemMeta();
-        meta.setDisplayName(ChatColor.RED + "Remove Generator");
-
+        ItemStack removeItem = new ItemStackBuilder(Material.RED_WOOL).setDisplayName(ChatColor.RED + "Remove Generator").build();
+        this.setItem(9+6, removeItem);
         Inventory baseInventory = this.getInventory();
         this.addHandler(9+6, (e) -> {
             ConfirmationHolder confirmHolder = new ConfirmationHolder("Are you sure you want to pickup this generator?", baseInventory, () -> {
                 ForgeFrontier.getInstance().getGeneratorManager().removeGeneratorInstance(generatorInstance);
+                e.getWhoClicked().getInventory().addItem(CustomItemManager.getCustomItem("GenPlace-" + generatorInstance.generator.getCode()).asInstance(null).asItemStack());
+                e.getWhoClicked().closeInventory();
             });
             e.getWhoClicked().openInventory(confirmHolder.getInventory());
         });
     }
 
     public void setCollectItem() {
-        ItemStack collectItem = new ItemStack(generatorInstance.generator.primaryMaterial.representation);
-        ItemMeta collectItemMeta = collectItem.getItemMeta();
-        collectItemMeta.setDisplayName(ChatColor.YELLOW + "Collect");
-        collectItemMeta.setLore(Arrays.asList(
-                ChatColor.RED + "Available Items: " + generatorInstance.getCollectAmt() + " / " + generatorInstance.getMaxAmt() + " " + generatorInstance.generator.primaryMaterial.name + "(s)"
-        ));
-        collectItem.setItemMeta(collectItemMeta);
-        this.setItem(9+2, collectItem);
+        ItemStack item = new ItemStackBuilder(generatorInstance.generator.primaryMaterial.representation)
+                .setDisplayName(ChatColor.YELLOW + "Collect")
+                .addLoreLine(ChatColor.RED + "Available Items: " + generatorInstance.getCollectAmt() + " / " + generatorInstance.getMaxAmt() + " " + generatorInstance.generator.primaryMaterial.name + "(s)")
+                .setAmount(1)
+                .build();
+        this.setItem(9+2, item);
     }
 
     @Override
     public void onOpen(InventoryOpenEvent e) {
         int id = Bukkit.getScheduler().runTaskTimer(ForgeFrontier.getInstance(), () -> {
             setCollectItem();
-        }, 0, generatorInstance.getGeneratorLevel().generatorRate * 20 / 1000).getTaskId();
-        this.updateTaskId = updateTaskId;
+        }, 0, generatorInstance.getGeneratorLevel().generatorRate * 20L / 1000).getTaskId();
+        this.updateTaskId = id;
     }
 
     @Override

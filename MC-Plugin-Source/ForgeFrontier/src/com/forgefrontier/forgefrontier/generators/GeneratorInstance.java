@@ -32,7 +32,10 @@ public class GeneratorInstance {
             collectAmt = currentLevel.maxSize;
         }
 
+    }
 
+    public BoundingBox getBoundingBox() {
+        return this.boundingBox;
     }
 
     private void setAmountLeft(int amtLeft, long currentTime) {

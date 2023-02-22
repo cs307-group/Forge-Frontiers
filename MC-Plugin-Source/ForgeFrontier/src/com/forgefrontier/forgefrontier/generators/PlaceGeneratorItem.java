@@ -45,7 +45,6 @@ public class PlaceGeneratorItem extends CustomItem {
         e.setCancelled(true);
         if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
             e.getItem().setAmount(e.getItem().getAmount() - 1);
-        block.setType(Material.GOLD_BLOCK);
         GeneratorInstance generatorInstance = new GeneratorInstance(generator, newLocation);
         ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(generatorInstance);
     }
