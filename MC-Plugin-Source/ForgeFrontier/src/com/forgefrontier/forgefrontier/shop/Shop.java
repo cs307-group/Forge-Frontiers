@@ -17,8 +17,12 @@ import java.util.*;
  * Implements functionality to buy/sell items through a GUI interface
  */
 public class Shop {
-    private static final String INSUFF_BALANCE = ChatColor.DARK_RED + "You don't have enough money to buy this item!";
-    private static final String GEN_SHOP_ERR = ChatColor.RED + "An error occurred with the shop. Please try again.";
+    private static final String INSUFF_BALANCE = ChatColor.DARK_RED +
+            "[SHOP] You don't have enough money to buy this item!";
+    private static final String SELF_BUY_ERR = ChatColor.DARK_RED +
+            "[SHOP] You cannot buy your own listings!";
+    private static final String GEN_SHOP_ERR = ChatColor.RED +
+            "[SHOP] An error occurred with the shop. Please try again.";
 
     private Hashtable<UUID, ShopListing> listings;
     ShopHolder shopGUI;
@@ -67,8 +71,30 @@ public class Shop {
         return this.listings;
     }
 
-
+    public boolean executeRemoveListing(Player p, ShopListing l) {
+        if (l.getLister().getUniqueId() != p.getUniqueId()) {
+            p.sendMessage(GEN_SHOP_ERR);
+            return false;
+        }
+        if (!listings.containsKey(l.getID())) {
+            p.sendMessage(GEN_SHOP_ERR);
+            return false;
+        }
+        ItemGiver.giveItem(p, l.getItem());
+        removeListing(l.getID());
+        return true;
+    }
     public double executeBuy(Player p, ShopListing l) {
+        // TODO: TURN BOOLEAN OFF WHEN NOT TESTING
+        boolean TEST = true;
+        if (l.getLister().getUniqueId() == p.getUniqueId()) {
+            if (!listings.containsKey(l.getID())) {
+                p.sendMessage(GEN_SHOP_ERR);
+                return -1;
+            }
+            p.sendMessage(SELF_BUY_ERR);
+            return -1;
+        }
         if (!econ.has(p,l.getPrice())) {
             p.sendMessage(INSUFF_BALANCE);
             return -1;
