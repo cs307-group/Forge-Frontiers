@@ -29,7 +29,7 @@ public class ShopListing {
         this.amt = item.getAmount();
         this.item = item;
         this.listingID = listingID;
-        displayItem = this.shopifyItem(item);
+        displayItem = this.shopifyItem(item, price);
     }
 
     /** Getters **/
@@ -47,10 +47,13 @@ public class ShopListing {
     void setItem(ItemStack ci) { item = ci; }
     @Deprecated
     void setPlayer(Player p) { lister = p; }
+
+
+
     /**
      * Edits ItemStack's display name to have price amount
      */
-    public ItemStack shopifyItem(ItemStack itemStack) {
+    public static ItemStack shopifyItem(ItemStack itemStack, double price) {
         ItemStack i2 = new ItemStackBuilder(itemStack).build();
         ItemMeta im = itemStack.getItemMeta();
         final String invisibleChar = "" + ChatColor.COLOR_CHAR + ChatColor.COLOR_CHAR;
@@ -77,9 +80,6 @@ public class ShopListing {
             s = im.getDisplayName();
             String invisible = "" + ChatColor.COLOR_CHAR + ChatColor.COLOR_CHAR;
             int split = s.indexOf(invisible);
-            if (split == -1) {
-                System.err.print("[ShopListing.unshopifyItem] Failure to restore item's display name");
-            }
             s = s.substring(0, split);
         }
         im.setDisplayName(s);

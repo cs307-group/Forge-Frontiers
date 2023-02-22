@@ -3,6 +3,7 @@ name: ForgeFrontier
 version: 1.0
 description: The main plugin for Forge Frontier
 api-version: 1.18
+depend: [Vault]
 
 commands:
   gen:

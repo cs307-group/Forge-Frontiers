@@ -68,15 +68,11 @@ public class ShopCommandExecutor implements CommandExecutor {
                 }
 
                 // TODO: Add confirmation gui, pricing, etc.
-
-                int finalAmt = amt;
-                double finalPrice = price;
-                p.openInventory(new ConfirmationHolder("Confirm?",null,()->{
-                    ItemStack shopitm = new ItemStackBuilder(itm).copy(itm, finalAmt);
-                    if (shop.createListing(p, finalPrice, finalAmt,shopitm)) {
-                        itm.setAmount(itm.getAmount()- finalAmt);
-                        p.getInventory().setItemInMainHand(itm);
-                    }
+                final int finalAmt = amt;
+                final double finalPrice = price;
+                ItemStack viewItem = ShopListing.shopifyItem(new ItemStackBuilder(itm).copy(itm, finalAmt), price);
+                p.openInventory(new ConfirmationHolder("Confirm?",null, viewItem, ()->{
+                    shop.addItem(p,itm, finalAmt, finalPrice);
                 }).getInventory());
                 break;
             }
@@ -86,7 +82,7 @@ public class ShopCommandExecutor implements CommandExecutor {
             }
             case "remove": {
                 System.out.println("Opening Remove Shop");
-                p.openInventory(new ShopHolder(shop.getListings(),true).getInventory());
+                p.openInventory(new ShopHolder(shop,true).getInventory());
                 return true;
             }
             default: {
@@ -95,4 +91,7 @@ public class ShopCommandExecutor implements CommandExecutor {
         }
         return true;
     }
+
+
+
 }

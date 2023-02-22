@@ -40,8 +40,8 @@ public class ConfirmationHolder extends BaseInventoryHolder {
         this.addHandler(CANCEL_SLOT, (e) -> closeHandler(e,previousInventory));
     }
 
-    public ConfirmationHolder(String message, Inventory previousInventory,
-                              Runnable confirm, ItemStack accept, ItemStack cancel) {
+    public ConfirmationHolder(String message, Inventory previousInventory, ItemStack accept, ItemStack cancel,
+                              Runnable confirm) {
         super(27, message);
         this.fillPanes();
         setAcceptItem(accept);
@@ -49,6 +49,16 @@ public class ConfirmationHolder extends BaseInventoryHolder {
         this.addHandler(ACCEPT_SLOT, (e) -> confirmHandler(e,previousInventory,confirm));
         this.addHandler(CANCEL_SLOT, (e) -> closeHandler(e,previousInventory));
     }
+    public ConfirmationHolder(String message, Inventory previousInventory,
+                              ItemStack accept, Runnable confirm) {
+        super(27, message);
+        this.fillPanes();
+        setAcceptItem(accept);
+        setCancelItem(Material.RED_STAINED_GLASS_PANE, DEFAULT_CANCEL_STR);
+        this.addHandler(ACCEPT_SLOT, (e) -> confirmHandler(e,previousInventory,confirm));
+        this.addHandler(CANCEL_SLOT, (e) -> closeHandler(e,previousInventory));
+    }
+
 
     /**
      * Create ItemStack for accept

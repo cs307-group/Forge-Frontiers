@@ -3,18 +3,44 @@ package com.forgefrontier.forgefrontier.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Method;
 
 
 
 
-/**
- * THIS IS CODE FROM A ONLINE FORUM FOR UTILITY PURPOSES
- * SOURCE: https://bukkit.org/threads/reflection-friendly-item-names.339467/
- * @author Forge_User_62502025
- */
+
 public class ItemRename {
+
+    public static String itemName(ItemStack itm) {
+        ItemMeta meta = itm.getItemMeta();
+        if (meta == null) return simpleRename(itm.getType());
+        if (meta.hasDisplayName()) return meta.getDisplayName();
+        else return simpleRename(itm.getType());
+    }
+
+    /**
+     * Get Material Renamed
+     * @param material Material
+     * @return Friendly Name
+     */
+    public static String simpleRename(Material material) {
+        String[] strs = material.toString().toLowerCase().split("_");
+        StringBuilder out = new StringBuilder();
+        for (String s : strs) {
+            out.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
+        }
+        out.deleteCharAt(out.length()-1);
+        return out.toString();
+    }
+
+
+    /**
+     * THIS IS CODE FROM A ONLINE FORUM FOR UTILITY PURPOSES
+     * SOURCE: https://bukkit.org/threads/reflection-friendly-item-names.339467/
+     * @author Forge_User_62502025
+     */
     public static String capitalizeFully(String name) {
         if (name != null) {
             if (name.length() > 1) {
@@ -34,15 +60,6 @@ public class ItemRename {
         }
     }
 
-    public static String simpleRename(Material material) {
-        String[] strs = material.toString().toLowerCase().split("_");
-        StringBuilder out = new StringBuilder();
-        for (String s : strs) {
-            out.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
-        }
-        out.deleteCharAt(out.length()-1);
-        return out.toString();
-    }
     public static String getFriendlyName(Material material) {
         return material == null ? "Air" : getFriendlyName(new ItemStack(material), false);
     }
