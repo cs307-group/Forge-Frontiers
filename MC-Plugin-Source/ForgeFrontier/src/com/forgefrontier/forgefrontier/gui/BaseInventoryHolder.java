@@ -47,7 +47,10 @@ public class BaseInventoryHolder implements InventoryHolder {
 
         return this;
     }
-
+    public BaseInventoryHolder removeHandler(int slot) {
+        this.handlers[slot] = null;
+        return this;
+    }
     public BaseInventoryHolder setItem(int slot, ItemStack item) {
         this.inventory.setItem(slot, item);
 

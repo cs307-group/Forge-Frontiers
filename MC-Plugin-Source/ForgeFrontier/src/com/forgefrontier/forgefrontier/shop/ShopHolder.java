@@ -24,37 +24,66 @@ import java.util.UUID;
 
 public class ShopHolder extends BaseInventoryHolder {
     Hashtable<UUID, ShopListing> listings;
-    Boolean remove = false;
+    Boolean remove;
+    UUID pID;
     Shop shop;
     ShopHolder(Shop s) {
         super(27);
         this.fillPanes();
         this.listings = s.getListings();
-        this.updateGUI();
         this.shop = s;
+        remove = false;
+        this.updateGUI();
+
     }
 
-    ShopHolder(Shop s, Boolean remove) {
+    ShopHolder(Shop s, UUID playerID, Boolean remove) {
         super(27);
         this.fillPanes();
         this.listings = s.getListings();
         this.remove = remove;
-        this.updateGUI();
         this.shop = s;
+        this.pID = playerID;
+        this.removeGUI();
     }
 
-    public void updateGUI() {
+    public void removeGUI() {
         Set<UUID> keys = listings.keySet();
         int i = 0;
         for (UUID k : keys) {
+            if (listings.get(k).getLister().getUniqueId() != pID) {
+                continue;
+            }
             if (i > 9) break;
             ItemStack displayItem = listings.get(k).getDisplayItem();
             this.setItem(i, displayItem);
             int i2 = i;
             this.addHandler(i, (e) -> {
                 Player p = (Player) e.getWhoClicked();
-                p.openInventory(new ConfirmationHolder("Confirm?",this.getInventory(), displayItem, ()->{
-                    removeListingCallback(e, i2, k);
+                p.openInventory(new ConfirmationHolder("Remove Listing?",this.getInventory(), displayItem, ()->{
+                    this.setItem(i2,new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName("").build());
+                    if (shop.executeRemoveListing(p,listings.get(k))) {
+                        this.removeHandler(i2);
+                    }
+                    removeGUI();
+                }).getInventory());
+            });
+            i++;
+        }
+    }
+    public void updateGUI() {
+        Set<UUID> keys = listings.keySet();
+        int i = 0;
+        for (UUID k : keys) {
+            // TODO: Fill GUI
+            if (i > 9) break;
+            ItemStack displayItem = listings.get(k).getDisplayItem();
+            this.setItem(i, displayItem);
+            int i2 = i;
+            this.addHandler(i, (e) -> {
+                Player p = (Player) e.getWhoClicked();
+                p.openInventory(new ConfirmationHolder("Buy Item?",this.getInventory(), displayItem, ()->{
+                    buyListingCallback(e, i2, k);
                 }).getInventory());
             });
             i++;
@@ -69,7 +98,7 @@ public class ShopHolder extends BaseInventoryHolder {
      * @param i slot index
      * @param k item uuid
      */
-    public void removeListingCallback(InventoryClickEvent e, int i, UUID k) {
+    public void buyListingCallback(InventoryClickEvent e, int i, UUID k) {
         ShopListing sl = this.listings.get(k);
         if (sl == null) {
             this.updateGUI();
@@ -81,12 +110,13 @@ public class ShopHolder extends BaseInventoryHolder {
         }
         Player p = (Player) e.getWhoClicked();
         this.setItem(i,new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName("").build());
-        double result = shop.executeBuy(p,k);
-        if (result != -1) {
-            p.sendMessage(ChatColor.GOLD + "You bought " + ItemRename.itemName(sl.getItem()) +
-                    ChatColor.GOLD + " for " + ChatColor.BOLD  + (Math.round(result * 100) / 100) + "g" +
-                    ChatColor.RESET + ChatColor.GOLD + "!");
-        }
+            double result = shop.executeBuy(p, k);
+            if (result != -1) {
+                p.sendMessage(ChatColor.GOLD + "You bought " + ItemRename.itemName(sl.getItem()) +
+                        ChatColor.GOLD + " for " + ChatColor.BOLD + (Math.round(result * 100) / 100) + "g" +
+                        ChatColor.RESET + ChatColor.GOLD + "!");
+                this.removeHandler(i);
+            }
         this.updateGUI();
     }
 
