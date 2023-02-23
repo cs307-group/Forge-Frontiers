@@ -16,8 +16,8 @@ timestamps:
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1677052223567
-  login: 1677052185930
+  logout: 1677131117438
+  login: 1677131077503
 money: '5.0'
 last-account-name: Piiro
 lastlocation:
@@ -31,8 +31,8 @@ lastlocation:
 logoutlocation:
   world: f3493a3d-6f35-46cd-9f02-1c20089114c8
   world-name: world
-  x: 248.40363806356956
-  y: 77.16794743760542
-  z: 186.33039268539642
-  yaw: -120.11328125
-  pitch: 28.638111114501953
+  x: 226.77020816315678
+  y: 78.10240562793919
+  z: 155.6440117068955
+  yaw: 120.55807495117188
+  pitch: 25.42352294921875

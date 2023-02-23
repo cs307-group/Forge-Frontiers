@@ -65,7 +65,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.customItemManager.init();
         this.playerManager.init();
 
-        this.itemShop = new Shop(econ);
+        this.itemShop = new Shop();
 
         // TODO: Remove testing code for the Zombie Sword example custom item.
         this.getCustomItemManager().registerCustomItem(new ExampleZombieSword());
@@ -115,6 +115,11 @@ public class ForgeFrontier extends JavaPlugin {
     public static ForgeFrontier getInstance() {
         return inst;
     }
+
+    public static Economy getEconomy() {
+        return econ;
+    }
+
 
 
     private boolean setupEconomy() {

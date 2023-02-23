@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.shop;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import net.milkbowl.vault.economy.Economy;
@@ -29,11 +30,11 @@ public class Shop {
     ShopCommandExecutor shopCommands;
     Economy econ;
     /** Basic Constructor. */
-    public Shop(Economy e) {
+    public Shop() {
         listings = new Hashtable<>();
         shopGUI = new ShopHolder(this);
         shopCommands = new ShopCommandExecutor(this);
-        this.econ = e;
+        this.econ = ForgeFrontier.getEconomy();
     }
 
     /**
