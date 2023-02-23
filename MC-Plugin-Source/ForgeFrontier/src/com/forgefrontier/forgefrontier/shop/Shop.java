@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Implements functionality to buy/sell items through a GUI interface
@@ -25,13 +27,13 @@ public class Shop {
     private static final String GEN_SHOP_ERR = ChatColor.RED +
             "[SHOP] An error occurred with the shop. Please try again.";
 
-    private Hashtable<UUID, ShopListing> listings;
+    private ConcurrentHashMap<UUID, ShopListing> listings;
     ShopHolder shopGUI;
     ShopCommandExecutor shopCommands;
     Economy econ;
     /** Basic Constructor. */
     public Shop() {
-        listings = new Hashtable<>();
+        listings = new ConcurrentHashMap<>();
         shopGUI = new ShopHolder(this);
         shopCommands = new ShopCommandExecutor(this);
         this.econ = ForgeFrontier.getEconomy();
@@ -68,7 +70,7 @@ public class Shop {
         return new ShopHolder(this).getInventory();
     }
 
-    public Hashtable<UUID, ShopListing> getListings() {
+    public ConcurrentHashMap<UUID, ShopListing> getListings() {
         return this.listings;
     }
 

@@ -23,9 +23,10 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ShopHolder extends BaseInventoryHolder {
-    Hashtable<UUID, ShopListing> listings;
+    ConcurrentHashMap<UUID, ShopListing> listings;
     Boolean remove;
     UUID pID;
     Shop shop;
@@ -73,6 +74,7 @@ public class ShopHolder extends BaseInventoryHolder {
             i++;
         }
     }
+
     public void updateGUI() {
         Set<UUID> keys = listings.keySet();
         int i = 0;
