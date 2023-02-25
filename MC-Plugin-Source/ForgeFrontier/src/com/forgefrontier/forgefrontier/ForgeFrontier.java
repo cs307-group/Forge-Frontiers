@@ -11,14 +11,12 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGem;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
-import io.github.cdimascio.dotenv.Dotenv;
-import io.netty.handler.logging.LogLevel;
+
 import org.apache.commons.lang.SystemUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
-
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -29,7 +27,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -157,32 +154,43 @@ public class ForgeFrontier extends JavaPlugin {
     }
 
     private boolean setupDatabaseConnection() {
-
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (Exception e) {
+            this.getLogger().log(Level.SEVERE, "[FF DATABASE] COULD NOT FIND POSTGRES DRIVER!");
+            return false;
+        }
         try (InputStream in = getClass().getResourceAsStream("/.env");
              BufferedReader reader = new BufferedReader(new InputStreamReader(in)))
         {
             String connStr = reader.readLine();
+            String uname = reader.readLine();
+            String password = reader.readLine();
             reader.close();
             this.getLogger().log(Level.INFO, "[FF DATABASE] Attempting to connect to DB");
             Properties props = new Properties();
             props.setProperty("ssl", "true");
             props.setProperty("sslmode","verify-full");
-
+            props.setProperty("user", uname);
+            props.setProperty("password",password);
             String home_dir;
             if (SystemUtils.IS_OS_LINUX) {
-                home_dir = System.getProperty("HOME");;
+                home_dir = System.getProperty("HOME");
+                home_dir += "/.postgresql/root.crt";
+
             } else if (SystemUtils.IS_OS_WINDOWS) {
                 home_dir = System.getenv("UserProfile");
+                home_dir += "\\.postgresql\\root.crt";
             } else {
                 this.getLogger().log(Level.SEVERE, "[FF DATABASE] COULD NOT FIND SSL ROOT CERTIFICATE...");
                 return false;
             }
-            home_dir += "/.postgresql/root.crt";
+            this.getLogger().log(Level.INFO, "[FF DATABASE] Loading SSL Cert from " + home_dir);
 
             props.setProperty("sslcert", home_dir);
             this.getLogger().log(Level.INFO, "[FF DATABASE] Establishing connection...");
-            Connection conn = DriverManager.getConnection(connStr, props);
-            this.getLogger().log(Level.INFO, "[FF DATABASE] Post connection...");
+            Class.forName("org.postgresql.Driver");
+            Connection conn = DriverManager.getConnection(connStr, uname, password);
 
             if (conn != null) {
                 this.getLogger().log(Level.INFO, "[FF DATABASE] Connected to Database.");

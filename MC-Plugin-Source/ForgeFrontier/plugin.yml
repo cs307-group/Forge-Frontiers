@@ -4,7 +4,8 @@ version: 1.0
 description: The main plugin for Forge Frontier
 api-version: 1.18
 depend: [Vault]
-
+libraries:
+  - org.postgresql:postgresql:42.5.4
 commands:
   gen:
     description: "Command for accessing generators."
