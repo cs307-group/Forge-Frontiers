@@ -28,12 +28,15 @@ public class Shop {
             "[SHOP] An error occurred with the shop. Please try again.";
 
     private ConcurrentHashMap<UUID, ShopListing> listings;
+    private TreeMap<UUID, ShopListing> listingsSorted;
+
     ShopHolder shopGUI;
     ShopCommandExecutor shopCommands;
     Economy econ;
     /** Basic Constructor. */
     public Shop() {
         listings = new ConcurrentHashMap<>();
+        listingsSorted = new TreeMap<>();
         shopGUI = new ShopHolder(this);
         shopCommands = new ShopCommandExecutor(this);
         this.econ = ForgeFrontier.getEconomy();
