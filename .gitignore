@@ -12,4 +12,5 @@ MC-Plugin-Source/ForgeFrontier/ForgeFrontier.iml
 MC-Plugin-Source/.idea
 
 .idea
-
+.idea/runConfigurations
+.idea/workspace
