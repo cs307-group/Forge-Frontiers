@@ -15,6 +15,9 @@ public class GemValues {
     /** the quality associated with the gem */
     Quality quality;
 
+    /** Empty constructor for base instance generation */
+    public GemValues() {}
+
     /**
      * Constructor sets attributes based off of parameters
      *

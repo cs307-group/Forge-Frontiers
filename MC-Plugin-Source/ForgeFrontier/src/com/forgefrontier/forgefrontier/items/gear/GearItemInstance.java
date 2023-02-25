@@ -82,7 +82,11 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         // stores the gems
         StringBuilder gemsArrayString = new StringBuilder();
         for (int i = 0; i < numGemSlots; i++) {
-            gemsArrayString.append(gems[i].toString());
+            if (gems[i] == null) {
+                gemsArrayString.append("{EMPTY}");
+            } else {
+                gemsArrayString.append(gems[i].toString());
+            }
         }
         gearData.put("gems", gemsArrayString.toString());
 
@@ -120,8 +124,12 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
 
         String gemsString = name = gearData.get("gems");
         for (int i = 0; i < numBaseStats; i++) {
-            gems[i] =
-                    new GemValues(gemsString.substring(0, gemsString.indexOf("}")));
+            if (gemsString.substring(0, gemsString.indexOf("}") + 1).equals("{EMPTY}")) {
+                gems[i] = null;
+            } else {
+                gems[i] =
+                        new GemValues(gemsString.substring(0, gemsString.indexOf("}")));
+            }
             gemsString = gemsString.substring(gemsString.indexOf("}") + 1);
         }
 

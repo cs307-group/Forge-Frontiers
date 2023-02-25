@@ -17,7 +17,7 @@ public class UpgradeGemInstance extends UniqueCustomItemInstance {
     /** holds the data related to the values of the gem */
     GemValues gemValues;
 
-    HashMap<String, String> gemData;
+    HashMap<String, String> gemData = new HashMap<String, String>();
 
     /**
      * Instance constructor
@@ -26,6 +26,7 @@ public class UpgradeGemInstance extends UniqueCustomItemInstance {
      */
     public UpgradeGemInstance(ItemStack itemStack) {
         super(itemStack);
+        this.gemValues = new GemValues();
     }
 
     /**
