@@ -67,4 +67,14 @@ public enum QualityEnum {
         }
         return UNASSIGNED;
     }
+
+    public static QualityEnum getQualityEnumFromString(String sEnum) {
+        return switch (sEnum) {
+            case "COMMON" -> COMMON;
+            case "RARE" -> RARE;
+            case "UNIQUE" -> UNIQUE;
+            case "MYTHIC" -> MYTHIC;
+            default -> UNASSIGNED;
+        };
+    }
 }

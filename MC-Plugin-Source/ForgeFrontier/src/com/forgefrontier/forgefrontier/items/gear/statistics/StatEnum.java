@@ -24,4 +24,23 @@ public enum StatEnum {
             default -> UNASSIGNED;
         };
     }
+
+    /**
+     * Returns the correct enum based upon specified string
+     *
+     * @param sEnum string specifying the correct enum
+     * @return the correct enum value
+     */
+    public static StatEnum getEnumFromString(String sEnum) {
+        return switch (sEnum) {
+            case "HP" -> HP;
+            case "ATK" -> ATK;
+            case "STR" -> STR;
+            case "DEX" -> DEX;
+            case "CRATE" -> CRATE;
+            case "CDMG" -> CDMG;
+            case "DEF" -> DEF;
+            default ->UNASSIGNED;
+        };
+    }
 }

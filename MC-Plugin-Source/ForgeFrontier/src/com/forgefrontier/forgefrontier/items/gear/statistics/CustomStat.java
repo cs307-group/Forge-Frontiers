@@ -10,6 +10,9 @@ public abstract class CustomStat {
     /** Defines the value of the statistic*/
     int statValue;
 
+    /** Empty constructor */
+    public CustomStat() {}
+
     /**
      * Default Constructor with Random values
      *
@@ -34,6 +37,19 @@ public abstract class CustomStat {
     public CustomStat(int minValue, int maxValue, StatEnum statType) {
         this.statType = statType;
         this.statValue = (int) (Math.random() * (maxValue - minValue + 1)) + minValue;
+    }
+
+    /**
+     * Stat constructor when given string data most likely from NMS
+     *
+     * @param data specifies the attributes of the statistic
+     */
+    public CustomStat(String data) {
+        // removes curly brackets
+        data = data.substring(1, data.length() - 1);
+
+        this.statType = StatEnum.getEnumFromString(data.substring(0, data.indexOf(":")));
+        this.statValue = Integer.parseInt(data.substring(data.indexOf(":") + 1));
     }
 
     /**
@@ -75,6 +91,6 @@ public abstract class CustomStat {
      */
     @Override
     public String toString() {
-        return statType.toString() + " +" + statValue;
+        return "{" + statType.toString() + ":" + statValue + "}";
     }
 }

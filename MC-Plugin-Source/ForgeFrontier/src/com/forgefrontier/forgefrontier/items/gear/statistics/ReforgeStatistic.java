@@ -1,6 +1,8 @@
 package com.forgefrontier.forgefrontier.items.gear.statistics;
 
+import com.destroystokyo.paper.event.entity.WitchThrowPotionEvent;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
+import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
 
 /**
  * ReforgeStatistic
@@ -48,6 +50,32 @@ public class ReforgeStatistic extends CustomStat {
     }
 
     /**
+     * Constructor which creates an object based on data in string format
+     *
+     * @param data the string which specifies the attributes of the object
+     */
+    public ReforgeStatistic(String data) {
+        super();
+        // removes curly brackets
+        data = data.substring(1, data.length() - 1);
+
+        if (data.contains("%")) {
+            isPercent = true;
+            quality = QualityEnum.getQualityEnumFromString(data.substring(0, data.indexOf(":"))).getQuality();
+            String withoutQuality = data.substring(data.indexOf(":") + 1);
+            statType = StatEnum.getEnumFromString(withoutQuality.substring(0, withoutQuality.indexOf((":"))));
+            statValue = Integer.parseInt(withoutQuality.substring(withoutQuality.indexOf(":") + 1, withoutQuality.indexOf("%")));
+        }
+        else {
+            isPercent = false;
+            quality = QualityEnum.getQualityEnumFromString(data.substring(0, data.indexOf(":"))).getQuality();
+            String withoutQuality = data.substring(data.indexOf(":") + 1);
+            statType = StatEnum.getEnumFromString(withoutQuality.substring(0, withoutQuality.indexOf((":"))));
+            statValue = Integer.parseInt(withoutQuality.substring(withoutQuality.indexOf(":") + 1));
+        }
+    }
+
+    /**
      * Performs a 'reforge' on the statistic, re-rolling the values
      *
      * @return the updated stat value
@@ -73,8 +101,8 @@ public class ReforgeStatistic extends CustomStat {
     @Override
     public String toString() {
         if (isPercent)
-            return statType.toString() + " +" + statValue + "%";
+            return quality.toString() + ":" + statType.toString() + ":" + statValue + "%";
         else
-            return statType.toString() + " +" + statValue;
+            return "{" + quality.toString() + ":" + statType.toString() + ":" + statValue + "}";
     }
 }

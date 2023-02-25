@@ -13,8 +13,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.json.simple.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class UpgradeGem extends UniqueCustomItem {
 
@@ -35,11 +37,17 @@ public class UpgradeGem extends UniqueCustomItem {
             if (itemStack == null) {
                 // Set default value for a brand new UpgradeGem.
                 QualityEnum myEnum = QualityEnum.getRandQualityEnum();
-                gemInstance.quality = myEnum.getQuality();
-                gemInstance.stat = new BaseStatistic(0, gemInstance.quality.getMaxValue());
-                gemInstance.gemType = GemEnum.getRandGemEnum();
+                gemInstance.gemValues.quality = myEnum.getQuality();
+                gemInstance.gemValues.stat = new BaseStatistic(0, gemInstance.gemValues.quality.getMaxValue());
+                gemInstance.gemValues.gemType = GemEnum.getRandGemEnum();
+                gemInstance.setGemData();
             } else {
-                // TODO: Access ItemStack data and set based off that data.
+
+                // Pulls the data from the upgrade-gem-data portion of the data hashmap to specify attributes
+                JSONObject data = gemInstance.getData();
+                gemInstance.gemData = (HashMap<String, String>) data.get("upgrade-gem-data");
+                assert(gemInstance.gemData != null);
+                gemInstance.setAttributes();
             }
 
             // Return it to rise up to the accumulator for UniqueCustomItem (giving it a unique id)
@@ -61,15 +69,18 @@ public class UpgradeGem extends UniqueCustomItem {
             // Set the data based off the item's attributes.
             meta.setLore(
                     Arrays.asList(
-                            ChatColor.GRAY + "Can be applied to your " + gemInstance.gemType.toString()
+                            ChatColor.GRAY + "Can be applied to your " + gemInstance.gemValues.gemType.toString()
                                     + " for stat increases",
-                            ChatColor.YELLOW + gemInstance.stat.toString(),
-                            gemInstance.quality.getColor() + gemInstance.quality.toString()
+                            ChatColor.YELLOW + gemInstance.gemValues.stat.toString(),
+                            gemInstance.gemValues.quality.getColor() + gemInstance.gemValues.quality.toString()
                     )
             );
             item.setItemMeta(meta);
             // Return the item to give it to the UniqueCustomItem's accumulator,
             // which will add the unique id to the ItemStack.
+
+            gemInstance.getData().put("upgrade-gem-data", new JSONObject(gemInstance.gemData));
+
             return item;
         });
 
@@ -93,9 +104,9 @@ public class UpgradeGem extends UniqueCustomItem {
             if (itemStack == null) {
                 // Set default value for a brand new UpgradeGem.
                 QualityEnum myEnum = QualityEnum.getRandQualityEnum(maxQuality.getRarityInt());
-                gemInstance.quality = myEnum.getQuality();
-                gemInstance.stat = new BaseStatistic(0, gemInstance.quality.getMaxValue());
-                gemInstance.gemType = GemEnum.getRandGemEnum();
+                gemInstance.gemValues.quality = myEnum.getQuality();
+                gemInstance.gemValues.stat = new BaseStatistic(0, gemInstance.gemValues.quality.getMaxValue());
+                gemInstance.gemValues.gemType = GemEnum.getRandGemEnum();
             } else {
                 // TODO: Access ItemStack data and set based off that data.
             }
@@ -118,10 +129,10 @@ public class UpgradeGem extends UniqueCustomItem {
             // Set the data based off the item's attributes.
             meta.setLore(
                     Arrays.asList(
-                            ChatColor.GRAY + "Can be applied to your " + gemInstance.gemType.toString()
+                            ChatColor.GRAY + "Can be applied to your " + gemInstance.gemValues.gemType.toString()
                                     + " for stat increases",
-                            ChatColor.YELLOW + gemInstance.stat.toString(),
-                            gemInstance.quality.getColor() + gemInstance.quality.toString()
+                            ChatColor.YELLOW + gemInstance.gemValues.stat.toString(),
+                            gemInstance.gemValues.quality.getColor() + gemInstance.gemValues.quality.toString()
                     )
             );
             item.setItemMeta(meta);

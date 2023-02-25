@@ -14,4 +14,13 @@ public class PlayerStat extends CustomStat {
     public PlayerStat(int statValue, StatEnum statType) {
         super(statValue, statType);
     }
+
+    /**
+     * Constructor given a string to specify data
+     *
+     * @param data the string specifying the attributes of the object
+     */
+    public PlayerStat(String data) {
+        super(data);
+    }
 }
