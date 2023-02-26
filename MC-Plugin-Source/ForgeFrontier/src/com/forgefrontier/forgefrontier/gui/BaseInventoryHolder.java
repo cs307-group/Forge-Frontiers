@@ -69,7 +69,7 @@ public class BaseInventoryHolder implements InventoryHolder {
         Bukkit.getScheduler().runTaskLater(ForgeFrontier.getInstance(), () -> {
             this.inventory.setItem(slotId, oldItem);
             this.handlers[slotId] = oldHandler;
-        }, 5000);
+        }, 5 * 20);
 
         return this;
     }

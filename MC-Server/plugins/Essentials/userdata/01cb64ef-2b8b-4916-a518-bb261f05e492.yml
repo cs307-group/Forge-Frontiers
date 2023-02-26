@@ -3,7 +3,7 @@ teleportauto: false
 godmode: false
 muted: false
 jailed: false
-ip-address: ''
+ip-address: 127.0.0.1
 afk: false
 socialspy: false
 npc: false
@@ -11,19 +11,28 @@ powertoolsenabled: true
 accepting-pay: true
 baltop-exempt: false
 timestamps:
-  lastteleport: 0
+  lastteleport: 1677432887294
   lastheal: 0
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1677391479360
-  login: 0
-money: '2381.0'
+  logout: 1677433114312
+  login: 1677431424001
+money: '64044.0'
 logoutlocation:
-  world: 8129001e-fb9c-4b12-9cd9-bfbcf5dcde0d
-  world-name: world
-  x: 511.87143440535
-  y: 98.0
-  z: -773.7799938826205
-  yaw: 30.90185546875
-  pitch: 34.50033187866211
+  world: a73e48f1-3240-4b13-ac6f-b110960b0566
+  world-name: bskyblock_world
+  x: 0.6990998695045335
+  y: 86.0
+  z: 815.9045437141899
+  yaw: 58.04839324951172
+  pitch: 22.650041580200195
+last-account-name: BubbleKitty13426
+lastlocation:
+  world: a73e48f1-3240-4b13-ac6f-b110960b0566
+  world-name: bskyblock_world
+  x: -1.208842286941711
+  y: 85.0
+  z: 0.1088117227449808
+  yaw: -152.8495635986328
+  pitch: 22.800016403198242
