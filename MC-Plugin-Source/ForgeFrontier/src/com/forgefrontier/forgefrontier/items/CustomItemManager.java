@@ -1,8 +1,11 @@
 package com.forgefrontier.forgefrontier.items;
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
 import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -48,6 +51,7 @@ public class CustomItemManager extends Manager implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         ItemStack item = e.getItem();
+        System.out.println(item);
         if(item == null)
             return;
         CustomItemInstance customItemInst = asCustomItemInstance(item);
@@ -69,27 +73,18 @@ public class CustomItemManager extends Manager implements Listener {
         customItemInst.getBaseItem().onAttack(e, customItemInst);
     }
 
-    /**
-     * Is called when an item being used by a player is set to take damage
-     *
-     * @param event the event specifying the specific
-     */
-    @EventHandler
-    public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
-        Player player = event.getPlayer();
-        CustomItemInstance customItemInstance = asCustomItemInstance(player.getInventory().getItem(EquipmentSlot.HAND));
-        if (customItemInstance == null) {
-            return;
-        }
-
-        if (customItemInstance instanceof GearItemInstance) {
-            event.setCancelled(true);
-        }
-    }
-
     // Get the custom item associated with the specified code.
     public static CustomItem getCustomItem(String code) {
         return ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
+    }
+
+    // Convert an ItemStack into a CustomItemInstance of the appropriate custom item.
+    public static CustomItem getCustomItem(ItemStack itemStack) {
+        String code = extractCode(itemStack);
+        if(code == null)
+            return null;
+        CustomItem customItem = ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
+        return customItem;
     }
 
     // Convert an ItemStack into a CustomItemInstance of the appropriate custom item.

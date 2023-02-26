@@ -31,7 +31,8 @@ public class GeneratorInstance {
         if(collectAmt > currentLevel.maxSize) {
             collectAmt = currentLevel.maxSize;
         }
-
+        this.generator.primaryMaterial.collect(player, collectAmt);
+        this.lastCollectTime = currentTime;
     }
 
     public BoundingBox getBoundingBox() {
@@ -50,6 +51,7 @@ public class GeneratorInstance {
 
         GeneratorLevel currentLevel = getGeneratorLevel();
 
+        if(currentLevel.generatorRate == 0) currentLevel.generatorRate = 1;
         int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
         if(collectAmt > currentLevel.maxSize) {
             collectAmt = currentLevel.maxSize;

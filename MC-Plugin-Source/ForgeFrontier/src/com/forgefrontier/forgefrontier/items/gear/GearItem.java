@@ -1,20 +1,28 @@
 package com.forgefrontier.forgefrontier.items.gear;
 
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGemInstance;
+import com.google.common.collect.Multimap;
+import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * GearItem
@@ -89,17 +97,24 @@ public abstract class GearItem extends UniqueCustomItem {
                 initBaseStatSlots(gearItemInstance, numBaseStats);
 
                 gearItemInstance.numGemSlots = numGemSlots;
-                gearItemInstance.gems = new UpgradeGemInstance[gearItemInstance.numGemSlots];
+                gearItemInstance.gems = new GemValues[gearItemInstance.numGemSlots];
                 gearItemInstance.gemEnum = gemEnum;
 
                 gearItemInstance.material = material;
                 gearItemInstance.durability = durability;
 
                 gearItemInstance.lore = lore;
+                gearItemInstance.setGearData();
             } else {
-                //TODO: Access ItemStack data and set based off that data.
-            }
+                System.out.println("LOADING GEAR FROM PREVIOUS DATA");
 
+                // Pulls the data from the gear-data portion of the data hashmap to specify attributes
+                JSONObject data = gearItemInstance.getData();
+                gearItemInstance.gearData = (HashMap<String, String>) data.get("gear-data");
+                assert(gearItemInstance.gearData != null);
+                gearItemInstance.setAttributes();
+
+            }
             return gearItemInstance;
         });
 
@@ -129,16 +144,43 @@ public abstract class GearItem extends UniqueCustomItem {
                 if (gearItemInstance.gems[i] == null) {
                     loreArr.add(ChatColor.DARK_GRAY + "Empty Slot");
                 } else {
-                    loreArr.add(gearItemInstance.gems[i].toString());
+                    loreArr.add(gearItemInstance.gems[i].getQuality().getColor() + gearItemInstance.gems[i].toString());
                 }
             }
             meta.setLore(loreArr);
 
-            //sets the durability of the item to the specified durability
+            // sets the durability of the item to the specified durability
             Damageable damageable = (Damageable) meta;
             damageable.setDamage(gearItemInstance.material.getMaxDurability() - gearItemInstance.durability);
             System.out.println("durability: " + durability);
+
+            // makes the item unbreakable
+            meta.setUnbreakable(true);
+
+            // set the item to do no damage
+            Multimap<Attribute, AttributeModifier> modifiers = meta.getAttributeModifiers();
+            if (modifiers != null) {
+                modifiers.get(Attribute.GENERIC_ATTACK_DAMAGE).clear();
+            }
+            AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 0,
+                    AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+
+            // if the gear is armor, set the defense to 0
+            if (gearItemInstance instanceof CustomArmor.CustomArmorInstance armorInstance) {
+                if (modifiers != null) {
+                    modifiers.get(Attribute.GENERIC_ARMOR).clear();
+                }
+                modifier = new AttributeModifier(UUID.randomUUID(), "generic.armor", 0,
+                        AttributeModifier.Operation.ADD_NUMBER, armorInstance.getEquipmentSlot());
+                meta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier);
+            }
+
             item.setItemMeta(damageable);
+
+            // stores the attribute values in the gear-data hashmap
+            gearItemInstance.getData().put("gear-data", new JSONObject(gearItemInstance.gearData));
+
             return item;
         });
     }

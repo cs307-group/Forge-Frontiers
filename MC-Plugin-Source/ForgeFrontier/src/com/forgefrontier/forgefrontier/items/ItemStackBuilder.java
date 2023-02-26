@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.items;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,7 +50,7 @@ public class ItemStackBuilder {
     public ItemStackBuilder addLoreLine(String loreLine) {
         if(this.lore == null)
             this.lore = new ArrayList<>();
-        this.lore.add(loreLine);
+        this.lore.add(ChatColor.translateAlternateColorCodes('&', loreLine));
 
         return this;
     }
@@ -66,7 +67,7 @@ public class ItemStackBuilder {
         ItemMeta meta = itm.getItemMeta();
 
         if (displayName != null && meta != null)
-            meta.setDisplayName(displayName);
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
         if(lore != null)
             meta.setLore(lore);
         itm.setItemMeta(meta);

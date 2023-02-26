@@ -2,13 +2,17 @@ package com.forgefrontier.forgefrontier;
 
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
+import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
-import com.forgefrontier.forgefrontier.items.ExampleZombieSword;
 import com.forgefrontier.forgefrontier.items.ItemCommandExecutor;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.WoodenBow;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.WoodenSword;
-import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGem;
+import com.forgefrontier.forgefrontier.items.gear.GearItemManager;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
+import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
@@ -20,7 +24,6 @@ import org.bukkit.command.PluginCommand;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -45,6 +48,7 @@ public class ForgeFrontier extends JavaPlugin {
     GeneratorManager generatorManager;
     CustomItemManager customItemManager;
     PlayerManager playerManager;
+    GearItemManager gearItemManager;
     Shop itemShop;
 
     @Override
@@ -67,22 +71,26 @@ public class ForgeFrontier extends JavaPlugin {
         this.generatorManager = new GeneratorManager(this);
         this.customItemManager = new CustomItemManager(this);
         this.playerManager = new PlayerManager(this);
+        this.gearItemManager = new GearItemManager(this);
 
-        this.generatorManager.init();
         this.customItemManager.init();
+        this.generatorManager.init();
         this.playerManager.init();
+        this.gearItemManager.init();
 
         this.itemShop = new Shop();
 
-        // TODO: Remove testing code for the Zombie Sword example custom item.
-        this.getCustomItemManager().registerCustomItem(new ExampleZombieSword());
         this.getCustomItemManager().registerCustomItem(new UpgradeGem());
         this.getCustomItemManager().registerCustomItem(new WoodenSword());
         this.getCustomItemManager().registerCustomItem(new WoodenBow());
+        this.getCustomItemManager().registerCustomItem(new LeatherHelmet());
+        this.getCustomItemManager().registerCustomItem(new LeatherChestplate());
 
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.customItemManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.playerManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.gearItemManager, this);
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
@@ -91,12 +99,18 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand genCmd = Bukkit.getPluginCommand("gen");
         if(genCmd != null)
             genCmd.setExecutor(new GeneratorCommandExecutor());
+        PluginCommand genshopCmd = Bukkit.getPluginCommand("genshop");
+        if(genshopCmd != null)
+            genshopCmd.setExecutor(new GeneratorShopCommandExecutor());
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
         if (shopCmd != null)
             shopCmd.setExecutor(itemShop.getCommandExecutor());
         PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
         if (customItemCmd != null)
             customItemCmd.setExecutor(new ItemCommandExecutor());
+        PluginCommand inspectCmd = Bukkit.getPluginCommand("inspect");
+        if (inspectCmd != null)
+            inspectCmd.setExecutor(new InspectCommandExecutor(playerManager));
     }
 
     @Override
