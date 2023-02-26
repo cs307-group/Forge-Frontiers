@@ -5,7 +5,13 @@ import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.UUID;
 
 /**
  * CustomArmor class which acts as a definition to know that the item should be equip-able in the armor slots
@@ -14,8 +20,19 @@ public abstract class CustomArmor extends GearItem {
 
     /** Instance class extending GearItemInstance to represent CustomArmor */
     public static class CustomArmorInstance extends GearItemInstance {
+
+        EquipmentSlot equipmentSlot;
+
+        /** calls the super constructor and sets the item slot of the item */
         public CustomArmorInstance(ItemStack itemStack) {
             super(itemStack);
+
+            equipmentSlot = EquipmentSlot.CHEST;
+        }
+
+        /** returns the equipment slot of the armor */
+        public EquipmentSlot getEquipmentSlot() {
+            return equipmentSlot;
         }
     }
 

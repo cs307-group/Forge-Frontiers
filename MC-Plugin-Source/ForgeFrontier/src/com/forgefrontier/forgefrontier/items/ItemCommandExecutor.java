@@ -58,7 +58,7 @@ public class ItemCommandExecutor implements CommandExecutor {
         Class<? extends UniqueCustomItem> itemType;
 
         if (args.length == 0) {
-            sender.sendMessage("Invalid usage: /customgive <item type> or /customgive <player name> <item type>" +
+            sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid usage: /customgive <item type> or /customgive <player name> <item type>" +
                     " or /customgive <player name> <item type> <number of items>");
             return true;
         }
@@ -69,7 +69,7 @@ public class ItemCommandExecutor implements CommandExecutor {
                 itemType = getItemType(args[0]);
 
                 if (itemType == null) {
-                    sender.sendMessage("Invalid item type: " + args[0]);
+                    sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid item type: " + args[0]);
                     return true;
                 }
 

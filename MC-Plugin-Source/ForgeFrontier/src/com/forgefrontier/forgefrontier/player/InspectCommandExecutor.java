@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.player;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,21 +28,21 @@ public class InspectCommandExecutor implements CommandExecutor {
             if (args.length == 0) {
 
                 FFPlayer ffPlayer = playerManager.getFFPlayerFromID(player.getUniqueId());
-                sender.sendMessage(ffPlayer.getStatsString());
+                sender.sendMessage(ForgeFrontier.CHAT_PREFIX + ffPlayer.getStatsString());
 
             } else if (args.length == 1) {
                 if (playerManager.hasPlayerWithName(args[0])) {
                     Player otherPlayer = playerManager.getPlayerByName(args[0]);
                     FFPlayer ffPlayer = playerManager.getFFPlayerFromID(otherPlayer.getUniqueId());
-                    sender.sendMessage(ffPlayer.getStatsString());
+                    sender.sendMessage(ForgeFrontier.CHAT_PREFIX + ffPlayer.getStatsString());
                 } else {
-                    sender.sendMessage("Invalid usage: Player Name does not exist or player is not online");
+                    sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid usage: Player Name does not exist or player is not online");
                 }
             }
             return true;
         }
         if (args.length == 0) {
-            sender.sendMessage("Invalid usage: /inspect <player-name>");
+            sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid usage: /inspect <player-name>");
             return true;
         }
         return true;
