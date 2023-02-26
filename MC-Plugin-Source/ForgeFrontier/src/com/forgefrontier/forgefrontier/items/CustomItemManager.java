@@ -1,8 +1,11 @@
 package com.forgefrontier.forgefrontier.items;
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
 import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -67,6 +70,38 @@ public class CustomItemManager extends Manager implements Listener {
         if(customItemInst == null)
             return;
         customItemInst.getBaseItem().onAttack(e, customItemInst);
+    }
+
+    /**
+     * Called when a player changes the item in their armor slots
+     *
+     * @param e the event object storing data about the event
+     */
+    @EventHandler
+    public void onPlayerArmorChange(PlayerArmorChangeEvent e) {
+        System.out.println("ARMOR CHANGE EVENT ACTIVATED");
+        Player p = (Player) e.getPlayer();
+        FFPlayer ffPlayer = plugin.getPlayerManager().getFFPlayerFromID(p.getUniqueId());
+        System.out.println("BEFORE:\n" + ffPlayer.getStatsString());
+        CustomItemInstance newItemInstance = asCustomItemInstance(e.getNewItem());
+        if (newItemInstance != null) {
+            System.out.println(newItemInstance.getData().toString() + " : " + (newItemInstance instanceof CustomArmor.CustomArmorInstance));
+        }
+        if (e.getOldItem() != null) {
+            CustomItemInstance oldItemInstance = asCustomItemInstance(e.getOldItem());
+            CustomArmor.CustomArmorInstance oldArmorInstance = (CustomArmor.CustomArmorInstance) oldItemInstance;
+
+            // if there was a custom armor that is being swapped out update the player stats
+            if (oldArmorInstance != null) {
+                ffPlayer.updateStatsOnArmorDequip(oldArmorInstance);
+            }
+        }
+
+        // updates player stats values if the armor is a custom armor
+        if (newItemInstance instanceof CustomArmor.CustomArmorInstance newArmorInstance) {
+            ffPlayer.updateStatsOnArmorEquip(newArmorInstance);
+        }
+        System.out.println("AFTER:\n" + ffPlayer.getStatsString());
     }
 
     /**

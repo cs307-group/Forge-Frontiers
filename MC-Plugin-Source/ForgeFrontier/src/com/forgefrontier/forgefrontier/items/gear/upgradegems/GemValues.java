@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.items.gear.upgradegems;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
+import com.forgefrontier.forgefrontier.items.gear.statistics.CustomStat;
 
 public class GemValues {
 
@@ -50,10 +51,15 @@ public class GemValues {
     }
 
     /**
-     * @return the quality of the instance
+     * @return the quality of the gem values instance
      */
     public Quality getQuality() {
         return quality;
+    }
+
+    /** @return the stat related to the gem values instance */
+    public BaseStatistic getStat() {
+        return stat;
     }
 
     /**

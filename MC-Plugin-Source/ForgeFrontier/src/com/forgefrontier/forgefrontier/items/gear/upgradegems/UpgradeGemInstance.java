@@ -2,8 +2,6 @@ package com.forgefrontier.forgefrontier.items.gear.upgradegems;
 
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem.UniqueCustomItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
-import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
-import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;

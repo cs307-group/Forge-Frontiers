@@ -1,6 +1,8 @@
 package com.forgefrontier.forgefrontier.items;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
@@ -34,38 +36,12 @@ public class ItemCommandExecutor implements CommandExecutor {
     public ItemCommandExecutor() {
         this.itemTypes = new HashMap<>();
         //Add all the different item types to the hashmap
+        //TODO: iterate through CustomItemManager app;
         itemTypes.put("WoodenSword", WoodenSword.class);
         itemTypes.put("WoodenBow", WoodenBow.class);
         itemTypes.put("UpgradeGem", UpgradeGem.class);
-    }
-
-    /**
-     * Iterate through a package and add all classes inside that package to the itemTypes hashmap
-     *
-     * @param packageName the reference to the package
-     */
-    public void packageLoader(String packageName) {
-        //TODO: debug and get working
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        String packagePath = packageName.replace('.', '/');
-        try {
-            Enumeration<URL> resources = classLoader.getResources(packagePath);
-            while (resources.hasMoreElements()) {
-                URL resource = resources.nextElement();
-                if (resource.getProtocol().equals("file")) {
-                    File directory = new File(resource.toURI());
-                    for (File file : directory.listFiles()) {
-                        if (file.getName().endsWith(".class") && !file.getName().endsWith("Instance.class")) {
-                            String itemName = packageName + '.' + file.getName().replace(".class", "");
-                            Class<? extends UniqueCustomItem> itemType = (Class<? extends UniqueCustomItem>) Class.forName(itemName);
-                            itemTypes.put(itemName, itemType);
-                        }
-                    }
-                }
-            }
-        } catch (IOException | ClassNotFoundException | URISyntaxException e) {
-            e.printStackTrace();
-        }
+        itemTypes.put("LeatherHelmet", LeatherHelmet.class);
+        itemTypes.put("LeatherChestplate", LeatherChestplate.class);
     }
 
     /**
@@ -87,7 +63,6 @@ public class ItemCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        System.out.println(sender instanceof Player);
         if (sender instanceof Player) {
             if (args.length == 1) {
                 Player player = (Player) sender;

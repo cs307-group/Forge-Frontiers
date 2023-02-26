@@ -67,15 +67,15 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
             baseStatArrayString.append(baseStats[i].toString());
         }
         baseStatArrayString = new StringBuilder(baseStatArrayString.substring(0, baseStatArrayString.length() - 1));
-        gearData.put("base-stats", baseStatArrayString.toString());
+        gearData.put("base-stats", baseStatArrayString.toString() + "}");
 
         // stores the ReforgeStatistics
         StringBuilder reforgeStatArrayString = new StringBuilder();
-        for (int i = 0; i < numBaseStats; i++) {
-            reforgeStatArrayString.append(baseStats[i].toString());
+        for (int i = 0; i < 3; i++) {
+            reforgeStatArrayString.append(reforgeStats[i].toString());
         }
         reforgeStatArrayString = new StringBuilder(reforgeStatArrayString.substring(0, reforgeStatArrayString.length() - 1));
-        gearData.put("reforge-stats", reforgeStatArrayString.toString());
+        gearData.put("reforge-stats", reforgeStatArrayString.toString() + "}");
 
         gearData.put("num-gem-slots", Integer.toString(numGemSlots));
 
@@ -107,28 +107,31 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         numBaseStats = Integer.parseInt(gearData.get("num-base-stats"));
 
         String baseStatsString = name = gearData.get("base-stats");
+        baseStats = new BaseStatistic[numBaseStats];
         for (int i = 0; i < numBaseStats; i++) {
             baseStats[i] =
-                    new BaseStatistic(baseStatsString.substring(0, baseStatsString.indexOf("}")));
+                    new BaseStatistic(baseStatsString.substring(0, baseStatsString.indexOf("}") + 1));
             baseStatsString = baseStatsString.substring(baseStatsString.indexOf("}") + 1);
         }
 
+        reforgeStats = new ReforgeStatistic[3];
         String reforgeStatsString = name = gearData.get("reforge-stats");
-        for (int i = 0; i < numBaseStats; i++) {
+        for (int i = 0; i < 3; i++) {
             reforgeStats[i] =
-                    new ReforgeStatistic(reforgeStatsString.substring(0, reforgeStatsString.indexOf("}")));
+                    new ReforgeStatistic(reforgeStatsString.substring(0, reforgeStatsString.indexOf("}") + 1));
             reforgeStatsString = reforgeStatsString.substring(reforgeStatsString.indexOf("}") + 1);
         }
 
         numGemSlots = Integer.parseInt(gearData.get("num-gem-slots"));
 
+        gems = new GemValues[numGemSlots];
         String gemsString = name = gearData.get("gems");
-        for (int i = 0; i < numBaseStats; i++) {
+        for (int i = 0; i < numGemSlots; i++) {
             if (gemsString.substring(0, gemsString.indexOf("}") + 1).equals("{EMPTY}")) {
                 gems[i] = null;
             } else {
                 gems[i] =
-                        new GemValues(gemsString.substring(0, gemsString.indexOf("}")));
+                        new GemValues(gemsString.substring(0, gemsString.indexOf("}") + 1));
             }
             gemsString = gemsString.substring(gemsString.indexOf("}") + 1);
         }
@@ -137,5 +140,20 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         name = gearData.get("material");
         name = gearData.get("durability");
         name = gearData.get("lore");
+    }
+
+    /** returns the value of this.baseStats */
+    public BaseStatistic[] getBaseStats() {
+        return this.baseStats;
+    }
+
+    /** returns the value of this.reforgeStats */
+    public ReforgeStatistic[] getReforgeStats() {
+        return this.reforgeStats;
+    }
+
+    /** returns the value of this.gems */
+    public GemValues[] getGems() {
+        return this.gems;
     }
 }

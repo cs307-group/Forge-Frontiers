@@ -95,13 +95,18 @@ public class ReforgeStatistic extends CustomStat {
         return statValue;
     }
 
+    /** @return if the statistic is a percentage */
+    public boolean isPercent() {
+        return isPercent;
+    }
+
     /**
      * @return a string representation of the ReforgeStatistic
      */
     @Override
     public String toString() {
         if (isPercent)
-            return quality.toString() + ":" + statType.toString() + ":" + statValue + "%";
+            return "{" + quality.toString() + ":" + statType.toString() + ":" + statValue + "%" + "}";
         else
             return "{" + quality.toString() + ":" + statType.toString() + ":" + statValue + "}";
     }

@@ -26,8 +26,6 @@ public abstract class CustomItem {
     /** Accumulator functions that create a CustomItemInstance incrementally through data in an ItemStack. */
     private final List<CustomItemInstanceAccumulator> instanceAccumulators;
 
-
-
     /**
      * CustomItem constructor
      *
@@ -40,7 +38,6 @@ public abstract class CustomItem {
         this.code = code;
         this.itemStackAccumulators = new ArrayList<>();
         this.instanceAccumulators = new ArrayList<>();
-
 
         // Every custom item will have a base code that needs to be used to identify it.
         // This function inserts that code into the ItemStack.

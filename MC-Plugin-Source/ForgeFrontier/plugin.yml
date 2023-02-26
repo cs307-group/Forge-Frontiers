@@ -12,3 +12,5 @@ commands:
     description: "Command for accessing shop GUI."
   customgive:
     description: "Command for spawning custom items."
+  inspect:
+    description: "Command used to inspect the statistics of players"
