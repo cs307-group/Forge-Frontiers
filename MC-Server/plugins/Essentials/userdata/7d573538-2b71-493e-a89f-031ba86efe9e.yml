@@ -16,8 +16,8 @@ timestamps:
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1677384834452
-  login: 1677384520948
+  logout: 1677388132459
+  login: 1677387856879
 money: '0'
 last-account-name: jjjooommmilll
 lastlocation:
@@ -31,8 +31,8 @@ lastlocation:
 logoutlocation:
   world: cc3ecba1-7a9c-4125-a7be-0bcf73708c36
   world-name: world
-  x: -25.98804010528295
-  y: 74.52719668990892
-  z: 55.69978413090638
-  yaw: -120.365234375
-  pitch: -2.9997825622558594
+  x: 53.68596217548393
+  y: 72.0
+  z: 24.667331353879835
+  yaw: 95.85101318359375
+  pitch: 1.0483627319335938

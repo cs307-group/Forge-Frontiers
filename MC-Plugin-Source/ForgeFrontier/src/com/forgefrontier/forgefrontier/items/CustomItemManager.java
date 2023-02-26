@@ -72,56 +72,6 @@ public class CustomItemManager extends Manager implements Listener {
         customItemInst.getBaseItem().onAttack(e, customItemInst);
     }
 
-    /**
-     * Called when a player changes the item in their armor slots
-     *
-     * @param e the event object storing data about the event
-     */
-    @EventHandler
-    public void onPlayerArmorChange(PlayerArmorChangeEvent e) {
-        System.out.println("ARMOR CHANGE EVENT ACTIVATED");
-        Player p = (Player) e.getPlayer();
-        FFPlayer ffPlayer = plugin.getPlayerManager().getFFPlayerFromID(p.getUniqueId());
-        System.out.println("BEFORE:\n" + ffPlayer.getStatsString());
-        CustomItemInstance newItemInstance = asCustomItemInstance(e.getNewItem());
-        if (newItemInstance != null) {
-            System.out.println(newItemInstance.getData().toString() + " : " + (newItemInstance instanceof CustomArmor.CustomArmorInstance));
-        }
-        if (e.getOldItem() != null) {
-            CustomItemInstance oldItemInstance = asCustomItemInstance(e.getOldItem());
-            CustomArmor.CustomArmorInstance oldArmorInstance = (CustomArmor.CustomArmorInstance) oldItemInstance;
-
-            // if there was a custom armor that is being swapped out update the player stats
-            if (oldArmorInstance != null) {
-                ffPlayer.updateStatsOnArmorDequip(oldArmorInstance);
-            }
-        }
-
-        // updates player stats values if the armor is a custom armor
-        if (newItemInstance instanceof CustomArmor.CustomArmorInstance newArmorInstance) {
-            ffPlayer.updateStatsOnArmorEquip(newArmorInstance);
-        }
-        System.out.println("AFTER:\n" + ffPlayer.getStatsString());
-    }
-
-    /**
-     * Is called when an item being used by a player is set to take damage
-     *
-     * @param event the event specifying the specific
-     */
-    @EventHandler
-    public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
-        Player player = event.getPlayer();
-        CustomItemInstance customItemInstance = asCustomItemInstance(player.getInventory().getItem(EquipmentSlot.HAND));
-        if (customItemInstance == null) {
-            return;
-        }
-
-        if (customItemInstance instanceof GearItemInstance) {
-            event.setCancelled(true);
-        }
-    }
-
     // Get the custom item associated with the specified code.
     public static CustomItem getCustomItem(String code) {
         return ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);

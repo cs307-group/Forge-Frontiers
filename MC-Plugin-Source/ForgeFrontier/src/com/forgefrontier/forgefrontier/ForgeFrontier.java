@@ -4,8 +4,8 @@ import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
-import com.forgefrontier.forgefrontier.items.ExampleZombieSword;
 import com.forgefrontier.forgefrontier.items.ItemCommandExecutor;
+import com.forgefrontier.forgefrontier.items.gear.GearItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
@@ -47,6 +47,7 @@ public class ForgeFrontier extends JavaPlugin {
     GeneratorManager generatorManager;
     CustomItemManager customItemManager;
     PlayerManager playerManager;
+    GearItemManager gearItemManager;
     Shop itemShop;
 
     @Override
@@ -69,10 +70,12 @@ public class ForgeFrontier extends JavaPlugin {
         this.generatorManager = new GeneratorManager(this);
         this.customItemManager = new CustomItemManager(this);
         this.playerManager = new PlayerManager(this);
+        this.gearItemManager = new GearItemManager(this);
 
         this.generatorManager.init();
         this.customItemManager.init();
         this.playerManager.init();
+        this.gearItemManager.init();
 
         this.itemShop = new Shop();
 
@@ -86,6 +89,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.customItemManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.playerManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.gearItemManager, this);
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);

@@ -149,6 +149,9 @@ public abstract class GearItem extends UniqueCustomItem {
             Damageable damageable = (Damageable) meta;
             damageable.setDamage(gearItemInstance.material.getMaxDurability() - gearItemInstance.durability);
             System.out.println("durability: " + durability);
+
+            meta.setUnbreakable(true);
+
             item.setItemMeta(damageable);
 
             // stores the attribute values in the gear-data hashmap
