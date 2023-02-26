@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.gui;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class BaseInventoryHolder implements InventoryHolder {
 
@@ -56,6 +58,22 @@ public class BaseInventoryHolder implements InventoryHolder {
 
         return this;
     }
+
+    public BaseInventoryHolder replaceItemTemporarily(int slotId, ItemStack itemStack) {
+        ItemStack oldItem = this.inventory.getItem(slotId);
+        InventoryClickHandler oldHandler = this.handlers[slotId];
+
+        this.inventory.setItem(slotId, itemStack);
+        this.handlers[slotId] = null;
+
+        Bukkit.getScheduler().runTaskLater(ForgeFrontier.getInstance(), () -> {
+            this.inventory.setItem(slotId, oldItem);
+            this.handlers[slotId] = oldHandler;
+        }, 5000);
+
+        return this;
+    }
+
 
     public BaseInventoryHolder fill(ItemStack item) {
         for(int i = 0; i < this.size; i++) {

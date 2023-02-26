@@ -3,7 +3,7 @@ teleportauto: false
 godmode: false
 muted: false
 jailed: false
-ip-address: 127.0.0.1
+ip-address: ''
 afk: false
 socialspy: false
 npc: false
@@ -16,15 +16,14 @@ timestamps:
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1677092411187
-  login: 1677092388278
-money: '0'
+  logout: 1677391479360
+  login: 0
+money: '2381.0'
 logoutlocation:
   world: 8129001e-fb9c-4b12-9cd9-bfbcf5dcde0d
   world-name: world
-  x: 378.30000001192093
-  y: 112.0
-  z: -720.3000000119209
-  yaw: 65.10186767578125
-  pitch: 30.000160217285156
-last-account-name: BubbleKitty13426
+  x: 511.87143440535
+  y: 98.0
+  z: -773.7799938826205
+  yaw: 30.90185546875
+  pitch: 34.50033187866211

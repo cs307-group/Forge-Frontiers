@@ -8,6 +8,8 @@ depend: [Vault]
 commands:
   gen:
     description: "Command for accessing generators."
+  genshop:
+    description: "Command for accessing the generator shop."
   shop:
     description: "Command for accessing shop GUI."
   customgive:

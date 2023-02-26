@@ -1,10 +1,37 @@
 package com.forgefrontier.forgefrontier.generators;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.generators.materials.CustomMaterial;
 import com.forgefrontier.forgefrontier.items.CustomItem;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 public class MaterialCost {
 
-    CustomItem material;
+    CustomMaterial material;
     int amount;
 
+    public MaterialCost(ConfigurationSection configSection) {
+        this.material = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial(
+            configSection.getString("material_type"),
+            configSection.getString("item_id")
+        );
+        this.amount = configSection.getInt("amount");
+    }
+
+    public CustomMaterial getMaterial() {
+        return this.material;
+    }
+
+    public boolean hasBalance(Player p) {
+        return this.material.hasBalance(p, this.amount);
+    }
+
+    public void take(Player p) {
+        this.material.take(p, this.amount);
+    }
+
+    public int getAmount() {
+        return this.amount;
+    }
 }

@@ -51,6 +51,7 @@ public class CustomItemManager extends Manager implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         ItemStack item = e.getItem();
+        System.out.println(item);
         if(item == null)
             return;
         CustomItemInstance customItemInst = asCustomItemInstance(item);
@@ -75,6 +76,15 @@ public class CustomItemManager extends Manager implements Listener {
     // Get the custom item associated with the specified code.
     public static CustomItem getCustomItem(String code) {
         return ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
+    }
+
+    // Convert an ItemStack into a CustomItemInstance of the appropriate custom item.
+    public static CustomItem getCustomItem(ItemStack itemStack) {
+        String code = extractCode(itemStack);
+        if(code == null)
+            return null;
+        CustomItem customItem = ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
+        return customItem;
     }
 
     // Convert an ItemStack into a CustomItemInstance of the appropriate custom item.

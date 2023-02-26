@@ -33,7 +33,7 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
         this.addHandler(9+6, (e) -> {
             ConfirmationHolder confirmHolder = new ConfirmationHolder("Are you sure you want to pickup this generator?", baseInventory, () -> {
                 ForgeFrontier.getInstance().getGeneratorManager().removeGeneratorInstance(generatorInstance);
-                e.getWhoClicked().getInventory().addItem(CustomItemManager.getCustomItem("GenPlace-" + generatorInstance.generator.getCode()).asInstance(null).asItemStack());
+                e.getWhoClicked().getInventory().addItem(CustomItemManager.getCustomItem("GenPlace-" + generatorInstance.generator.getId()).asInstance(null).asItemStack());
                 e.getWhoClicked().closeInventory();
             });
             e.getWhoClicked().openInventory(confirmHolder.getInventory());
@@ -41,11 +41,11 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
     }
 
     public void setCollectItem() {
-        ItemStack item = new ItemStackBuilder(generatorInstance.generator.primaryMaterial.representation)
-                .setDisplayName(ChatColor.YELLOW + "Collect")
-                .addLoreLine(ChatColor.RED + "Available Items: " + generatorInstance.getCollectAmt() + " / " + generatorInstance.getMaxAmt() + " " + generatorInstance.generator.primaryMaterial.name + "(s)")
-                .setAmount(1)
-                .build();
+        ItemStack item = new ItemStackBuilder(generatorInstance.generator.primaryMaterial.getRepresentation().getType())
+            .setDisplayName(ChatColor.YELLOW + "Collect")
+            .addLoreLine(ChatColor.RED + "Available Items: " + generatorInstance.getCollectAmt() + " / " + generatorInstance.getMaxAmt() + " " + generatorInstance.generator.primaryMaterial.getRepresentation().getItemMeta().getDisplayName() + "(s)")
+            .setAmount(1)
+            .build();
         this.setItem(9+2, item);
     }
 

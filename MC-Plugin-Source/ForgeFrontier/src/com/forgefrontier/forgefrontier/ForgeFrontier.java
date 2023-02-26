@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier;
 
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
+import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemCommandExecutor;
@@ -72,8 +73,8 @@ public class ForgeFrontier extends JavaPlugin {
         this.playerManager = new PlayerManager(this);
         this.gearItemManager = new GearItemManager(this);
 
-        this.generatorManager.init();
         this.customItemManager.init();
+        this.generatorManager.init();
         this.playerManager.init();
         this.gearItemManager.init();
 
@@ -98,6 +99,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand genCmd = Bukkit.getPluginCommand("gen");
         if(genCmd != null)
             genCmd.setExecutor(new GeneratorCommandExecutor());
+        PluginCommand genshopCmd = Bukkit.getPluginCommand("genshop");
+        if(genshopCmd != null)
+            genshopCmd.setExecutor(new GeneratorShopCommandExecutor());
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
         if (shopCmd != null)
             shopCmd.setExecutor(itemShop.getCommandExecutor());
