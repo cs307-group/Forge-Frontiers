@@ -64,7 +64,7 @@ public abstract class GearItem extends UniqueCustomItem {
         // fills in all empty stats with random stats
         for (int i = 0; i < numBaseStats; i++) {
             if (instance.baseStats[i] == null) {
-                instance.baseStats[i] = new BaseStatistic(1, instance.quality.getMaxValue());
+                instance.baseStats[i] = new BaseStatistic(1, instance.quality.getMaxValue(), instance.gemEnum);
             }
         }
     }
@@ -87,6 +87,8 @@ public abstract class GearItem extends UniqueCustomItem {
             GearItemInstance gearItemInstance = (GearItemInstance) instance;
 
             if (itemStack == null) {
+                gearItemInstance.gemEnum = gemEnum;
+
                 gearItemInstance.name = name;
                 if (quality.getRarityInt() == -1) {
                     gearItemInstance.quality = QualityEnum.getRandQualityEnum().getQuality();
@@ -96,13 +98,12 @@ public abstract class GearItem extends UniqueCustomItem {
 
                 gearItemInstance.reforgeStats = new ReforgeStatistic[3];
                 for (int i = 0; i < 3; i++) {
-                    gearItemInstance.reforgeStats[i] = new ReforgeStatistic(gearItemInstance.quality);
+                    gearItemInstance.reforgeStats[i] = new ReforgeStatistic(gearItemInstance.quality, gearItemInstance.gemEnum);
                 }
                 initBaseStatSlots(gearItemInstance, numBaseStats);
 
                 gearItemInstance.numGemSlots = numGemSlots;
                 gearItemInstance.gems = new GemValues[gearItemInstance.numGemSlots];
-                gearItemInstance.gemEnum = gemEnum;
 
                 gearItemInstance.material = material;
                 gearItemInstance.durability = durability;

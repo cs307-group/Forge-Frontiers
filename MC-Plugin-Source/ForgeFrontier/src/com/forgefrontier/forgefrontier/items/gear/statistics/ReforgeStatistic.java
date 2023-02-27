@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.items.gear.statistics;
 import com.destroystokyo.paper.event.entity.WitchThrowPotionEvent;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 
 /**
  * ReforgeStatistic
@@ -22,8 +23,8 @@ public class ReforgeStatistic extends CustomStat {
      *
      * @param quality the quality of the statistic
      */
-    public ReforgeStatistic(Quality quality) {
-        super(1, quality.getMaxValue(), StatEnum.getRandStatEnum());
+    public ReforgeStatistic(Quality quality, GemEnum gemEnum) {
+        super(1, quality.getMaxValue(), StatEnum.getRandStatEnum(gemEnum));
         this.quality = quality;
 
         if (statType == StatEnum.CDMG || statType == StatEnum.CRATE) {
@@ -80,7 +81,7 @@ public class ReforgeStatistic extends CustomStat {
      *
      * @return the updated stat value
      */
-    public int reforge() {
+    public int reforge(GemEnum gemEnum) {
         // generates random values
         int percentVal = (int) (Math.random() * 100) + 1;
         int newStatVal = (int) (Math.random() * (quality.getMaxValue())) + 1;
@@ -89,7 +90,7 @@ public class ReforgeStatistic extends CustomStat {
         isPercent = quality.getPercentChance() < percentVal;
 
         // determines new stat type
-        statType = StatEnum.getRandStatEnum();
+        statType = StatEnum.getRandStatEnum(gemEnum);
 
         statValue = newStatVal;
         return statValue;

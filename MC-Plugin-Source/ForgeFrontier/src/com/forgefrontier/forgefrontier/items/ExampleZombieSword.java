@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.items;
 
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Zombie;
@@ -68,7 +69,7 @@ public final class ExampleZombieSword extends UniqueCustomItem {
 
     // Upon attack with Zombie Sword, check if its hitting a zombie. If so, multiply by the multiplier of the sword.
     @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance customItemInstance) {
+    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance customItemInstance, FFPlayer ffPlayer) {
         ExampleZombieSwordInstance zombieSwordInstance = (ExampleZombieSwordInstance) customItemInstance;
         if(!(e.getEntity() instanceof Zombie))
             return;

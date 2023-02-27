@@ -1,11 +1,11 @@
 package com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords;
 
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
-import com.forgefrontier.forgefrontier.items.gear.GearItem;
-import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
-import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.CustomWeapon;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
+import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -14,12 +14,12 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Wooden sword item class has all functionality of GearItem
  */
-public class WoodenSword extends GearItem {
+public class WoodenSword extends CustomWeapon {
 
     /**
      * Instance class extends GearItemInstance for the WoodenSword class
      */
-    public static class WoodenSwordInstance extends GearItemInstance {
+    public static class WoodenSwordInstance extends CustomWeaponInstance {
         public WoodenSwordInstance(ItemStack itemStack) {
             super(itemStack);
         }
@@ -29,8 +29,7 @@ public class WoodenSword extends GearItem {
      * Default constructor for the wooden sword weapon
      */
     public WoodenSword() {
-        super ("WoodenSword", QualityEnum.UNASSIGNED.getQuality(), 2, 1,
-                GemEnum.WEAPON, Material.WOODEN_SWORD, Material.WOODEN_SWORD.getMaxDurability(),
+        super ("WoodenSword", QualityEnum.UNASSIGNED.getQuality(), 2, 1, Material.WOODEN_SWORD, Material.WOODEN_SWORD.getMaxDurability() - 1,
                 "A handy wooden sword, crafted with oak");
 
         this.registerInstanceAccumulator((__, itemStack) -> {
@@ -50,7 +49,7 @@ public class WoodenSword extends GearItem {
      * @param itemInstance the instance used
      */
     @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance) {
-        //TODO: update outgoing damage values based on stats
+    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
+        super.onAttack(e, itemInstance, ffPlayer);
     }
 }

@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.items.gear.statistics;
 
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerStat;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,37 @@ import java.util.ArrayList;
  * Used a library class for functions relating to calculating values based off of statistics
  */
 public class StatCalc {
+
+    /**
+     * Calculates the outgoing damage of a custom weapon attack
+     *
+     * @param ffPlayer the player issuing the attack
+     * @return the updated damage
+     */
+    public static double calcOutgoingDamage(FFPlayer ffPlayer, StatEnum MAIN_STAT) {
+        System.out.println(ffPlayer.getStatsString());
+
+        double damage = 0;
+        System.out.println(damage);
+        int mainStatInt = StatEnum.getIntFromEnum(MAIN_STAT);
+
+        damage += ffPlayer.getATK();
+        System.out.println(damage);
+        switch (mainStatInt) {
+            case 2: damage += ffPlayer.getSTR(); break;
+            case 3: damage += ffPlayer.getDEX(); break;
+            default: break;
+        }
+        System.out.println(damage);
+
+        if ((int) (Math.random() * 100) + 1 <= ffPlayer.getCRATE()) {
+            double critDamage = ((double) ffPlayer.getCDMG()) / 100 * damage;
+            damage += critDamage;
+        }
+        System.out.println(damage);
+
+        return damage;
+    }
 
     /**
      * Returns the modified incoming damage based off of the defense statistic

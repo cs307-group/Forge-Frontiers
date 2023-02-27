@@ -6,6 +6,7 @@ import com.forgefrontier.forgefrontier.items.gear.quality.InvalidMaxQualityExcep
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
@@ -38,7 +39,8 @@ public class UpgradeGem extends UniqueCustomItem {
                 // Set default value for a brand new UpgradeGem.
                 QualityEnum myEnum = QualityEnum.getRandQualityEnum();
                 gemInstance.gemValues.quality = myEnum.getQuality();
-                gemInstance.gemValues.stat = new BaseStatistic(0, gemInstance.gemValues.quality.getMaxValue());
+                gemInstance.gemValues.stat = new BaseStatistic(0, gemInstance.gemValues.quality.getMaxValue(),
+                        gemInstance.gemValues.gemType);
                 gemInstance.gemValues.gemType = GemEnum.getRandGemEnum();
                 gemInstance.setGemData();
             } else {
@@ -105,7 +107,8 @@ public class UpgradeGem extends UniqueCustomItem {
                 // Set default value for a brand new UpgradeGem.
                 QualityEnum myEnum = QualityEnum.getRandQualityEnum(maxQuality.getRarityInt());
                 gemInstance.gemValues.quality = myEnum.getQuality();
-                gemInstance.gemValues.stat = new BaseStatistic(0, gemInstance.gemValues.quality.getMaxValue());
+                gemInstance.gemValues.stat = new BaseStatistic(0, gemInstance.gemValues.quality.getMaxValue(),
+                        gemInstance.gemValues.gemType);
                 gemInstance.gemValues.gemType = GemEnum.getRandGemEnum();
             } else {
                 // TODO: Access ItemStack data and set based off that data.
@@ -163,7 +166,7 @@ public class UpgradeGem extends UniqueCustomItem {
      * @param itemInstance the instance of the item being used to attack
      */
     @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance) {
+    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
 
     }
 }

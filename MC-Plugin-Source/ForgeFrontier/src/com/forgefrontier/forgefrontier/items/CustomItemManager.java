@@ -1,10 +1,7 @@
 package com.forgefrontier.forgefrontier.items;
 
-import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
-import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
@@ -13,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,7 +47,6 @@ public class CustomItemManager extends Manager implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         ItemStack item = e.getItem();
-        System.out.println(item);
         if(item == null)
             return;
         CustomItemInstance customItemInst = asCustomItemInstance(item);
@@ -70,7 +65,8 @@ public class CustomItemManager extends Manager implements Listener {
         CustomItemInstance customItemInst = asCustomItemInstance(p.getInventory().getItem(EquipmentSlot.HAND));
         if(customItemInst == null)
             return;
-        customItemInst.getBaseItem().onAttack(e, customItemInst);
+        FFPlayer ffPlayer = plugin.getPlayerManager().getFFPlayerFromID(p.getUniqueId());
+        customItemInst.getBaseItem().onAttack(e, customItemInst, ffPlayer);
     }
 
     // Get the custom item associated with the specified code.

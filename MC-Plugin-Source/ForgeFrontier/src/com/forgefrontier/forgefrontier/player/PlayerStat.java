@@ -2,7 +2,6 @@ package com.forgefrontier.forgefrontier.player;
 
 import com.forgefrontier.forgefrontier.items.gear.statistics.*;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 
 public class PlayerStat extends CustomStat {
@@ -54,7 +53,12 @@ public class PlayerStat extends CustomStat {
     public void addStat(CustomStat stat) {
         if (stat instanceof ReforgeStatistic reforgeStatistic) {
             if (reforgeStatistic.isPercent()) {
-                percentages.add(((double) stat.getStatValue()) / 100);
+                if (reforgeStatistic.getStatType().equals(StatEnum.CRATE) ||
+                        reforgeStatistic.getStatType().equals(StatEnum.CDMG)) {
+                    baseValue += stat.getStatValue();
+                } else {
+                    percentages.add(((double) stat.getStatValue()) / 100);
+                }
             } else {
                 baseValue += stat.getStatValue();
             }

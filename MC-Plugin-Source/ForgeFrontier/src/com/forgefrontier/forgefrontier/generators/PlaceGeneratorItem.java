@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -56,7 +57,7 @@ public class PlaceGeneratorItem extends CustomItem {
     }
 
     @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance inst) {
+    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance inst, FFPlayer ffPlayer) {
     }
 
 }

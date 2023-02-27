@@ -64,11 +64,9 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
 
         // stores the base stats
         StringBuilder baseStatArrayString = new StringBuilder();
-        System.out.println("BaseStats: " + Arrays.toString(baseStats) + ":" + numBaseStats);
         for (int i = 0; i < numBaseStats; i++) {
             baseStatArrayString.append(baseStats[i].toString());
         }
-        System.out.println("STRING: " + baseStatArrayString);
         baseStatArrayString = new StringBuilder(baseStatArrayString.substring(0, baseStatArrayString.length() - 1));
         gearData.put("base-stats", baseStatArrayString + "}");
 
@@ -150,9 +148,21 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         return this.baseStats;
     }
 
+    /**
+     * Sets the baseStat array with new base statistics
+     *
+     * @param baseStats baseStatistics to be set
+     */
     public void setBaseStats(BaseStatistic[] baseStats) {
         this.numBaseStats = baseStats.length;
         this.baseStats = baseStats;
+    }
+
+    /**
+     * @return the quality of the instance
+     */
+    public Quality getQuality() {
+        return quality;
     }
 
     /** returns the value of this.reforgeStats */
