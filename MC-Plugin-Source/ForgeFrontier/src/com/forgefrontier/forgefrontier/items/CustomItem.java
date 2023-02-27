@@ -1,13 +1,19 @@
 package com.forgefrontier.forgefrontier.items;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public abstract class CustomItem {
 
@@ -26,7 +32,7 @@ public abstract class CustomItem {
      * Defines the attributes of a base custom item
      * and registers the appropriate accumulators to set those attributes.
      *
-     * @param code the value to be set to the 'code' attribute. Defines the type of item the CustomItem is
+     * @param code A string that is used to identify the type of CustomItem an item is
      */
     public CustomItem(String code) {
         this.code = code;
@@ -41,7 +47,8 @@ public abstract class CustomItem {
             assert(nmsItem.t() != null);
 
             nmsItem.t().a("base-code", code);
-            //nmsItem.t().a("custom-data", itemInstance.data.toJSONString());
+            nmsItem.t().a("custom-data", itemInstance.data.toJSONString());
+            System.out.println("custom-data:\n" + itemInstance.data.toJSONString());
 
             itemStack = CraftItemStack.asBukkitCopy(nmsItem);
 
@@ -53,8 +60,7 @@ public abstract class CustomItem {
         // Set the CustomItemInstance values for general custom items.
         this.registerInstanceAccumulator(((instance, itemStack) -> {
             instance.setBase(this);
-            //net.minecraft.world.item.ItemStack item2 = CraftItemStack.asNMSCopy(itemStack);
-            //instance.data = (JSONObject) JSONValue.parse(item2.t().l("custom-data"));
+
             if(itemStack == null) instance.setAmount(1);
             else instance.setAmount(itemStack.getAmount());
             return instance;

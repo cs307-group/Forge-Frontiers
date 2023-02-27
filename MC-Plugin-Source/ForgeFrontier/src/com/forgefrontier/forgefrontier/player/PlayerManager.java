@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.player;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.gear.statistics.StatCalc;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -28,6 +29,7 @@ public class PlayerManager extends Manager implements Listener {
     Map<UUID, FFPlayer> ffPlayers;
     /** a map for the Players which store data native to minecraft Players */
     Map<UUID, Player> players;
+    Map<String, Player> playersByName;
 
     /**
      * A Constructor for the player manager class, which sets the plugin and initializes the HashMaps
@@ -38,16 +40,17 @@ public class PlayerManager extends Manager implements Listener {
         super(plugin);
         ffPlayers = new HashMap<>();
         players = new HashMap<>();
+        playersByName = new HashMap<>();
     }
 
     @Override
     public void init() {
-        // TODO: Add all players online into the hashmap.
+
     }
 
     @Override
     public void disable() {
-        // TODO: Save all players in the hashmap in some sort of persistent storage.
+        // TODO: Save all players in the hashmap in the database.
     }
 
     /**
@@ -57,8 +60,11 @@ public class PlayerManager extends Manager implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        System.out.println("PLAYER JOINED");
         Player player = event.getPlayer();
+        //TODO: Check for player in database
         players.put(player.getUniqueId(), player);
+        playersByName.put(player.getDisplayName(), player);
         ffPlayers.put(player.getUniqueId(), new FFPlayer(player));
     }
 
@@ -70,7 +76,9 @@ public class PlayerManager extends Manager implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        //TODO: Add player to database
         players.remove(player.getUniqueId());
+        playersByName.remove(player.getDisplayName(), player);
         ffPlayers.remove(player.getUniqueId());
     }
 
@@ -91,7 +99,7 @@ public class PlayerManager extends Manager implements Listener {
             if (maxHealthAttr != null) {
                 maxHealth = maxHealthAttr.getValue();
             }
-            double convertedDamage = ffPlayer.convertDamage(damage, maxHealth);
+            double convertedDamage = StatCalc.convertDamage(damage, maxHealth, ffPlayer);
             event.setDamage(convertedDamage);
         }
     }
@@ -106,5 +114,29 @@ public class PlayerManager extends Manager implements Listener {
         Player player = event.getPlayer();
         FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
         ffPlayer.respawn();
+    }
+
+    /**
+     * @param playerID ID of player to be returned
+     * @return the FFPlayer object corresponding with the UUID playerID
+     */
+    public FFPlayer getFFPlayerFromID(UUID playerID) {
+        return ffPlayers.get(playerID);
+    }
+
+    /**
+     * @param name name of the player that is to be returned
+     * @return the player with the display name equal to the name parameter
+     */
+    public Player getPlayerByName(String name) {
+        return playersByName.get(name);
+    }
+
+    /**
+     * @param name name of the player that is being checked to be online
+     * @return if the player with the name exists then true
+     */
+    public boolean hasPlayerWithName(String name) {
+        return playersByName.containsKey(name);
     }
 }

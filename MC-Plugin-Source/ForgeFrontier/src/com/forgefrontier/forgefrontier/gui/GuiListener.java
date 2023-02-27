@@ -10,24 +10,21 @@ public class GuiListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryOpen(InventoryOpenEvent e) {
-        if(e.getInventory().getHolder() instanceof BaseInventoryHolder) {
-            BaseInventoryHolder holder = (BaseInventoryHolder) e.getInventory().getHolder();
+        if(e.getInventory().getHolder() instanceof BaseInventoryHolder holder) {
             holder.onOpen(e);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent e) {
-        if(e.getInventory().getHolder() instanceof BaseInventoryHolder) {
-            BaseInventoryHolder holder = (BaseInventoryHolder) e.getInventory().getHolder();
+        if(e.getInventory().getHolder() instanceof BaseInventoryHolder holder) {
             holder.onClick(e);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent e) {
-        if(e.getInventory().getHolder() instanceof BaseInventoryHolder) {
-            BaseInventoryHolder holder = (BaseInventoryHolder) e.getInventory().getHolder();
+        if(e.getInventory().getHolder() instanceof BaseInventoryHolder holder) {
             holder.onClose(e);
         }
     }

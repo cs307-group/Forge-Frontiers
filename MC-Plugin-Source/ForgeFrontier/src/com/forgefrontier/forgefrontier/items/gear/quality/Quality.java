@@ -88,7 +88,7 @@ public class Quality {
      */
     @Override
     public String toString() {
-        return rarity + ": " + maxValue;
+        return rarity;
     }
 
     /**

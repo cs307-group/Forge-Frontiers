@@ -1,0 +1,15 @@
+{
+  "uniqueId": "default",
+  "icon": "STONE_BRICK",
+  "displayName": "&6Forge&cFrontier &eIsland",
+  "description": [
+    "&eStandard island",
+  ],
+  "requirePermission": false,
+  "blueprints": {
+    "NORMAL": "forge-island",
+    "NETHER": "nether-island",
+    "THE_END": "end-island"
+  },
+  "slot": 0
+}

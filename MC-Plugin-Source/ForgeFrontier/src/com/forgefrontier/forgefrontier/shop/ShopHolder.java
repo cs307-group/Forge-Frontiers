@@ -1,8 +1,10 @@
 package com.forgefrontier.forgefrontier.shop;
 
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
+import com.forgefrontier.forgefrontier.items.ItemSetRunnable;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemRename;
 import org.bukkit.Bukkit;
@@ -21,9 +23,10 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ShopHolder extends BaseInventoryHolder {
-    Hashtable<UUID, ShopListing> listings;
+    ConcurrentHashMap<UUID, ShopListing> listings;
     Boolean remove;
     UUID pID;
     Shop shop;
@@ -71,17 +74,26 @@ public class ShopHolder extends BaseInventoryHolder {
             i++;
         }
     }
+
     public void updateGUI() {
         Set<UUID> keys = listings.keySet();
         int i = 0;
         for (UUID k : keys) {
             // TODO: Fill GUI
             if (i > 9) break;
+            ShopListing listing = listings.get(k);
             ItemStack displayItem = listings.get(k).getDisplayItem();
             this.setItem(i, displayItem);
             int i2 = i;
             this.addHandler(i, (e) -> {
                 Player p = (Player) e.getWhoClicked();
+                if (p.getUniqueId() == listing.getLister().getUniqueId()) {
+                    this.setItem(i2,new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
+                            .setDisplayName("" + ChatColor.RED + "Cannot buy your own item!").build());
+                    ForgeFrontier.getInstance().getServer().getScheduler()
+                            .runTaskLater(ForgeFrontier.getInstance(), new ItemSetRunnable(this,i2,displayItem),60);
+                    return;
+                }
                 p.openInventory(new ConfirmationHolder("Buy Item?",this.getInventory(), displayItem, ()->{
                     buyListingCallback(e, i2, k);
                 }).getInventory());
@@ -109,9 +121,9 @@ public class ShopHolder extends BaseInventoryHolder {
             return;
         }
         Player p = (Player) e.getWhoClicked();
+        double result = shop.executeBuy(p, k);
         this.setItem(i,new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName("").build());
-            double result = shop.executeBuy(p, k);
-            if (result != -1) {
+        if (result != -1) {
                 p.sendMessage(ChatColor.GOLD + "You bought " + ItemRename.itemName(sl.getItem()) +
                         ChatColor.GOLD + " for " + ChatColor.BOLD + (Math.round(result * 100) / 100) + "g" +
                         ChatColor.RESET + ChatColor.GOLD + "!");

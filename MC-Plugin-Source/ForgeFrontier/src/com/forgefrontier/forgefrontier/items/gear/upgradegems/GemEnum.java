@@ -4,9 +4,9 @@ package com.forgefrontier.forgefrontier.items.gear.upgradegems;
  * An enum which represents the type of gear an UpgradeGem can be applied to
  */
 public enum GemEnum {
-    UNASSIGNED ("Unassigned"),
-    WEAPON ("Weapon"),
-    ARMOR ("Armor");
+    UNASSIGNED ("UNASSIGNED"),
+    WEAPON ("WEAPON"),
+    ARMOR ("ARMOR");
 
     /** the string representation of the enum */
     private final String str;
@@ -31,6 +31,20 @@ public enum GemEnum {
         return switch (randVal) {
             case 0 -> WEAPON;
             case 1 -> ARMOR;
+            default -> UNASSIGNED;
+        };
+    }
+
+    /**
+     * Returns the specified GemEnum based on the string param
+     *
+     * @param sEnum String specifying the correct GemEnum
+     * @return the correct GemEnum
+     */
+    public static GemEnum getGemEnumFromString(String sEnum) {
+        return switch(sEnum) {
+            case "WEAPON" -> WEAPON;
+            case "ARMOR" -> ARMOR;
             default -> UNASSIGNED;
         };
     }

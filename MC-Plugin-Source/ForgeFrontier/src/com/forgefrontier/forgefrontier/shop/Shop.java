@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.shop;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import net.milkbowl.vault.economy.Economy;
@@ -12,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Implements functionality to buy/sell items through a GUI interface
@@ -24,16 +27,19 @@ public class Shop {
     private static final String GEN_SHOP_ERR = ChatColor.RED +
             "[SHOP] An error occurred with the shop. Please try again.";
 
-    private Hashtable<UUID, ShopListing> listings;
+    private ConcurrentHashMap<UUID, ShopListing> listings;
+    private TreeMap<UUID, ShopListing> listingsSorted;
+
     ShopHolder shopGUI;
     ShopCommandExecutor shopCommands;
     Economy econ;
     /** Basic Constructor. */
-    public Shop(Economy e) {
-        listings = new Hashtable<>();
+    public Shop() {
+        listings = new ConcurrentHashMap<>();
+        listingsSorted = new TreeMap<>();
         shopGUI = new ShopHolder(this);
         shopCommands = new ShopCommandExecutor(this);
-        this.econ = e;
+        this.econ = ForgeFrontier.getEconomy();
     }
 
     /**
@@ -67,7 +73,7 @@ public class Shop {
         return new ShopHolder(this).getInventory();
     }
 
-    public Hashtable<UUID, ShopListing> getListings() {
+    public ConcurrentHashMap<UUID, ShopListing> getListings() {
         return this.listings;
     }
 

@@ -24,4 +24,42 @@ public enum StatEnum {
             default -> UNASSIGNED;
         };
     }
+
+    /**
+     * Returns the correct enum based upon specified string
+     *
+     * @param sEnum string specifying the correct enum
+     * @return the correct enum value
+     */
+    public static StatEnum getEnumFromString(String sEnum) {
+        return switch (sEnum) {
+            case "HP" -> HP;
+            case "ATK" -> ATK;
+            case "STR" -> STR;
+            case "DEX" -> DEX;
+            case "CRATE" -> CRATE;
+            case "CDMG" -> CDMG;
+            case "DEF" -> DEF;
+            default ->UNASSIGNED;
+        };
+    }
+
+    /**
+     * returns an integer representation of the enum
+     *
+     * @param value the stat enum
+     * @return the integer representation
+     */
+    public static int getIntFromEnum(StatEnum value) {
+        return switch (value) {
+            case HP -> 0;
+            case ATK -> 1;
+            case STR -> 2;
+            case DEX -> 3;
+            case CRATE -> 4;
+            case CDMG -> 5;
+            case DEF -> 6;
+            default -> -1;
+        };
+    }
 }

@@ -70,6 +70,8 @@ public class ShopCommandExecutor implements CommandExecutor {
                 // TODO: Add confirmation gui, pricing, etc.
                 final int finalAmt = amt;
                 final double finalPrice = price;
+
+
                 ItemStack viewItem = ShopListing.shopifyItem(new ItemStackBuilder(itm).copy(itm, finalAmt), price);
                 p.openInventory(new ConfirmationHolder("Confirm?",null, viewItem, ()->{
                     shop.addItem(p,itm, finalAmt, finalPrice);

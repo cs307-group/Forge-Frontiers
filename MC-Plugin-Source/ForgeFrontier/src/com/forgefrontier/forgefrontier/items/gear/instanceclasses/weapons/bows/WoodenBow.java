@@ -9,6 +9,7 @@ import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Wooden bow item class has all functionality of GearItem
@@ -18,7 +19,11 @@ public class WoodenBow extends GearItem {
     /**
      * Instance class extends GearItemInstance for the WoodenBow class
      */
-    public static class WoodenBowInstance extends GearItemInstance {};
+    public static class WoodenBowInstance extends GearItemInstance {
+        public WoodenBowInstance(ItemStack itemStack) {
+            super(itemStack);
+        }
+    };
 
     /**
      * Default constructor for the wooden bow weapon
@@ -29,7 +34,7 @@ public class WoodenBow extends GearItem {
                 "A handy wooden bow, crafted with oak");
 
         this.registerInstanceAccumulator((__, itemStack) -> {
-            return new WoodenBowInstance();
+            return new WoodenBowInstance(itemStack);
         });
     }
 
