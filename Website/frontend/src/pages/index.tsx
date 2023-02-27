@@ -22,7 +22,7 @@ export default function Home() {
           </Link>
         </div>
         <div>
-          <Link className="underline" href="/login">
+          <Link className="underline" href="/register">
             Register
           </Link>
         </div>

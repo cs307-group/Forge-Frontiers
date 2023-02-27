@@ -8,5 +8,10 @@ MC-Server/plugins/LuckPerms/*
 MC-Plugin-Source/ForgeFrontier/.idea
 MC-Plugin-Source/ForgeFrontier/out
 MC-Plugin-Source/ForgeFrontier/target
-./idea
+MC-Plugin-Source/ForgeFrontier/ForgeFrontier.iml
+MC-Plugin-Source/.idea
+
+.idea
+.idea/runConfigurations.xml
+.idea/workspace.xml
 
