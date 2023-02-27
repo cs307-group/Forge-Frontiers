@@ -17,7 +17,7 @@ public class StatCalc {
      * @param damage the base damage value being done by the entity
      * @return the modified incoming damage value
      */
-    public static double modifyIncomingDamage(int def, double damage) {
+    public static double modifyIncomingDamage(double damage, int def) {
         if (def / damage > 0.8) {
             return damage * 0.2;
         }

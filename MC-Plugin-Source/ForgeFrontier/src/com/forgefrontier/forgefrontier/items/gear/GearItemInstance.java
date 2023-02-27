@@ -10,6 +10,7 @@ import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -63,11 +64,13 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
 
         // stores the base stats
         StringBuilder baseStatArrayString = new StringBuilder();
+        System.out.println("BaseStats: " + Arrays.toString(baseStats) + ":" + numBaseStats);
         for (int i = 0; i < numBaseStats; i++) {
             baseStatArrayString.append(baseStats[i].toString());
         }
+        System.out.println("STRING: " + baseStatArrayString);
         baseStatArrayString = new StringBuilder(baseStatArrayString.substring(0, baseStatArrayString.length() - 1));
-        gearData.put("base-stats", baseStatArrayString.toString() + "}");
+        gearData.put("base-stats", baseStatArrayString + "}");
 
         // stores the ReforgeStatistics
         StringBuilder reforgeStatArrayString = new StringBuilder();
@@ -75,7 +78,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
             reforgeStatArrayString.append(reforgeStats[i].toString());
         }
         reforgeStatArrayString = new StringBuilder(reforgeStatArrayString.substring(0, reforgeStatArrayString.length() - 1));
-        gearData.put("reforge-stats", reforgeStatArrayString.toString() + "}");
+        gearData.put("reforge-stats", reforgeStatArrayString + "}");
 
         gearData.put("num-gem-slots", Integer.toString(numGemSlots));
 
@@ -145,6 +148,11 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
     /** returns the value of this.baseStats */
     public BaseStatistic[] getBaseStats() {
         return this.baseStats;
+    }
+
+    public void setBaseStats(BaseStatistic[] baseStats) {
+        this.numBaseStats = baseStats.length;
+        this.baseStats = baseStats;
     }
 
     /** returns the value of this.reforgeStats */
