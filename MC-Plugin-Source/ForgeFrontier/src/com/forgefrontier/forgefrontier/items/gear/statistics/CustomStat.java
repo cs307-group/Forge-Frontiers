@@ -1,5 +1,7 @@
 package com.forgefrontier.forgefrontier.items.gear.statistics;
 
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+
 /**
  * Class to form skeleton for statistics, which are modifications to attack/defense values in game
  */
@@ -19,10 +21,10 @@ public abstract class CustomStat {
      * @param minValue minimum possible value for the statValue
      * @param maxValue maximum possible value for the statValue
      */
-    public CustomStat(int minValue, int maxValue) {
-        this.statType = StatEnum.getRandStatEnum();
+    public CustomStat(int minValue, int maxValue, GemEnum gemEnum) {
+        this.statType = StatEnum.getRandStatEnum(gemEnum);
         while (statType == StatEnum.CRATE || statType == StatEnum.CDMG) {
-            this.statType = StatEnum.getRandStatEnum();
+            this.statType = StatEnum.getRandStatEnum(gemEnum);
         }
         this.statValue = (int) (Math.random() * (maxValue - minValue + 1)) + minValue;
     }

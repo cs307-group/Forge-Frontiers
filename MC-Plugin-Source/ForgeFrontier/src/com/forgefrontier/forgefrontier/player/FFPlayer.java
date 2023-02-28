@@ -1,11 +1,15 @@
 package com.forgefrontier.forgefrontier.player;
 
+import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.CustomWeapon;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
+import com.forgefrontier.forgefrontier.items.gear.statistics.StatCalc;
 import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.UUID;
 
@@ -126,6 +130,47 @@ public class FFPlayer {
                 stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].removeStat(gemValue.getStat());
             }
         }
+    }
+
+    /**
+     * Returns the calculated outgoing damage when using a custom weapon
+     *
+     * @param weaponInstance the custom weapon instance that is being used
+     * @return the calculated outgoing damage
+     */
+    public double getOutgoingDamageOnAttack(CustomWeapon.CustomWeaponInstance weaponInstance) {
+        double damage = 0;
+
+        BaseStatistic[] baseStatistics = weaponInstance.getBaseStats();
+        ReforgeStatistic[] reforgeStatistics = weaponInstance.getReforgeStats();
+        GemValues[] gemValues = weaponInstance.getGems();
+        for (BaseStatistic baseStatistic : baseStatistics) {
+            stats[StatEnum.getIntFromEnum(baseStatistic.getStatType())].addStat(baseStatistic);
+        }
+        for (ReforgeStatistic reforgeStatistic : reforgeStatistics) {
+            stats[StatEnum.getIntFromEnum(reforgeStatistic.getStatType())].addStat(reforgeStatistic);
+        }
+        for (GemValues gemValue : gemValues) {
+            if (gemValue != null) {
+                stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].addStat(gemValue.getStat());
+            }
+        }
+
+        damage = StatCalc.calcOutgoingDamage(this, weaponInstance.getMainStat());
+
+        for (BaseStatistic baseStatistic : baseStatistics) {
+            stats[StatEnum.getIntFromEnum(baseStatistic.getStatType())].removeStat(baseStatistic);
+        }
+        for (ReforgeStatistic reforgeStatistic : reforgeStatistics) {
+            stats[StatEnum.getIntFromEnum(reforgeStatistic.getStatType())].removeStat(reforgeStatistic);
+        }
+        for (GemValues gemValue : gemValues) {
+            if (gemValue != null) {
+                stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].removeStat(gemValue.getStat());
+            }
+        }
+
+        return damage;
     }
 
     /**

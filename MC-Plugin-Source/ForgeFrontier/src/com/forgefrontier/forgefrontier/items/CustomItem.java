@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.items;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -71,7 +72,7 @@ public abstract class CustomItem {
     public abstract void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance);
 
     /** Ran whenever a player attacks an entity with the custom item. */
-    public abstract void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance);
+    public abstract void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer);
 
     // TODO: Add more events, whenever necessary
 

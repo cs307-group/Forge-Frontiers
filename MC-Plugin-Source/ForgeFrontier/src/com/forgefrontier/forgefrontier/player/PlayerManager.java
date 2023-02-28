@@ -99,7 +99,15 @@ public class PlayerManager extends Manager implements Listener {
             if (maxHealthAttr != null) {
                 maxHealth = maxHealthAttr.getValue();
             }
+
+            // Modifies incoming damage based on defense stat
+            System.out.println("init dmg: " + damage);
+            damage = StatCalc.modifyIncomingDamage(damage, ffPlayer.getDEF());
+            System.out.println("after DEF conversion: " + damage);
+
+            // Modifies incoming damage based on health stat
             double convertedDamage = StatCalc.convertDamage(damage, maxHealth, ffPlayer);
+            System.out.println("after HP conversion: " + convertedDamage);
             event.setDamage(convertedDamage);
         }
     }

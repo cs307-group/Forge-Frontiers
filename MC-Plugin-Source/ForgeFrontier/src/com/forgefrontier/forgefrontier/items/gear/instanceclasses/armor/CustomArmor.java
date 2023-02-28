@@ -3,6 +3,8 @@ package com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor;
 import com.forgefrontier.forgefrontier.items.gear.GearItem;
 import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
+import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
+import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -51,5 +53,17 @@ public abstract class CustomArmor extends GearItem {
      */
     public CustomArmor(String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum, Material material, int durability, String lore) {
         super(name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
+
+        this.registerInstanceAccumulator((instance, itemStack) -> {
+            CustomArmorInstance armorInstance = (CustomArmorInstance) instance;
+
+            if (itemStack == null) {
+                BaseStatistic[] baseStats = new BaseStatistic[numBaseStats];
+                baseStats[0] = new BaseStatistic(4, StatEnum.DEF);
+                armorInstance.setBaseStats(baseStats);
+            }
+
+            return armorInstance;
+        });
     }
 }

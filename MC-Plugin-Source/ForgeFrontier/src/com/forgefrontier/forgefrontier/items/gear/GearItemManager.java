@@ -44,14 +44,9 @@ public class GearItemManager extends Manager implements Listener {
      */
     @EventHandler
     public void onPlayerArmorChange(PlayerArmorChangeEvent e) {
-        System.out.println("ARMOR CHANGE EVENT ACTIVATED");
         Player p = (Player) e.getPlayer();
         FFPlayer ffPlayer = plugin.getPlayerManager().getFFPlayerFromID(p.getUniqueId());
-        System.out.println("BEFORE:\n" + ffPlayer.getStatsString());
         CustomItemInstance newItemInstance = CustomItemManager.asCustomItemInstance(e.getNewItem());
-        if (newItemInstance != null) {
-            System.out.println(newItemInstance.getData().toString() + " : " + (newItemInstance instanceof CustomArmor.CustomArmorInstance));
-        }
         if (e.getOldItem() != null) {
             CustomItemInstance oldItemInstance = CustomItemManager.asCustomItemInstance(e.getOldItem());
             CustomArmor.CustomArmorInstance oldArmorInstance = (CustomArmor.CustomArmorInstance) oldItemInstance;
@@ -66,7 +61,6 @@ public class GearItemManager extends Manager implements Listener {
         if (newItemInstance instanceof CustomArmor.CustomArmorInstance newArmorInstance) {
             ffPlayer.updateStatsOnArmorEquip(newArmorInstance);
         }
-        System.out.println("AFTER:\n" + ffPlayer.getStatsString());
     }
 
 

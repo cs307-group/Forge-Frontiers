@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.items.gear.statistics;
 
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerStat;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
 
@@ -11,13 +12,44 @@ import java.util.ArrayList;
 public class StatCalc {
 
     /**
+     * Calculates the outgoing damage of a custom weapon attack
+     *
+     * @param ffPlayer the player issuing the attack
+     * @return the updated damage
+     */
+    public static double calcOutgoingDamage(FFPlayer ffPlayer, StatEnum MAIN_STAT) {
+        System.out.println(ffPlayer.getStatsString());
+
+        double damage = 0;
+        System.out.println(damage);
+        int mainStatInt = StatEnum.getIntFromEnum(MAIN_STAT);
+
+        damage += ffPlayer.getATK();
+        System.out.println(damage);
+        switch (mainStatInt) {
+            case 2: damage += ffPlayer.getSTR(); break;
+            case 3: damage += ffPlayer.getDEX(); break;
+            default: break;
+        }
+        System.out.println(damage);
+
+        if ((int) (Math.random() * 100) + 1 <= ffPlayer.getCRATE()) {
+            double critDamage = ((double) ffPlayer.getCDMG()) / 100 * damage;
+            damage += critDamage;
+        }
+        System.out.println(damage);
+
+        return damage;
+    }
+
+    /**
      * Returns the modified incoming damage based off of the defense statistic
      *
      * @param def the defense of the defending entity
      * @param damage the base damage value being done by the entity
      * @return the modified incoming damage value
      */
-    public static double modifyIncomingDamage(int def, double damage) {
+    public static double modifyIncomingDamage(double damage, int def) {
         if (def / damage > 0.8) {
             return damage * 0.2;
         }

@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -39,7 +40,7 @@ public class LeatherChestplate extends CustomArmor {
 
     /** Method is empty due to no special events occurring when using this item to attack */
     @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance) {
+    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
 
     }
 }

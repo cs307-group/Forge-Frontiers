@@ -1,5 +1,7 @@
 package com.forgefrontier.forgefrontier.items.gear.statistics;
 
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+
 /**
  * Enum to represent the different types of statistics
  */
@@ -11,8 +13,13 @@ public enum StatEnum {
      *
      * @return the StatEnum returned
      */
-    public static StatEnum getRandStatEnum() {
-        int randValue = (int)(Math.random() * 5);
+    public static StatEnum getRandStatEnum(GemEnum gemEnum) {
+        System.out.println(gemEnum.toString());
+        int randValue = (int)(Math.random() * 7);
+        if (gemEnum == GemEnum.WEAPON) {
+            System.out.println("regen");
+            randValue = (int)(Math.random() * 5) + 1;
+        }
         return switch (randValue) {
             case 0 -> HP;
             case 1 -> ATK;

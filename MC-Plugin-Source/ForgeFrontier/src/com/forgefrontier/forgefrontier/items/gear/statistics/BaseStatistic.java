@@ -1,5 +1,7 @@
 package com.forgefrontier.forgefrontier.items.gear.statistics;
 
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+
 /**
  * BaseStatistic
  *
@@ -13,8 +15,8 @@ public class BaseStatistic extends CustomStat {
      * @param minValue minimum possible value for the statValue
      * @param maxValue maximum possible value for the statValue
      */
-    public BaseStatistic(int minValue, int maxValue) {
-        super(minValue, maxValue);
+    public BaseStatistic(int minValue, int maxValue, GemEnum gemEnum) {
+        super(minValue, maxValue, gemEnum);
     }
 
     /**

@@ -8,14 +8,11 @@ import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
-import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGemInstance;
 import com.google.common.collect.Multimap;
-import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -58,10 +55,17 @@ public abstract class GearItem extends UniqueCustomItem {
      * @param numBaseStats the number of specified base statistics the gear should contain
      */
     private void initBaseStatSlots(GearItemInstance instance, int numBaseStats) {
-        instance.numBaseStats = numBaseStats;
-        instance.baseStats = new BaseStatistic[numBaseStats];
+        // checks to see if baseStats has already been instantiated
+        if (instance.baseStats == null) {
+            instance.numBaseStats = numBaseStats;
+            instance.baseStats = new BaseStatistic[numBaseStats];
+        }
+
+        // fills in all empty stats with random stats
         for (int i = 0; i < numBaseStats; i++) {
-            instance.baseStats[i] = new BaseStatistic(1, instance.quality.getMaxValue());
+            if (instance.baseStats[i] == null) {
+                instance.baseStats[i] = new BaseStatistic(1, instance.quality.getMaxValue(), instance.gemEnum);
+            }
         }
     }
 
@@ -83,6 +87,8 @@ public abstract class GearItem extends UniqueCustomItem {
             GearItemInstance gearItemInstance = (GearItemInstance) instance;
 
             if (itemStack == null) {
+                gearItemInstance.gemEnum = gemEnum;
+
                 gearItemInstance.name = name;
                 if (quality.getRarityInt() == -1) {
                     gearItemInstance.quality = QualityEnum.getRandQualityEnum().getQuality();
@@ -92,13 +98,12 @@ public abstract class GearItem extends UniqueCustomItem {
 
                 gearItemInstance.reforgeStats = new ReforgeStatistic[3];
                 for (int i = 0; i < 3; i++) {
-                    gearItemInstance.reforgeStats[i] = new ReforgeStatistic(gearItemInstance.quality);
+                    gearItemInstance.reforgeStats[i] = new ReforgeStatistic(gearItemInstance.quality, gearItemInstance.gemEnum);
                 }
                 initBaseStatSlots(gearItemInstance, numBaseStats);
 
                 gearItemInstance.numGemSlots = numGemSlots;
                 gearItemInstance.gems = new GemValues[gearItemInstance.numGemSlots];
-                gearItemInstance.gemEnum = gemEnum;
 
                 gearItemInstance.material = material;
                 gearItemInstance.durability = durability;
