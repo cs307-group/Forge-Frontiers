@@ -28,6 +28,7 @@ router = Blueprint("user", __name__, url_prefix="/users")
 def register():
     req = Context()
     json = req.json
+    return json
     pw = json.pop("password", None)
     body = UserIn(**req.json, password_hash=pw, is_admin=False)
     js = create_user(body, return_json=True)
