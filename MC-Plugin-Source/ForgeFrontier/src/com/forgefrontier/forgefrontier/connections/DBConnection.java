@@ -13,7 +13,7 @@ import java.util.logging.Level;
 public class DBConnection {
     Connection dbConn;
 
-    private boolean setupDatabaseConnection() {
+    public boolean setupDatabaseConnection() {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (Exception e) {
@@ -64,7 +64,32 @@ public class DBConnection {
             ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "[FF DATABASE] " + e.getMessage());
             return false;
         }
+    }
 
+    public boolean test_connection() {
+        try {
+            Statement s = this.dbConn.createStatement();
+            ResultSet rs = s.executeQuery("select table_name from information_schema.tables " +
+                                            "WHERE table_schema = 'public';\n");
+            StringBuilder tbls = new StringBuilder();
+            tbls.append("\n[TEST CONNECTION - PUBLIC TABLES]:\n");
+            while (rs.next()) {
+                tbls.append("\t").append(rs.getString("table_name")).append("\n");
+            }
+            rs.close();
+            s.close();
+            ForgeFrontier.getInstance().getLogger().log(Level.INFO, tbls.toString());
+
+        } catch (SQLException se) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[FATAL] SQL Exception. \n" + se.getMessage());
+            return false;
+        } catch (Exception e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[FATAL] Error querying database!\n" + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier;
 
+import com.forgefrontier.forgefrontier.connections.DBConnection;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
@@ -42,8 +43,7 @@ public class ForgeFrontier extends JavaPlugin {
     private static Permission perms = null;
     private static Chat chat = null;
     private static final Logger log = Logger.getLogger("Minecraft");
-    private static String DB_CONN_STR;
-
+    private static DBConnection postGresConnection = null;
 
     GeneratorManager generatorManager;
     CustomItemManager customItemManager;
@@ -58,7 +58,6 @@ public class ForgeFrontier extends JavaPlugin {
             this.getDataFolder().mkdirs();
         }
         CHAT_PREFIX = ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.BOLD + "Forge" + ChatColor.GOLD + ChatColor.BOLD + "Frontier" + ChatColor.GRAY + "] " + ChatColor.YELLOW;
-        setupDatabaseConnection();
         if (!setupEconomy() ) {
             log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
@@ -66,7 +65,7 @@ public class ForgeFrontier extends JavaPlugin {
         }
         setupPermissions();
         setupChat();
-
+        setupDBConnection();
         // Managers
         this.generatorManager = new GeneratorManager(this);
         this.customItemManager = new CustomItemManager(this);
@@ -141,7 +140,12 @@ public class ForgeFrontier extends JavaPlugin {
         return econ;
     }
 
-
+    private void setupDBConnection() {
+        postGresConnection = new DBConnection();
+        boolean result = postGresConnection.setupDatabaseConnection();
+        if (result)
+            postGresConnection.test_connection();
+    }
 
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
