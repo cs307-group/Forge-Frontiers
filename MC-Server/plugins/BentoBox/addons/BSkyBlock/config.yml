@@ -4,7 +4,7 @@ bskyblock:
     # Island Command. What command users will run to access their island.
     # To define alias, just separate commands with white space.
     # Added since 1.3.0.
-    island: island is skyblock sb
+    island: skyblock
     # The island admin command.
     # To define alias, just separate commands with white space.
     # Added since 1.3.0.
@@ -138,9 +138,9 @@ world:
     dragon-spawn: false
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
-  - ZOMBIE_VILLAGER
   - ENDERMAN
   - WITHER
+  - ZOMBIE_VILLAGER
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -201,11 +201,11 @@ world:
     BREAK_SPAWNERS: 500
     LEVER: 500
     ELYTRA: 0
-    HURT_MONSTERS: 0
-    CAKE: 500
     RIDING: 500
-    NAME_TAG: 500
+    CAKE: 500
+    HURT_MONSTERS: 0
     ARMOR_STAND: 500
+    NAME_TAG: 500
     TRADING: 0
     EGGS: 500
     ITEM_DROP: 0
@@ -215,8 +215,8 @@ world:
     LECTERN: 500
     ITEM_PICKUP: 0
     CROP_TRAMPLE: 500
-    BREWING: 500
     DROPPER: 500
+    BREWING: 500
     TNT_PRIMING: 500
     COLLECT_WATER: 500
     BUTTON: 500
@@ -224,18 +224,18 @@ world:
     COMMAND_RANKS: 500
     BEACON: 500
     TRAPDOOR: 500
-    PRESSURE_PLATE: 0
     EXPERIENCE_BOTTLE_THROWING: 500
-    DYE: 500
+    PRESSURE_PLATE: 0
     HIVE: 500
-    PLACE_BLOCKS: 500
+    DYE: 500
     ITEM_FRAME: 500
+    PLACE_BLOCKS: 500
     CRAFTING: 0
-    ENCHANTING: 0
     SHEARING: 500
+    ENCHANTING: 0
     BOAT: 500
-    BED: 500
     SPAWN_EGGS: 500
+    BED: 500
     MILKING: 0
     DISPENSER: 500
     GATE: 0
@@ -246,15 +246,15 @@ world:
     MOUNT_INVENTORY: 500
     CHORUS_FRUIT: 500
     CONTAINER: 500
-    POTION_THROWING: 500
     JUKEBOX: 500
+    POTION_THROWING: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
     PVP_NETHER: false
     LEAF_DECAY: true
-    TNT_DAMAGE: true
     MONSTER_SPAWNERS_SPAWN: true
+    TNT_DAMAGE: true
     ANIMAL_NATURAL_SPAWN: true
     MONSTER_NATURAL_SPAWN: true
     FIRE_IGNITE: true
