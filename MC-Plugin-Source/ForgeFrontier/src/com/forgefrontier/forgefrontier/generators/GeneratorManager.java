@@ -74,13 +74,13 @@ public class GeneratorManager extends Manager implements Listener {
         this.plugin.getConfig().addDefault("generators.1.levels.1.generation_rate", 5);
         this.plugin.getConfig().addDefault("generators.1.levels.1.max_size", 100000);
          */
+        this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem());
 
         int generatorInd = 0;
         ConfigurationSection configSection;
         while((configSection = this.plugin.getConfig().getConfigurationSection("generators." + generatorInd)) != null) {
             Generator generator = new Generator(configSection);
             this.generators.put(generator.getId(), generator);
-            this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem(generator));
             generatorInd += 1;
         }
 

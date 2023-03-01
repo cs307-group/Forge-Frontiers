@@ -58,13 +58,14 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
         }
         ItemStackBuilder buyItemBuilder = new ItemStackBuilder(Material.GREEN_WOOL)
             .setDisplayName("&aBuy Upgrade");
-        for(MaterialCost cost: generator.getShopCost()) {
+        for(MaterialCost cost: generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts) {
             buyItemBuilder.addLoreLine("&7>> &f" + cost.getAmount() + "&7x " + cost.getMaterial().getRepresentation().getItemMeta().getDisplayName());
         }
         this.setItem(9 * 3 + 7, buyItemBuilder.build());
         final List<MaterialCost> costs = generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts;
         this.addHandler(9 * 3 + 7, (e) -> {
             boolean works = true;
+            System.out.println(costs);
             for(MaterialCost cost: costs) {
                 if(!cost.hasBalance((Player) e.getWhoClicked())) {
                     works = false;

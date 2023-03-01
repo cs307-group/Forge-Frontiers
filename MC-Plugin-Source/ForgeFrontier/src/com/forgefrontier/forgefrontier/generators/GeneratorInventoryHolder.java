@@ -38,11 +38,12 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
         this.setItem(9+6, removeItem);
         Inventory baseInventory = this.getInventory();
         this.addHandler(9+6, (e) -> {
-            ConfirmationHolder confirmHolder = new ConfirmationHolder("Are you sure you want to pickup this generator?", baseInventory, () -> {
+            ConfirmationHolder confirmHolder = new ConfirmationHolder("&cWould you like to pickup this generator?", baseInventory, () -> {
                 ForgeFrontier.getInstance().getGeneratorManager().removeGeneratorInstance(generatorInstance);
-                GeneratorPlaceItemInstance genPlaceItemInst = CustomItemManager.getCustomItem("GenPlace-" + generatorInstance.generator.getId()).asInstance(null);
-                genPlaceItemInst.
-                e.getWhoClicked().getInventory().addItem(.asInstance(null).asItemStack());
+                PlaceGeneratorItemInstance genPlaceItemInst = (PlaceGeneratorItemInstance) CustomItemManager.getCustomItem("PlaceGeneratorBlock").asInstance(null);
+                genPlaceItemInst.generatorId = generatorInstance.generator.getId();
+                genPlaceItemInst.level = generatorInstance.level;
+                e.getWhoClicked().getInventory().addItem(genPlaceItemInst.asItemStack());
                 e.getWhoClicked().closeInventory();
             }, false);
             e.getWhoClicked().openInventory(confirmHolder.getInventory());

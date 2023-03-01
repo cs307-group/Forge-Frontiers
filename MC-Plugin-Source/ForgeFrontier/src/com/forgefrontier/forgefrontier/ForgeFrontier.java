@@ -27,6 +27,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import world.bentobox.bentobox.BentoBox;
 
 import java.io.*;
 import java.sql.*;

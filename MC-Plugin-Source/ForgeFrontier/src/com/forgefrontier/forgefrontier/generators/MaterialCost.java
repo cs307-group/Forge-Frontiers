@@ -34,4 +34,10 @@ public class MaterialCost {
     public int getAmount() {
         return this.amount;
     }
+
+    @Override
+    public String toString() {
+        return "(material: " + material + ", amount: " + amount + ")";
+    }
+
 }

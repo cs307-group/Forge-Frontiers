@@ -3,6 +3,8 @@ package com.forgefrontier.forgefrontier.gui;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.Generator;
 import com.forgefrontier.forgefrontier.generators.MaterialCost;
+import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
+import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.Material;
@@ -56,7 +58,9 @@ public class GeneratorShopInventoryHolder extends BaseInventoryHolder {
                 for(MaterialCost cost: costs) {
                     cost.take((Player) e.getWhoClicked());
                 }
-                ItemStack generatorItem = CustomItemManager.getCustomItem("GenPlace-"+generator.getId()).asInstance(null).asItemStack();
+                PlaceGeneratorItemInstance placeGeneratorItemInstance = (PlaceGeneratorItemInstance) CustomItemManager.getCustomItem("PlaceGeneratorBlock").asInstance(null);
+                placeGeneratorItemInstance.setGeneratorData(generator.getId(), 0);
+                ItemStack generatorItem = placeGeneratorItemInstance.asItemStack();
                 e.getWhoClicked().getInventory().addItem(generatorItem);
                 e.getWhoClicked().closeInventory();
                 e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully bought the " + generatorItem.getItemMeta().getDisplayName() + ".");

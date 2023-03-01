@@ -23,4 +23,9 @@ public abstract class CustomMaterial {
 
     public abstract void take(Player p, int amt);
 
+    @Override
+    public String toString() {
+        return "(name: " +  this.name + ")";
+    }
+
 }
