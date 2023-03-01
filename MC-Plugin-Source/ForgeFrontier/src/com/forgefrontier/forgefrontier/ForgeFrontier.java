@@ -144,7 +144,7 @@ public class ForgeFrontier extends JavaPlugin {
         postGresConnection = new DBConnection();
         boolean result = postGresConnection.setupDatabaseConnection();
         if (result)
-            postGresConnection.test_connection();
+            postGresConnection.testConnection();
     }
 
     private boolean setupEconomy() {
@@ -169,6 +169,10 @@ public class ForgeFrontier extends JavaPlugin {
         RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
         chat = rsp.getProvider();
         return chat != null;
+    }
+
+    public DBConnection getDBConnection() {
+        return postGresConnection;
     }
 
 

@@ -1,8 +1,12 @@
 package com.forgefrontier.forgefrontier.shop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.CustomItem;
+import com.forgefrontier.forgefrontier.items.CustomItemInstance;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
+import com.forgefrontier.forgefrontier.utils.ItemRename;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.ChatColor;
@@ -12,9 +16,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
 
 /**
  * Implements functionality to buy/sell items through a GUI interface
@@ -55,6 +61,7 @@ public class Shop {
         if (listings.get(id) != null) return false;
         ShopListing sl = new ShopListing(p, i, price, amt, id);
         listings.put(sl.getID(), sl);
+        addListingToDatabase(sl);
         return true;
     }
 
@@ -137,5 +144,47 @@ public class Shop {
             return false;
         }
     }
+
+    public void addListingToDatabase(ShopListing listing) {
+        String listingId = listing.getID().toString();
+        String itemMaterial = listing.getItem().getType().toString();
+        String itemID = itemMaterial;
+        ItemMeta im = listing.getItem().getItemMeta();
+        String itemname = ItemRename.itemName(listing.getItem());
+        String lore = "";
+        if (im != null) {
+            if (im.hasLore()) {
+                List<String> lorelist = im.getLore();
+                if (lorelist != null)
+                    lore = String.join("\n", lorelist);
+            }
+        }
+        String price = Double.toString(listing.getPrice());
+        int amount = listing.getItem().getAmount();
+        String listerID = listing.getLister().getUniqueId().toString();
+        long dateListed = System.currentTimeMillis();
+        String customData = "";
+        CustomItemInstance ci = CustomItemManager.asCustomItemInstance(listing.getItem());
+        if (ci != null) {
+            customData = ci.getData().toString();
+            itemID = ci.getBaseItem().getCode();
+        }
+        StringBuilder info = new StringBuilder();
+        info.append("ID: ").append(listerID).append("\nMaterial: ").append(itemMaterial)
+                .append("\nLore: ").append(lore).append("\nPrice: ").append(price).append("\nAmount: ").append(amount)
+                .append("\nLister: ").append(listerID).append("\nDate: ").append(dateListed)
+                .append("\nCustomData: ").append(customData);
+        ForgeFrontier.getInstance().getLogger().log(Level.INFO,"ADDING TO DB: \n" + info.toString());
+        ForgeFrontier.getInstance().getDBConnection().insertShopListing
+                (listingId,itemID,itemMaterial,itemname,lore,price,amount
+                ,listerID,null,-1,dateListed,customData);
+    }
+
+
+    public void loadFromDB() {
+
+    }
+
+
 
 }

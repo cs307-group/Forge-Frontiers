@@ -77,13 +77,13 @@ biomes:
 
           &7 Uzstādīšanas mode: [mode]
           &7 Uzstādīšanas attālums: [number]
-      # Button that is used to return to previous GUI or exit it completely.
+# Button that is used to return to previous GUI or exit it completely.
       return:
         name: '&f&l Atpakaļ'
         description: |-
           &7 Atgriezties uz iepriekšējo
           &7 izvēlni.
-      # Button that is used in multi-page GUIs which allows to return to previous page.
+# Button that is used in multi-page GUIs which allows to return to previous page.
       previous:
         name: '&f&l Iepriekšējā Lapa'
         description: '&7 Atgriezties uz &e [number] &7 lapu.' # Button that is used in multi-page GUIs which allows to go to next page.
@@ -616,7 +616,7 @@ biomes:
           [biome]
           [unlock]
           [change]
-        # Text that will replace [biome]
+# Text that will replace [biome]
         original: '&7 Bioms: &e [biome]' # The text that will replace [unlock] message. If biome is unlocked, then this message will be generated empty.
         unlock:
           lore: |-
@@ -624,12 +624,12 @@ biomes:
             [money]
             [level]
             [permissions]
-          # Text that will replace [money]
+# Text that will replace [money]
           money: '&7 Pirkšanas maksa: &e €[number]' # Text that will replace [level]
           level: |-
             &7 Nepieciešams sasniegt &e [number]
             &7 salas līmeni.
-          # Text that will replace [permissions]
+# Text that will replace [permissions]
           permission-single: '&7 Trūkst atļauja: &c [permission]'
           permissions-title: '&c Trūkstošās atļaujas:'
           permissions-list: '&c - [permission]' # Text that will replace [items]
@@ -645,7 +645,7 @@ biomes:
             [money]
             [mode]
             [usage]
-          # Text that will replace [mode]
+# Text that will replace [mode]
           mode:
             per_block: |-
               &b&o Bioma uzstādīšana
@@ -662,7 +662,7 @@ biomes:
           number-of-usage: |-
             |&7 Šis bioms ir uzstādīts
             &e [number] &r&7 reizes.
-          # Text that replaces [color].
+# Text that replaces [color].
           missing: '&c'
           has: '&e'
       bundle:
@@ -674,7 +674,7 @@ biomes:
           &7 Atļauja, kas nepieciešama
           &7 lietotājam:
           &7&o [gamemode].biomes.bundle.[id]
-        # String that are before listing all biomes assigned to bundle.
+# String that are before listing all biomes assigned to bundle.
         title: '&7 Bundļa Biomi: '
         # Each biome name in listing
         value: '&7 - [biome]'

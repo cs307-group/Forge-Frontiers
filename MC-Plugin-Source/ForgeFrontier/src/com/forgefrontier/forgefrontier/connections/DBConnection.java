@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Level;
 
+
 public class DBConnection {
     Connection dbConn;
 
@@ -66,15 +67,19 @@ public class DBConnection {
         }
     }
 
-    public boolean test_connection() {
+    /**
+     * Queries database tables, if returned successfully, the database is probably connected.
+     * @return success
+     */
+    public boolean testConnection() {
         try {
             Statement s = this.dbConn.createStatement();
             ResultSet rs = s.executeQuery("select table_name from information_schema.tables " +
                                             "WHERE table_schema = 'public';\n");
             StringBuilder tbls = new StringBuilder();
-            tbls.append("\n[TEST CONNECTION - PUBLIC TABLES]:\n");
+            tbls.append("\n\t[TEST CONNECTION - PUBLIC TABLES]:\n");
             while (rs.next()) {
-                tbls.append("\t").append(rs.getString("table_name")).append("\n");
+                tbls.append("\t- ").append(rs.getString("table_name")).append("\n");
             }
             rs.close();
             s.close();
@@ -91,5 +96,58 @@ public class DBConnection {
         }
         return true;
     }
+
+    /**
+     *
+     * @param query Query to execute
+     * @return queried data
+     */
+    public ConnectionSet createQuery(String query) {
+        try {
+            Statement s = this.dbConn.createStatement();
+            ResultSet rs = s.executeQuery("select table_name from information_schema.tables " +
+                    "WHERE table_schema = 'public';\n");
+            return new ConnectionSet(s, rs);
+            //ForgeFrontier.getInstance().getLogger().log(Level.INFO, "Query Executed");
+        } catch (SQLException se) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[FATAL] SQL Exception. \n" + se.getMessage());
+            return null;
+        } catch (Exception e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[FATAL] Error querying database!\n" + e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean insertShopListing(
+            String id, String itemId, String material, String name, String lore, String price, int amount,
+            String listerID, String buyerID, long dateSold, long dateListed, String customData) {
+            try {
+                PreparedStatement preparedStatement = dbConn.prepareStatement("INSERT INTO public.shop " +
+                        "(id_, item_id, item_material, item_name, item_lore, price, " +
+                        "amount, lister_player_id, buyer_id, date_sold, created_at, custom_data) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                preparedStatement.setString(1, id);
+                preparedStatement.setString(2, itemId);
+                preparedStatement.setString(3, material);
+                preparedStatement.setString(4, name);
+                preparedStatement.setString(5, lore);
+                preparedStatement.setString(6, price);
+                preparedStatement.setInt(7, amount);
+                preparedStatement.setString(8,listerID);
+                preparedStatement.setString(9,buyerID);
+                preparedStatement.setLong(10,dateSold);
+                preparedStatement.setLong(11, dateListed);
+                preparedStatement.setString(12, customData);
+                ForgeFrontier.getInstance().getLogger().log(Level.INFO,"[QUERY]\n" + preparedStatement);
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "[QUERY FAILURE]\n" + e.getMessage());
+                return false;
+            }
+    }
+
 
 }
