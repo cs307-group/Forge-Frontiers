@@ -9,8 +9,10 @@ import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.ItemRename;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -85,7 +87,7 @@ public class Shop {
     }
 
     public boolean executeRemoveListing(Player p, ShopListing l) {
-        if (l.getLister().getUniqueId() != p.getUniqueId()) {
+        if (l.getLister().getUniqueId().compareTo(p.getUniqueId()) != 0) {
             p.sendMessage(GEN_SHOP_ERR);
             return false;
         }
@@ -93,14 +95,17 @@ public class Shop {
             p.sendMessage(GEN_SHOP_ERR);
             return false;
         }
-        ItemGiver.giveItem(p, l.getItem());
-        removeListing(l.getID());
-        return true;
+        if (ForgeFrontier.getInstance().getDBConnection().removeListing(l.getID())) {
+            ItemGiver.giveItem(p, l.getItem());
+            removeListing(l.getID());
+            return true;
+        }
+        return false;
     }
     public double executeBuy(Player p, ShopListing l) {
         // TODO: TURN BOOLEAN OFF WHEN NOT TESTING
         boolean TEST = true;
-        if (l.getLister().getUniqueId() == p.getUniqueId()) {
+        if (!TEST && l.getLister().getUniqueId().compareTo(p.getUniqueId()) == 0) {
             if (!listings.containsKey(l.getID())) {
                 p.sendMessage(GEN_SHOP_ERR);
                 return -1;
@@ -121,9 +126,15 @@ public class Shop {
             p.sendMessage(GEN_SHOP_ERR);
             return -1;
         }
+
+        OfflinePlayer offlinePlayer = Bukkit.getPlayer(l.getLister().getUniqueId());
+        if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(l.getLister().getUniqueId());
+
         removeListing(l.getID());
         ItemStack origItem = l.getItem();
         ItemGiver.giveItem(p, origItem);
+        setSoldDB(l.getID(),p.getUniqueId());
+        econ.depositPlayer(offlinePlayer, l.getPrice());
         return l.getPrice();
     }
     public double executeBuy(Player p, UUID l) {
@@ -162,6 +173,7 @@ public class Shop {
         String price = Double.toString(listing.getPrice());
         int amount = listing.getItem().getAmount();
         String listerID = listing.getLister().getUniqueId().toString();
+        String listerName = listing.getLister().getName();
         long dateListed = System.currentTimeMillis();
         String customData = "";
         CustomItemInstance ci = CustomItemManager.asCustomItemInstance(listing.getItem());
@@ -174,15 +186,47 @@ public class Shop {
                 .append("\nLore: ").append(lore).append("\nPrice: ").append(price).append("\nAmount: ").append(amount)
                 .append("\nLister: ").append(listerID).append("\nDate: ").append(dateListed)
                 .append("\nCustomData: ").append(customData);
-        ForgeFrontier.getInstance().getLogger().log(Level.INFO,"ADDING TO DB: \n" + info.toString());
+        ForgeFrontier.getInstance().getLogger().log(Level.INFO,"ADDING TO DB: \n" + info);
+
         ForgeFrontier.getInstance().getDBConnection().insertShopListing
                 (listingId,itemID,itemMaterial,itemname,lore,price,amount
-                ,listerID,null,-1,dateListed,customData);
+                ,listerID,null,-1,dateListed,customData,listerName);
     }
 
+    public boolean setSoldDB(UUID listing_id, UUID player) {
+        return ForgeFrontier.getInstance().getDBConnection()
+                .setListingSold(listing_id, player, System.currentTimeMillis());
+    }
 
-    public void loadFromDB() {
+    public boolean loadListing(UUID listing_id, String itemId, String material, String name,
+                            String lore, Double price, int amount, UUID listerID, String customData, String playerName) {
+//        if (!customData.equals("")) return false;
+        Material m = Material.matchMaterial(material);
+        if (m == null) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "Shop ERROR: loading shop: " + material + " from database.");
+            return false;
+        }
 
+        ItemStack itm = new ItemStack(m);
+        itm.setAmount(amount);
+        ItemMeta im = itm.getItemMeta();
+        if (im == null) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "Shop ERROR: loading item meta of " + name + " from database.");
+            return false;
+        }
+        if (!lore.equals(""))
+            im.setLore(List.of(lore.split("\n")));
+        im.setDisplayName(name);
+        itm.setItemMeta(im);
+        ShopPlayer sp = new ShopPlayer(listerID, playerName);
+        ShopListing sl = new ShopListing(sp,itm,price,listing_id);
+        if (this.listings.put(listing_id,sl) != null) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "Shop WARNING: uuid(" + listing_id + ") loaded multiple times!");
+        }
+        return true;
     }
 
 

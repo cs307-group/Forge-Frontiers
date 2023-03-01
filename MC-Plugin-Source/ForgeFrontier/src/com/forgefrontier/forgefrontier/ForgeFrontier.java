@@ -77,8 +77,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.playerManager.init();
         this.gearItemManager.init();
 
-        this.itemShop = new Shop();
-
+        this.setupPlayerShop();
         this.getCustomItemManager().registerCustomItem(new UpgradeGem());
         this.getCustomItemManager().registerCustomItem(new WoodenSword());
         this.getCustomItemManager().registerCustomItem(new WoodenBow());
@@ -175,5 +174,12 @@ public class ForgeFrontier extends JavaPlugin {
         return postGresConnection;
     }
 
+    public Shop getPlayerShop() {
+        return this.itemShop;
+    }
 
+    public void setupPlayerShop() {
+        this.itemShop = new Shop();
+        postGresConnection.loadListings();
+    }
 }

@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public class ShopHolder extends BaseInventoryHolder {
     ConcurrentHashMap<UUID, ShopListing> listings;
@@ -53,8 +54,10 @@ public class ShopHolder extends BaseInventoryHolder {
     public void removeGUI() {
         Set<UUID> keys = listings.keySet();
         int i = 0;
+        this.fillPanes();
         for (UUID k : keys) {
-            if (listings.get(k).getLister().getUniqueId() != pID) {
+            if (listings.get(k).getLister().getUniqueId().compareTo(pID) != 0) {
+                ForgeFrontier.getInstance().getLogger().log(Level.INFO,"UUID COMPARE REMOVE: " + listings.get(k).getLister().getUniqueId().toString() + " - " + pID.toString());
                 continue;
             }
             if (i > 9) break;
@@ -76,8 +79,14 @@ public class ShopHolder extends BaseInventoryHolder {
     }
 
     public void updateGUI() {
+
+        if (this.remove) {
+            this.removeGUI();
+            return;
+        }
         Set<UUID> keys = listings.keySet();
         int i = 0;
+        this.fillPanes();
         for (UUID k : keys) {
             // TODO: Fill GUI
             if (i > 9) break;
@@ -87,7 +96,8 @@ public class ShopHolder extends BaseInventoryHolder {
             int i2 = i;
             this.addHandler(i, (e) -> {
                 Player p = (Player) e.getWhoClicked();
-                if (p.getUniqueId() == listing.getLister().getUniqueId()) {
+                boolean TEST = true;
+                if (!TEST && p.getUniqueId() == listing.getLister().getUniqueId()) {
                     this.setItem(i2,new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
                             .setDisplayName("" + ChatColor.RED + "Cannot buy your own item!").build());
                     ForgeFrontier.getInstance().getServer().getScheduler()

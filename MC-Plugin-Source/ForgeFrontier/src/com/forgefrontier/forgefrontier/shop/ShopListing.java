@@ -33,6 +33,14 @@ public class ShopListing {
         this.listingID = listingID;
         displayItem = shopifyItem(item, lister, price);
     }
+    public ShopListing(ShopPlayer p, ItemStack item, double price, UUID listingID) {
+        this.lister = p;
+        this.price = price;
+        this.amt = item.getAmount();
+        this.item = item;
+        this.listingID = listingID;
+        displayItem = shopifyItem(item, lister, price);
+    }
 
     /** Getters **/
     ItemStack getItem() { return this.item; }
@@ -118,5 +126,6 @@ public class ShopListing {
         im.setDisplayName(s);
         itemStack.setItemMeta(im);
     }
+
 
 }
