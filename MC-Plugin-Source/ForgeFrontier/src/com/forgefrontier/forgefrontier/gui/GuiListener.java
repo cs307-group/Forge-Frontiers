@@ -30,11 +30,4 @@ public class GuiListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onSwapItem(PlayerSwapHandItemsEvent e) {
-        if(e.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof BaseInventoryHolder) {
-            e.setCancelled(true);
-        }
-    }
-
 }

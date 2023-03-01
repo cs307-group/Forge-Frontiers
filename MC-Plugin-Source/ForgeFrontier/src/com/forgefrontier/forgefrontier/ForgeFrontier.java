@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier;
 
+import com.forgefrontier.forgefrontier.commands.IslandCommandExecutor;
 import com.forgefrontier.forgefrontier.connections.DBConnection;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
@@ -113,6 +114,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand inspectCmd = Bukkit.getPluginCommand("inspect");
         if (inspectCmd != null)
             inspectCmd.setExecutor(new InspectCommandExecutor(playerManager));
+        PluginCommand islandCmd = Bukkit.getPluginCommand("island");
+        if (islandCmd != null)
+            islandCmd.setExecutor(new IslandCommandExecutor());
     }
 
     @Override

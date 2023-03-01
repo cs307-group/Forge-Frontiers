@@ -38,6 +38,12 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
         this.setItem(9+6, removeItem);
         Inventory baseInventory = this.getInventory();
         this.addHandler(9+6, (e) -> {
+            if(e.getWhoClicked().getInventory().firstEmpty() == -1) {
+                this.replaceItemTemporarily(9+6, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
+                    .setDisplayName("&cUnable to remove this generator. You do not have space in your inventory.")
+                    .build());
+                return;
+            }
             ConfirmationHolder confirmHolder = new ConfirmationHolder("&cWould you like to pickup this generator?", baseInventory, () -> {
                 ForgeFrontier.getInstance().getGeneratorManager().removeGeneratorInstance(generatorInstance);
                 PlaceGeneratorItemInstance genPlaceItemInst = (PlaceGeneratorItemInstance) CustomItemManager.getCustomItem("PlaceGeneratorBlock").asInstance(null);

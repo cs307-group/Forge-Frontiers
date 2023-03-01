@@ -17,3 +17,8 @@ commands:
     description: "Command for spawning custom items."
   inspect:
     description: "Command used to inspect the statistics of players"
+  island:
+    description: "Command used for accessing your island GUI."
+    aliases:
+      - "is"
+      - "isl"
