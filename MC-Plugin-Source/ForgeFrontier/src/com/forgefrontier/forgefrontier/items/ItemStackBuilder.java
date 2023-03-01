@@ -2,6 +2,8 @@ package com.forgefrontier.forgefrontier.items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -55,6 +57,11 @@ public class ItemStackBuilder {
         return this;
     }
 
+    /* Add an invisible enchant to make the item shine. */
+    public ItemStackBuilder setShiny(boolean shiny) {
+        return this;
+    }
+
     /**
      * Add all build attributes to a newly instantiated itemstack class
      *
@@ -68,7 +75,7 @@ public class ItemStackBuilder {
 
         if (displayName != null && meta != null)
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
-        if(lore != null)
+        if(lore != null && meta != null)
             meta.setLore(lore);
         itm.setItemMeta(meta);
         return itm;

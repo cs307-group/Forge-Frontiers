@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.items;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
+import com.forgefrontier.forgefrontier.items.resources.SilverIngot;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
@@ -30,6 +31,8 @@ public class CustomItemManager extends Manager implements Listener {
     @Override
     public void init() {
 
+        this.registerCustomItem(new SilverIngot());
+        
     }
 
     @Override

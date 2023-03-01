@@ -41,6 +41,7 @@ public class GeneratorManager extends Manager implements Listener {
         //plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem(generator));
 
         // Config
+        /*
         this.plugin.getConfig().addDefault("generator-shop.0", "diamond-gen");
         this.plugin.getConfig().addDefault("generator-shop.1", "coin-gen");
 
@@ -72,6 +73,7 @@ public class GeneratorManager extends Manager implements Listener {
         this.plugin.getConfig().addDefault("generators.1.levels.0.update_costs.0.amount", 10000);
         this.plugin.getConfig().addDefault("generators.1.levels.1.generation_rate", 5);
         this.plugin.getConfig().addDefault("generators.1.levels.1.max_size", 100000);
+         */
 
         int generatorInd = 0;
         ConfigurationSection configSection;
@@ -89,6 +91,10 @@ public class GeneratorManager extends Manager implements Listener {
             genIndex += 1;
         }
 
+    }
+
+    public Generator getGenerator(String generatorId) {
+        return this.generators.get(generatorId);
     }
 
     public CustomMaterial getCustomMaterial(String materialType, String id) {
@@ -120,7 +126,7 @@ public class GeneratorManager extends Manager implements Listener {
 
     public void addGeneratorInstance(GeneratorInstance generatorInstance) {
         this.generatorInstances.add(generatorInstance);
-        generatorInstance.getBoundingBox().getLocation().getBlock().setType(Material.GOLD_BLOCK);
+        generatorInstance.getBoundingBox().getLocation().getBlock().setType(generatorInstance.generator.getMaterialRepresentation());
     }
 
     public void removeGeneratorInstance(GeneratorInstance generatorInstance) {
@@ -131,4 +137,5 @@ public class GeneratorManager extends Manager implements Listener {
     public List<Generator> getShopMenuList() {
         return this.shopMenuList;
     }
+
 }
