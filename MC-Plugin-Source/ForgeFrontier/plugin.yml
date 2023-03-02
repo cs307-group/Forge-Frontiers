@@ -22,3 +22,5 @@ commands:
     aliases:
       - "is"
       - "isl"
+  customspawn:
+    description: "Command used for spawning custom entities."
