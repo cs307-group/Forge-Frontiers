@@ -32,7 +32,7 @@ public class ShopHolder extends BaseInventoryHolder {
     UUID pID;
     Shop shop;
     ShopHolder(Shop s) {
-        super(27);
+        super(54, "Shop");
         this.fillPanes();
         this.listings = s.getListings();
         this.shop = s;
@@ -42,7 +42,7 @@ public class ShopHolder extends BaseInventoryHolder {
     }
 
     ShopHolder(Shop s, UUID playerID, Boolean remove) {
-        super(27);
+        super(54, "Shop");
         this.fillPanes();
         this.listings = s.getListings();
         this.remove = remove;
@@ -85,16 +85,21 @@ public class ShopHolder extends BaseInventoryHolder {
             return;
         }
         Set<UUID> keys = listings.keySet();
-        int i = 0;
+        int nitems = 0;
+        int i = 1;
+        int j = 0;
         this.fillPanes();
         for (UUID k : keys) {
             // TODO: Fill GUI
-            if (i > 9) break;
+            if (nitems > 28) break;
             ShopListing listing = listings.get(k);
             ItemStack displayItem = listings.get(k).getDisplayItem();
-            this.setItem(i, displayItem);
-            int i2 = i;
-            this.addHandler(i, (e) -> {
+
+            if (j == 7) { i++; j = 0; }
+
+            int i2 = (9 * i) + 1 + j;
+            this.setItem(i2, displayItem);
+            this.addHandler(i2, (e) -> {
                 Player p = (Player) e.getWhoClicked();
                 boolean TEST = true;
                 if (!TEST && p.getUniqueId() == listing.getLister().getUniqueId()) {
@@ -108,7 +113,8 @@ public class ShopHolder extends BaseInventoryHolder {
                     buyListingCallback(e, i2, k);
                 }).getInventory());
             });
-            i++;
+            j++;
+            nitems++;
         }
     }
 
