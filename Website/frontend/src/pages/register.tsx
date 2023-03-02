@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import {Auth, AuthSideText, AuthSideType} from "@/components/Auth";
 import {CreateAccount} from "@/components/Auth/CreateAccount";
+import {redirToProf} from "@/util/redir-to-prof";
 
 export default function Register() {
   return (
@@ -29,6 +30,4 @@ export default function Register() {
   );
 }
 
-export function getServerSideProps() {
-  return {props: {ok: new Date().toString()}};
-}
+export const getServerSideProps = redirToProf;

@@ -29,6 +29,7 @@ export async function createAccount(obj: {
 }) {
   const resp = await fetch("/api/create-account", {
     body: JSON.stringify(obj),
+    credentials: "include",
     method: "POST",
     headers: {"content-type": "application/json"},
   });
@@ -37,6 +38,7 @@ export async function createAccount(obj: {
 
 export async function login(obj: {password: string; email: string}) {
   const resp = await fetch("/api/login", {
+    credentials: "include",
     body: JSON.stringify(obj),
     method: "POST",
     headers: {"content-type": "application/json"},

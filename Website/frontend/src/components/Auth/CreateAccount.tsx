@@ -1,7 +1,8 @@
+import {useRouter} from "next/router";
 import {useState} from "react";
 import {Toaster, toast} from "react-hot-toast";
 
-import {createAccount, isError} from "@/handlers";
+import {createAccount, isError, login} from "@/handlers";
 import {useStatus} from "@/hooks/use-status";
 
 import {Button} from "../Button";
@@ -14,7 +15,7 @@ export function CreateAccount() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
+  const {push} = useRouter();
   const [status, setStatus] = useStatus();
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -28,6 +29,8 @@ export function CreateAccount() {
       return;
     }
     toast.success("Account Successfully Created!");
+    await login(obj);
+    push("/profile?new");
   }
 
   return (

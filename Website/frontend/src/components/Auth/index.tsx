@@ -21,7 +21,7 @@ export function Auth({children}: AuthProps) {
           style={raleway.style}
           className="border-2 border-white w-[90%] sm:w-7/12 mt-4 rounded-md bg-white"
         >
-          <motion.div layout className="sm:grid grid-cols-2">
+          <motion.div style={raleway.style} layout className="sm:grid grid-cols-2">
             {children}
           </motion.div>
         </motion.div>

@@ -1,4 +1,4 @@
-from app.internal.helpers import json_response
+from app.internal.helpers.json_response import json_response
 
 
 # A special error class which is caught by our request handler

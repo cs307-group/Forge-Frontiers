@@ -2,11 +2,11 @@ import Link from "next/link";
 
 import {Auth, AuthSideText, AuthSideType} from "@/components/Auth";
 import {LoginToAccount} from "@/components/Auth/LoginToAccount";
-import {Raleway} from "@next/font/google";
-
-const raleway = Raleway({preload: false, variable: "--raleway"});
+import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {redirToProf} from "@/util/redir-to-prof";
 
 export default function Login() {
+  useCookieSync({});
   return (
     <Auth>
       <AuthSideType>
@@ -32,6 +32,4 @@ export default function Login() {
   );
 }
 
-export function getServerSideProps() {
-  return {props: {ok: new Date().toString()}};
-}
+export const getServerSideProps = redirToProf;

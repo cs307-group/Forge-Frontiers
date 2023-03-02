@@ -8,6 +8,8 @@ import type {
   PreviewData,
 } from "next";
 
+import {hasToken} from "@/util/const-has-token";
+
 import {getAuthenticationHeaders, jsonRequest, routes} from "./_util";
 import {Tokens} from "./types";
 
@@ -38,7 +40,7 @@ export interface RequiredAuthentication {
 export const requireAuthenticatedPageView: RequiredAuthentication = (fn) => {
   return async (c) => {
     const {req} = c;
-    if (!("tokens" in req.cookies)) {
+    if (!hasToken(req.cookies)) {
       return {redirect: {destination: "/login", statusCode: 302}};
     }
     // @todo maybe use better type here
@@ -69,7 +71,7 @@ export async function handleTokenRefresh(
     });
     if (!refresh.ok) {
       return new RefreshFail({
-        redirect: {destination: "/login", statusCode: 302},
+        redirect: {destination: "/login?force", statusCode: 302},
       });
     }
     const accessToken = refresh.headers.get("x-access-token");

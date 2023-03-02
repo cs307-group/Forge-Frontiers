@@ -51,6 +51,7 @@ export function jsonRequest(
   reqHeaders.set("content-type", "application/json");
   reqHeaders.set("x-debug-from", "serverless-functions"); // maybe make it a secret?)
   return fetch(url, {
+    credentials: "include",
     method: method || "post",
     body: body ? JSON.stringify(body) : undefined,
     headers: reqHeaders,
