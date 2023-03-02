@@ -26,6 +26,10 @@ class LoginModel(AuthModel):
     password: PasswordType
 
 
+class LinkModel(BaseModel):
+    code: str
+
+
 class _UserBase(AuthModel):
     name: constr(strip_whitespace=True, max_length=100)
 

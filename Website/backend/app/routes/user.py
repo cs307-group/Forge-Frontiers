@@ -1,6 +1,9 @@
+from flask import Blueprint
+
 from app.db.mutations.user import create_user
 from app.db.mutations.util import commit
-from app.db.queries.user import get_user_by_username
+from app.db.queries.links import get_link_by_link_code
+from app.db.queries.user import get_user_by_id, get_user_by_username
 from app.decorators.api_response import api
 from app.exceptions.app_exception import AppException
 from app.internal.context import Context
@@ -12,13 +15,13 @@ from app.internal.security.auth_token import (
 )
 from app.internal.security.danger import create_token, decode_token
 from app.models.user import (
+    LinkModel,
     LoginModel,
     UserEditable,
     UserIn,
     UserOut,
     UserOutSecure,
 )
-from flask import Blueprint
 
 router = Blueprint("user", __name__, url_prefix="/users")
 
@@ -105,3 +108,20 @@ def edit(user: str):
     json = user_data.as_json
     commit()
     return json
+
+
+@router.post("/-/link/")
+@api.strict
+def link_mc_account():
+    req = Context(LinkModel)
+    code = req.body.code
+    link = get_link_by_link_code(code)
+    if link.bool_used:
+        raise AppException("Code has already been used")
+    link.bool_used = True
+    user = req.auth.user_id
+    user_data = get_user_by_id(user)
+    user_data.mc_user = code
+    js = user_data.as_json
+    commit()
+    return js

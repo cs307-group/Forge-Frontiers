@@ -8,7 +8,7 @@ export function useMedia(query: string) {
     () =>
       typeof window !== "undefined"
         ? window.matchMedia(query)
-        : ({matches: false} as MediaQueryList),
+        : ({matches: true} as MediaQueryList),
     [query]
   );
   const [matches, setMatches] = useState(() => q.matches);

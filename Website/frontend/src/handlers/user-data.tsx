@@ -3,11 +3,13 @@ import {IncomingMessage} from "http";
 import {GetServerSidePropsContext, GetServerSidePropsResult} from "next";
 
 import {config} from "@/config";
+import {noBrowser} from "@/util/no-browser";
 
 import {getAuthenticationHeaders, jsonRequest, routes} from "./_util";
 import {handleTokenRefresh, isRefreshSuccess} from "./auth";
 import {Tokens, UserDataSecure} from "./types";
 
+noBrowser();
 export class ErrorResponse {
   constructor(public resp: GetServerSidePropsResult<any>) {}
 }
@@ -59,7 +61,7 @@ export async function fetchUserData(
           },
         });
       }
-      const userData: UserDataSecure = await newResp.json();
+      const userData: UserDataSecure = (await newResp.json()).data.user_data;
       if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
         if (userData.mc_user == null) {
           return new ErrorResponse({
@@ -74,7 +76,7 @@ export async function fetchUserData(
       return new ErrorResponse(refresh.response);
     }
   }
-  const userData: UserDataSecure = await resp.json();
+  const userData: UserDataSecure = (await resp.json()).data.user_data;
   if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
     if (userData.mc_user == null) {
       return new ErrorResponse({

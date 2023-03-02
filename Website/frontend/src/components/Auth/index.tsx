@@ -1,4 +1,5 @@
 import {motion} from "framer-motion";
+import Link from "next/link";
 import {PropsWithChildren} from "react";
 
 import {Raleway} from "@next/font/google";
@@ -13,15 +14,23 @@ export function Auth({children}: AuthProps) {
         layout
         className="mx-auto mt-8 flex items-center justify-center flex-col"
       >
-        <h1 style={raleway.style} className="text-ff-theme text-5xl mb-4">
+        <Link
+          href="/"
+          style={raleway.style}
+          className="text-ff-theme text-5xl mb-4"
+        >
           Forge Frontier
-        </h1>
+        </Link>
         <motion.div
           layout
           style={raleway.style}
           className="border-2 border-white w-[90%] sm:w-7/12 mt-4 rounded-md bg-white"
         >
-          <motion.div style={raleway.style} layout className="sm:grid grid-cols-2">
+          <motion.div
+            style={raleway.style}
+            layout
+            className="sm:grid grid-cols-2"
+          >
             {children}
           </motion.div>
         </motion.div>
