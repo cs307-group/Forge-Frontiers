@@ -16,6 +16,7 @@ export default function Profile({
   cookie?: object;
 }) {
   useCookieSync(cookie);
+  if (!userData) return <div>User not found!</div>;
   return (
     <AppLayout active="profile" title={`${userData.name}'s Profile`}>
       <div>
@@ -57,5 +58,6 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   if (isErrorResponse(userData)) {
     return userData.resp;
   }
+
   return userData.toSSPropsResult;
 });
