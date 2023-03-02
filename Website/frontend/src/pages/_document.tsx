@@ -1,6 +1,6 @@
 import {Head, Html, Main, NextScript} from "next/document";
+import {Toaster} from "react-hot-toast";
 import {Provider} from "react-wrap-balancer";
-
 export default function Document() {
   return (
     <Html lang="en">

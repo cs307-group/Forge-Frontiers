@@ -9,7 +9,10 @@ from ..base import db
 class User(db.Model):
     # pylint: disable=E1101
     id_: str = db.Column(TEXT, unique=True, nullable=False, primary_key=True)
-    email: str = db.Column(TEXT, unique=True, nullable=False)
+
+    # for reference: this is the EMAIL
+    user: str = db.Column(TEXT, unique=True, nullable=False)
+    mc_user: str = db.Column(TEXT, unique=True)
     name: str = db.Column(db.String(100), nullable=False)
     password_hash: str = db.Column(TEXT, nullable=False)
     created_at: int = db.Column(db.Integer)
@@ -19,13 +22,13 @@ class User(db.Model):
     def __init__(
         self,
         user: str = None,
-        email: str = None,
         name: str = None,
         password_hash: str = None,
+        mc_user: str = None,
     ):
         self.id_ = token_urlsafe(20)
         self.user = user
-        self.email = email
+        self.mc_user = mc_user
         self.name = name
         self.password_hash = password_hash
         self.created_at = time()
@@ -35,8 +38,10 @@ class User(db.Model):
         return {
             "id_": self.id_,
             "name": self.name,
-            "user": self.user,
             "created_at": self.created_at,
             "is_admin": self.is_admin,
-            "_secure_": {},
+            "mc_user": self.mc_user,
+            "_secure_": {
+                "user": self.user,
+            },
         }
