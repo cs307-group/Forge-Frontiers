@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier;
 
+import com.forgefrontier.forgefrontier.commands.GearShopCommandExecutor;
 import com.forgefrontier.forgefrontier.commands.IslandCommandExecutor;
 import com.forgefrontier.forgefrontier.commands.LinkCommandExecutor;
 import com.forgefrontier.forgefrontier.connections.DBConnection;
@@ -106,6 +107,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand genshopCmd = Bukkit.getPluginCommand("genshop");
         if(genshopCmd != null)
             genshopCmd.setExecutor(new GeneratorShopCommandExecutor());
+        PluginCommand gearshopCmd = Bukkit.getPluginCommand("gearshop");
+        if(gearshopCmd != null)
+            gearshopCmd.setExecutor(new GearShopCommandExecutor());
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
         if (shopCmd != null)
             shopCmd.setExecutor(itemShop.getCommandExecutor());

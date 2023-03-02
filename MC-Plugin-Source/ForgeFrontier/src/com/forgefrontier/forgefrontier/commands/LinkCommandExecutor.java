@@ -41,7 +41,7 @@ public class LinkCommandExecutor implements CommandExecutor {
 
             db.createPlayerLink(p.getUniqueId(), linkCode, (success) -> {
                 if(success) {
-                    sendMessage(sender, ForgeFrontier.CHAT_PREFIX + "Go to the website and enter the following code to link your account. Code: " + result.get("link_code"));
+                    sendMessage(sender, ForgeFrontier.CHAT_PREFIX + "Go to the website and enter the following code to link your account. Code: " + linkCode);
                 } else {
                     sendMessage(sender, ForgeFrontier.CHAT_PREFIX + "Unable to create a link code for right now. Sorry. Please try again later.");
                 }
