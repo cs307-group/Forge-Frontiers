@@ -1,30 +1,23 @@
 package com.forgefrontier.forgefrontier.mobs.chickens;
 
-import com.forgefrontier.forgefrontier.mobs.CustomEntity;
 import com.forgefrontier.forgefrontier.mobs.CustomMob;
-import net.minecraft.network.chat.ChatComponentText;
 import org.bukkit.*;
-import org.bukkit.attribute.Attributable;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.*;
 
 
 /**
  * Superclass for all chicken entities in Forge Frontier
  */
-public abstract class CustomChicken extends CustomMob implements Chicken {
+public abstract class CustomChicken extends CustomMob {
 
     /**
      * Constructor for a custom chicken entity
      *
      * @param customName name of the custom chicken
-     * @param maxHealth max health for the specified chicken
      */
-    public CustomChicken(String customName, double maxHealth) {
-        super(customName, EntityType.CHICKEN);
-
-        setCustomName(new ChatComponentText("CHICKEN").toString() + ChatColor.WHITE + ChatColor.BOLD);
-        setCustomNameVisible(true);
-        setHealth(maxHealth);
+    public CustomChicken(String customName, CraftEntity craftEntity) {
+        super(customName, EntityType.CHICKEN, craftEntity);
     }
 
 

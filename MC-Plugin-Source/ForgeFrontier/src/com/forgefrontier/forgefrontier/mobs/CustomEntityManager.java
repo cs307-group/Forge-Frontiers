@@ -5,7 +5,9 @@ import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +59,13 @@ public class CustomEntityManager extends Manager implements Listener {
         System.out.println("Spawning at " + player.getLocation().toVector());
         mob.spawnCustomEntity(player.getLocation());
         return true;
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof CustomMob) {
+
+        }
     }
 
     /** getter for the entities hashmap in the manager */
