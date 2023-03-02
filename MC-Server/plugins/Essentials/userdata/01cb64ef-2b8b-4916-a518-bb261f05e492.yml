@@ -11,28 +11,28 @@ powertoolsenabled: true
 accepting-pay: true
 baltop-exempt: false
 timestamps:
-  lastteleport: 1677432887294
+  lastteleport: 1677693845303
   lastheal: 0
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1677433114312
-  login: 1677431424001
-money: '64044.0'
+  logout: 1677693987723
+  login: 1677693842076
+money: '0'
 logoutlocation:
   world: a73e48f1-3240-4b13-ac6f-b110960b0566
   world-name: bskyblock_world
-  x: 0.6990998695045335
+  x: -2.699999988079071
   y: 86.0
-  z: 815.9045437141899
-  yaw: 58.04839324951172
-  pitch: 22.650041580200195
+  z: 18.1203783533157
+  yaw: 175.35000610351562
+  pitch: 7.9500041007995605
 last-account-name: BubbleKitty13426
 lastlocation:
   world: a73e48f1-3240-4b13-ac6f-b110960b0566
   world-name: bskyblock_world
-  x: -1.208842286941711
-  y: 85.0
-  z: 0.1088117227449808
-  yaw: -152.8495635986328
-  pitch: 22.800016403198242
+  x: 0.5707640215247417
+  y: 91.0
+  z: 799.8730906279903
+  yaw: 94.9492416381836
+  pitch: 27.14998435974121

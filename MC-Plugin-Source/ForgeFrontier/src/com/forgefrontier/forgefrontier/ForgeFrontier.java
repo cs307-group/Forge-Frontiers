@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier;
 
+import com.forgefrontier.forgefrontier.commands.IslandCommandExecutor;
 import com.forgefrontier.forgefrontier.connections.DBConnection;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
@@ -27,6 +28,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import world.bentobox.bentobox.BentoBox;
 
 import java.io.*;
 import java.sql.*;
@@ -54,10 +56,13 @@ public class ForgeFrontier extends JavaPlugin {
     @Override
     public void onEnable() {
         inst = this;
+        CHAT_PREFIX = ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.BOLD + "Forge" + ChatColor.GOLD + ChatColor.BOLD + "Frontier" + ChatColor.GRAY + "] " + ChatColor.YELLOW;
+
         if (!this.getDataFolder().exists()) {
             this.getDataFolder().mkdirs();
         }
-        CHAT_PREFIX = ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.BOLD + "Forge" + ChatColor.GOLD + ChatColor.BOLD + "Frontier" + ChatColor.GRAY + "] " + ChatColor.YELLOW;
+        this.saveDefaultConfig();
+        //setupDatabaseConnection();
         if (!setupEconomy() ) {
             log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
@@ -109,6 +114,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand inspectCmd = Bukkit.getPluginCommand("inspect");
         if (inspectCmd != null)
             inspectCmd.setExecutor(new InspectCommandExecutor(playerManager));
+        PluginCommand islandCmd = Bukkit.getPluginCommand("island");
+        if (islandCmd != null)
+            islandCmd.setExecutor(new IslandCommandExecutor());
     }
 
     @Override

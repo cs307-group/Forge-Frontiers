@@ -1,0 +1,72 @@
+generator-shop:
+  0: "silver-gen"
+  1: "coin-gen"
+  2: "super-silver-gen"
+generators:
+  0:
+    id: "silver-gen"
+    friendly_name: "&fSilver Generator"
+    representation_material: "RAW_IRON_BLOCK"
+    material_type: "item"
+    item_id: "SilverIngot"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 10000
+    levels:
+      0:
+        generation_rate: 1000
+        max_size: 256
+        upgrade_costs:
+          0:
+            material_type: "coin"
+            amount: 10000
+      1:
+        generation_rate: 900
+        max_size: 512
+
+  1:
+    id: "coin-gen"
+    friendly_name: "&eCoin Generator"
+    representation_material: "RAW_GOLD_BLOCK"
+    material_type: "coin"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 10000
+    levels:
+      0:
+        generation_rate: 3000
+        max_size: 10000
+        upgrade_costs:
+          0:
+            material_type: "coin"
+            amount: 10000
+      1:
+        generation_rate: 2000
+        max_size: 10000
+  2:
+    id: "super-silver-gen"
+    friendly_name: "&fSuper Silver Generator"
+    representation_material: "IRON_BLOCK"
+    material_type: "item"
+    item_id: "SilverIngot"
+    costs:
+      0:
+        material_type: "item"
+        item_id: "SilverIngot"
+        amount: 128
+    levels:
+      0:
+        generation_rate: 1000
+        max_size: 10000
+        upgrade_costs:
+          0:
+            material_type: "item"
+            item_id: "SilverIngot"
+            amount: 256
+      1:
+        generation_rate: 2000
+        max_size: 10000
+
+

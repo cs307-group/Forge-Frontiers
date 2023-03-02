@@ -63,6 +63,7 @@ public class DBConnection {
             return true;
         } catch (Exception e) {
             ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "[FF DATABASE] " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

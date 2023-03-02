@@ -14,6 +14,7 @@ public class ConfirmationHolder extends BaseInventoryHolder {
 
     private String acceptName;
     private String cancelName;
+    private boolean openPrevInvOnConfirm;
 
     /**
      * Simple Confirmation GUI
@@ -23,6 +24,16 @@ public class ConfirmationHolder extends BaseInventoryHolder {
      */
     public ConfirmationHolder(String message, Inventory previousInventory, Runnable confirm) {
         super(27, message);
+        this.openPrevInvOnConfirm = true;
+        this.fillPanes();
+        setAcceptItem(Material.GREEN_STAINED_GLASS_PANE, DEFAULT_ACCEPT_STR);
+        setCancelItem(Material.RED_STAINED_GLASS_PANE, DEFAULT_CANCEL_STR);
+        this.addHandler(ACCEPT_SLOT, (e) -> confirmHandler(e,previousInventory,confirm));
+        this.addHandler(CANCEL_SLOT, (e) -> closeHandler(e,previousInventory));
+    }
+    public ConfirmationHolder(String message, Inventory previousInventory, Runnable confirm, boolean openPrevInvOnConfirm) {
+        super(27, message);
+        this.openPrevInvOnConfirm = openPrevInvOnConfirm;
         this.fillPanes();
         setAcceptItem(Material.GREEN_STAINED_GLASS_PANE, DEFAULT_ACCEPT_STR);
         setCancelItem(Material.RED_STAINED_GLASS_PANE, DEFAULT_CANCEL_STR);
@@ -33,6 +44,7 @@ public class ConfirmationHolder extends BaseInventoryHolder {
     public ConfirmationHolder(String message, Inventory previousInventory,
                               Runnable confirm, Material accept, Material cancel) {
         super(27, message);
+        this.openPrevInvOnConfirm = true;
         this.fillPanes();
         setAcceptItem(accept, DEFAULT_ACCEPT_STR);
         setCancelItem(cancel, DEFAULT_CANCEL_STR);
@@ -43,6 +55,7 @@ public class ConfirmationHolder extends BaseInventoryHolder {
     public ConfirmationHolder(String message, Inventory previousInventory, ItemStack accept, ItemStack cancel,
                               Runnable confirm) {
         super(27, message);
+        this.openPrevInvOnConfirm = true;
         this.fillPanes();
         setAcceptItem(accept);
         setCancelItem(cancel);
@@ -52,6 +65,7 @@ public class ConfirmationHolder extends BaseInventoryHolder {
     public ConfirmationHolder(String message, Inventory previousInventory,
                               ItemStack accept, Runnable confirm) {
         super(27, message);
+        this.openPrevInvOnConfirm = true;
         this.fillPanes();
         setAcceptItem(accept);
         setCancelItem(Material.RED_STAINED_GLASS_PANE, DEFAULT_CANCEL_STR);
@@ -99,7 +113,9 @@ public class ConfirmationHolder extends BaseInventoryHolder {
             e.getWhoClicked().closeInventory();
             return;
         }
-        e.getWhoClicked().openInventory(previousInventory);
+        if(this.openPrevInvOnConfirm) {
+            e.getWhoClicked().openInventory(previousInventory);
+        }
     }
 
     /** Goes back to previous inventory. Closes if there is none. **/

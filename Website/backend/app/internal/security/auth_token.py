@@ -15,6 +15,7 @@ from .danger import generate_password_hash
 def regenerate_access_token(refresh: dict) -> dict:
     user_id = refresh.get("user_id")
     integrity = refresh.get("integrity")
+
     data = get_user_by_id(user_id)
     is_admin = data.is_admin
     username = data.user
@@ -66,6 +67,7 @@ def get_token(strict=True):
     if access is None:
         if strict:
             raise AppException("refresh")
+
         return None
 
     return access
@@ -85,5 +87,5 @@ def authenticate(user: str, password: str):
     username = user_data.user
     is_admin = user_data.is_admin
     access_token = create_token(issue_access_token(user_data.id_, username, is_admin))
-    refresh_token = create_token(issue_refresh_token(username, pw_hash))
+    refresh_token = create_token(issue_refresh_token(user_data.id_, pw_hash))
     return access_token, refresh_token, user_data

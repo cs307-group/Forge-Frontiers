@@ -17,10 +17,8 @@
   "gameMode": "BSkyBlock",
   "createdDate": 1677433014852,
   "updatedDate": 1677433014852,
-  "owner": "01cb64ef-2b8b-4916-a518-bb261f05e492",
-  "members": {
-    "01cb64ef-2b8b-4916-a518-bb261f05e492": 1000
-  },
+  "members": {},
+  "maxMembers": {},
   "spawn": false,
   "purgeProtected": false,
   "flags": {
@@ -121,7 +119,13 @@
     "JUKEBOX": 500,
     "COLLECT_POWDERED_SNOW": 500
   },
-  "history": [],
+  "history": [
+    {
+      "timestamp": 1677693963070,
+      "type": "UNOWNED",
+      "data": {}
+    }
+  ],
   "spawnPoint": {
     "NORMAL": [
       "bskyblock_world",
@@ -150,6 +154,7 @@
   },
   "doNotLoad": false,
   "cooldowns": {},
+  "metaData": {},
   "homes": {
     "": [
       "bskyblock_world",

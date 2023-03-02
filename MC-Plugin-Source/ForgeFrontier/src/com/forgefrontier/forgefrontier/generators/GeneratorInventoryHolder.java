@@ -19,23 +19,39 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
     GeneratorInstance generatorInstance;
     int updateTaskId;
     public GeneratorInventoryHolder(GeneratorInstance generatorInstance) {
-        super(27);
+        super(27, generatorInstance.generator.getFriendlyName());
         this.generatorInstance = generatorInstance;
 
         this.fillPanes();
         this.setCollectItem();
         this.addHandler(9+2, (e) -> {
             generatorInstance.collect((Player) e.getWhoClicked());
+            setCollectItem();
         });
+
+        this.addHandler(9 + 4, (e) -> {
+            e.getWhoClicked().openInventory(new GeneratorUpgradeInventoryHolder(generatorInstance).getInventory());
+        });
+        this.setItem(9 + 4, new ItemStackBuilder(Material.ANVIL).setDisplayName("&bView Generator Upgrades & Stats").build());
+
         ItemStack removeItem = new ItemStackBuilder(Material.RED_WOOL).setDisplayName(ChatColor.RED + "Remove Generator").build();
         this.setItem(9+6, removeItem);
         Inventory baseInventory = this.getInventory();
         this.addHandler(9+6, (e) -> {
-            ConfirmationHolder confirmHolder = new ConfirmationHolder("Are you sure you want to pickup this generator?", baseInventory, () -> {
+            if(e.getWhoClicked().getInventory().firstEmpty() == -1) {
+                this.replaceItemTemporarily(9+6, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
+                    .setDisplayName("&cUnable to remove this generator. You do not have space in your inventory.")
+                    .build());
+                return;
+            }
+            ConfirmationHolder confirmHolder = new ConfirmationHolder("&cWould you like to pickup this generator?", baseInventory, () -> {
                 ForgeFrontier.getInstance().getGeneratorManager().removeGeneratorInstance(generatorInstance);
-                e.getWhoClicked().getInventory().addItem(CustomItemManager.getCustomItem("GenPlace-" + generatorInstance.generator.getId()).asInstance(null).asItemStack());
+                PlaceGeneratorItemInstance genPlaceItemInst = (PlaceGeneratorItemInstance) CustomItemManager.getCustomItem("PlaceGeneratorBlock").asInstance(null);
+                genPlaceItemInst.generatorId = generatorInstance.generator.getId();
+                genPlaceItemInst.level = generatorInstance.level;
+                e.getWhoClicked().getInventory().addItem(genPlaceItemInst.asItemStack());
                 e.getWhoClicked().closeInventory();
-            });
+            }, false);
             e.getWhoClicked().openInventory(confirmHolder.getInventory());
         });
     }

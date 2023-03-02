@@ -3,7 +3,7 @@ name: ForgeFrontier
 version: 1.0
 description: The main plugin for Forge Frontier
 api-version: 1.18
-depend: [Vault]
+depend: [Vault, BentoBox]
 libraries:
   - org.postgresql:postgresql:42.5.4
 commands:
@@ -17,3 +17,8 @@ commands:
     description: "Command for spawning custom items."
   inspect:
     description: "Command used to inspect the statistics of players"
+  island:
+    description: "Command used for accessing your island GUI."
+    aliases:
+      - "is"
+      - "isl"

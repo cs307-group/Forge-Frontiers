@@ -39,7 +39,7 @@ public class BaseInventoryHolder implements InventoryHolder {
     }
     public BaseInventoryHolder(int size, String name) {
         this.size = size;
-        this.inventory = Bukkit.createInventory(this, size, name);
+        this.inventory = Bukkit.createInventory(this, size, ChatColor.translateAlternateColorCodes('&', name));
         this.handlers = new InventoryClickHandler[size];
     }
 

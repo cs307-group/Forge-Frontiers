@@ -1,39 +1,42 @@
 package com.forgefrontier.forgefrontier.generators;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import com.forgefrontier.forgefrontier.items.UniqueCustomItem;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-public class PlaceGeneratorItem extends CustomItem {
+public class PlaceGeneratorItem extends UniqueCustomItem {
 
-    Generator generator;
-
-    public PlaceGeneratorItem(Generator generator) {
-        super("GenPlace-" + generator.getId());
-        this.generator = generator;
+    public PlaceGeneratorItem() {
+        super("PlaceGeneratorBlock");
 
         this.registerItemStackAccumulator((itemInstance, __) -> {
+            PlaceGeneratorItemInstance placeGeneratorItemInstance = (PlaceGeneratorItemInstance) itemInstance;
+            Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(placeGeneratorItemInstance.generatorId);
+
+            itemInstance.getData().put("generator-id", placeGeneratorItemInstance.generatorId);
+            itemInstance.getData().put("level", placeGeneratorItemInstance.level);
+
             return new ItemStackBuilder(generator.getMaterialRepresentation())
-                    .setDisplayName(generator.getFriendlyName() + "&7 - Lvl &f" + itemInstance.getData().get("level"))
+                    .setDisplayName(generator.getFriendlyName() + "&7 - Lvl &f" + (placeGeneratorItemInstance.level + 1))
                     .addLoreLine("&7Place this generator down into the world to start generating materials.")
                     .build();
         });
 
         this.registerInstanceAccumulator((__, itemStack) -> {
-            CustomItemInstance inst = new CustomItemInstance(itemStack);
-            if(itemStack == null)
-                inst.getData().put("level", 1);
+            PlaceGeneratorItemInstance inst = new PlaceGeneratorItemInstance(itemStack);
+            if(itemStack == null) {
+                inst.generatorId = "";
+                inst.level = 0;
+            } else {
+                inst.generatorId = (String) inst.getData().get("generator-id");
+                inst.level = ((Long) inst.getData().get("level")).intValue();
+            }
             return inst;
         });
 
@@ -44,15 +47,16 @@ public class PlaceGeneratorItem extends CustomItem {
         if(e.isCancelled())
             return;
         Location newLocation = e.getClickedBlock().getLocation().add(e.getBlockFace().getDirection());
-        Block block = e.getClickedBlock().getWorld().getBlockAt(newLocation);
         if(!e.getClickedBlock().getWorld().getBlockAt(newLocation).isEmpty()) {
             return;
         }
-        block.setType(e.getItem().getType());
         e.setCancelled(true);
         if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
             e.getItem().setAmount(e.getItem().getAmount() - 1);
+        PlaceGeneratorItemInstance placeGeneratorItemInstance = (PlaceGeneratorItemInstance) instance;
+        Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(placeGeneratorItemInstance.generatorId);
         GeneratorInstance generatorInstance = new GeneratorInstance(generator, newLocation);
+        generatorInstance.level = placeGeneratorItemInstance.level;
         ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(generatorInstance);
     }
 

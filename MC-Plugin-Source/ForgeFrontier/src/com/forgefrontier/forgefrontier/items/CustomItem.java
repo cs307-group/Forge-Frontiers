@@ -49,7 +49,6 @@ public abstract class CustomItem {
 
             nmsItem.t().a("base-code", code);
             nmsItem.t().a("custom-data", itemInstance.data.toJSONString());
-            System.out.println("custom-data:\n" + itemInstance.data.toJSONString());
 
             itemStack = CraftItemStack.asBukkitCopy(nmsItem);
 
