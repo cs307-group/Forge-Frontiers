@@ -30,6 +30,7 @@ def decorate(handler, auth_mode=AuthModes.none):
                 return maybe_response
             return json_response({"data": maybe_response})
         except AppException as e:
+            print(e)
             return e.to_flask_response()
         except ValidationError as e:
             return handle_validation_error(e)
@@ -42,6 +43,7 @@ def decorate(handler, auth_mode=AuthModes.none):
 
 
 def handle_validation_error(e):
+    print(e)
     err = e.errors()
     message = []
     for i in err:

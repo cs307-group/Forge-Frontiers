@@ -28,11 +28,11 @@ router = Blueprint("user", __name__, url_prefix="/users")
 def register():
     req = Context()
     json = req.json
-    return json
     pw = json.pop("password", None)
-    body = UserIn(**req.json, password_hash=pw, is_admin=False)
+    user = json.pop("email", None)
+    body = UserIn(**req.json, user=user, password_hash=pw, is_admin=False)
     js = create_user(body, return_json=True)
-    return {"user_data": js}
+    return js
 
 
 @router.post("/-/login")
@@ -42,14 +42,14 @@ def login():
     body = req.body
     access, refresh, user_data = authenticate(body.user, body.password)
     return json_response(
-        {"user_data": user_data.as_json},
+        {"data": user_data.as_json},
         headers={"x-access-token": access, "x-refresh-token": refresh},
     )
 
 
 @router.get("/-/token/refresh")
-@api.strict
-def refresh_token():
+@api.lax
+def api_refresh_token():
     context = Context()
     headers = context.headers
     access_token = get_bearer_token(headers)
@@ -72,7 +72,7 @@ def refresh_token():
 
 
 @router.get("/<user>/")
-@api.lax
+@api.strict
 def user_details(user: str):
     req = Context()
     auth = req.auth
@@ -93,7 +93,6 @@ def user_details(user: str):
 @api.strict
 def edit(user: str):
     req = Context()
-    user = user.lower()
     if user != req.auth.user and not req.auth.is_admin:
         raise AppException("Not authorized to edit", 401)
     if not req.auth.is_admin:

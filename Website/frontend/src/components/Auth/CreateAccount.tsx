@@ -1,4 +1,8 @@
 import {useState} from "react";
+import {Toaster, toast} from "react-hot-toast";
+
+import {createAccount, isError} from "@/handlers";
+import {useStatus} from "@/hooks/use-status";
 
 import {Button} from "../Button";
 import {EmailInput} from "../Input/EmailInput";
@@ -6,32 +10,29 @@ import {NameInput} from "../Input/NameInput";
 import {PasswordInput} from "../Input/PasswordInput";
 import {Spacer} from "../Spacer";
 
-type Status = "idle" | "loading" | "error" | "success";
-
 export function CreateAccount() {
-  const [status, setStatus] = useState<{type: Status; message?: string}>({
-    type: "idle",
-  });
-
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
+  const [status, setStatus] = useStatus();
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (status.type === "loading") return;
     setStatus({type: "loading", message: "Loading..."});
     const obj = {name, password, email};
-    const res = await fetch("/api/create-account", {
-      body: JSON.stringify(obj),
-      method: "POST",
-      headers: {"content-type": "application/json"},
-    });
+    const res = await createAccount(obj);
     setStatus({type: "idle"});
+    if (isError(res)) {
+      toast.error(res.error);
+      return;
+    }
+    toast.success("Account Successfully Created!");
   }
 
   return (
     <div className="mt-12 w-[80%]">
+      <Toaster />
       <form onSubmit={handleSubmit}>
         <NameInput
           placeholder="Name"
