@@ -13,18 +13,30 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={raleway.style} className="mx-auto text-center mt-8">
-        Something cool here soon..
+      <main
+        style={raleway.style}
+        className="mx-auto text-center pt-8 forge_background h-full w-full text-white border-[1px] border-transparent"
+      >
+        Welcome to Forge Frontiers: Something cool here soon..
         <br />
-        <div>
-          <Link className="underline" href="/login">
-            Login
-          </Link>
-        </div>
-        <div>
-          <Link className="underline" href="/register">
-            Register
-          </Link>
+        <div className="flex items-center justify-center gap-4 mt-6">
+          <div>
+            <Link
+              className="bg-white inline-block w-24 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+              href="/login"
+            >
+              Login
+            </Link>
+          </div>
+
+          <div>
+            <Link
+              className="bg-white inline-block w-24 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+              href="/register"
+            >
+              Register
+            </Link>
+          </div>
         </div>
       </main>
     </>

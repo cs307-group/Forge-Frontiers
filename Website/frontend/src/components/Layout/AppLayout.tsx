@@ -39,7 +39,7 @@ export function AppLayout({children, active, title}: LayoutProps) {
           className="flex-1 sm:w-full sm:flex-grow sm:pt-1 sm:px-3 sm:rounded-2xl sm:bg-[#262C2C] sm:m-4"
         >
           {title && (
-            <div className="text-2xl mt-4">
+            <div className="text-2xl mt-4 text-center sm:text-left">
               <span className="border-b-2 border-ff-theme">{title}</span>
             </div>
           )}
