@@ -19,7 +19,7 @@ export interface ServerSidePropsWrapper {
   (fn: GetServerSideProps): GetServerSideProps;
 }
 
-type GSSPWithAuth<
+export type GSSPWithAuth<
   P extends {[key: string]: any} = {[key: string]: any},
   Q extends ParsedUrlQuery = ParsedUrlQuery,
   D extends PreviewData = PreviewData
