@@ -25,6 +25,7 @@ import java.util.UUID;
  */
 public class PlayerManager extends Manager implements Listener {
 
+
     /** a map for the FFPlayers which store custom data */
     Map<UUID, FFPlayer> ffPlayers;
     /** a map for the Players which store data native to minecraft Players */
@@ -64,7 +65,7 @@ public class PlayerManager extends Manager implements Listener {
         Player player = event.getPlayer();
         //TODO: Check for player in database
         players.put(player.getUniqueId(), player);
-        playersByName.put(player.getDisplayName(), player);
+        playersByName.put(player.getName(), player);
         ffPlayers.put(player.getUniqueId(), new FFPlayer(player));
     }
 
@@ -78,7 +79,7 @@ public class PlayerManager extends Manager implements Listener {
         Player player = event.getPlayer();
         //TODO: Add player to database
         players.remove(player.getUniqueId());
-        playersByName.remove(player.getDisplayName(), player);
+        playersByName.remove(player.getName(), player);
         ffPlayers.remove(player.getUniqueId());
     }
 
@@ -122,6 +123,11 @@ public class PlayerManager extends Manager implements Listener {
         Player player = event.getPlayer();
         FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
         ffPlayer.respawn();
+    }
+
+    /** Getter */
+    public Map<UUID, FFPlayer> getFFPlayers() {
+        return ffPlayers;
     }
 
     /**

@@ -1,5 +1,11 @@
 [
   {
+    "uuid": "dc2c38a5-af8f-4ef3-9d48-b44519ba50c5",
+    "name": "Mugtree",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
     "uuid": "01cb64ef-2b8b-4916-a518-bb261f05e492",
     "name": "BubbleKitty13426",
     "level": 4,
@@ -8,6 +14,12 @@
   {
     "uuid": "5bf1dfdb-0dca-4123-9ce1-020f781be1ad",
     "name": "Piiro",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "317768e5-ba3f-4ab4-8872-0b60410fb5c9",
+    "name": "Secluse",
     "level": 4,
     "bypassesPlayerLimit": false
   },

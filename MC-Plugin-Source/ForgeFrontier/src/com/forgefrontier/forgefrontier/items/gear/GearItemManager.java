@@ -13,6 +13,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
+
 /**
  * Handles events related to GearItem classes
  */
@@ -45,6 +49,7 @@ public class GearItemManager extends Manager implements Listener {
     @EventHandler
     public void onPlayerArmorChange(PlayerArmorChangeEvent e) {
         Player p = (Player) e.getPlayer();
+
         FFPlayer ffPlayer = plugin.getPlayerManager().getFFPlayerFromID(p.getUniqueId());
         CustomItemInstance newItemInstance = CustomItemManager.asCustomItemInstance(e.getNewItem());
         if (e.getOldItem() != null) {

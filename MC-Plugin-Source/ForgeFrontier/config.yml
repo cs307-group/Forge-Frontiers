@@ -51,7 +51,7 @@ gear-shop:
     costs:
       0:
         material_type: "coin"
-        amount: 10000
+        amount: 20000
   1:
     custom_item_id: "WoodenBow"
     costs:
@@ -68,4 +68,4 @@ reroll-costs:
   1:
     material_type: "item"
     item_id: "SilverIngot"
-    amount: 128
+    amount: 32

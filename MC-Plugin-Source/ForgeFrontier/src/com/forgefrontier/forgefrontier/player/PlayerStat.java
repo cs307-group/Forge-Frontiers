@@ -82,6 +82,7 @@ public class PlayerStat extends CustomStat {
         }
 
         this.setStatValue((int) StatCalc.calculateTotalStat(this));
+
     }
 
     /** returns the percentages array */

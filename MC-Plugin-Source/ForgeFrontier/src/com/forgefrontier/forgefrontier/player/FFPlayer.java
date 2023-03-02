@@ -11,6 +11,7 @@ import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -31,13 +32,13 @@ public class FFPlayer {
     };
 
     /** an array of PlayerStat objects which represent the stats of the player */
-    PlayerStat[] stats;
+    private PlayerStat[] stats;
 
     /** the unique ID of the Player this FFPlayer represents */
-    UUID playerID;
+    public UUID playerID;
 
     /** the unique ID of the FFPlayer this FFPlayer represents */
-    UUID uniqueFFPlayerID;
+    public UUID uniqueFFPlayerID;
 
     /** the current health of the player */
     double currentHealth;
@@ -65,7 +66,16 @@ public class FFPlayer {
         playerID = player.getUniqueId();
         uniqueFFPlayerID = UUID.randomUUID();
 
-        stats = baseStats.clone();
+
+        stats = new PlayerStat[] {
+                new PlayerStat(20, StatEnum.HP),
+                new PlayerStat(1, StatEnum.ATK),
+                new PlayerStat(0, StatEnum.STR),
+                new PlayerStat(0, StatEnum.DEX),
+                new PlayerStat(0, StatEnum.CRATE),
+                new PlayerStat(0, StatEnum.CDMG),
+                new PlayerStat(0, StatEnum.DEF)
+        };
 
         this.currentHealth = getHP();
 
