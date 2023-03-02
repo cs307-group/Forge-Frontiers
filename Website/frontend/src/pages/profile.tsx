@@ -1,5 +1,6 @@
 import {GetServerSideProps} from "next";
 
+import {config} from "@/config";
 import {getAuthenticationHeaders, jsonRequest, routes} from "@/handlers/_util";
 import {
   handleTokenRefresh,
@@ -17,6 +18,7 @@ export default function Profile({
   cookie?: object;
 }) {
   useCookieSync(cookie);
+
   return <>{JSON.stringify({userData, cookie})}</>;
 }
 
@@ -44,10 +46,15 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
           },
         };
       }
-
+      const userData: UserDataSecure = await newResp.json();
+      if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
+        if (userData.mc_user == null) {
+          return {redirect: {destination: "/link", statusCode: 302}};
+        }
+      }
       return {
         props: {
-          userData: await newResp.json(),
+          userData,
           cookie: {tokens: JSON.stringify(newTokens)},
         },
       };
@@ -55,8 +62,13 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
       return refresh.response;
     }
   }
-
+  const userData: UserDataSecure = await resp.json();
+  if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
+    if (userData.mc_user == null) {
+      return {redirect: {destination: "/link", statusCode: 302}};
+    }
+  }
   return {
-    props: {userData: await resp.json()},
+    props: {userData},
   };
 });

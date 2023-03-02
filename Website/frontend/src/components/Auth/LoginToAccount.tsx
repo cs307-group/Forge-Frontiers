@@ -54,7 +54,6 @@ export function LoginToAccount() {
         <Spacer y={50} />
         <div className="mx-auto w-[80%]">
           <Button className="w-full mt-4 p-2">Login</Button>
-          <Link href="/profile">Lol</Link>
         </div>
         <Spacer y={50} />
       </form>
