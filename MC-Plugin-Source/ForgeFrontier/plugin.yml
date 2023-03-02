@@ -22,3 +22,5 @@ commands:
     aliases:
       - "is"
       - "isl"
+  link:
+    description: "Command used to connect your Minecraft account to your website account"

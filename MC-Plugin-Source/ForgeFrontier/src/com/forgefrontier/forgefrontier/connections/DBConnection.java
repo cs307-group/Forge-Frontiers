@@ -4,12 +4,16 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.shop.ShopListing;
 import org.apache.commons.lang.SystemUtils;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 
@@ -207,6 +211,7 @@ public class DBConnection {
         cs.close();
 
     }
+
     public boolean setListingSold(UUID listing, UUID buyer, long time_bought) {
         try {
             PreparedStatement preparedStatement = dbConn.prepareStatement(
@@ -238,5 +243,62 @@ public class DBConnection {
             ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "[QUERY SHOP REMOVE FAILURE]\n" + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Gets existing player link information before creating a new one.
+     *
+     * Upon completion, runs the consumer giving the map of values of existing link, if it exists.
+     */
+    public void getExistingPlayerLink(UUID playerUuid, Consumer<Map<String, Object>> consumer) {
+        new Thread(() -> {
+            try {
+                PreparedStatement ps = this.dbConn.prepareStatement(("SELECT link_id, player_uuid, link_code, bool_used from public.links " +
+                        "WHERE player_uuid = ?"));
+                ps.setString(1, playerUuid.toString());
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    Map<String, Object> resultMap = new HashMap<>();
+                    long id = rs.getLong("link_id");
+                    String linkCode = rs.getString("link_code");
+                    boolean boolUsed = rs.getBoolean("bool_used");
+                    resultMap.put("link_id", id);
+                    resultMap.put("link_code", UUID.fromString(linkCode));
+                    resultMap.put("bool_used", boolUsed);
+                    consumer.accept(resultMap);
+                } else {
+                    consumer.accept(null);
+                }
+                rs.close();
+                ps.close();
+            } catch (SQLException se) {
+                ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                        "[DB] SQL Exception. \n" + se.getMessage());
+                consumer.accept(null);
+            }
+        }).start();
+    }
+
+    /**
+     * Gets existing player link information before creating a new one.
+     *
+     * Upon completion, runs the consumer giving whether or not the query succeeded
+     */
+    public void createPlayerLink(UUID uniqueId, UUID linkCode, Consumer<Boolean> consumer) {
+        new Thread(() -> {
+            try {
+                PreparedStatement preparedStatement = dbConn.prepareStatement("INSERT INTO public.links " +
+                        "(player_uuid, link_code) " +
+                        "VALUES (?, ?);");
+                preparedStatement.setString(1, uniqueId.toString());
+                preparedStatement.setString(2, linkCode.toString());
+                preparedStatement.executeUpdate();
+                consumer.accept(true);
+            } catch (SQLException e) {
+                ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                        "[DB] SQL Exception. \n" + e.getMessage());
+                consumer.accept(false);
+            }
+        }).start();
     }
 }
