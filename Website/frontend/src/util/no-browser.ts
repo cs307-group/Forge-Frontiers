@@ -6,8 +6,9 @@
  */
 
 const IS_BROWSER =
-  typeof document !== "undefined" && typeof HTMLSpanElement !== "undefined";
-document.createElement("span") instanceof HTMLSpanElement;
+  typeof document !== "undefined" &&
+  typeof HTMLSpanElement !== "undefined" &&
+  document.createElement("span") instanceof HTMLSpanElement;
 
 export function noBrowser() {
   if (IS_BROWSER) {
