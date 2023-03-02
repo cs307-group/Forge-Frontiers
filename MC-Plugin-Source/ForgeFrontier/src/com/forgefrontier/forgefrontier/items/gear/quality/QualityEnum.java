@@ -48,13 +48,13 @@ public enum QualityEnum {
      * @return a random QualityEnum type
      */
     public static QualityEnum getRandQualityEnum(int max) {
-        System.out.println("max" + max);
+        // System.out.println("max" + max);
         try {
             if (max < 0 || max > 4) {
                 throw new InvalidMaxQualityException();
             }
             int randVal = (int) (Math.random() * max);
-            System.out.println("randVal " + randVal);
+            // System.out.println("randVal " + randVal);
             return switch (randVal) {
                 case 0 -> COMMON;
                 case 1 -> RARE;

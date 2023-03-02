@@ -13,6 +13,8 @@ commands:
     description: "Command for accessing the generator shop."
   gearshop:
     description: "Command for accessing the gear shop."
+  reroll:
+    description: "Command for accessing the reroll gui."
   shop:
     description: "Command for accessing shop GUI."
   customgive:

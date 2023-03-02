@@ -65,7 +65,7 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
         final List<MaterialCost> costs = generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts;
         this.addHandler(9 * 3 + 7, (e) -> {
             boolean works = true;
-            System.out.println(costs);
+
             for(MaterialCost cost: costs) {
                 if(!cost.hasBalance((Player) e.getWhoClicked())) {
                     works = false;

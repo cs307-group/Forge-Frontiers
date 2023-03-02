@@ -111,7 +111,7 @@ public abstract class GearItem extends UniqueCustomItem {
                 gearItemInstance.lore = lore;
                 gearItemInstance.setGearData();
             } else {
-                System.out.println("LOADING GEAR FROM PREVIOUS DATA");
+                // System.out.println("LOADING GEAR FROM PREVIOUS DATA");
 
                 // Pulls the data from the gear-data portion of the data hashmap to specify attributes
                 JSONObject data = gearItemInstance.getData();
@@ -157,7 +157,7 @@ public abstract class GearItem extends UniqueCustomItem {
             // sets the durability of the item to the specified durability
             Damageable damageable = (Damageable) meta;
             damageable.setDamage(gearItemInstance.material.getMaxDurability() - gearItemInstance.durability);
-            System.out.println("durability: " + durability);
+            // System.out.println("durability: " + durability);
 
             // makes the item unbreakable
             meta.setUnbreakable(true);

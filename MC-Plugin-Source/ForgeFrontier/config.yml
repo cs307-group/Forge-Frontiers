@@ -59,3 +59,13 @@ gear-shop:
         material_type: "item"
         item_id: "SilverIngot"
         amount: 128
+
+
+reroll-costs:
+  0:
+    material_type: "coin"
+    amount: 10000
+  1:
+    material_type: "item"
+    item_id: "SilverIngot"
+    amount: 128

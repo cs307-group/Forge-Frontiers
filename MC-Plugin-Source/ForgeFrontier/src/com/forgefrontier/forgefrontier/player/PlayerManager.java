@@ -60,7 +60,7 @@ public class PlayerManager extends Manager implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        System.out.println("PLAYER JOINED");
+        // System.out.println("PLAYER JOINED");
         Player player = event.getPlayer();
         //TODO: Check for player in database
         players.put(player.getUniqueId(), player);
@@ -101,13 +101,13 @@ public class PlayerManager extends Manager implements Listener {
             }
 
             // Modifies incoming damage based on defense stat
-            System.out.println("init dmg: " + damage);
+            // System.out.println("init dmg: " + damage);
             damage = StatCalc.modifyIncomingDamage(damage, ffPlayer.getDEF());
-            System.out.println("after DEF conversion: " + damage);
+            // System.out.println("after DEF conversion: " + damage);
 
             // Modifies incoming damage based on health stat
             double convertedDamage = StatCalc.convertDamage(damage, maxHealth, ffPlayer);
-            System.out.println("after HP conversion: " + convertedDamage);
+            // System.out.println("after HP conversion: " + convertedDamage);
             event.setDamage(convertedDamage);
         }
     }

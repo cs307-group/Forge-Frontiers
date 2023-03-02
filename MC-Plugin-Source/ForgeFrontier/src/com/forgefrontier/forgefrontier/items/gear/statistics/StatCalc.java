@@ -18,26 +18,26 @@ public class StatCalc {
      * @return the updated damage
      */
     public static double calcOutgoingDamage(FFPlayer ffPlayer, StatEnum MAIN_STAT) {
-        System.out.println(ffPlayer.getStatsString());
+        // System.out.println(ffPlayer.getStatsString());
 
         double damage = 0;
-        System.out.println(damage);
+        // System.out.println(damage);
         int mainStatInt = StatEnum.getIntFromEnum(MAIN_STAT);
 
         damage += ffPlayer.getATK();
-        System.out.println(damage);
+        // System.out.println(damage);
         switch (mainStatInt) {
             case 2: damage += ffPlayer.getSTR(); break;
             case 3: damage += ffPlayer.getDEX(); break;
             default: break;
         }
-        System.out.println(damage);
+        // System.out.println(damage);
 
         if ((int) (Math.random() * 100) + 1 <= ffPlayer.getCRATE()) {
             double critDamage = ((double) ffPlayer.getCDMG()) / 100 * damage;
             damage += critDamage;
         }
-        System.out.println(damage);
+        // System.out.println(damage);
 
         return damage;
     }

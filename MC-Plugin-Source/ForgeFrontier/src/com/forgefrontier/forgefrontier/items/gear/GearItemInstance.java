@@ -107,7 +107,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
                 gearData.get("quality")).getQuality();
         numBaseStats = Integer.parseInt(gearData.get("num-base-stats"));
 
-        String baseStatsString = name = gearData.get("base-stats");
+        String baseStatsString = gearData.get("base-stats");
         baseStats = new BaseStatistic[numBaseStats];
         for (int i = 0; i < numBaseStats; i++) {
             baseStats[i] =
@@ -116,7 +116,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         }
 
         reforgeStats = new ReforgeStatistic[3];
-        String reforgeStatsString = name = gearData.get("reforge-stats");
+        String reforgeStatsString = gearData.get("reforge-stats");
         for (int i = 0; i < 3; i++) {
             reforgeStats[i] =
                     new ReforgeStatistic(reforgeStatsString.substring(0, reforgeStatsString.indexOf("}") + 1));
@@ -126,7 +126,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         numGemSlots = Integer.parseInt(gearData.get("num-gem-slots"));
 
         gems = new GemValues[numGemSlots];
-        String gemsString = name = gearData.get("gems");
+        String gemsString = gearData.get("gems");
         for (int i = 0; i < numGemSlots; i++) {
             if (gemsString.substring(0, gemsString.indexOf("}") + 1).equals("{EMPTY}")) {
                 gems[i] = null;
@@ -137,10 +137,10 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
             gemsString = gemsString.substring(gemsString.indexOf("}") + 1);
         }
 
-        name = gearData.get("gem-enum");
-        name = gearData.get("material");
-        name = gearData.get("durability");
-        name = gearData.get("lore");
+        gemEnum = GemEnum.valueOf(gearData.get("gem-enum"));
+        material = Material.valueOf(gearData.get("material"));
+        durability = Integer.parseInt(gearData.get("durability"));
+        lore = gearData.get("lore");
     }
 
     /** returns the value of this.baseStats */
