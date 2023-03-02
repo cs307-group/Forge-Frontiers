@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier;
 import com.forgefrontier.forgefrontier.commands.GearShopCommandExecutor;
 import com.forgefrontier.forgefrontier.commands.IslandCommandExecutor;
 import com.forgefrontier.forgefrontier.commands.LinkCommandExecutor;
+import com.forgefrontier.forgefrontier.commands.RerollCommandExecutor;
 import com.forgefrontier.forgefrontier.connections.DBConnection;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
@@ -125,6 +126,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand linkCmd = Bukkit.getPluginCommand("link");
         if (linkCmd != null)
             linkCmd.setExecutor(new LinkCommandExecutor());
+        PluginCommand rerollCmd = Bukkit.getPluginCommand("reroll");
+        if (rerollCmd != null)
+            rerollCmd.setExecutor(new RerollCommandExecutor());
     }
 
     @Override

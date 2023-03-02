@@ -14,10 +14,10 @@ public enum StatEnum {
      * @return the StatEnum returned
      */
     public static StatEnum getRandStatEnum(GemEnum gemEnum) {
-        System.out.println(gemEnum.toString());
+        // System.out.println(gemEnum.toString());
         int randValue = (int)(Math.random() * 7);
         if (gemEnum == GemEnum.WEAPON) {
-            System.out.println("regen");
+            // System.out.println("regen");
             randValue = (int)(Math.random() * 5) + 1;
         }
         return switch (randValue) {

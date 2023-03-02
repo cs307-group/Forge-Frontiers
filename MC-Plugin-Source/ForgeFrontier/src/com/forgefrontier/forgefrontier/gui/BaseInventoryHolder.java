@@ -88,6 +88,7 @@ public class BaseInventoryHolder implements InventoryHolder {
     }
 
     public void onClick(InventoryClickEvent e) {
+        if(e.getClickedInventory() != e.getInventory()) return;
         e.setCancelled(true);
         if (e.getSlot() < 0 || e.getSlot() > size) return;
         if(handlers[e.getSlot()] != null)
