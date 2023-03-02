@@ -23,5 +23,5 @@ export default function Links() {
 }
 
 export const getServerSideProps = requireAuthenticatedPageView(async (_) => {
-  return {props: {ok: new Date().toString()}};
+  return {props: {now: new Date().toString()}};
 });

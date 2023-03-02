@@ -1,4 +1,4 @@
-import {UserDataSecure} from "./types";
+import {UserDataSecure} from "../types";
 
 export type ResponseType<T> = {error: string} | T;
 function parseJsonResponse<T>(json: any): ResponseType<T> {
@@ -41,6 +41,16 @@ export async function login(obj: {password: string; email: string}) {
     credentials: "include",
     body: JSON.stringify(obj),
     method: "POST",
+    headers: {"content-type": "application/json"},
+  });
+  return parseJsonResponse<UserDataSecure>(await resp.json());
+}
+
+export async function linkAccount(obj: {code: string}) {
+  const resp = await fetch("/api/link-account", {
+    body: JSON.stringify(obj),
+    method: "post",
+    credentials: "include",
     headers: {"content-type": "application/json"},
   });
   return parseJsonResponse<UserDataSecure>(await resp.json());

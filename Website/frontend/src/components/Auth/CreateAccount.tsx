@@ -2,7 +2,7 @@ import {useRouter} from "next/router";
 import {useState} from "react";
 import {Toaster, toast} from "react-hot-toast";
 
-import {createAccount, isError, login} from "@/handlers";
+import {createAccount, isError, login} from "@/handlers/runtime";
 import {useStatus} from "@/hooks/use-status";
 
 import {Button} from "../Button";

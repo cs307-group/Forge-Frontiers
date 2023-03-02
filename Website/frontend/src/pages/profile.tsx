@@ -1,14 +1,12 @@
-import {GetServerSideProps} from "next";
+import Image from "next/image";
 
-import {config} from "@/config";
-import {getAuthenticationHeaders, jsonRequest, routes} from "@/handlers/_util";
-import {
-  handleTokenRefresh,
-  isRefreshSuccess,
-  requireAuthenticatedPageView,
-} from "@/handlers/auth";
-import {Tokens, UserDataSecure} from "@/handlers/types";
+import {AppLayout} from "@/components/Layout/AppLayout";
+import {requireAuthenticatedPageView} from "@/handlers/auth";
+import {UserDataSecure} from "@/handlers/types";
+import {fetchUserData, isErrorResponse} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
+import avatarImage from "@/images/avatar.png";
+import skillsImage from "@/images/skills.png";
 
 export default function Profile({
   userData,
@@ -18,57 +16,44 @@ export default function Profile({
   cookie?: object;
 }) {
   useCookieSync(cookie);
-
-  return <>{JSON.stringify({userData, cookie})}</>;
+  return (
+    <AppLayout active="profile" title={`${userData.name}'s Profile`}>
+      <div>
+        {/* TODO DYNAMIC IMAGE */}
+        <Image
+          className="h-80 w-40 mt-4"
+          width={316}
+          height={512}
+          src={
+            userData.mc_user
+              ? `https://visage.surgeplay.com/full/512/${userData.mc_user}`
+              : avatarImage.src
+          }
+          alt="Avatar"
+        />
+        <div className="flex-1">
+          <Image
+            className="h-80 w-full mt-4 hidden sm:block"
+            src={skillsImage.src}
+            height={skillsImage.height}
+            width={skillsImage.width}
+            alt="Skills"
+          />
+          <span className="italic">Skills data needs to be fetched</span>
+        </div>
+        <div className="flex item-center justify-between">
+          <h2 className="text-xl">Inventory</h2>
+          <h2 className="text-xl">Market Listings</h2>
+        </div>
+      </div>
+    </AppLayout>
+  );
 }
 
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
-  const {req} = c;
-  const tokens: Tokens = JSON.parse(req.cookies.tokens);
-
-  const getResponse = ($tokens: Tokens) =>
-    jsonRequest(routes.userInfo, {
-      method: "get",
-      headers: getAuthenticationHeaders($tokens),
-    });
-  let resp = await getResponse(tokens);
-
-  if (!resp.ok) {
-    const refresh = await handleTokenRefresh(resp, tokens);
-    if (isRefreshSuccess(refresh)) {
-      const newTokens = refresh.tokens;
-      const newResp = await getResponse(newTokens);
-
-      if (!newResp.ok) {
-        return {
-          props: {
-            error: (await resp.json()).error,
-          },
-        };
-      }
-      const userData: UserDataSecure = await newResp.json();
-      if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
-        if (userData.mc_user == null) {
-          return {redirect: {destination: "/link", statusCode: 302}};
-        }
-      }
-      return {
-        props: {
-          userData,
-          cookie: {tokens: JSON.stringify(newTokens)},
-        },
-      };
-    } else {
-      return refresh.response;
-    }
+  const userData = await fetchUserData(c);
+  if (isErrorResponse(userData)) {
+    return userData.resp;
   }
-  const userData: UserDataSecure = await resp.json();
-  if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
-    if (userData.mc_user == null) {
-      return {redirect: {destination: "/link", statusCode: 302}};
-    }
-  }
-  return {
-    props: {userData},
-  };
+  return userData.toSSPropsResult;
 });

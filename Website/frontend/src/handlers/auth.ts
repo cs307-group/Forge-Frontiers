@@ -13,13 +13,11 @@ import {hasToken} from "@/util/const-has-token";
 import {getAuthenticationHeaders, jsonRequest, routes} from "./_util";
 import {Tokens} from "./types";
 
-export const REQUEST_OK = {} as const;
-
 export interface ServerSidePropsWrapper {
   (fn: GetServerSideProps): GetServerSideProps;
 }
 
-type GSSPWithAuth<
+export type GSSPWithAuth<
   P extends {[key: string]: any} = {[key: string]: any},
   Q extends ParsedUrlQuery = ParsedUrlQuery,
   D extends PreviewData = PreviewData
@@ -53,7 +51,10 @@ export class RefreshSuccess {
 }
 
 export class RefreshFail {
-  constructor(public response: GetServerSidePropsResult<any>) {}
+  constructor(
+    public response: GetServerSidePropsResult<any>,
+    public serverResponse: Response
+  ) {}
 }
 
 export function isRefreshSuccess(x: unknown): x is RefreshSuccess {
@@ -64,25 +65,33 @@ export async function handleTokenRefresh(
   resp: Response,
   previousTokens: Tokens
 ) {
+  const clone = resp.clone();
   if (resp.headers.get("x-error-hint") === "refresh") {
     const refresh = await jsonRequest(routes.refreshToken, {
       method: "get",
       headers: getAuthenticationHeaders(previousTokens),
     });
+    const clone = refresh.clone();
     if (!refresh.ok) {
-      return new RefreshFail({
-        redirect: {destination: "/login?force", statusCode: 302},
-      });
+      return new RefreshFail(
+        {
+          redirect: {destination: "/login?force", statusCode: 302},
+        },
+        clone
+      );
     }
     const accessToken = refresh.headers.get("x-access-token");
     const refreshToken = refresh.headers.get("x-refresh-token");
     if (!accessToken || !refreshToken) {
-      return new RefreshFail({
-        props: {
-          error:
-            "An unknown error occured while contacting the backend. (NO_TOKEN)",
+      return new RefreshFail(
+        {
+          props: {
+            error:
+              "An unknown error occured while contacting the backend. (NO_TOKEN)",
+          },
         },
-      });
+        clone
+      );
     }
     return new RefreshSuccess({accessToken, refreshToken});
   } else {
@@ -92,7 +101,8 @@ export async function handleTokenRefresh(
       },
     };
     return new RefreshFail(
-      resp.status === 404 ? {notFound: true, ...propsObj} : propsObj
+      resp.status === 404 ? {notFound: true, ...propsObj} : propsObj,
+      clone
     );
   }
 }
