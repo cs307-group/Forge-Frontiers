@@ -11,6 +11,8 @@ commands:
     description: "Command for accessing generators."
   genshop:
     description: "Command for accessing the generator shop."
+  gearshop:
+    description: "Command for accessing the gear shop."
   shop:
     description: "Command for accessing shop GUI."
   customgive:

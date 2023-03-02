@@ -174,4 +174,17 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
     public GemValues[] getGems() {
         return this.gems;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLore() {
+        return lore;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
 }
