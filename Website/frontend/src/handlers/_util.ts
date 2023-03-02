@@ -1,5 +1,8 @@
+import {noBrowser} from "@/util/no-browser";
+
 import {Tokens} from "./types";
 
+noBrowser();
 export const {
   IS_DEV: _isDev,
   API_HOST_PROD,
