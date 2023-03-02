@@ -16,9 +16,9 @@ timestamps:
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1677657399016
-  login: 1677657231922
-money: '383.0'
+  logout: 1677779032643
+  login: 1677778987075
+money: '70389.0'
 last-account-name: Piiro
 lastlocation:
   world: f3493a3d-6f35-46cd-9f02-1c20089114c8
@@ -31,8 +31,8 @@ lastlocation:
 logoutlocation:
   world: a73e48f1-3240-4b13-ac6f-b110960b0566
   world-name: bskyblock_world
-  x: -1.4101524794495248
+  x: -1.4816287295863941
   y: 86.0
-  z: 13.001253462845929
-  yaw: -109.4652099609375
-  pitch: 57.42134094238281
+  z: 15.406234031195941
+  yaw: -150.5316925048828
+  pitch: 22.30447006225586
