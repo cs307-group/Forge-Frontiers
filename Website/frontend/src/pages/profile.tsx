@@ -20,17 +20,19 @@ export default function Profile({
     <AppLayout active="profile" title={`${userData.name}'s Profile`}>
       <div>
         {/* TODO DYNAMIC IMAGE */}
-        <Image
-          className="h-80 w-40 mt-4"
-          width={316}
-          height={512}
-          src={
-            userData.mc_user
-              ? `https://visage.surgeplay.com/full/512/${userData.mc_user}`
-              : avatarImage.src
-          }
-          alt="Avatar"
-        />
+        <div className="sm:block flex items-center justify-center">
+          <Image
+            className="h-80 w-40 mt-4"
+            width={316}
+            height={512}
+            src={
+              userData.mc_user
+                ? `https://visage.surgeplay.com/full/512/${userData.mc_user}`
+                : avatarImage.src
+            }
+            alt="Avatar"
+          />
+        </div>
         <div className="flex-1">
           <Image
             className="h-80 w-full mt-4 hidden sm:block"

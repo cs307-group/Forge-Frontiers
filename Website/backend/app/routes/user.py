@@ -121,7 +121,7 @@ def link_mc_account():
     link.bool_used = True
     user = req.auth.user_id
     user_data = get_user_by_id(user)
-    user_data.mc_user = code
+    user_data.mc_user = link.player_uuid
     js = user_data.as_json
     commit()
     return js
