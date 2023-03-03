@@ -1,7 +1,7 @@
 from app.internal.helpers.guard import guard
 from app.db.schemas.links import Links
 
-message = "Code not found.. did you run /ls?"
+message = "Code not found.. did you run /link?"
 
 
 def get_link_by_link_code(code: str) -> Links:

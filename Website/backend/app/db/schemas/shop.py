@@ -13,7 +13,7 @@ class Shop(db.Model):
     item_material: str = db.Column(db.String(100), unique=True, nullable=False)
     item_name: str = db.Column(db.String(100), nullable=False)
     item_lore: str = db.Column(TEXT, nullable=False)
-
+    player_name: str = db.Column(TEXT, nullable=False)
     # DO NOT store as float, we don't want floating point errors
     price: str = db.Column(TEXT, nullable=False, default="0")
     amount: int = db.Column(db.Integer, default=0)

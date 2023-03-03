@@ -1,4 +1,4 @@
-export function hasToken(cookies: Record<string, any>) {
+export function hasToken(cookies: any): cookies is string {
   try {
     return Boolean(
       cookies &&

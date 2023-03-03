@@ -3,6 +3,7 @@ from flask import Blueprint
 from app.db.mutations.user import create_user
 from app.db.mutations.util import commit
 from app.db.queries.links import get_link_by_link_code
+from app.db.queries.stats import get_stats_by_player_uuid
 from app.db.queries.user import get_user_by_id, get_user_by_username
 from app.decorators.api_response import api
 from app.exceptions.app_exception import AppException
@@ -125,3 +126,15 @@ def link_mc_account():
     js = user_data.as_json
     commit()
     return js
+
+
+@router.get("/-/stats")
+@api.strict
+def get_mc_stats():
+    req = Context()
+    user = req.auth.user_id
+    mc_user = get_user_by_id(user).mc_user
+    if mc_user is not None:
+        stats = get_stats_by_player_uuid(mc_user)
+        return stats.as_json
+    return {}

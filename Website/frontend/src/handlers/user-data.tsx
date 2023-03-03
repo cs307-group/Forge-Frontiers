@@ -13,16 +13,28 @@ noBrowser();
 export class ErrorResponse {
   constructor(public resp: GetServerSidePropsResult<any>) {}
 }
+
 export class UserDataRespoonse {
+  private customData: Record<any, any> = {};
   public get toSSPropsResult(): GetServerSidePropsResult<any> {
-    if (this.cookie) {
-      return {
-        props: {userData: this.resp, cookie: this.cookie},
-      };
-    }
-    return {props: {userData: this.resp}};
+    return {props: {userData: this.resp, ...this.customData}};
   }
-  constructor(public resp: UserDataSecure, public cookie?: any) {}
+
+  constructor(public resp: UserDataSecure) {}
+  public addCustomData(obj: Record<any, any>) {
+    this.customData = {...this.customData, ...obj};
+    return this;
+  }
+  public extractTokens(): Tokens | null {
+    if ("cookie" in this.customData) {
+      try {
+        return JSON.parse(this.customData.cookie?.tokens) as Tokens;
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
 }
 
 export function isErrorResponse(x: unknown): x is ErrorResponse {
@@ -69,8 +81,10 @@ export async function fetchUserData(
           });
         }
       }
-      return new UserDataRespoonse(userData, {
-        tokens: JSON.stringify(newTokens),
+      return new UserDataRespoonse(userData).addCustomData({
+        cookie: {
+          tokens: JSON.stringify(newTokens),
+        },
       });
     } else {
       return new ErrorResponse(refresh.response);
@@ -85,4 +99,11 @@ export async function fetchUserData(
     }
   }
   return new UserDataRespoonse(userData);
+}
+
+export function getPlayerStats(tokens: Tokens) {
+  return jsonRequest(routes.mcStats, {
+    method: "get",
+    headers: getAuthenticationHeaders(tokens),
+  });
 }

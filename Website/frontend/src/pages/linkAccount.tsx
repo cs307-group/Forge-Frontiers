@@ -1,8 +1,5 @@
-import Link from "next/link";
-
 import {Auth, AuthSideText, AuthSideType} from "@/components/Auth";
-import {LoginToAccount} from "@/components/Auth/LoginToAccount";
-import {LinkAccount} from "@/components/Auth/LinkAccount"
+import {LinkAccount} from "@/components/Auth/LinkAccount";
 import {Spacer} from "@/components/Spacer";
 import {Raleway} from "@next/font/google";
 
@@ -21,11 +18,11 @@ export default function LinkAcct() {
           <div className="text-2xl text-center md:text-5xl">Hello!</div>
           <Spacer y={30} />
           <p className="mt-4 text-lg md:text-2xl w-[80%] text-center">
-            It looks like you haven't linked your Forge Frontier Profile to
-            a Minecraft Account. Use the '/ls' command to generate a code. Link
+            It looks like you haven't linked your Forge Frontier Profile to a
+            Minecraft Account. Use the '/link' command to generate a code. Link
             your account to continue!
           </p>
-        <Spacer y={50} />
+          <Spacer y={50} />
         </div>
       </AuthSideText>
     </Auth>
