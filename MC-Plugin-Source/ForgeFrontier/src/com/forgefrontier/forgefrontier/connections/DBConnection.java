@@ -209,7 +209,8 @@ public class DBConnection {
         } catch (Exception e) {
             ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "[LOAD ERROR]\n" + e.getMessage());
         }
-        cs.close();
+        if(cs != null)
+            cs.close();
 
     }
 

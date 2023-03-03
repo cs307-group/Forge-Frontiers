@@ -1,12 +1,15 @@
 package com.forgefrontier.forgefrontier.commands;
 
 import com.forgefrontier.forgefrontier.gui.CreateIslandInventoryHolder;
+import com.forgefrontier.forgefrontier.gui.MainIslandInventoryHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.database.objects.Island;
 //import world.bentobox.bentobox.BentoBox;
 //import world.bentobox.bentobox.database.objects.Island;
 
@@ -19,11 +22,13 @@ public class IslandCommandExecutor implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
-        //Island island = BentoBox.getInstance().getIslands().getIsland(Bukkit.getWorld("bskyblock_world"), p.getUniqueId());
+        Island island = BentoBox.getInstance().getIslands().getIsland(Bukkit.getWorld("bskyblock_world"), p.getUniqueId());
 
-        //if(island == null) {
+        if(island == null) {
             p.openInventory(new CreateIslandInventoryHolder().getInventory());
-        //}
+        } else {
+            p.openInventory(new MainIslandInventoryHolder().getInventory());
+        }
 
         return true;
     }
