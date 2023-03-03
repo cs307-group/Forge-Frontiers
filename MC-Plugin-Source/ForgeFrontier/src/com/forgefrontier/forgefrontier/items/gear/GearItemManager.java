@@ -66,6 +66,10 @@ public class GearItemManager extends Manager implements Listener {
         if (newItemInstance instanceof CustomArmor.CustomArmorInstance newArmorInstance) {
             ffPlayer.updateStatsOnArmorEquip(newArmorInstance);
         }
+
+        // Updates player stats in database
+        ForgeFrontier.getInstance().getDBConnection().updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(),
+                ffPlayer.getStats());
     }
 
 

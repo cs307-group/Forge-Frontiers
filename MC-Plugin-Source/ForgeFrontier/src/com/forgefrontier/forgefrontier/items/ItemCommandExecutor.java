@@ -1,19 +1,11 @@
 package com.forgefrontier.forgefrontier.items;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*;
-import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * ItemCommandExecutor
@@ -22,21 +14,11 @@ import java.util.Map;
  */
 public class ItemCommandExecutor implements CommandExecutor {
 
-    /** HashMap containing all the different custom item classes */
-    private final Map<String, Class<? extends UniqueCustomItem>> itemTypes;
-
     /**
      * Constructor which initializes the values of the hashmap
      */
     public ItemCommandExecutor() {
-        this.itemTypes = new HashMap<>();
-        //Add all the different item types to the hashmap
-        //TODO: iterate through CustomItemManager app;
-        itemTypes.put("WoodenSword", WoodenSword.class);
-        itemTypes.put("WoodenBow", WoodenBow.class);
-        itemTypes.put("UpgradeGem", UpgradeGem.class);
-        itemTypes.put("LeatherHelmet", LeatherHelmet.class);
-        itemTypes.put("LeatherChestplate", LeatherChestplate.class);
+
     }
 
     /**
@@ -50,7 +32,7 @@ public class ItemCommandExecutor implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Class<? extends UniqueCustomItem> itemType;
+        String itemType;
 
         if (args.length == 0) {
             sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid usage: /customgive <item type> or /customgive <player name> <item type>" +
@@ -61,7 +43,7 @@ public class ItemCommandExecutor implements CommandExecutor {
         if (sender instanceof Player) {
             if (args.length == 1) {
                 Player player = (Player) sender;
-                itemType = getItemType(args[0]);
+                itemType = args[0];
 
                 if (itemType == null) {
                     sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid item type: " + args[0]);
@@ -70,9 +52,9 @@ public class ItemCommandExecutor implements CommandExecutor {
 
                 return addItemToInv(args[0], player, sender);
             } else if (args.length == 2) {
-
+                //TODO: /customgive <player-name> <item-name> || /customgive <item-name> <num-items>
             } else if (args.length == 3) {
-
+                //TODO: /customgive <player-name> <item-name> <num-items>
             }
         }
         return true;
@@ -91,15 +73,5 @@ public class ItemCommandExecutor implements CommandExecutor {
         sender.sendMessage(ForgeFrontier.CHAT_PREFIX + itemType + " item added to " +
                 player.getDisplayName() + "'s inventory");
         return true;
-    }
-
-    /**
-     * Gets the item type specified in the command
-     *
-     * @param typeArg the string representation of the item specified by the command
-     * @return the class type of the item specified in the command
-     */
-    private Class<? extends UniqueCustomItem> getItemType(String typeArg) {
-        return itemTypes.get(typeArg);
     }
 }

@@ -1,6 +1,6 @@
 teleportenabled: true
 teleportauto: false
-godmode: false
+godmode: true
 muted: false
 jailed: false
 ip-address: 127.0.0.1
@@ -11,28 +11,28 @@ powertoolsenabled: true
 accepting-pay: true
 baltop-exempt: false
 timestamps:
-  lastteleport: 1677693845303
+  lastteleport: 1677861293542
   lastheal: 0
   mute: 0
   jail: 0
   onlinejail: 0
-  logout: 1677693987723
-  login: 1677693842076
-money: '0'
+  logout: 1677862456168
+  login: 1677862453258
+money: '89.0'
 logoutlocation:
   world: a73e48f1-3240-4b13-ac6f-b110960b0566
   world-name: bskyblock_world
-  x: -2.699999988079071
+  x: 2.1374114605474306
   y: 86.0
-  z: 18.1203783533157
-  yaw: 175.35000610351562
-  pitch: 7.9500041007995605
+  z: 811.381840751362
+  yaw: 5.999382495880127
+  pitch: 21.749919891357422
 last-account-name: BubbleKitty13426
 lastlocation:
   world: a73e48f1-3240-4b13-ac6f-b110960b0566
   world-name: bskyblock_world
-  x: 0.5707640215247417
-  y: 91.0
-  z: 799.8730906279903
-  yaw: 94.9492416381836
-  pitch: 27.14998435974121
+  x: 3.1221431401529753
+  y: 86.0
+  z: 811.5421474277356
+  yaw: 8.553356170654297
+  pitch: 37.199954986572266

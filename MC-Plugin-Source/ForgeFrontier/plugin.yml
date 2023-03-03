@@ -28,3 +28,9 @@ commands:
       - "isl"
   link:
     description: "Command used to connect your Minecraft account to your website account"
+  forgefrontier:
+    description: "ForgeFrontier main command"
+    aliases:
+      - "ff"
+  customspawn:
+    description: "Command used for spawning custom entities."

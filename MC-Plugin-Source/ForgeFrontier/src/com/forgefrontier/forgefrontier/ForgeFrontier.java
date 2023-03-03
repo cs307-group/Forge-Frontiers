@@ -1,9 +1,6 @@
 package com.forgefrontier.forgefrontier;
 
-import com.forgefrontier.forgefrontier.commands.GearShopCommandExecutor;
-import com.forgefrontier.forgefrontier.commands.IslandCommandExecutor;
-import com.forgefrontier.forgefrontier.commands.LinkCommandExecutor;
-import com.forgefrontier.forgefrontier.commands.RerollCommandExecutor;
+import com.forgefrontier.forgefrontier.commands.*;
 import com.forgefrontier.forgefrontier.connections.DBConnection;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
@@ -11,17 +8,21 @@ import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemCommandExecutor;
+import com.forgefrontier.forgefrontier.items.gear.GearItem;
 import com.forgefrontier.forgefrontier.items.gear.GearItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
+import com.forgefrontier.forgefrontier.mobs.CustomEntity;
+import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
+import com.forgefrontier.forgefrontier.mobs.EntityCommandExecutor;
+import com.forgefrontier.forgefrontier.mobs.chickens.TestChicken;
 import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
-import org.apache.commons.lang.SystemUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,12 +32,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import world.bentobox.bentobox.BentoBox;
 
-import java.io.*;
-import java.sql.*;
-import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ForgeFrontier extends JavaPlugin {
@@ -54,6 +50,7 @@ public class ForgeFrontier extends JavaPlugin {
     CustomItemManager customItemManager;
     PlayerManager playerManager;
     GearItemManager gearItemManager;
+    CustomEntityManager customEntityManager;
     Shop itemShop;
 
     @Override
@@ -73,30 +70,42 @@ public class ForgeFrontier extends JavaPlugin {
         }
         setupPermissions();
         setupChat();
+        //TODO: re-enable database
         setupDBConnection();
+
         // Managers
         this.generatorManager = new GeneratorManager(this);
         this.customItemManager = new CustomItemManager(this);
         this.playerManager = new PlayerManager(this);
         this.gearItemManager = new GearItemManager(this);
+        this.customEntityManager = new CustomEntityManager(this);
 
         this.customItemManager.init();
         this.generatorManager.init();
         this.playerManager.init();
         this.gearItemManager.init();
+        this.customEntityManager.init();
 
+        // Player Shop
+        //TODO: re-enable
         this.setupPlayerShop();
+
+        // Custom Items
         this.getCustomItemManager().registerCustomItem(new UpgradeGem());
         this.getCustomItemManager().registerCustomItem(new WoodenSword());
         this.getCustomItemManager().registerCustomItem(new WoodenBow());
         this.getCustomItemManager().registerCustomItem(new LeatherHelmet());
         this.getCustomItemManager().registerCustomItem(new LeatherChestplate());
 
+        // Custom Mobs
+        this.getCustomEntityManager().registerCustomEntity(new TestChicken());
+
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.customItemManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.playerManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.gearItemManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.customEntityManager, this);
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
@@ -112,6 +121,7 @@ public class ForgeFrontier extends JavaPlugin {
         if(gearshopCmd != null)
             gearshopCmd.setExecutor(new GearShopCommandExecutor());
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
+        //TODO: re-enable shop functionality
         if (shopCmd != null)
             shopCmd.setExecutor(itemShop.getCommandExecutor());
         PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
@@ -129,6 +139,12 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand rerollCmd = Bukkit.getPluginCommand("reroll");
         if (rerollCmd != null)
             rerollCmd.setExecutor(new RerollCommandExecutor());
+        PluginCommand forgefrontierCmd = Bukkit.getPluginCommand("forgefrontier");
+        if (forgefrontierCmd != null)
+            forgefrontierCmd.setExecutor(new ForgeFrontierCommandExecutor());
+        PluginCommand entityCmd = Bukkit.getPluginCommand("customspawn");
+        if (entityCmd != null)
+            entityCmd.setExecutor(new EntityCommandExecutor());
     }
 
     @Override
@@ -136,6 +152,8 @@ public class ForgeFrontier extends JavaPlugin {
         this.generatorManager.disable();
         this.customItemManager.disable();
         this.playerManager.disable();
+        this.gearItemManager.disable();
+        this.customEntityManager.disable();
     }
 
     public CustomItemManager getCustomItemManager() {
@@ -148,6 +166,14 @@ public class ForgeFrontier extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return this.playerManager;
+    }
+
+    public GearItemManager getGearItemManager() {
+        return this.gearItemManager;
+    }
+
+    public CustomEntityManager getCustomEntityManager() {
+        return this.customEntityManager;
     }
 
     // Singleton Pattern
