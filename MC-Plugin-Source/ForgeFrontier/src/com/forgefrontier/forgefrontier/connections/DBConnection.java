@@ -311,7 +311,7 @@ public class DBConnection {
     public boolean createPlayerStats(UUID uniqueId, PlayerStat[] stats) {
         try {
             PreparedStatement preparedStatement = dbConn.prepareStatement("INSERT INTO public.stats " +
-                    "(player_uuid, current_health, hp, atk, str, dex, crate, cdmg, def) " +
+                    "(player_uuid, current_health, HP, ATK, STR, DEX, CRATE, CDMG, DEF) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
             preparedStatement.setString(1, uniqueId.toString());
             preparedStatement.setDouble(2, stats[0].getStatValue());
@@ -338,7 +338,7 @@ public class DBConnection {
         try {
             PreparedStatement preparedStatement = dbConn.prepareStatement(
                     "UPDATE public.stats " +
-                            "(player_uuid, current_health, hp, atk, str, dex, crate, cdmg, def) " +
+                            "(player_uuid, current_health, HP, ATK, STR, DEX, CRATE, CDMG, DEF) " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
             preparedStatement.setString(1, uniqueId.toString());
             preparedStatement.setDouble(2, currentHealth);
@@ -366,7 +366,7 @@ public class DBConnection {
         new Thread(() -> {
             try {
                 PreparedStatement ps = this.dbConn.prepareStatement(("SELECT " +
-                        "player_uuid, current_health, hp, atk, str, dex, crate, cdmg, def from public.stats " +
+                        "player_uuid, current_health, HP, ATK, STR, DEX, CRATE, CDMG, DEF from public.stats " +
                         "WHERE player_uuid = ?"));
                 ps.setString(1, playerUuid.toString());
                 ResultSet rs = ps.executeQuery();

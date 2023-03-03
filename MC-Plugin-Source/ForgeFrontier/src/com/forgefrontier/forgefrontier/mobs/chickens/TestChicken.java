@@ -56,8 +56,8 @@ public class TestChicken extends CustomChicken {
             super(server, "TestChicken");
 
             // sets the health of the chicken
-            this.setMaxHealth(100);
-            this.setHealth(100);
+            this.setMaxHealth(10);
+            this.setHealth(10);
 
             // sets the nameplate of the chicken
             this.setCustomName(ChatColor.WHITE + "TESTCHICKEN" + this.getHealth());

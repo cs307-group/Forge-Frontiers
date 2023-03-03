@@ -50,28 +50,6 @@ public class CustomEntityManager extends Manager implements Listener {
     /** Method to run to register a new CustomItem. If not run, the custom item will not be able to be identified. */
     public void registerCustomEntity(CustomMob mob) {
         this.entities.put(mob.getCode(), mob);
-        Class<? extends CraftEntity> craftClass = mob.getCorrespondingCraftEntity();
-        try {
-            List<Map<?, ?>> dataMap = new ArrayList<Map<?, ?>>();
-            for(Field f : EntityTypes.class.getDeclaredFields()) {
-                if (f.getType().getSimpleName().equals(Map.class.getSimpleName())){
-                    f.setAccessible(true);
-                    dataMap.add((Map<?, ?>) f.get(null));
-                }
-            }
-
-            if (dataMap.get(2).containsKey(mob.getID())) {
-                dataMap.get(0).remove(mob.getCode());
-                dataMap.get(2).remove(mob.getID());
-            }
-
-            Method method = EntityType.class.getDeclaredMethod("a", Class.class, String.class, int.class);
-            method.setAccessible(true);
-            method.invoke(null, craftClass, mob.getCode(), mob.getID());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -109,9 +87,9 @@ public class CustomEntityManager extends Manager implements Listener {
 
         if (entity.hasMetadata("code")) {
             //TODO: this is temporary, would re-create instance and call function to execute same
-            entity.getHandle().du().a(Activity.b);
-            entity.setTarget((Player) event.getDamager());
-            entity.attack(event.getDamager());
+            // entity.getHandle().du().a(Activity.b);
+            // entity.setTarget((Player) event.getDamager());
+            // entity.attack(event.getDamager());
         }
     }
 
