@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import {AppLayout} from "@/components/Layout/AppLayout";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
-import {Tokens, UserDataSecure} from "@/handlers/types";
+import {PlayerStats, Tokens, UserDataSecure} from "@/handlers/types";
 import {
   fetchUserData,
   getPlayerStats,
@@ -11,17 +11,35 @@ import {
 } from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import avatarImage from "@/images/avatar.png";
-import skillsImage from "@/images/skills.png";
+
+const keyToTableMap: Record<keyof PlayerStats, string> = {
+  ATK: "ATK",
+  current_health: "Health",
+  CDMG: "CDMG",
+  CRATE: "CRATE",
+
+  DEF: "DEF",
+  DEX: "DEX",
+  HP: "HP",
+  player_uuid: "uuid",
+  STR: "STR",
+};
 
 export default function Profile({
   userData,
   cookie,
+  stats,
 }: {
+  stats: PlayerStats;
   userData: UserDataSecure;
   cookie?: object;
 }) {
   useCookieSync(cookie);
   if (!userData) return <div>User not found!</div>;
+  stats = Object.fromEntries(
+    Object.entries(stats).filter((x) => x[0] !== "player_uuid")
+  ) as any;
+
   return (
     <>
       <Head>
@@ -32,7 +50,6 @@ export default function Profile({
       </Head>
       <AppLayout active="profile" title={`${userData.name}'s Profile`}>
         <div>
-          {/* TODO DYNAMIC IMAGE */}
           <div className="sm:block flex items-center justify-center">
             <Image
               className="h-80 w-40 mt-4"
@@ -47,14 +64,24 @@ export default function Profile({
             />
           </div>
           <div className="flex-1">
-            <Image
-              className="h-80 w-full mt-4 hidden sm:block"
-              src={skillsImage.src}
-              height={skillsImage.height}
-              width={skillsImage.width}
-              alt="Skills"
-            />
-            <span className="italic">Skills data needs to be fetched</span>
+            <table className="border-collapse table-auto w-full max-w-[600px] mx-auto">
+              <thead>
+                <tr className="border-b border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-200 text-left">
+                  {Object.keys(stats).map((x) => (
+                    <th key={x}>{keyToTableMap[x as keyof PlayerStats]}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="bg-slate-800">
+                <tr className="border-b border-slate-700 p-4 pl-8 text-slate-400">
+                  {Object.entries(stats).map((x) => (
+                    <td key={`${x[0]}-${x[1]}`}>
+                      <span>{x[1]}</span>
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div className="flex item-center justify-between">
             <h2 className="text-xl">Inventory</h2>
