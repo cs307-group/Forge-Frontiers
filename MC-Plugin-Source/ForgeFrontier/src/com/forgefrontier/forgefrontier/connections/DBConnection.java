@@ -338,7 +338,7 @@ public class DBConnection {
         try {
             PreparedStatement preparedStatement = dbConn.prepareStatement(
                     "UPDATE public.stats " +
-                            "(player_uuid, current_health, HP, ATK, STR, DEX, CRATE, CDMG, DEF) " +
+                            "(player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\") " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
             preparedStatement.setString(1, uniqueId.toString());
             preparedStatement.setDouble(2, currentHealth);
@@ -366,28 +366,28 @@ public class DBConnection {
         new Thread(() -> {
             try {
                 PreparedStatement ps = this.dbConn.prepareStatement(("SELECT " +
-                        "player_uuid, current_health, HP, ATK, STR, DEX, CRATE, CDMG, DEF from public.stats " +
+                        "player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\" from public.stats " +
                         "WHERE player_uuid = ?"));
                 ps.setString(1, playerUuid.toString());
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     Map<String, Object> resultMap = new HashMap<>();
                     double currHealth = rs.getDouble("current_health");
-                    int hp = rs.getInt("hp");
-                    int atk = rs.getInt("atk");
-                    int str = rs.getInt("str");
-                    int dex = rs.getInt("dex");
-                    int crate = rs.getInt("crate");
-                    int cdmg = rs.getInt("cdmg");
-                    int def = rs.getInt("def");
+                    int hp = rs.getInt("HP");
+                    int atk = rs.getInt("ATK");
+                    int str = rs.getInt("STR");
+                    int dex = rs.getInt("DEX");
+                    int crate = rs.getInt("CRATE");
+                    int cdmg = rs.getInt("CDMG");
+                    int def = rs.getInt("DEF");
                     resultMap.put("current_health", currHealth);
-                    resultMap.put("hp", hp);
-                    resultMap.put("atk", atk);
-                    resultMap.put("str", str);
-                    resultMap.put("dex", dex);
-                    resultMap.put("crate", crate);
-                    resultMap.put("cdmg", cdmg);
-                    resultMap.put("def", def);
+                    resultMap.put("HP", hp);
+                    resultMap.put("ATK", atk);
+                    resultMap.put("STR", str);
+                    resultMap.put("DEX", dex);
+                    resultMap.put("CRATE", crate);
+                    resultMap.put("CDMG", cdmg);
+                    resultMap.put("DEF", def);
                     consumer.accept(resultMap);
                 } else {
                     consumer.accept(null);
@@ -396,7 +396,7 @@ public class DBConnection {
                 ps.close();
             } catch (SQLException se) {
                 ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
-                        "[DB] SQL Exception. \n" + se.getMessage());
+                        "[DB] SQL Exception Existing Player Stat. \n" + se.getMessage());
                 consumer.accept(null);
             }
         }).start();

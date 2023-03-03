@@ -4,6 +4,9 @@ MC-Server/world_nether/*
 MC-Server/world_the_end/*
 MC-Server/logs/*
 MC-Server/plugins/LuckPerms/*
+MC-Server/plugins/bskyblock_world/*
+MC-Server/plugins/bskyblock_world_nether/*
+MC-Server/plugins/bskyblock_world_the_end/*
 
 MC-Plugin-Source/ForgeFrontier/.idea
 MC-Plugin-Source/ForgeFrontier/out
