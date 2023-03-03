@@ -32,3 +32,5 @@ commands:
     description: "ForgeFrontier main command"
     aliases:
       - "ff"
+  customspawn:
+    description: "Command used for spawning custom entities."
