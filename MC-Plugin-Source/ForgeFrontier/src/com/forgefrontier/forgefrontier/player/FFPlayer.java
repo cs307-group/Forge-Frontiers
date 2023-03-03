@@ -52,13 +52,13 @@ public class FFPlayer {
         plugin.getDBConnection().getExistingPlayerStats(playerID, (Map<String, Object> result) -> {
             if (result != null) {
                 PlayerStat[] stats = new PlayerStat[7];
-                stats[0] = new PlayerStat((int) result.get("hp"), StatEnum.HP);
-                stats[1] = new PlayerStat((int) result.get("atk"), StatEnum.ATK);
-                stats[2] = new PlayerStat((int) result.get("str"), StatEnum.STR);
-                stats[3] = new PlayerStat((int) result.get("dex"), StatEnum.DEX);
-                stats[4] = new PlayerStat((int) result.get("crate"), StatEnum.CRATE);
-                stats[5] = new PlayerStat((int) result.get("cdmg"), StatEnum.CDMG);
-                stats[6] = new PlayerStat((int) result.get("def"), StatEnum.DEF);
+                stats[0] = new PlayerStat((int) result.get("HP"), StatEnum.HP);
+                stats[1] = new PlayerStat((int) result.get("ATK"), StatEnum.ATK);
+                stats[2] = new PlayerStat((int) result.get("STR"), StatEnum.STR);
+                stats[3] = new PlayerStat((int) result.get("DEX"), StatEnum.DEX);
+                stats[4] = new PlayerStat((int) result.get("CRATE"), StatEnum.CRATE);
+                stats[5] = new PlayerStat((int) result.get("CDMG"), StatEnum.CDMG);
+                stats[6] = new PlayerStat((int) result.get("DEF"), StatEnum.DEF);
                 ffPlayer.set(new FFPlayer(playerID, (Double) result.get("current_health"), stats));
             } else {
                 ffPlayer.set(new FFPlayer(playerID));
