@@ -13,7 +13,8 @@ public interface CustomEntity {
     public void executeBehavior();
 
     /** spawns the custom entity in the world at the specified location */
-    public Entity spawnCustomEntity(Location loc);
+    public CraftEntity spawnCustomEntity(Location loc, CraftEntity craftEntity);
 
-    public void initHealthValues(double maxHealth, double health, CraftEntity entity);
+    /** creates an entity instance of the class to be spawned in the world */
+    public CraftEntity createCustomEntity();
 }

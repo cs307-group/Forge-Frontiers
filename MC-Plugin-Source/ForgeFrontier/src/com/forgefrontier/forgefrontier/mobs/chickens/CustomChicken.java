@@ -16,8 +16,8 @@ public abstract class CustomChicken extends CustomMob {
      *
      * @param customName name of the custom chicken
      */
-    public CustomChicken(String customName, CraftEntity craftEntity) {
-        super(customName, EntityType.CHICKEN, craftEntity);
+    public CustomChicken(String customName) {
+        super(customName);
     }
 
 
@@ -27,7 +27,7 @@ public abstract class CustomChicken extends CustomMob {
      * @param loc the location the entity will be spawned
      */
     @Override
-    public Entity spawnCustomEntity(Location loc) {
-        return super.spawnCustomEntity(loc);
+    public CraftEntity spawnCustomEntity(Location loc, CraftEntity craftEntity) {
+        return super.spawnCustomEntity(loc, craftEntity);
     }
 }

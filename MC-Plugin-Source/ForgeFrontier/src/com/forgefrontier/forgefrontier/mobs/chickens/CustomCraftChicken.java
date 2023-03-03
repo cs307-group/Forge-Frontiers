@@ -1,11 +1,15 @@
 package com.forgefrontier.forgefrontier.mobs.chickens;
 
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.entity.EntityAgeable;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.EntityChicken;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftChicken;
+
+import javax.annotation.Nullable;
 
 /**
  * Class to represent the actual chicken entity in game
