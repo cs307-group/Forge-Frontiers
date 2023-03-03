@@ -71,7 +71,7 @@ public class ForgeFrontier extends JavaPlugin {
         setupPermissions();
         setupChat();
         //TODO: re-enable database
-        //setupDBConnection();
+        setupDBConnection();
 
         // Managers
         this.generatorManager = new GeneratorManager(this);
@@ -88,7 +88,7 @@ public class ForgeFrontier extends JavaPlugin {
 
         // Player Shop
         //TODO: re-enable
-        //this.setupPlayerShop();
+        this.setupPlayerShop();
 
         // Custom Items
         this.getCustomItemManager().registerCustomItem(new UpgradeGem());
@@ -122,8 +122,8 @@ public class ForgeFrontier extends JavaPlugin {
             gearshopCmd.setExecutor(new GearShopCommandExecutor());
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
         //TODO: re-enable shop functionality
-        //if (shopCmd != null)
-            //shopCmd.setExecutor(itemShop.getCommandExecutor());
+        if (shopCmd != null)
+            shopCmd.setExecutor(itemShop.getCommandExecutor());
         PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
         if (customItemCmd != null)
             customItemCmd.setExecutor(new ItemCommandExecutor());
@@ -185,14 +185,12 @@ public class ForgeFrontier extends JavaPlugin {
         return econ;
     }
 
-    /*
     private void setupDBConnection() {
         postGresConnection = new DBConnection();
         boolean result = postGresConnection.setupDatabaseConnection();
         if (result)
             postGresConnection.testConnection();
     }
-    */
 
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
