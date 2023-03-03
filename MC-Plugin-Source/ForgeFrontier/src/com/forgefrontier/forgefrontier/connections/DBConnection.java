@@ -373,21 +373,21 @@ public class DBConnection {
                 if (rs.next()) {
                     Map<String, Object> resultMap = new HashMap<>();
                     double currHealth = rs.getDouble("current_health");
-                    int hp = rs.getInt("hp");
-                    int atk = rs.getInt("atk");
-                    int str = rs.getInt("str");
-                    int dex = rs.getInt("dex");
-                    int crate = rs.getInt("crate");
-                    int cdmg = rs.getInt("cdmg");
-                    int def = rs.getInt("def");
+                    int hp = rs.getInt("HP");
+                    int atk = rs.getInt("ATK");
+                    int str = rs.getInt("STR");
+                    int dex = rs.getInt("DEX");
+                    int crate = rs.getInt("CRATE");
+                    int cdmg = rs.getInt("CDMG");
+                    int def = rs.getInt("DEF");
                     resultMap.put("current_health", currHealth);
-                    resultMap.put("hp", hp);
-                    resultMap.put("atk", atk);
-                    resultMap.put("str", str);
-                    resultMap.put("dex", dex);
-                    resultMap.put("crate", crate);
-                    resultMap.put("cdmg", cdmg);
-                    resultMap.put("def", def);
+                    resultMap.put("HP", hp);
+                    resultMap.put("ATK", atk);
+                    resultMap.put("STR", str);
+                    resultMap.put("DEX", dex);
+                    resultMap.put("CRATE", crate);
+                    resultMap.put("CDMG", cdmg);
+                    resultMap.put("DEF", def);
                     consumer.accept(resultMap);
                 } else {
                     consumer.accept(null);
