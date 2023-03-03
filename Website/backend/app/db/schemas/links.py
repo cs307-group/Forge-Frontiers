@@ -1,9 +1,7 @@
 from secrets import token_urlsafe
 from time import time
-from sqlalchemy.dialects.postgresql import UUID
-
-from sqlalchemy.dialects.postgresql import TEXT
-from sqlalchemy import func
+from sqlalchemy.dialects.postgresql import UUID, TEXT
+from sqlalchemy import text
 from uuid import uuid4
 from ..base import db
 
@@ -16,6 +14,7 @@ class Links(db.Model):
         nullable=False,
         primary_key=True,
         default=uuid4,
+        server_default=text("gen_random_uuid()"),
     )
     player_uuid: str = db.Column(TEXT, unique=True, nullable=False)
     link_code: str = db.Column(TEXT, unique=True, nullable=False)

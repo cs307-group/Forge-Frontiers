@@ -22,6 +22,7 @@ export const routes = {
   userInfo: getApiURL("/users/me"),
   refreshToken: getApiURL("/users/-/token/refresh"),
   linkAccount: getApiURL("/users/-/link"),
+  mcStats: getApiURL("/users/-/stats"),
 };
 
 /**

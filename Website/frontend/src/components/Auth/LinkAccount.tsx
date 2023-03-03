@@ -26,7 +26,7 @@ export function LinkAccount() {
         <BaseInput
           onInput={(e) => setCode(e.currentTarget.value)}
           label="Code"
-          placeholder="Code generated from '/ls'"
+          placeholder="Code generated from '/link'"
         />
         <Spacer y={50} />
         <div className="mx-auto w-[80%]">

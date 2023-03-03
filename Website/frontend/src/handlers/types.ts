@@ -16,3 +16,15 @@ export interface Tokens {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface PlayerStats {
+  player_uuid: string;
+  current_health: number;
+  HP: number;
+  ATK: number;
+  STR: number;
+  DEX: number;
+  CRATE: number;
+  CDMG: number;
+  DEF: number;
+}

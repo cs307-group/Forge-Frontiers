@@ -28,7 +28,7 @@ function Menu({active}: LayoutProps) {
 export function AppLayout({children, active, title}: LayoutProps) {
   return (
     <div className="forge_background h-full w-full text-white border-[1px] border-transparent flex flex-col sm:block">
-      <div className="sm:w-full sm:flex sm:flex-row sm:flex-nowrap sm:h-full sm:flex-grow">
+      <div className="sm:w-full sm:flex sm:flex-row sm:flex-nowrap sm:h-fit sm:min-h-full sm:flex-grow">
         <Client
           fallback={<div data-ssr-skeleton className="sm:w-[200px] h-12"></div>}
         >
