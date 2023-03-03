@@ -71,25 +71,27 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
-        CraftChicken entity = (CraftChicken) event.getEntity(); //TODO: Change this to more generic class type
+        if (event.getEntity() instanceof CraftChicken) {
+            CraftChicken entity = (CraftChicken) event.getEntity(); //TODO: Change this to more generic class type
 
-        // Updates the boss health bar if the entity contains metadata for it
-        if (entity.hasMetadata("bossbar")) {
-            Object o = entity.getMetadata("bossbar").get(0).value();
-            if (o instanceof BossBar bossBar) {
-                System.out.println("UPDATE BAR");
-                double currHealth = (entity.getHealth() - event.getDamage());
-                if (currHealth < 0)
-                    currHealth = 0;
-                bossBar.setProgress(currHealth / entity.getMaxHealth());
+            // Updates the boss health bar if the entity contains metadata for it
+            if (entity.hasMetadata("bossbar")) {
+                Object o = entity.getMetadata("bossbar").get(0).value();
+                if (o instanceof BossBar bossBar) {
+                    System.out.println("UPDATE BAR");
+                    double currHealth = (entity.getHealth() - event.getDamage());
+                    if (currHealth < 0)
+                        currHealth = 0;
+                    bossBar.setProgress(currHealth / entity.getMaxHealth());
+                }
             }
-        }
 
-        if (entity.hasMetadata("code")) {
-            //TODO: this is temporary, would re-create instance and call function to execute same
-            // entity.getHandle().du().a(Activity.b);
-            // entity.setTarget((Player) event.getDamager());
-            // entity.attack(event.getDamager());
+            if (entity.hasMetadata("code")) {
+                //TODO: this is temporary, would re-create instance and call function to execute same
+                // entity.getHandle().du().a(Activity.b);
+                // entity.setTarget((Player) event.getDamager());
+                // entity.attack(event.getDamager());
+            }
         }
     }
 

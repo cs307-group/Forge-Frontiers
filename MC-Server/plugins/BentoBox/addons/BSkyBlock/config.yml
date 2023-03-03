@@ -138,9 +138,9 @@ world:
     dragon-spawn: false
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
-  - ZOMBIE_VILLAGER
-  - WITHER
   - ENDERMAN
+  - WITHER
+  - ZOMBIE_VILLAGER
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -189,14 +189,14 @@ world:
     DOOR: 500
     BREAK_HOPPERS: 500
     FURNACE: 500
-    ANVIL: 500
     MINECART: 500
+    ANVIL: 500
     FISH_SCOOPING: 500
     END_PORTAL: 500
     BREEDING: 500
     HURT_VILLAGERS: 500
-    FROST_WALKER: 500
     TURTLE_EGGS: 500
+    FROST_WALKER: 500
     COLLECT_LAVA: 500
     BREAK_SPAWNERS: 500
     LEVER: 500
@@ -204,8 +204,8 @@ world:
     HURT_MONSTERS: 0
     RIDING: 500
     CAKE: 500
-    ARMOR_STAND: 500
     NAME_TAG: 500
+    ARMOR_STAND: 500
     TRADING: 0
     EGGS: 500
     ITEM_DROP: 0
@@ -213,10 +213,10 @@ world:
     FLINT_AND_STEEL: 500
     NETHER_PORTAL: 500
     LECTERN: 500
-    ITEM_PICKUP: 0
     CROP_TRAMPLE: 500
-    BREWING: 500
+    ITEM_PICKUP: 0
     DROPPER: 500
+    BREWING: 500
     TNT_PRIMING: 500
     COLLECT_WATER: 500
     BUTTON: 500
@@ -231,8 +231,8 @@ world:
     PLACE_BLOCKS: 500
     ITEM_FRAME: 500
     CRAFTING: 0
-    SHEARING: 500
     ENCHANTING: 0
+    SHEARING: 500
     BOAT: 500
     BED: 500
     SPAWN_EGGS: 500
@@ -246,21 +246,21 @@ world:
     BREAK_BLOCKS: 500
     CHORUS_FRUIT: 500
     CONTAINER: 500
-    POTION_THROWING: 500
     JUKEBOX: 500
+    POTION_THROWING: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
     PVP_NETHER: false
     LEAF_DECAY: true
-    MONSTER_SPAWNERS_SPAWN: true
     TNT_DAMAGE: true
+    MONSTER_SPAWNERS_SPAWN: true
     ANIMAL_NATURAL_SPAWN: true
     MONSTER_NATURAL_SPAWN: true
     FIRE_IGNITE: true
     FIRE_SPREAD: true
-    FIRE_BURNING: true
     ANIMAL_SPAWNERS_SPAWN: true
+    FIRE_BURNING: true
     PVP_OVERWORLD: false
   # These settings/flags are hidden from users
   # Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings

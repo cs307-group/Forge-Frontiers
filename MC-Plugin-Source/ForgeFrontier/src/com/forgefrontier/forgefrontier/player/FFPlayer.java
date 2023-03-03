@@ -48,6 +48,8 @@ public class FFPlayer {
      */
     public static FFPlayer getPlayerFromDatabase(UUID playerID) {
         ForgeFrontier plugin = ForgeFrontier.getInstance();
+        FFPlayer ffPlayer = new FFPlayer(playerID);
+        /*
         AtomicReference<FFPlayer> ffPlayer = new AtomicReference<>();
         plugin.getDBConnection().getExistingPlayerStats(playerID, (Map<String, Object> result) -> {
             if (result != null) {
@@ -65,8 +67,9 @@ public class FFPlayer {
                 plugin.getDBConnection().createPlayerStats(playerID, ffPlayer.get().getStats());
             }
         });
-
         return ffPlayer.get();
+         */
+        return ffPlayer;
     }
 
     /**
@@ -134,8 +137,6 @@ public class FFPlayer {
         this.stats = stats;
 
         this.currentHealth = currentHealth;
-
-        //TODO: store player data in database
     }
 
     /**
@@ -222,7 +223,7 @@ public class FFPlayer {
             }
         }
 
-        damage = StatCalc.calcOutgoingDamage(this, weaponInstance.getMainStat());
+        damage = StatCalc.calcOutgoingDamage(this, weaponInstance.getMainStat()) ;
 
         for (BaseStatistic baseStatistic : baseStatistics) {
             stats[StatEnum.getIntFromEnum(baseStatistic.getStatType())].removeStat(baseStatistic);
