@@ -46,9 +46,6 @@ public abstract class CustomMob implements CustomEntity {
         WorldServer worldServer = ((CraftWorld)Bukkit.getServer().getWorld("world")).getHandle();
         worldServer.addFreshEntity(craftEntity.getHandle(), CreatureSpawnEvent.SpawnReason.CUSTOM);
         craftEntity.teleport(loc);
-        if (craftEntity instanceof CustomCraftChicken) {
-            System.out.println("CUSTOM MOB CHECK AS CUSTOM CRAFT CHICKEN");
-        }
         return craftEntity;
     }
 
@@ -69,5 +66,13 @@ public abstract class CustomMob implements CustomEntity {
     @Override
     public void executeBehavior() {
 
+    }
+
+    /**
+     * @return null since CustomMob doesn't have a corresponding craft entity
+     */
+    @Override
+    public Class<? extends CraftEntity> getCorrespondingCraftEntity() {
+        return null;
     }
 }

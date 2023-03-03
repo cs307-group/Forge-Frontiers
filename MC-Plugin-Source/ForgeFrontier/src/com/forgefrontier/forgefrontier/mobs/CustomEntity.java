@@ -17,4 +17,9 @@ public interface CustomEntity {
 
     /** creates an entity instance of the class to be spawned in the world */
     public CraftEntity createCustomEntity();
+
+    /** returns the class type of the craftentity corresponding to the CustomEntity wrapper */
+    public Class<? extends CraftEntity> getCorrespondingCraftEntity();
+
+    public int getID();
 }

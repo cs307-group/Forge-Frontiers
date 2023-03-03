@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 public abstract class CustomCraftChicken extends CraftChicken implements CustomCraftEntity {
 
     String code;
+    EntityChicken handle;
 
     /**
      * Constructor
@@ -25,6 +26,7 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
     public CustomCraftChicken(CraftServer server, String chickenType) {
         super(server, new EntityChicken(EntityTypes.l, ((CraftWorld)server.getWorld("world")).getHandle()));
         this.code = chickenType;
+        this.handle = this.getHandle();
     }
 
     @Override

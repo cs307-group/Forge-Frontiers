@@ -147,4 +147,9 @@ public class PlayerManager extends Manager implements Listener {
     public boolean hasPlayerWithName(String name) {
         return playersByName.containsKey(name);
     }
+
+    /** @return the map of players mapped to their UUID*/
+    public Map<UUID, Player> getPlayersByUUID() {
+        return players;
+    }
 }

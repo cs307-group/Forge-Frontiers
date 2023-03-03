@@ -1,30 +1,24 @@
 package com.forgefrontier.forgefrontier.mobs;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.items.CustomItem;
-import com.forgefrontier.forgefrontier.items.CustomItemInstance;
-import com.forgefrontier.forgefrontier.items.CustomItemManager;
-import com.forgefrontier.forgefrontier.mobs.chickens.CustomCraftChicken;
 import com.forgefrontier.forgefrontier.utils.Manager;
-import net.minecraft.world.entity.EntityLiving;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.schedule.Activity;
+import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftChicken;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Handles Events for Custom Mobs and includes methods to spawn/de-spawn them
@@ -56,6 +50,28 @@ public class CustomEntityManager extends Manager implements Listener {
     /** Method to run to register a new CustomItem. If not run, the custom item will not be able to be identified. */
     public void registerCustomEntity(CustomMob mob) {
         this.entities.put(mob.getCode(), mob);
+        Class<? extends CraftEntity> craftClass = mob.getCorrespondingCraftEntity();
+        try {
+            List<Map<?, ?>> dataMap = new ArrayList<Map<?, ?>>();
+            for(Field f : EntityTypes.class.getDeclaredFields()) {
+                if (f.getType().getSimpleName().equals(Map.class.getSimpleName())){
+                    f.setAccessible(true);
+                    dataMap.add((Map<?, ?>) f.get(null));
+                }
+            }
+
+            if (dataMap.get(2).containsKey(mob.getID())) {
+                dataMap.get(0).remove(mob.getCode());
+                dataMap.get(2).remove(mob.getID());
+            }
+
+            Method method = EntityType.class.getDeclaredMethod("a", Class.class, String.class, int.class);
+            method.setAccessible(true);
+            method.invoke(null, craftClass, mob.getCode(), mob.getID());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -77,8 +93,25 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof CustomMob) {
+        CraftChicken entity = (CraftChicken) event.getEntity(); //TODO: Change this to more generic class type
 
+        // Updates the boss health bar if the entity contains metadata for it
+        if (entity.hasMetadata("bossbar")) {
+            Object o = entity.getMetadata("bossbar").get(0).value();
+            if (o instanceof BossBar bossBar) {
+                System.out.println("UPDATE BAR");
+                double currHealth = (entity.getHealth() - event.getDamage());
+                if (currHealth < 0)
+                    currHealth = 0;
+                bossBar.setProgress(currHealth / entity.getMaxHealth());
+            }
+        }
+
+        if (entity.hasMetadata("code")) {
+            //TODO: this is temporary, would re-create instance and call function to execute same
+            entity.getHandle().du().a(Activity.b);
+            entity.setTarget((Player) event.getDamager());
+            entity.attack(event.getDamager());
         }
     }
 
@@ -86,21 +119,15 @@ public class CustomEntityManager extends Manager implements Listener {
     public void onEntityDeath (EntityDeathEvent event) {
         System.out.println("REGISTERED DEATH EVENT");
         LivingEntity entity = event.getEntity();
-        if (entity instanceof CraftChicken) {
-            System.out.println("IS CRAFT CHICKEN");
-        }
-        if (entity instanceof CustomCraftChicken) {
-            System.out.println("IS CUSTOM CRAFT CHICKEN");
-        }
-        ArrayList<ItemStack> drops = (ArrayList<ItemStack>) event.getDrops();
-        for (ItemStack drop : drops) {
-            if (CustomItemManager.asCustomItemInstance(drop) != null) {
-                System.out.println("IS CUSTOM ITEM");
-                CustomItemInstance dropInstance = CustomItemManager.asCustomItemInstance(drop);
-                System.out.println(dropInstance.toString());
+
+        // Removes the boss health bar if the entity contains metadata for it
+        if (entity.hasMetadata("bossbar")) {
+            Object o = entity.getMetadata("bossbar").get(0).value();
+            if (o instanceof BossBar bossBar) {
+                bossBar.setProgress(0);
+                bossBar.removeAll();
             }
         }
-
     }
 
     private LootContext buildLootContext(LivingEntity entity) {
