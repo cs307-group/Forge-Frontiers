@@ -12,7 +12,7 @@ generators:
     costs:
       0:
         material_type: "coin"
-        amount: 10000
+        amount: 1
     levels:
       0:
         generation_rate: 1000
@@ -20,7 +20,7 @@ generators:
         upgrade_costs:
           0:
             material_type: "coin"
-            amount: 10000
+            amount: 10
       1:
         generation_rate: 900
         max_size: 512
@@ -33,7 +33,7 @@ generators:
     costs:
       0:
         material_type: "coin"
-        amount: 10000
+        amount: 1
     levels:
       0:
         generation_rate: 3000
@@ -41,7 +41,7 @@ generators:
         upgrade_costs:
           0:
             material_type: "coin"
-            amount: 10000
+            amount: 10
       1:
         generation_rate: 2000
         max_size: 10000
@@ -55,7 +55,7 @@ generators:
       0:
         material_type: "item"
         item_id: "SilverIngot"
-        amount: 128
+        amount: 16
     levels:
       0:
         generation_rate: 1000
@@ -64,9 +64,27 @@ generators:
           0:
             material_type: "item"
             item_id: "SilverIngot"
-            amount: 256
+            amount: 32
       1:
         generation_rate: 2000
         max_size: 10000
 
+gear-shop:
+  0:
+    custom_item_id: "WoodenSword"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 5
+  1:
+    custom_item_id: "WoodenBow"
+    costs:
+      0:
+        material_type: "item"
+        item_id: "SilverIngot"
+        amount: 1
 
+reroll-costs:
+  0:
+    material_type: "coin"
+    amount: 5

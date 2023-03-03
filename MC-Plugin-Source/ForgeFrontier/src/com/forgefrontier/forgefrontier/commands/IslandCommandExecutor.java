@@ -22,13 +22,23 @@ public class IslandCommandExecutor implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
-        Island island = BentoBox.getInstance().getIslands().getIsland(Bukkit.getWorld("bskyblock_world"), p.getUniqueId());
 
-        if(island == null) {
-            p.openInventory(new CreateIslandInventoryHolder().getInventory());
-        } else {
-            p.openInventory(new MainIslandInventoryHolder().getInventory());
+        if(args.length == 0) {
+            Island island = BentoBox.getInstance().getIslands().getIsland(Bukkit.getWorld("bskyblock_world"), p.getUniqueId());
+
+            if(island == null) {
+                p.openInventory(new CreateIslandInventoryHolder().getInventory());
+            } else {
+                p.openInventory(new MainIslandInventoryHolder().getInventory());
+            }
+        } else if(args.length == 1) {
+            if(args[0].equals("home")) {
+                p.performCommand("skyblock home");
+            } else {
+                p.sendMessage("Unknown subcommand: " + args[0]);
+            }
         }
+
 
         return true;
     }
