@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * PlayerManager
@@ -63,10 +65,10 @@ public class PlayerManager extends Manager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         // System.out.println("PLAYER JOINED");
         Player player = event.getPlayer();
-        //TODO: Check for player in database
+
         players.put(player.getUniqueId(), player);
         playersByName.put(player.getName(), player);
-        ffPlayers.put(player.getUniqueId(), new FFPlayer(player));
+        ffPlayers.put(player.getUniqueId(), FFPlayer.getPlayerFromDatabase(player.getUniqueId()));
     }
 
     /**
@@ -77,7 +79,7 @@ public class PlayerManager extends Manager implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        //TODO: Add player to database
+
         players.remove(player.getUniqueId());
         playersByName.remove(player.getName(), player);
         ffPlayers.remove(player.getUniqueId());
@@ -102,13 +104,10 @@ public class PlayerManager extends Manager implements Listener {
             }
 
             // Modifies incoming damage based on defense stat
-            // System.out.println("init dmg: " + damage);
             damage = StatCalc.modifyIncomingDamage(damage, ffPlayer.getDEF());
-            // System.out.println("after DEF conversion: " + damage);
 
             // Modifies incoming damage based on health stat
             double convertedDamage = StatCalc.convertDamage(damage, maxHealth, ffPlayer);
-            // System.out.println("after HP conversion: " + convertedDamage);
             event.setDamage(convertedDamage);
         }
     }

@@ -1,6 +1,6 @@
 package com.forgefrontier.forgefrontier.player;
 
-import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.CustomWeapon;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
@@ -9,10 +9,10 @@ import com.forgefrontier.forgefrontier.items.gear.statistics.StatCalc;
 import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.Arrays;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * FFPlayer
@@ -37,9 +37,6 @@ public class FFPlayer {
     /** the unique ID of the Player this FFPlayer represents */
     public UUID playerID;
 
-    /** the unique ID of the FFPlayer this FFPlayer represents */
-    public UUID uniqueFFPlayerID;
-
     /** the current health of the player */
     double currentHealth;
 
@@ -50,8 +47,26 @@ public class FFPlayer {
      * @return the instance FFPlayer representation of the player
      */
     public static FFPlayer getPlayerFromDatabase(UUID playerID) {
-        //TODO: Get player from database
-        return null;
+        ForgeFrontier plugin = ForgeFrontier.getInstance();
+        AtomicReference<FFPlayer> ffPlayer = new AtomicReference<>();
+        plugin.getDBConnection().getExistingPlayerStats(playerID, (Map<String, Object> result) -> {
+            if (result != null) {
+                PlayerStat[] stats = new PlayerStat[7];
+                stats[0] = new PlayerStat((int) result.get("hp"), StatEnum.HP);
+                stats[1] = new PlayerStat((int) result.get("atk"), StatEnum.ATK);
+                stats[2] = new PlayerStat((int) result.get("str"), StatEnum.STR);
+                stats[3] = new PlayerStat((int) result.get("dex"), StatEnum.DEX);
+                stats[4] = new PlayerStat((int) result.get("crate"), StatEnum.CRATE);
+                stats[5] = new PlayerStat((int) result.get("cdmg"), StatEnum.CDMG);
+                stats[6] = new PlayerStat((int) result.get("def"), StatEnum.DEF);
+                ffPlayer.set(new FFPlayer(playerID, (Double) result.get("current_health"), stats));
+            } else {
+                ffPlayer.set(new FFPlayer(playerID));
+                plugin.getDBConnection().createPlayerStats(playerID, ffPlayer.get().getStats());
+            }
+        });
+
+        return ffPlayer.get();
     }
 
     /**
@@ -61,10 +76,8 @@ public class FFPlayer {
      * @param player the player that this instance of FFPlayer will represent
      */
     public FFPlayer(Player player) {
-        //TODO: Check if the player's data already exists in the database and if so call getPlayerFromDatabase()
 
         playerID = player.getUniqueId();
-        uniqueFFPlayerID = UUID.randomUUID();
 
 
         stats = new PlayerStat[] {
@@ -78,6 +91,49 @@ public class FFPlayer {
         };
 
         this.currentHealth = getHP();
+    }
+
+
+    /**
+     * Constructs the FFPlayer class given a player object (sets the stats to a level 1 character if the character
+     * does not exist in the database)
+     *
+     * @param playerID the playerID that this instance of FFPlayer will represent
+     */
+    public FFPlayer(UUID playerID) {
+
+        this.playerID = playerID;
+
+
+        stats = new PlayerStat[] {
+                new PlayerStat(20, StatEnum.HP),
+                new PlayerStat(1, StatEnum.ATK),
+                new PlayerStat(0, StatEnum.STR),
+                new PlayerStat(0, StatEnum.DEX),
+                new PlayerStat(0, StatEnum.CRATE),
+                new PlayerStat(0, StatEnum.CDMG),
+                new PlayerStat(0, StatEnum.DEF)
+        };
+
+        this.currentHealth = getHP();
+    }
+
+
+    /**
+     * Constructs the FFPlayer class given a player object (sets the stats to a level 1 character if the character
+     * does not exist in the database)
+     *
+     * @param playerID the player that this instance of FFPlayer will represent
+     * @param currentHealth the current health of the player
+     * @param stats the player stats
+     */
+    public FFPlayer(UUID playerID, double currentHealth, PlayerStat[] stats) {
+
+        this.playerID = playerID;
+
+        this.stats = stats;
+
+        this.currentHealth = currentHealth;
 
         //TODO: store player data in database
     }
@@ -183,9 +239,7 @@ public class FFPlayer {
         return damage;
     }
 
-    /**
-     * @return the HP stat value of the FFPlayer
-     */
+    /** @return the HP stat value of the FFPlayer */
     public int getHP() {
         return stats[0].getStatValue();
     }
@@ -218,6 +272,11 @@ public class FFPlayer {
     /** @return the DEF stat value of the FFPlayer */
     public int getDEF() {
         return stats[6].getStatValue();
+    }
+
+    /** @return the stats array of PlayerStats */
+    public PlayerStat[] getStats() {
+        return stats;
     }
 
     /** @return the current ffPlayer value for current health */
