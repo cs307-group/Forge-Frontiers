@@ -338,7 +338,7 @@ public class DBConnection {
         try {
             PreparedStatement preparedStatement = dbConn.prepareStatement(
                     "UPDATE public.stats " +
-                            "(player_uuid, current_health, HP, ATK, STR, DEX, CRATE, CDMG, DEF) " +
+                            "(player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\") " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
             preparedStatement.setString(1, uniqueId.toString());
             preparedStatement.setDouble(2, currentHealth);
@@ -366,7 +366,7 @@ public class DBConnection {
         new Thread(() -> {
             try {
                 PreparedStatement ps = this.dbConn.prepareStatement(("SELECT " +
-                        "player_uuid, current_health, HP, ATK, STR, DEX, CRATE, CDMG, DEF from public.stats " +
+                        "player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\" from public.stats " +
                         "WHERE player_uuid = ?"));
                 ps.setString(1, playerUuid.toString());
                 ResultSet rs = ps.executeQuery();
@@ -396,7 +396,7 @@ public class DBConnection {
                 ps.close();
             } catch (SQLException se) {
                 ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
-                        "[DB] SQL Exception. \n" + se.getMessage());
+                        "[DB] SQL Exception Existing Player Stat. \n" + se.getMessage());
                 consumer.accept(null);
             }
         }).start();
