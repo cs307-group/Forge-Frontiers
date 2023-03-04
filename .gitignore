@@ -2,11 +2,15 @@ MC-Server/bundler/*
 MC-Server/world/*
 MC-Server/world_nether/*
 MC-Server/world_the_end/*
+MC-Server/bskyblock_world/*
+MC-Server/bskyblock_world_nether/*
+MC-Server/bskyblock_world_the_end/*
 MC-Server/logs/*
 MC-Server/plugins/LuckPerms/*
-MC-Server/plugins/bskyblock_world/*
-MC-Server/plugins/bskyblock_world_nether/*
-MC-Server/plugins/bskyblock_world_the_end/*
+MC-Server/plugins/BentoBox/database/*
+MC-Server/plugins/BentoBox/database_backup/*
+MC-Server/server.properties
+MC-Server/usercache.json
 
 MC-Plugin-Source/ForgeFrontier/.idea
 MC-Plugin-Source/ForgeFrontier/out
