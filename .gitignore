@@ -6,9 +6,11 @@ MC-Server/bskyblock_world/*
 MC-Server/bskyblock_world_nether/*
 MC-Server/bskyblock_world_the_end/*
 MC-Server/logs/*
+MC-Server/plugins/Essentials/userdata/*
 MC-Server/plugins/LuckPerms/*
 MC-Server/plugins/BentoBox/database/*
 MC-Server/plugins/BentoBox/database_backup/*
+MC-Server/plugins/BentoBox/locales/*
 MC-Server/server.properties
 MC-Server/usercache.json
 
