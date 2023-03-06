@@ -32,7 +32,7 @@ public class ReforgeStatistic extends CustomStat {
         } else {
             //Randomly determines if the stat value is a percentage
             int percentVal = (int) (Math.random() * 100) + 1;
-            this.isPercent = quality.getPercentChance() < percentVal;
+            this.isPercent = quality.getPercentChance() >= percentVal;
         }
     }
 
@@ -87,7 +87,7 @@ public class ReforgeStatistic extends CustomStat {
         int newStatVal = (int) (Math.random() * (quality.getMaxValue())) + 1;
 
         // determines if the statistic is a percentage or not
-        isPercent = quality.getPercentChance() < percentVal;
+        isPercent = quality.getPercentChance() >= percentVal;
 
         // determines new stat type
         statType = StatEnum.getRandStatEnum(gemEnum);
