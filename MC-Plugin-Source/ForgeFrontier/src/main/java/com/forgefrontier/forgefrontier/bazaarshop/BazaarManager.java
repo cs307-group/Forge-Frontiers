@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.bazaarshop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -25,9 +26,15 @@ public class BazaarManager {
     }
 
 
-    public boolean setItemSlot(ItemStack i, int idx) {
-        return false;
-
+    public boolean setItemSlot(ItemStack itm, int idx) {
+        if (itm == null) {
+            return plugin.getDBConnection().bazaarDB.deleteSlotID(idx);
+        }
+        String name = ItemUtil.itemName(itm);
+        String lore = ItemUtil.getStringLore(itm);
+        String cdata = ItemUtil.getCustomData(itm);
+        return plugin.getDBConnection().bazaarDB.setLookup(
+                idx, itm.getType().toString(), name, lore, cdata);
     }
 
 

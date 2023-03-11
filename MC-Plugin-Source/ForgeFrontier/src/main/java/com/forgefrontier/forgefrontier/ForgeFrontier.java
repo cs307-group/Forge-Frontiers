@@ -162,8 +162,8 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand entityCmd = Bukkit.getPluginCommand("customspawn");
         if (entityCmd != null)
             entityCmd.setExecutor(new EntityCommandExecutor());
-//        this.commandHandler = BukkitCommandHandler.create(this);
-
+        this.commandHandler = BukkitCommandHandler.create(this);
+        this.commandHandler.register(new BazaarCommand(this));
     }
 
     public CustomItemManager getCustomItemManager() {

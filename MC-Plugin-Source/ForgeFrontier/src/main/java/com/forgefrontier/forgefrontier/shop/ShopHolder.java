@@ -6,21 +6,13 @@ import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
 import com.forgefrontier.forgefrontier.items.ItemSetRunnable;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
-import com.forgefrontier.forgefrontier.utils.ItemRename;
-import org.bukkit.Bukkit;
+import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import net.milkbowl.vault.economy.*;
-
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -139,7 +131,7 @@ public class ShopHolder extends BaseInventoryHolder {
         double result = shop.executeBuy(p, k);
         this.setItem(i,new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName("").build());
         if (result != -1) {
-                p.sendMessage(ChatColor.GOLD + "You bought " + ItemRename.itemName(sl.getItem()) +
+                p.sendMessage(ChatColor.GOLD + "You bought " + ItemUtil.itemName(sl.getItem()) +
                         ChatColor.GOLD + " for " + ChatColor.BOLD + (Math.round(result * 100) / 100) + "g" +
                         ChatColor.RESET + ChatColor.GOLD + "!");
                 this.removeHandler(i);

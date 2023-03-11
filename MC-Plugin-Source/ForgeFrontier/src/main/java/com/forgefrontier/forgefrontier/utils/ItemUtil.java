@@ -1,18 +1,34 @@
 package com.forgefrontier.forgefrontier.utils;
 
+import com.forgefrontier.forgefrontier.items.CustomItemInstance;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 
+public class ItemUtil {
 
+    public static String getCustomData(ItemStack itm) {
+        String customData = "";
+        CustomItemInstance ci = CustomItemManager.asCustomItemInstance(itm);
+        if (ci != null) {
+            customData = ci.getData().toString();
+        }
+        return customData;
+    }
 
-
-public class ItemRename {
-
+    public static String getStringLore(ItemStack itm) {
+        ItemMeta meta = itm.getItemMeta();
+        if (meta == null) return "";
+        List<String> lore = meta.getLore();
+        if (lore == null) return "";
+        return String.join("\n", lore);
+    }
     public static String itemName(ItemStack itm) {
         ItemMeta meta = itm.getItemMeta();
         if (meta == null) return simpleRename(itm.getType());

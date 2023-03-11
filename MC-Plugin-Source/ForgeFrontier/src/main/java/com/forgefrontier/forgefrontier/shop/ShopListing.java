@@ -1,8 +1,7 @@
 package com.forgefrontier.forgefrontier.shop;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
-import com.forgefrontier.forgefrontier.utils.ItemRename;
+import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -69,7 +68,7 @@ public class ShopListing {
         final String invisibleChar = "" + ChatColor.COLOR_CHAR + ChatColor.COLOR_CHAR;
 
         String s = (im.hasDisplayName()) ? im.getDisplayName() :
-                                            ItemRename.simpleRename(itemStack.getType());
+                                            ItemUtil.simpleRename(itemStack.getType());
         s = ChatColor.RESET + s +  " " + invisibleChar + ChatColor.GOLD  + "(" + price + "g)";
 
         im.setDisplayName(s);
@@ -100,7 +99,7 @@ public class ShopListing {
         final String invisibleChar = "" + ChatColor.COLOR_CHAR + ChatColor.COLOR_CHAR;
 
         String s = (im.hasDisplayName()) ? im.getDisplayName() :
-                ItemRename.simpleRename(itemStack.getType());
+                ItemUtil.simpleRename(itemStack.getType());
         s = ChatColor.RESET + s +  " " + invisibleChar + ChatColor.GOLD  + "(" + price + "g)";
 
         im.setDisplayName(s);
