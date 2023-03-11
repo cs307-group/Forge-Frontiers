@@ -1,5 +1,7 @@
 package com.forgefrontier.forgefrontier;
 
+import com.forgefrontier.forgefrontier.bazaarshop.BazaarCommand;
+import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.commands.*;
 import com.forgefrontier.forgefrontier.connections.DBConnection;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
@@ -23,6 +25,7 @@ import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,6 +35,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import revxrsal.commands.bukkit.BukkitCommandHandler;
 
 import java.util.logging.Logger;
 
@@ -51,7 +55,9 @@ public class ForgeFrontier extends JavaPlugin {
     PlayerManager playerManager;
     GearItemManager gearItemManager;
     CustomEntityManager customEntityManager;
-    Shop itemShop;
+    private Shop itemShop;
+    private BazaarManager bazaarManager;
+    BukkitCommandHandler commandHandler;
 
     @Override
     public void onEnable() {
@@ -79,6 +85,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.playerManager = new PlayerManager(this);
         this.gearItemManager = new GearItemManager(this);
         this.customEntityManager = new CustomEntityManager(this);
+        this.bazaarManager = new BazaarManager(this);
 
         this.customItemManager.init();
         this.generatorManager.init();
@@ -87,7 +94,6 @@ public class ForgeFrontier extends JavaPlugin {
         this.customEntityManager.init();
 
         // Player Shop
-        //TODO: re-enable
         this.setupPlayerShop();
 
         // Custom Items
@@ -109,7 +115,19 @@ public class ForgeFrontier extends JavaPlugin {
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
+        this.registerCommands();
+    }
 
+    @Override
+    public void onDisable() {
+        this.generatorManager.disable();
+        this.customItemManager.disable();
+        this.playerManager.disable();
+        this.gearItemManager.disable();
+        this.customEntityManager.disable();
+    }
+
+    private void registerCommands() {
         // Commands
         PluginCommand genCmd = Bukkit.getPluginCommand("gen");
         if(genCmd != null)
@@ -121,7 +139,6 @@ public class ForgeFrontier extends JavaPlugin {
         if(gearshopCmd != null)
             gearshopCmd.setExecutor(new GearShopCommandExecutor());
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
-        //TODO: re-enable shop functionality
         if (shopCmd != null)
             shopCmd.setExecutor(itemShop.getCommandExecutor());
         PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
@@ -145,15 +162,8 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand entityCmd = Bukkit.getPluginCommand("customspawn");
         if (entityCmd != null)
             entityCmd.setExecutor(new EntityCommandExecutor());
-    }
+//        this.commandHandler = BukkitCommandHandler.create(this);
 
-    @Override
-    public void onDisable() {
-        this.generatorManager.disable();
-        this.customItemManager.disable();
-        this.playerManager.disable();
-        this.gearItemManager.disable();
-        this.customEntityManager.disable();
     }
 
     public CustomItemManager getCustomItemManager() {
@@ -187,7 +197,7 @@ public class ForgeFrontier extends JavaPlugin {
 
     private void setupDBConnection() {
         postGresConnection = new DBConnection();
-        boolean result = postGresConnection.setupDatabaseConnection();
+        boolean result = postGresConnection.init();
         if (result)
             postGresConnection.testConnection();
     }
@@ -226,6 +236,11 @@ public class ForgeFrontier extends JavaPlugin {
 
     public void setupPlayerShop() {
         this.itemShop = new Shop();
-        postGresConnection.loadListings();
+        postGresConnection.shopDB.loadListings();
+    }
+
+    public BazaarManager getBazaarManager() {
+        return this.bazaarManager;
     }
 }
+

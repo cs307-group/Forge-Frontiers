@@ -36,6 +36,7 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
+
     </repositories>
     <dependencies>
         <dependency>
@@ -76,6 +77,23 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Anvil Input -->
+        <dependency>
+            <groupId>net.wesjd</groupId>
+            <artifactId>anvilgui</artifactId>
+            <version>1.6.3-SNAPSHOT</version>
+        </dependency>
+        <!-- COMMAND FRAMEWORK (remove if no worky) -->
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>common</artifactId>
+            <version>3.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>3.1.4</version>
+        </dependency>
 
     </dependencies>
 

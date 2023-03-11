@@ -67,7 +67,6 @@ public class ShopCommandExecutor implements CommandExecutor {
                     } catch (NumberFormatException nfe){p.sendMessage("Enter Valid Amount!");}
                 }
 
-                // TODO: Add confirmation gui, pricing, etc.
                 final int finalAmt = amt;
                 final double finalPrice = price;
 

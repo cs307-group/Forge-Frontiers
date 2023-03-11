@@ -95,7 +95,7 @@ public class Shop {
             p.sendMessage(GEN_SHOP_ERR);
             return false;
         }
-        if (ForgeFrontier.getInstance().getDBConnection().removeListing(l.getID())) {
+        if (ForgeFrontier.getInstance().getDBConnection().shopDB.removeListing(l.getID())) {
             ItemGiver.giveItem(p, l.getItem());
             removeListing(l.getID());
             return true;
@@ -103,9 +103,8 @@ public class Shop {
         return false;
     }
     public double executeBuy(Player p, ShopListing l) {
-        // TODO: TURN BOOLEAN OFF WHEN NOT TESTING
-        boolean TEST = true;
-        if (!TEST && l.getLister().getUniqueId().compareTo(p.getUniqueId()) == 0) {
+
+        if (l.getLister().getUniqueId().compareTo(p.getUniqueId()) == 0) {
             if (!listings.containsKey(l.getID())) {
                 p.sendMessage(GEN_SHOP_ERR);
                 return -1;
@@ -188,13 +187,13 @@ public class Shop {
                 .append("\nCustomData: ").append(customData);
         ForgeFrontier.getInstance().getLogger().log(Level.INFO,"ADDING TO DB: \n" + info);
 
-        ForgeFrontier.getInstance().getDBConnection().insertShopListing
+        ForgeFrontier.getInstance().getDBConnection().shopDB.insertShopListing
                 (listingId,itemID,itemMaterial,itemname,lore,price,amount
                 ,listerID,null,-1,dateListed,customData,listerName);
     }
 
     public boolean setSoldDB(UUID listing_id, UUID player) {
-        return ForgeFrontier.getInstance().getDBConnection()
+        return ForgeFrontier.getInstance().getDBConnection().shopDB
                 .setListingSold(listing_id, player, System.currentTimeMillis());
     }
 

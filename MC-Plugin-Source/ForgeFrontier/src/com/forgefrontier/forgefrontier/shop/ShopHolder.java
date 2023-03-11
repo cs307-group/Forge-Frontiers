@@ -101,8 +101,7 @@ public class ShopHolder extends BaseInventoryHolder {
             this.setItem(i2, displayItem);
             this.addHandler(i2, (e) -> {
                 Player p = (Player) e.getWhoClicked();
-                boolean TEST = true;
-                if (!TEST && p.getUniqueId() == listing.getLister().getUniqueId()) {
+                if (p.getUniqueId() == listing.getLister().getUniqueId()) {
                     this.setItem(i2,new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
                             .setDisplayName("" + ChatColor.RED + "Cannot buy your own item!").build());
                     ForgeFrontier.getInstance().getServer().getScheduler()
