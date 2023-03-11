@@ -21,6 +21,7 @@ import java.util.logging.Level;
 public class DBConnection {
     protected Connection dbConn;
     public ShopDB shopDB;
+    public BazaarDB bazaarDB;
 
     public DBConnection(Connection existingConn) {
         this.dbConn = existingConn;
@@ -85,6 +86,7 @@ public class DBConnection {
         boolean connected = this.setupDatabaseConnection();
         if (!connected) return false;
         this.shopDB = new ShopDB(dbConn);
+        this.bazaarDB = new BazaarDB(dbConn);
         return true;
     }
 
