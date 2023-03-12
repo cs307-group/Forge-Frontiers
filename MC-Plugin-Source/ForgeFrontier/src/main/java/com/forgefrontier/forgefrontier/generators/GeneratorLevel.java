@@ -9,6 +9,8 @@ public class GeneratorLevel {
 
     public int maxSize;
     public int generatorRate;
+    /** the tier required of the player to upgrade the generator */
+    public int requiredTier;
     public List<MaterialDrop> rareAdditionalDrops;
     public List<MaterialCost> upgradeCosts;
 
@@ -17,6 +19,7 @@ public class GeneratorLevel {
         this.maxSize = maxSize;
         this.rareAdditionalDrops = new ArrayList<>();
         this.upgradeCosts = null;
+        this.requiredTier = 0;
     }
 
 
@@ -24,6 +27,7 @@ public class GeneratorLevel {
 
         this.generatorRate = configSection.getInt("generation_rate");
         this.maxSize = configSection.getInt("max_size");
+        this.requiredTier = configSection.getInt("req_tier");
 
         int costInd = 0;
         ConfigurationSection costSection;

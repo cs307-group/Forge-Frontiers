@@ -32,10 +32,13 @@ public class FFPlayer {
     };
 
     /** an array of PlayerStat objects which represent the stats of the player */
-    private PlayerStat[] stats;
+    private final PlayerStat[] stats;
 
     /** the unique ID of the Player this FFPlayer represents */
     public UUID playerID;
+
+    /** the tier the current player is in */
+    public int tier;
 
     /** the current health of the player */
     double currentHealth;
@@ -94,6 +97,8 @@ public class FFPlayer {
         };
 
         this.currentHealth = getHP();
+
+        this.tier = 0;
     }
 
 
@@ -278,6 +283,16 @@ public class FFPlayer {
     /** @return the stats array of PlayerStats */
     public PlayerStat[] getStats() {
         return stats;
+    }
+
+    /** @return the tier of the ffplayer */
+    public int getTier() {
+        return this.tier;
+    }
+
+    /** updates the current player tier to the new specified tier */
+    public void setTier(int tier) {
+        this.tier = tier;
     }
 
     /** @return the current ffPlayer value for current health */
