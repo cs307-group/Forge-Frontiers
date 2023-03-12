@@ -65,16 +65,27 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
         final List<MaterialCost> costs = generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts;
         this.addHandler(9 * 3 + 7, (e) -> {
             boolean works = true;
+            boolean validTier = true;
+
+            int playerTier = ForgeFrontier.getInstance().getPlayerManager().getFFPlayers().get((e.getWhoClicked()).getUniqueId()).getTier();
+            int requiredTier = generator.getGeneratorLevels().get(generatorInstance.level).requiredTier;
 
             for(MaterialCost cost: costs) {
                 if(!cost.hasBalance((Player) e.getWhoClicked())) {
                     works = false;
                     break;
+                } else if (playerTier < requiredTier) {
+                    validTier = false;
+                    break;
                 }
             }
             if(!works) {
-                this.replaceItemTemporarily(9 * 3 + 7, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("&cYou do not have enough to buy this item.").build());
+                this.replaceItemTemporarily(9 * 3 + 7, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("&cYou do not have enough to buy this upgrade.").build());
                 e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "You do not have enough to buy this upgrade.");
+                return;
+            } else if (!validTier) {
+                this.replaceItemTemporarily(9 * 3 + 7, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("&cYou need to be in tier " + requiredTier + " to buy this upgrade.").build());
+                e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "You need to be in tier " + requiredTier + " to buy this upgrade.");
                 return;
             }
             for(MaterialCost cost: costs) {

@@ -16,6 +16,7 @@ generators:
       0:
         generation_rate: 10000
         max_size: 256
+        req_tier: 1
         upgrade_costs:
           0:
             material_type: "coin"
@@ -23,6 +24,7 @@ generators:
       1:
         generation_rate: 9000
         max_size: 512
+        req_tier: 2
 
   1:
     id: "coin-gen"
@@ -37,6 +39,7 @@ generators:
       0:
         generation_rate: 3000
         max_size: 10000
+        req_tier: 0
         upgrade_costs:
           0:
             material_type: "coin"
@@ -44,6 +47,7 @@ generators:
       1:
         generation_rate: 2000
         max_size: 10000
+        req_tier: 1
 
 gear-shop:
   0:

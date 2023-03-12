@@ -107,6 +107,7 @@ public class CustomEntityManager extends Manager implements Listener {
                 bossBar.setProgress(0);
                 bossBar.removeAll();
             }
+            plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
         }
     }
 
