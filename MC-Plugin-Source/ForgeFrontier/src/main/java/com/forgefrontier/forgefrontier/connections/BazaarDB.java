@@ -1,12 +1,16 @@
 package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -67,6 +71,38 @@ public class BazaarDB extends DBConnection {
             cs.close();
         return null;
     }
+
+    /**
+     * Load lookup items of Bazaar
+     * @param size Non-Inclusive, max index. Lookup [0, size)
+     * @return Arraylist of lookup items
+     */
+    public ArrayList<ItemStack> loadLookup(int size) {
+        ArrayList<ItemStack> out = new ArrayList<>(Collections.nCopies(size, null));
+
+        String query = "SELECT slot_id, item_material, item_name, item_lore, custom_data FROM bazaar_lookup;";
+        ConnectionSet cs = createQuery(query);
+        try {
+            while (cs.getResult().next()) {
+                ResultSet rs = cs.getResult();
+                int slotID = rs.getInt("slot_id");
+                String material = rs.getString("item_material");
+                String name = rs.getString("item_name");
+                String lore = rs.getString("item_lore");
+                String custom_data = rs.getString("custom_data");
+                if (custom_data.isEmpty()) {
+                    out.set(slotID, new ItemStackBuilder(material).setDisplayName(name).setFullLore(lore).build());
+                }
+            }
+            return out;
+        } catch (SQLException e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[QUERY FAILURE IN LOADING BAZAAR LOOKUP]\n" + e.getMessage());
+            return out;
+        }
+
+    }
+
 
 
 }

@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class CustomItemManager extends Manager implements Listener {
 
@@ -110,5 +111,10 @@ public class CustomItemManager extends Manager implements Listener {
     public Map<String, CustomItem> getItems() {
         return this.items;
     }
+
+    public Set<String> getItemNames() {
+        return items.keySet();
+    }
+
 
 }

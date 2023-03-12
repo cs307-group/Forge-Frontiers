@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.items;
 
+import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -36,15 +37,31 @@ public class ItemStackBuilder {
         copyBuild = true;
     }
 
+    public ItemStackBuilder(String material) {
+        this.m = Material.matchMaterial(material);
+        this.amt = 1;
+        copyBuild = false;
+    }
+
     /** Set the display name of the generated item */
     public ItemStackBuilder setDisplayName(String name) {
-        displayName = name;
+        if (name.equals(ItemUtil.simpleRename(m))) {
+            displayName = null;
+        } else {
+            displayName = name;
+        }
         return this;
     }
 
     /** Set the amount of the generated item stack */
     public ItemStackBuilder setAmount(int amt) {
         this.amt = amt;
+        return this;
+    }
+
+    public ItemStackBuilder setFullLore(String newlineSepLore) {
+
+        this.lore = (List.of(newlineSepLore.split("\n")));
         return this;
     }
 
@@ -73,8 +90,10 @@ public class ItemStackBuilder {
         itm.setAmount(amt);
         ItemMeta meta = itm.getItemMeta();
 
-        if (displayName != null && meta != null)
+        if (displayName != null && meta != null) {
+            //meta.setDisplayName(displayName);
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        }
         if(lore != null && meta != null)
             meta.setLore(lore);
         itm.setItemMeta(meta);

@@ -34,7 +34,8 @@ public class BazaarCommand {
         Player p = (Player) sender;
 
         // OPEN GUI
-        p.sendMessage("Bazaar not complete yet!");
+        p.openInventory(new BazaarGUI().getInventory());
+
 
     }
 
@@ -64,7 +65,7 @@ public class BazaarCommand {
             }).getInventory());
 
         } else {
-            p.openInventory(new ConfirmationHolder("Confirm Set Bazaar Item?", null, () -> {
+            p.openInventory(new ConfirmationHolder("Confirm Set Bazaar Item?", null, itm, () -> {
                 if (bazaarManager.setItemSlot(itm, slot)) {
                     sender.sendMessage("" + ChatColor.GREEN + "Successfully updated Bazaar Slot!");
                 } else {

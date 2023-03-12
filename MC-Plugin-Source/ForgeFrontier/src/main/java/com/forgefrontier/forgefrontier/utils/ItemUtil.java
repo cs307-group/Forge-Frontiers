@@ -75,7 +75,7 @@ public class ItemUtil {
             return "";
         }
     }
-
+/*
     public static String getFriendlyName(Material material) {
         return material == null ? "Air" : getFriendlyName(new ItemStack(material), false);
     }
@@ -120,4 +120,5 @@ public class ItemUtil {
         }
         return capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
     }
+ */
 }

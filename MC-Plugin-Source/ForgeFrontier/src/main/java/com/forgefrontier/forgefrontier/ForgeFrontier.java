@@ -8,6 +8,7 @@ import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
+import com.forgefrontier.forgefrontier.items.CustomGiveCommand;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemCommandExecutor;
 import com.forgefrontier.forgefrontier.items.gear.GearItem;
@@ -92,6 +93,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.playerManager.init();
         this.gearItemManager.init();
         this.customEntityManager.init();
+        this.bazaarManager.init();
 
         // Player Shop
         this.setupPlayerShop();
@@ -127,6 +129,9 @@ public class ForgeFrontier extends JavaPlugin {
         this.customEntityManager.disable();
     }
 
+    /**
+     * REQUIREMENT: COMMANDS MUST BE REGISTERED **AFTER** EVERYTHING IS DONE LOADING
+     */
     private void registerCommands() {
         // Commands
         PluginCommand genCmd = Bukkit.getPluginCommand("gen");
@@ -141,9 +146,9 @@ public class ForgeFrontier extends JavaPlugin {
         PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
         if (shopCmd != null)
             shopCmd.setExecutor(itemShop.getCommandExecutor());
-        PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
-        if (customItemCmd != null)
-            customItemCmd.setExecutor(new ItemCommandExecutor());
+//        PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
+//        if (customItemCmd != null)
+//            customItemCmd.setExecutor(new ItemCommandExecutor());
         PluginCommand inspectCmd = Bukkit.getPluginCommand("inspect");
         if (inspectCmd != null)
             inspectCmd.setExecutor(new InspectCommandExecutor(playerManager));
@@ -164,6 +169,10 @@ public class ForgeFrontier extends JavaPlugin {
             entityCmd.setExecutor(new EntityCommandExecutor());
         this.commandHandler = BukkitCommandHandler.create(this);
         this.commandHandler.register(new BazaarCommand(this));
+        this.commandHandler.getAutoCompleter().registerSuggestion
+                ("cgive", customItemManager.getItemNames());
+        this.commandHandler.register(new CustomGiveCommand(this));
+
     }
 
     public CustomItemManager getCustomItemManager() {

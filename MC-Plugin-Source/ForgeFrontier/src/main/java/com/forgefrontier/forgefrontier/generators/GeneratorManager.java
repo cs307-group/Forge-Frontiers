@@ -74,6 +74,8 @@ public class GeneratorManager extends Manager implements Listener {
         this.plugin.getConfig().addDefault("generators.1.levels.1.generation_rate", 5);
         this.plugin.getConfig().addDefault("generators.1.levels.1.max_size", 100000);
          */
+
+
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem());
 
         int generatorInd = 0;
