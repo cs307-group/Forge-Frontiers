@@ -1,12 +1,90 @@
 package com.forgefrontier.forgefrontier.bazaarshop;
 
 
+import java.sql.Timestamp;
+import java.util.UUID;
+
 public class BazaarEntry {
+
     public enum EntryType {
         BUY, SELL
     }
-    EntryType type;
-    int amount;
-    double price;
-    int slotID;
+    private EntryType type;
+    private int amount;
+    // price per
+    private  double price;
+    private  int slotID;
+    private Timestamp listdate;
+    private UUID listerID;
+    private UUID entryID;
+    public BazaarEntry(UUID entryID, EntryType type, int slotID, int amount, double price, UUID listerID, Timestamp creationTime) {
+        this.type = type;
+        this.entryID = entryID;
+        this.slotID = slotID;
+        this.amount = amount;
+        this.price = price;
+        listdate = creationTime;
+        this.listerID = listerID;
+    }
+    public UUID getEntryID() {
+        return entryID;
+    }
+    public void setEntryID(UUID id) {
+        this.entryID = id;
+    }
+    public UUID getListerID() {
+        return listerID;
+    }
+
+    public void setListerID(UUID playerID) {
+        this.listerID = playerID;
+    }
+
+    public EntryType getType() {
+        return type;
+    }
+    public boolean getBType() {
+        // 1 == Buy
+        // 0 == Sell
+        return (type == EntryType.BUY);
+    }
+
+
+
+    public void setType(EntryType type) {
+        this.type = type;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getSlotID() {
+        return slotID;
+    }
+
+    public void setSlotID(int slotID) {
+        this.slotID = slotID;
+    }
+
+    public Timestamp getListdate() {
+        return listdate;
+    }
+
+    public void setListdate(Timestamp listdate) {
+        this.listdate = listdate;
+    }
+
 }

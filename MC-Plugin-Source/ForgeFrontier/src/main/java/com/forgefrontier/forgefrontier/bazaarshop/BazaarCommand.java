@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import revxrsal.commands.annotation.Command;
 import org.jetbrains.annotations.NotNull;
 import revxrsal.commands.annotation.DefaultFor;
+import revxrsal.commands.annotation.Range;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.exception.SenderNotPlayerException;
 
@@ -73,6 +74,27 @@ public class BazaarCommand {
                 }
             }).getInventory());
         }
+    }
+
+    @Subcommand({"list buy"})
+    public void testBuy(CommandSender sender, @Range(min=0, max=1e9) Double price) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage("Unable to create buy listings for a non-player.");
+            throw new SenderNotPlayerException();
+        }
+        Player p = (Player) sender;
+    }
+
+    @Subcommand({"list sell"})
+    public void testSell(CommandSender sender, @Range(min=0, max=1e9) Double price) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage("Unable to create sell listings for a non-player.");
+            throw new SenderNotPlayerException();
+        }
+        Player p = (Player) sender;
+
+        p.sendMessage("boop");
+
     }
 
 

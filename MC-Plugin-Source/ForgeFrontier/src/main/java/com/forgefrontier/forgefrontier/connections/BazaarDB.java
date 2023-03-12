@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.bazaarshop.BazaarEntry;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,6 +40,31 @@ public class BazaarDB extends DBConnection {
             return false;
         }
     }
+
+    public boolean insertListing(BazaarEntry entry) {
+        String query = "INSERT INTO bazaar_orders " +
+                "(order_id, order_type, lister_id, slot_id, amount, price, listdate) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = dbConn.prepareStatement(query);
+
+            preparedStatement.setString(1, entry.getEntryID().toString());
+            preparedStatement.setBoolean(2, entry.getBType());
+            preparedStatement.setString(3, entry.getListerID().toString());
+            preparedStatement.setInt(4, entry.getSlotID());
+            preparedStatement.setInt(5, entry.getAmount());
+            preparedStatement.setDouble(6, entry.getPrice());
+            preparedStatement.setTimestamp(7,entry.getListdate());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[QUERY FAILURE] Bazaar Insert Order\n" + e.getMessage());
+        }
+
+        return true;
+    }
+
 
     public boolean deleteSlotID(int slot) {
         try {
