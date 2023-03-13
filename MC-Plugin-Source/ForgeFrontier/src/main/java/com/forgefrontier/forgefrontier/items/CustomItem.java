@@ -45,10 +45,10 @@ public abstract class CustomItem {
         this.registerItemStackAccumulator((itemInstance, itemStack) -> {
             net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
 
-            assert(nmsItem.t() != null);
+            assert(nmsItem.getTag() != null);
 
-            nmsItem.t().a("base-code", code);
-            nmsItem.t().a("custom-data", itemInstance.data.toJSONString());
+            nmsItem.getTag().putString("base-code", code);
+            nmsItem.getTag().putString("custom-data", itemInstance.data.toJSONString());
 
             itemStack = CraftItemStack.asBukkitCopy(nmsItem);
 

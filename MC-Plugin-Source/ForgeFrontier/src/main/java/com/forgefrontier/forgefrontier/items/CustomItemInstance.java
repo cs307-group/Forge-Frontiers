@@ -39,10 +39,10 @@ public class CustomItemInstance {
 
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         try {
-            this.data = (JSONObject) parser.parse(nmsItem.t().l("custom-data"));
+            this.data = (JSONObject) parser.parse(nmsItem.getTag().getString("custom-data"));
         } catch (ParseException e) {
             ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "Unable to parse JSON data of item: " + itemStack);
-            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "Item has data: " + nmsItem.t().l("custom-data"));
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "Item has data: " + nmsItem.getTag().getString("custom-data"));
         }
 
     }

@@ -9,9 +9,6 @@ import org.bukkit.entity.Entity;
  */
 public interface CustomEntity {
 
-    /** defines the behaviour of the entity */
-    public void executeBehavior();
-
     /** spawns the custom entity in the world at the specified location */
     public CraftEntity spawnCustomEntity(Location loc, CraftEntity craftEntity);
 

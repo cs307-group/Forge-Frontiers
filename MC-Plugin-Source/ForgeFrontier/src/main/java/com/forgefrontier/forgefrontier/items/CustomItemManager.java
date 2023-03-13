@@ -102,10 +102,11 @@ public class CustomItemManager extends Manager implements Listener {
     private static String extractCode(ItemStack itemStack) {
 
         net.minecraft.world.item.ItemStack item2 = CraftItemStack.asNMSCopy(itemStack);
-        if(item2.t() == null) {
+        if(item2.getTag() == null) { //TODO: (Isaac) check to make sure that the method is correct - item2.getTag()
             return null;
         }
-        return item2.t().l("base-code");
+        //TODO: (Isaac) check to make sure that the method is correct - item2.getTag()
+        return item2.getTag().getString("base-code");
     }
 
     public Map<String, CustomItem> getItems() {

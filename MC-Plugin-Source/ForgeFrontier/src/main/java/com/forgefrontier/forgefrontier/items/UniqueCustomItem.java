@@ -28,7 +28,7 @@ public abstract class UniqueCustomItem extends CustomItem {
 
             net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
 
-            nmsItem.t().a("unique-code", inst.uniqueId.toString());
+            nmsItem.getTag().putString("unique-code", inst.uniqueId.toString());
 
             itemStack = CraftItemStack.asBukkitCopy(nmsItem);
 
@@ -50,7 +50,7 @@ public abstract class UniqueCustomItem extends CustomItem {
             // Otherwise, access the id of the existing item, and put it into the custom item's instance.
             net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
 
-            uniqueInstance.uniqueId = UUID.fromString(nmsItem.t().l("unique-code"));
+            uniqueInstance.uniqueId = UUID.fromString(nmsItem.getTag().getString("unique-code"));
 
             return uniqueInstance;
         }));
