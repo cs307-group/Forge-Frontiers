@@ -1,7 +1,6 @@
 package com.forgefrontier.forgefrontier.bazaarshop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
@@ -15,19 +14,18 @@ public class BazaarManager {
     private final int MIN_SLOT = 0;
     private final int MAX_SLOT = 28;
 
-    HashMap<Integer, TreeMap<UUID, BazaarEntry>> bazaarData;
-    ArrayList<ItemStack> displayItems;
-    BazaarGUI bazaarGUI;
+    private HashMap<Integer, TreeMap<UUID, BazaarEntry>> bazaarData;
+    private ArrayList<ItemStack> lookupItems;
+
     public BazaarManager(ForgeFrontier plugin) {
         this.plugin = plugin;
     }
 
     public void init() {
         // Pull Bazaar items from database
-        displayItems = plugin.getDBConnection().bazaarDB.loadLookup(MAX_SLOT);
-        displayItems.replaceAll(x -> Objects.isNull(x) ?
+        lookupItems = plugin.getDBConnection().bazaarDB.loadLookup(MAX_SLOT);
+        lookupItems.replaceAll(x -> Objects.isNull(x) ?
                 (new ItemStackBuilder(Material.BARRIER).setDisplayName("" + ChatColor.RED + "N/A").build()) : x);
-        bazaarGUI = new BazaarGUI();
     }
 
 
@@ -37,7 +35,7 @@ public class BazaarManager {
         }
         if (itm == null) {
             if (plugin.getDBConnection().bazaarDB.deleteSlotID(idx)) {
-                displayItems.set(idx, (new ItemStackBuilder(Material.BARRIER)
+                lookupItems.set(idx, (new ItemStackBuilder(Material.BARRIER)
                         .setDisplayName("" + ChatColor.RED + "N/A").build()));
                 return true;
             } else {
@@ -49,14 +47,14 @@ public class BazaarManager {
         String cdata = ItemUtil.getCustomData(itm);
         if (plugin.getDBConnection().bazaarDB.setLookup(
                 idx, itm.getType().toString(), name, lore, cdata)) {
-            displayItems.set(idx, (new ItemStackBuilder(itm).build()));
+            lookupItems.set(idx, (new ItemStackBuilder(itm).build()));
             return true;
         } else {
             return false;
         }
     }
 
-    public ArrayList<ItemStack> getDisplayItems() { return displayItems; }
+    public ArrayList<ItemStack> getLookupItems() { return lookupItems; }
 
 
 }

@@ -60,7 +60,9 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder setFullLore(String newlineSepLore) {
-
+        if (newlineSepLore.isEmpty()) {
+            return this;
+        }
         this.lore = (List.of(newlineSepLore.split("\n")));
         return this;
     }

@@ -1,14 +1,18 @@
 package com.forgefrontier.forgefrontier.utils;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.logging.Level;
 
 
 public class ItemUtil {
@@ -75,50 +79,63 @@ public class ItemUtil {
             return "";
         }
     }
-/*
-    public static String getFriendlyName(Material material) {
-        return material == null ? "Air" : getFriendlyName(new ItemStack(material), false);
-    }
 
-    private static Class localeClass = null;
-    private static Class craftItemStackClass = null, nmsItemStackClass = null, nmsItemClass = null;
-    private static String OBC_PREFIX = Bukkit.getServer().getClass().getPackage().getName();
-    private static String NMS_PREFIX = OBC_PREFIX.replace("org.bukkit.craftbukkit", "net.minecraft.server");
-
-    public static String getFriendlyName(ItemStack itemStack, boolean checkDisplayName) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) return "Air";
-        try {
-            if (craftItemStackClass == null)
-                craftItemStackClass = Class.forName(OBC_PREFIX + ".inventory.CraftItemStack");
-            Method nmsCopyMethod = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class);
-
-            if (nmsItemStackClass == null) nmsItemStackClass = Class.forName(NMS_PREFIX + ".ItemStack");
-            Object nmsItemStack = nmsCopyMethod.invoke(null, itemStack);
-
-            Object itemName = null;
-            if (checkDisplayName) {
-                Method getNameMethod = nmsItemStackClass.getMethod("getName");
-                itemName = getNameMethod.invoke(nmsItemStack);
-            } else {
-                Method getItemMethod = nmsItemStackClass.getMethod("getItem");
-                Object nmsItem = getItemMethod.invoke(nmsItemStack);
-
-                if (nmsItemClass == null) nmsItemClass = Class.forName(NMS_PREFIX + ".Item");
-
-                Method getNameMethod = nmsItemClass.getMethod("getName");
-                Object localItemName = getNameMethod.invoke(nmsItem);
-
-                if (localeClass == null) localeClass = Class.forName(NMS_PREFIX + ".LocaleI18n");
-                Method getLocaleMethod = localeClass.getMethod("get", String.class);
-
-                Object localeString = localItemName == null ? "" : getLocaleMethod.invoke(null, localItemName);
-                itemName = ("" + getLocaleMethod.invoke(null, localeString.toString() + ".name")).trim();
+    /**
+     *
+     * @param p
+     * @param item
+     * @param amt
+     * @return
+     */
+    public static boolean hasItem(Player p, ItemStack item, int amt) {
+        int totalAmt = 0;
+        int i = 0;
+        ItemStack[] contents = p.getInventory().getContents();
+        while(totalAmt < amt && i < 36) {
+            if(contents[i] == null) {i++; continue;}
+            if(customCompare(contents[i], item)) {
+                totalAmt += contents[i].getAmount();
             }
-            return itemName != null ? itemName.toString() : capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            i += 1;
         }
-        return capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
+
+        return totalAmt >= amt;
     }
- */
+    public static void take(Player p, ItemStack item, int amt) {
+        int amtLeft = amt;
+        int i = 0;
+        ItemStack[] contents = p.getInventory().getContents();
+        while(amtLeft > 0 && i < 36) {
+            if(contents[i] == null) {i++; continue;}
+            if(customCompare(contents[i], item)) {
+                int amtToTake = Math.min(contents[i].getAmount(), amtLeft);
+                contents[i].setAmount(contents[i].getAmount() - amtToTake);
+                amtLeft -= amtToTake;
+            }
+            i += 1;
+        }
+    }
+
+
+    public static boolean customCompare(ItemStack a, ItemStack b) {
+        // TODO: FUNCTIONALITY TO COMPARE CUSTOM ITEM MATERIALS
+        if (a.getType() != b.getType()) return false;
+        ItemMeta aim = a.getItemMeta();
+        ItemMeta bim = b.getItemMeta();
+        if ((aim != null && bim == null) || (aim == null && bim != null)) return false;
+        if (aim == null) return true;
+
+        String dnA = aim.getDisplayName();
+        String dnB = bim.getDisplayName();
+
+        if (!dnA.equals(dnB)) return false;
+        List<String> aLore = aim.getLore();
+        List<String> bLore = bim.getLore();
+        if ((aLore != null && bLore == null) || (aLore == null && bLore != null)) return false;
+
+        if (aLore == null) return true;
+        return String.join("\n", aLore).equals(String.join("\n", bLore));
+    }
+
+
 }

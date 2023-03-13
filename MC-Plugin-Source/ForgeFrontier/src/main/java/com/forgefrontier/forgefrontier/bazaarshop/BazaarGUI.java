@@ -6,7 +6,6 @@ import com.forgefrontier.forgefrontier.gui.TwoOptionHolder;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,7 +22,7 @@ public class BazaarGUI extends BaseInventoryHolder {
     public void initGUI() {
         int idx = 0;
         fillBorders();
-        ArrayList<ItemStack> displayItems = bazaarMgr.getDisplayItems();
+        ArrayList<ItemStack> displayItems = bazaarMgr.getLookupItems();
         ItemStack defaultPane = new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE)
                 .setDisplayName("").build();
         for (int i = 1; i < 5; i++) {
@@ -57,7 +56,7 @@ public class BazaarGUI extends BaseInventoryHolder {
     public void updateGUI() {
         int idx = 0;
         fillBorders();
-        ArrayList<ItemStack> displayItems = bazaarMgr.getDisplayItems();
+        ArrayList<ItemStack> displayItems = bazaarMgr.getLookupItems();
         for (int i = 1; i < 5; i++) {
             int rbegin = 9 * i + 1;
             for (int j = 0; j < 7; j++) {

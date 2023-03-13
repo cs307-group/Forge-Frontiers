@@ -1,11 +1,15 @@
 package com.forgefrontier.forgefrontier.bazaarshop;
 
 
+import org.bukkit.entity.Player;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class BazaarEntry {
 
+
+
+public class BazaarEntry {
     public enum EntryType {
         BUY, SELL
     }
@@ -17,6 +21,18 @@ public class BazaarEntry {
     private Timestamp listdate;
     private UUID listerID;
     private UUID entryID;
+    public BazaarEntry(boolean buy, int slot, int amount, double price, UUID lister) {
+        if (buy) this.type = EntryType.BUY;
+        else this.type = EntryType.SELL;
+        this.slotID = slot;
+        this.amount = amount;
+        this.price = price;
+
+        this.entryID = UUID.randomUUID();
+        this.listerID = lister;
+        this.listdate = new Timestamp(System.currentTimeMillis());
+    }
+
     public BazaarEntry(UUID entryID, EntryType type, int slotID, int amount, double price, UUID listerID, Timestamp creationTime) {
         this.type = type;
         this.entryID = entryID;
