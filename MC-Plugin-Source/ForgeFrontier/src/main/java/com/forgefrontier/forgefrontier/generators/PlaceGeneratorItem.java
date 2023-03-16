@@ -51,13 +51,18 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
             return;
         }
         e.setCancelled(true);
-        if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
-            e.getItem().setAmount(e.getItem().getAmount() - 1);
         PlaceGeneratorItemInstance placeGeneratorItemInstance = (PlaceGeneratorItemInstance) instance;
         Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(placeGeneratorItemInstance.generatorId);
         GeneratorInstance generatorInstance = new GeneratorInstance(generator, newLocation);
         generatorInstance.level = placeGeneratorItemInstance.level;
-        ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(generatorInstance);
+        boolean success = ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(generatorInstance);
+        if(!success) {
+            e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place generator here. You must place it on your island.");
+            return;
+        }
+        if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
+            e.getItem().setAmount(e.getItem().getAmount() - 1);
+        generatorInstance.getBoundingBox().getLocation().getBlock().setType(generatorInstance.generator.getMaterialRepresentation());
     }
 
     @Override

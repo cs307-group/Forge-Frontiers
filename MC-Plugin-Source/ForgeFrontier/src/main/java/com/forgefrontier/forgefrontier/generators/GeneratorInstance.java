@@ -1,10 +1,11 @@
 package com.forgefrontier.forgefrontier.generators;
 
+import com.forgefrontier.forgefrontier.utils.Locatable;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class GeneratorInstance {
+public class GeneratorInstance implements Locatable {
 
     Generator generator;
     BoundingBox boundingBox;
@@ -64,6 +65,10 @@ public class GeneratorInstance {
         return collectAmt;
     }
 
+    public long getLastCollectTime() {
+        return this.lastCollectTime;
+    }
+
     public int getMaxAmt() {
         return this.generator.generatorLevels.get(level).maxSize;
     }
@@ -84,5 +89,25 @@ public class GeneratorInstance {
 
         this.setAmountLeft(collectAmt, currentTime, nextTimeRemain);
 
+    }
+
+    @Override
+    public int getX() {
+        return this.boundingBox.getLocation().getBlockX();
+    }
+
+    @Override
+    public int getY() {
+        return this.boundingBox.getLocation().getBlockY();
+    }
+
+    @Override
+    public int getZ() {
+        return this.boundingBox.getLocation().getBlockZ();
+    }
+
+    @Override
+    public boolean isAt(int x, int y, int z) {
+        return this.getX() == x && this.getY() == y && this.getZ() == z;
     }
 }
