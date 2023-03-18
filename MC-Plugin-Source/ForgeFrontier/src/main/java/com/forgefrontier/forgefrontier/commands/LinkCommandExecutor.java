@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.commands;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.connections.DBConnection;
+import com.forgefrontier.forgefrontier.connections.PlayerDB;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,7 +26,7 @@ public class LinkCommandExecutor implements CommandExecutor {
 
         Player p = (Player) sender;
 
-        DBConnection db = ForgeFrontier.getInstance().getDBConnection();
+        PlayerDB db = ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB();
 
         db.getExistingPlayerLink(p.getUniqueId(), (Map<String, Object> result) -> {
             if(result != null) {

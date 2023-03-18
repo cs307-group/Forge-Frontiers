@@ -2,33 +2,18 @@ package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
-public class SelectQueryWrapper {
-
-    public static class SelectField {
-        String name;
-        String value;
-        public SelectField(String name, String value) {
-            this.name = name;
-            this.value = value;
-        }
-    }
+public class DeleteQueryWrapper {
 
     String table;
-    List<SelectField> fields;
     List<String> conditions;
     TreeMap<Integer, String> keyIndices;
     Map<String, Object> values;
 
-    public SelectQueryWrapper() {
-        this.fields = new ArrayList<>();
+    public DeleteQueryWrapper() {
         this.conditions = new ArrayList<>();
         this.keyIndices = new TreeMap<>();
         this.values = new HashMap<>();
@@ -36,12 +21,6 @@ public class SelectQueryWrapper {
 
     public void setTable(String table) {
         this.table = table;
-    }
-
-    public void setFields(String... fields) {
-        this.fields = Arrays.stream(fields)
-            .map(field -> new SelectField(field, field))
-            .collect(Collectors.toList());
     }
 
     public void addCondition(String condition, String... keys) {
@@ -59,22 +38,10 @@ public class SelectQueryWrapper {
         this.values.put(key, value);
     }
 
-    public ResultSet executeSyncQuery(Connection databaseConnection) {
+    public boolean executeSyncQuery(Connection databaseConnection) {
         try {
             StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.append("SELECT ");
-            for(int i = 0; i < fields.size(); i++) {
-                SelectField field = fields.get(i);
-
-                if(field.value.equals(field.name))
-                    queryBuilder.append(field.name);
-                else
-                    queryBuilder.append("(").append(field.value).append(") AS ").append(field.name);
-
-                if(i != fields.size() - 1)
-                    queryBuilder.append(", ");
-            }
-            queryBuilder.append(" FROM ");
+            queryBuilder.append("DELETE FROM ");
             queryBuilder.append(this.table);
             if(this.conditions.size() != 0) {
                 queryBuilder.append(" WHERE (");
@@ -103,14 +70,15 @@ public class SelectQueryWrapper {
                     preparedStatement.setBoolean(index, (Boolean) value);
                 index += 1;
             }
-            return preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return false;
         }
     }
 
-    public void executeAsyncQuery(Connection databaseConnection, Consumer<ResultSet> callback) {
+    public void executeAsyncQuery(Connection databaseConnection, Consumer<Boolean> callback) {
         new Thread(() -> {
             callback.accept(executeSyncQuery(databaseConnection));
         }).start();

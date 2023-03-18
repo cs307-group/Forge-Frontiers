@@ -19,6 +19,8 @@ public class GeneratorCommandExecutor implements CommandExecutor {
         }
         commandSender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Generator command is not current functional.");
 
+        ForgeFrontier.getInstance().getLogger().info(ForgeFrontier.getInstance().getGeneratorManager().generatorInstanceTree.toString());
+
         return true;
     }
 }

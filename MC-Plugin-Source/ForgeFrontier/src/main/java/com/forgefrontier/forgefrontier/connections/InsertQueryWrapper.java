@@ -2,15 +2,31 @@ package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class InsertQueryWrapper {
+
+    public static class InsertResult {
+        public static final InsertResult FAILURE = new InsertResult(false, null);
+        private boolean success;
+        private String id;
+        public InsertResult(String id) {
+            this.success = true;
+            this.id = id;
+        }
+        public InsertResult(boolean success, String id) {
+            this.success = success;
+            this.id = id;
+        }
+        public boolean isSuccess() {
+            return this.success;
+        }
+        public String getInsertId() {
+            return this.id;
+        }
+    }
 
     String query = "INSERT INTO bazaar_orders " +
             "(order_id, order_type, lister_id, slot_id, amount, price, listdate) " +
@@ -21,9 +37,8 @@ public class InsertQueryWrapper {
     Map<String, Object> values;
 
     public InsertQueryWrapper() {
-        this.table = null;
-        this.fields = null;
-        this.values = null;
+        this.fields = new ArrayList<>();
+        this.values = new HashMap<>();
     }
 
     public void setTable(String table) {
@@ -53,13 +68,13 @@ public class InsertQueryWrapper {
         this.values.put(field, value);
     }
 
-    public void executeAsyncQuery(Connection databaseConnection, Consumer<Boolean> callback) {
+    public void executeAsyncQuery(Connection databaseConnection, Consumer<InsertResult> callback) {
         new Thread(() -> {
             callback.accept(this.executeSyncQuery(databaseConnection));;
         }).start();
     }
 
-    public boolean executeSyncQuery(Connection databaseConnection) {
+    public InsertResult executeSyncQuery(Connection databaseConnection) {
         try {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.append("INSERT INTO ");
@@ -67,36 +82,43 @@ public class InsertQueryWrapper {
             queryBuilder.append(" (");
             for(int i = 0; i < fields.size(); i++) {
                 queryBuilder.append(fields.get(i));
-                if(i == fields.size() - 1)
+                if(i != fields.size() - 1)
                     queryBuilder.append(", ");
             }
             queryBuilder.append(") VALUES (");
             for(int i = 0; i < fields.size(); i++) {
                 queryBuilder.append("?");
-                if(i == fields.size() - 1)
+                if(i != fields.size() - 1)
                     queryBuilder.append(", ");
             }
             queryBuilder.append(")");
-            PreparedStatement preparedStatement = databaseConnection.prepareStatement(queryBuilder.toString());
+            PreparedStatement preparedStatement = databaseConnection.prepareStatement(queryBuilder.toString(), Statement.RETURN_GENERATED_KEYS);
             for(int i = 0; i < fields.size(); i++) {
                 Object value = values.get(fields.get(i));
                 if(value == null) throw new RuntimeException("Unable to insert null value into database for field \"" + fields.get(i) + "\".");
                 if(value instanceof String)
                     preparedStatement.setString(i + 1, (String) value);
-                if(value instanceof Long)
+                else if(value instanceof Long)
                     preparedStatement.setLong(i + 1, (Long) value);
-                if(value instanceof Double)
+                else if(value instanceof Double)
                     preparedStatement.setDouble(i + 1, (Double) value);
-                if(value instanceof Integer)
+                else if(value instanceof Integer)
                     preparedStatement.setInt(i + 1, (Integer) value);
-                if(value instanceof Boolean)
+                else if(value instanceof Boolean)
                     preparedStatement.setBoolean(i + 1, (Boolean) value);
+                else
+                    ForgeFrontier.getInstance().getLogger().severe("Unable to create sql query. Value is not a primitive type: " + value);
             }
             preparedStatement.executeUpdate();
-            return true;
+            ResultSet result = preparedStatement.getGeneratedKeys();
+            if(result.next()) {
+                return new InsertResult(result.getString(1));
+            } else {
+                return InsertResult.FAILURE;
+            }
         } catch (SQLException e) {
-            ForgeFrontier.getInstance().getLogger().severe(e.getMessage());
-            return false;
+            e.printStackTrace();
+            return InsertResult.FAILURE;
         }
     }
 }

@@ -2,6 +2,8 @@ package com.forgefrontier.forgefrontier.utils;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 
+import java.util.Arrays;
+
 public class QuadTree<T extends Locatable> {
 
     T[] items;
@@ -17,7 +19,7 @@ public class QuadTree<T extends Locatable> {
     int totalAmt = 0;
 
     public QuadTree(int x, int y, int z, int w, int h, int l) {
-        this.items = (T[]) new Object[4];
+        this.items = (T[]) new Locatable[4];
         this.x = x;
         this.y = y;
         this.z = z;
@@ -112,4 +114,22 @@ public class QuadTree<T extends Locatable> {
         this.subtrees[i][j][k].remove(item);
         this.totalAmt -= 1;
     }
+
+    @Override
+    public String toString() {
+        if(this.subtrees == null)
+            return Arrays.asList(this.items).toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(Arrays.asList(this.items));
+        stringBuilder.append(" + ");
+        for(int i = 0; i < (this.w > 1 ? 2 : 1); i++) {
+            for(int j = 0; j < (this.h > 1 ? 2 : 1); j++) {
+                for(int k = 0; k < (this.l > 1 ? 2 : 1); k++) {
+                    stringBuilder.append("(" + this.subtrees[i][j][k] + "), ");
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
+
 }

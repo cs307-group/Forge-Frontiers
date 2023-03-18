@@ -20,18 +20,18 @@ public class CoinMaterial extends CustomMaterial {
 
     @Override
     public int collect(Player p, int amt) {
-        ForgeFrontier.getEconomy().depositPlayer(p, amt);
+        ForgeFrontier.getInstance().getEconomy().depositPlayer(p, amt);
         return 0;
     }
 
     @Override
     public boolean hasBalance(Player p, int amt) {
-        return ForgeFrontier.getEconomy().has(p, amt);
+        return ForgeFrontier.getInstance().getEconomy().has(p, amt);
     }
 
     @Override
     public void take(Player p, int amt) {
-        ForgeFrontier.getEconomy().withdrawPlayer(p, amt);
+        ForgeFrontier.getInstance().getEconomy().withdrawPlayer(p, amt);
     }
 
 }

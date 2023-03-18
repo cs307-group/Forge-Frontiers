@@ -23,7 +23,7 @@ public class BazaarManager {
 
     public void init() {
         // Pull Bazaar items from database
-        lookupItems = plugin.getDBConnection().bazaarDB.loadLookup(MAX_SLOT);
+        lookupItems = plugin.getDatabaseManager().getBazaarDB().loadLookup(MAX_SLOT);
         lookupItems.replaceAll(x -> Objects.isNull(x) ?
                 (new ItemStackBuilder(Material.BARRIER).setDisplayName("" + ChatColor.RED + "N/A").build()) : x);
     }
@@ -34,7 +34,7 @@ public class BazaarManager {
             return false;
         }
         if (itm == null) {
-            if (plugin.getDBConnection().bazaarDB.deleteSlotID(idx)) {
+            if (plugin.getDatabaseManager().getBazaarDB().deleteSlotID(idx)) {
                 lookupItems.set(idx, (new ItemStackBuilder(Material.BARRIER)
                         .setDisplayName("" + ChatColor.RED + "N/A").build()));
                 return true;
@@ -45,7 +45,7 @@ public class BazaarManager {
         String name = ItemUtil.itemName(itm);
         String lore = ItemUtil.getStringLore(itm);
         String cdata = ItemUtil.getCustomData(itm);
-        if (plugin.getDBConnection().bazaarDB.setLookup(
+        if (plugin.getDatabaseManager().getBazaarDB().setLookup(
                 idx, itm.getType().toString(), name, lore, cdata)) {
             lookupItems.set(idx, (new ItemStackBuilder(itm).build()));
             return true;

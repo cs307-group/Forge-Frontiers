@@ -111,7 +111,7 @@ public class BazaarCommand {
         }
         if (ItemUtil.hasItem(p, displayItems.get(idx),amount)) {
             BazaarEntry entry = new BazaarEntry(false, idx, amount, price, p.getUniqueId());
-            if (plugin.getDBConnection().bazaarDB.insertListing(entry)) {
+            if (plugin.getDatabaseManager().getBazaarDB().insertListing(entry)) {
                 ItemUtil.take(p,displayItems.get(idx),amount);
                 sender.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.GOLD + "Successfully created listing!");
             } else {

@@ -10,15 +10,19 @@ import com.forgefrontier.forgefrontier.utils.QuadTree;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.api.events.BentoBoxReadyEvent;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.managers.island.IslandCache;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class GeneratorManager extends Manager implements Listener {
 
@@ -57,6 +61,11 @@ public class GeneratorManager extends Manager implements Listener {
 
     }
 
+    @EventHandler
+    public void onBentoBoxReady(BentoBoxReadyEvent e) {
+        plugin.getDatabaseManager().getGeneratorDB().importGenerators();
+    }
+
     public Generator getGenerator(String generatorId) {
         return this.generators.get(generatorId);
     }
@@ -90,24 +99,54 @@ public class GeneratorManager extends Manager implements Listener {
         if(instance == null) return;
         e.getPlayer().openInventory(instance.getInventory());
         e.setCancelled(true);
+
+        ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().updateGenerator(instance, (status) -> {
+            Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                switch(status) {
+                    case UPDATE_NEEDED:
+                        e.getPlayer().openInventory(instance.getInventory());
+                        break;
+                    case ERROR:
+                        plugin.getLogger().severe("An error occurred when attempting to look for updates to a generator.");
+                        break;
+                }
+            });
+        });
+
+    }
+
+    public void initializeGeneratorInstance(GeneratorInstance generatorInstance, Consumer<Boolean> callback) {
+        boolean success = addGeneratorInstance(generatorInstance);
+        if(!success) {
+            callback.accept(false);
+            return;
+        }
+        ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().insertGenerator(generatorInstance, (insertResult) -> {
+            callback.accept(insertResult.isSuccess());
+        });
     }
 
     public boolean addGeneratorInstance(GeneratorInstance generatorInstance) {
-        Optional<Island> island = BentoBox.getInstance().getIslandsManager().getIslandAt(generatorInstance.getBoundingBox().getLocation());
-        if(island.isEmpty()) return false;
-        QuadTree<GeneratorInstance> tree = generatorInstanceTree.get(island.get().getUniqueId());
+        Location location = generatorInstance.getBoundingBox().getLocation().clone();
+        //BentoBox.getInstance().getIslandsManager().
+        Island island = BentoBox.getInstance().getIslandsManager().getIslandCache().getIslandAt(location);
+        //System.out.println("Island: " + island);
+        if(island == null)
+            return false;
+        QuadTree<GeneratorInstance> tree = generatorInstanceTree.get(island.getUniqueId());
         if(tree == null) {
-            Location corner = island.get().getCenter().subtract(512, -128, 512);
-            generatorInstanceTree.put(island.get().getUniqueId(), new QuadTree<>(corner.getBlockX(), corner.getBlockY(), corner.getBlockZ(), 1024, 512, 1024));
+            Location corner = island.getCenter().subtract(512, 0, 512);
+            tree = new QuadTree<>(corner.getBlockX(), -128, corner.getBlockZ(), 1024, 512, 1024);
+            generatorInstanceTree.put(island.getUniqueId(), tree);
         }
         tree.insert(generatorInstance);
-
-        //generatorInstance.getBoundingBox().getLocation().getBlock().setType(generatorInstance.generator.getMaterialRepresentation());
         return true;
     }
 
     public void removeGeneratorInstance(GeneratorInstance generatorInstance) {
-        Optional<Island> island = BentoBox.getInstance().getIslandsManager().getIslandAt(generatorInstance.getBoundingBox().getLocation());
+        Location l = generatorInstance.getBoundingBox().getLocation().clone();
+        l.setY(0);
+        Optional<Island> island = BentoBox.getInstance().getIslandsManager().getIslandAt(l);
         if(island.isEmpty()) {
             ForgeFrontier.getInstance().getLogger().severe("Unable to find Generator Instance to remove.");
             return;
@@ -119,6 +158,7 @@ public class GeneratorManager extends Manager implements Listener {
         }
         tree.remove(generatorInstance);
         generatorInstance.getBoundingBox().getLocation().getBlock().setType(Material.AIR);
+        ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().removeGenerator(generatorInstance);
     }
 
     public List<Generator> getShopMenuList() {
