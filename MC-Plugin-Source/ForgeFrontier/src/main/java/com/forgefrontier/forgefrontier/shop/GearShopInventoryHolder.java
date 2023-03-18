@@ -24,7 +24,7 @@ public class GearShopInventoryHolder extends BaseInventoryHolder {
 
         int shopInd = 0;
         ConfigurationSection config;
-        while((config = this.plugin.getConfig().getConfigurationSection("gear-shop." + shopInd)) != null) {
+        while((config = this.plugin.getConfig("gear-shop").getConfigurationSection("gear-shop." + shopInd)) != null) {
             int shopY = 1 + shopInd / 7;
             int shopX = (shopInd % 7) + 1;
             final int slotId = shopX + shopY * 9;

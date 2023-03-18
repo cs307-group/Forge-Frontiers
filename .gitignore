@@ -11,6 +11,8 @@ MC-Server/plugins/LuckPerms/*
 MC-Server/plugins/BentoBox/database/*
 MC-Server/plugins/BentoBox/database_backup/*
 MC-Server/plugins/BentoBox/locales/*
+MC-Server/plugins/WorldEdit/*
+MC-Server/plugins/AsyncWorldEdit/*
 MC-Server/server.properties
 MC-Server/usercache.json
 

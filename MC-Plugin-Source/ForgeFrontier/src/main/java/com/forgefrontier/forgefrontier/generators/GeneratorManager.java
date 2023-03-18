@@ -46,7 +46,7 @@ public class GeneratorManager extends Manager implements Listener {
 
         int generatorInd = 0;
         ConfigurationSection configSection;
-        while((configSection = this.plugin.getConfig().getConfigurationSection("generators." + generatorInd)) != null) {
+        while((configSection = this.plugin.getConfig("generators").getConfigurationSection("generators." + generatorInd)) != null) {
             Generator generator = new Generator(configSection);
             this.generators.put(generator.getId(), generator);
             generatorInd += 1;
@@ -54,7 +54,7 @@ public class GeneratorManager extends Manager implements Listener {
 
         int genIndex = 0;
         String generatorId;
-        while((generatorId = this.plugin.getConfig().getString("generator-shop." + genIndex)) != null) {
+        while((generatorId = this.plugin.getConfig("generators").getString("generator-shop." + genIndex)) != null) {
             shopMenuList.add(this.generators.get(generatorId));
             genIndex += 1;
         }

@@ -33,7 +33,7 @@ public class RerollInventoryHolder extends BaseInventoryHolder {
         List<MaterialCost> costs = new ArrayList<>();
         int costInd = 0;
         ConfigurationSection configSection;
-        while((configSection = ForgeFrontier.getInstance().getConfig().getConfigurationSection("reroll-costs." + costInd)) != null) {
+        while((configSection = ForgeFrontier.getInstance().getConfig("reroll").getConfigurationSection("reroll-costs." + costInd)) != null) {
             MaterialCost cost = new MaterialCost(configSection);
             costs.add(cost);
             builder.addLoreLine("&7>> &f" + cost.getAmount() + "&7x " + cost.getMaterial().getRepresentation().getItemMeta().getDisplayName());

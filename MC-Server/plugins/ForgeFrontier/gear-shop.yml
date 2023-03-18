@@ -1,0 +1,14 @@
+gear-shop:
+  0:
+    custom_item_id: "WoodenSword"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 20000
+  1:
+    custom_item_id: "WoodenBow"
+    costs:
+      0:
+        material_type: "item"
+        item_id: "SilverIngot"
+        amount: 128

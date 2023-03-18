@@ -3,7 +3,6 @@ package com.forgefrontier.forgefrontier;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarCommand;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.commands.*;
-import com.forgefrontier.forgefrontier.connections.DBConnection;
 import com.forgefrontier.forgefrontier.connections.DatabaseManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
@@ -17,6 +16,8 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
+import com.forgefrontier.forgefrontier.mining.MiningCommandExecutor;
+import com.forgefrontier.forgefrontier.mining.MiningManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.EntityCommandExecutor;
 import com.forgefrontier.forgefrontier.mobs.chickens.TestChicken;
@@ -25,8 +26,9 @@ import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.event.EventHandler;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +40,10 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import revxrsal.commands.autocomplete.AutoCompleter;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
-import world.bentobox.bentobox.api.events.BentoBoxEvent;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ForgeFrontier extends JavaPlugin {
 
@@ -46,9 +51,7 @@ public class ForgeFrontier extends JavaPlugin {
 
     public static String CHAT_PREFIX;
 
-    private Economy econ;
-    private Permission perms;
-    private Chat chat;
+    private Map<String, FileConfiguration> configFiles;
 
     private DatabaseManager databaseManager;
     private GeneratorManager generatorManager;
@@ -56,20 +59,27 @@ public class ForgeFrontier extends JavaPlugin {
     private PlayerManager playerManager;
     private GearItemManager gearItemManager;
     private CustomEntityManager customEntityManager;
+    private MiningManager miningManager;
 
     private Shop itemShop;
     private BazaarManager bazaarManager;
     private BukkitCommandHandler commandHandler;
 
+    private Economy econ;
+    private Permission perms;
+    private Chat chat;
+
     @Override
     public void onEnable() {
         inst = this;
         CHAT_PREFIX = ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.BOLD + "Forge" + ChatColor.GOLD + ChatColor.BOLD + "Frontier" + ChatColor.GRAY + "] " + ChatColor.YELLOW;
+        this.configFiles = new HashMap<>();
 
-        if (!this.getDataFolder().exists()) {
-            this.getDataFolder().mkdirs();
-        }
-        this.saveDefaultConfig();
+        this.createConfig("config");
+        this.createConfig("generators");
+        this.createConfig("mining");
+        this.createConfig("gear-shop");
+        this.createConfig("reroll");
 
         if (!setupEconomy() ) {
             getLogger().severe("Disabled due to no Vault dependency found!");
@@ -87,6 +97,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.gearItemManager = new GearItemManager(this);
         this.customEntityManager = new CustomEntityManager(this);
         this.bazaarManager = new BazaarManager(this);
+        this.miningManager = new MiningManager(this);
 
         this.databaseManager.init();
         this.customItemManager.init();
@@ -95,6 +106,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.gearItemManager.init();
         this.customEntityManager.init();
         this.bazaarManager.init();
+        this.miningManager.init();
 
         // Player Shop
         this.setupPlayerShop();
@@ -115,6 +127,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.playerManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.gearItemManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.customEntityManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.miningManager, this);
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
@@ -129,6 +142,17 @@ public class ForgeFrontier extends JavaPlugin {
         this.playerManager.disable();
         this.gearItemManager.disable();
         this.customEntityManager.disable();
+        this.miningManager.disable();
+    }
+
+    private void createConfig(String name) {
+        File customConfigFile = new File(getDataFolder(), name + ".yml");
+        if (!customConfigFile.exists()) {
+            customConfigFile.getParentFile().mkdirs();
+            saveResource(name + ".yml", false);
+        }
+
+        configFiles.put(name, YamlConfiguration.loadConfiguration(customConfigFile));
     }
 
     private void registerCommand(String name, CommandExecutor executor) {
@@ -152,6 +176,7 @@ public class ForgeFrontier extends JavaPlugin {
         registerCommand("reroll"       , new RerollCommandExecutor());
         registerCommand("forgefrontier", new ForgeFrontierCommandExecutor());
         registerCommand("customspawn"  , new EntityCommandExecutor());
+        registerCommand("mining"       , new MiningCommandExecutor());
 
         // Wrapper-Registered Commands
         BukkitCommandHandler commandHandler = BukkitCommandHandler.create(this);
@@ -192,6 +217,10 @@ public class ForgeFrontier extends JavaPlugin {
         this.getDatabaseManager().getShopDB().loadListings();
     }
 
+    public FileConfiguration getConfig(String name) {
+        return this.configFiles.get(name);
+    }
+
     public DatabaseManager getDatabaseManager() {
         return this.databaseManager;
     }
@@ -218,6 +247,10 @@ public class ForgeFrontier extends JavaPlugin {
 
     public BazaarManager getBazaarManager() {
         return this.bazaarManager;
+    }
+
+    public MiningManager getMiningManager() {
+        return this.miningManager;
     }
 
     public Shop getPlayerShop() {
