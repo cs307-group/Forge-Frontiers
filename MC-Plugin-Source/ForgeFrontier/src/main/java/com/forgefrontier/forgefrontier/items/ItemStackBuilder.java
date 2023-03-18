@@ -33,6 +33,7 @@ public class ItemStackBuilder {
     /** Copies some references from itemstack */
     public ItemStackBuilder(ItemStack m) {
         copy = m;
+        this.displayName = ItemUtil.itemName(m);
         amt = m.getAmount();
         copyBuild = true;
     }

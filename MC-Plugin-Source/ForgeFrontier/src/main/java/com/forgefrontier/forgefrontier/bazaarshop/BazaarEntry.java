@@ -4,12 +4,23 @@ package com.forgefrontier.forgefrontier.bazaarshop;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.UUID;
 
 
 
 
 public class BazaarEntry {
+    /**
+     * Comparator for comparing bazaar entries by price
+     */
+    static class BazaarEntryComparator implements Comparator<BazaarEntry> {
+        @Override
+        public int compare(BazaarEntry e1, BazaarEntry e2) {
+            return Double.compare(e2.getPrice(), e1.getPrice());
+        }
+    }
+
     public enum EntryType {
         BUY, SELL
     }
@@ -102,5 +113,4 @@ public class BazaarEntry {
     public void setListdate(Timestamp listdate) {
         this.listdate = listdate;
     }
-
 }
