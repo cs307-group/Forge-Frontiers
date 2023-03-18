@@ -22,7 +22,7 @@ public class BazaarGUI extends BaseInventoryHolder {
     public void initGUI() {
         int idx = 0;
         fillBorders();
-        ArrayList<ItemStack> displayItems = bazaarMgr.getLookupItems();
+        ArrayList<ItemStack> displayItems = bazaarMgr.getDisplayItems();
         ItemStack defaultPane = new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE)
                 .setDisplayName("").build();
         for (int i = 1; i < 5; i++) {
@@ -49,14 +49,23 @@ public class BazaarGUI extends BaseInventoryHolder {
     }
 
     public void slotClick(Player p, int idx) {
-        p.openInventory(new TwoOptionHolder("Select Buy/Sell",() -> {}, () -> {}).getInventory());
-
+        TwoOptionHolder optionHolder = new TwoOptionHolder("Select Buy/Sell");
+        optionHolder.setOpts(
+                () -> {
+                    p.openInventory(new OrderCreationGUI(27,"Create Buy Order",true,
+                            idx, optionHolder).getInventory());
+                },
+                () -> {
+                    p.openInventory(new OrderCreationGUI(27,"Create Sell Order",true,
+                            idx, optionHolder).getInventory());
+                });
+        p.openInventory(optionHolder.getInventory());
     }
 
     public void updateGUI() {
         int idx = 0;
         fillBorders();
-        ArrayList<ItemStack> displayItems = bazaarMgr.getLookupItems();
+        ArrayList<ItemStack> displayItems = bazaarMgr.getDisplayItems();
         for (int i = 1; i < 5; i++) {
             int rbegin = 9 * i + 1;
             for (int j = 0; j < 7; j++) {

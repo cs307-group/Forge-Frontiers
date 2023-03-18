@@ -25,7 +25,7 @@ public class CustomGiveCommand {
      */
     @DefaultFor({"cgive", "customgive"})
     @AutoComplete("@cgive")
-    public void cgiveCmd(CommandSender sender, @Optional Player target, String item) {
+    public void cgiveCmd(CommandSender sender, String item, @Optional Player target) {
         if(!(sender instanceof Player)) {
             sender.sendMessage("Unable to give items to a non-player");
             throw new SenderNotPlayerException();

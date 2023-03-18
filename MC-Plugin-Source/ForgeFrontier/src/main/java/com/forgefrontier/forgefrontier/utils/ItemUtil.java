@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -105,9 +106,11 @@ public class ItemUtil {
         int amtLeft = amt;
         int i = 0;
         ItemStack[] contents = p.getInventory().getContents();
+        ItemStack copyItem = new ItemStackBuilder(item).build();
         while(amtLeft > 0 && i < 36) {
             if(contents[i] == null) {i++; continue;}
-            if(customCompare(contents[i], item)) {
+
+            if(customCompare(contents[i], copyItem)) {
                 int amtToTake = Math.min(contents[i].getAmount(), amtLeft);
                 contents[i].setAmount(contents[i].getAmount() - amtToTake);
                 amtLeft -= amtToTake;

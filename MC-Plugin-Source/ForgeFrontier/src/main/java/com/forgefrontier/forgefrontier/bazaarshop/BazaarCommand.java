@@ -15,6 +15,7 @@ import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.exception.SenderNotPlayerException;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 
 @Command({"bazaar"})
@@ -85,8 +86,7 @@ public class BazaarCommand {
             throw new SenderNotPlayerException();
         }
         Player p = (Player) sender;
-
-
+        //ArrayList<ItemStack> storedItems = bazaarManager.getLookupItems();
     }
 
     @Subcommand({"list sell"})
@@ -96,32 +96,9 @@ public class BazaarCommand {
             throw new SenderNotPlayerException();
         }
         Player p = (Player) sender;
-
-        p.sendMessage("boop");
         ItemStack itm = p.getInventory().getItemInMainHand();
-        ArrayList<ItemStack> displayItems = bazaarManager.getLookupItems();
-        int idx = 0;
-        for (idx = 0; idx < displayItems.size(); idx++) {
-            if (ItemUtil.customCompare(itm,displayItems.get(idx)))
-                break;
-        }
-        if (idx == displayItems.size()) {
-            sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Item is not listable on the bazaar.");
-            return;
-        }
-        if (ItemUtil.hasItem(p, displayItems.get(idx),amount)) {
-            BazaarEntry entry = new BazaarEntry(false, idx, amount, price, p.getUniqueId());
-            if (plugin.getDatabaseManager().getBazaarDB().insertListing(entry)) {
-                ItemUtil.take(p,displayItems.get(idx),amount);
-                sender.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.GOLD + "Successfully created listing!");
-            } else {
-                sender.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.RED +
-                        "Unexpected error while creating listing..");
-            }
-        } else {
-            sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "You do not have enough items to list.");
-        }
-
+        plugin.getLogger().log(Level.INFO,"Listing amount: " + amount + " for price: " + price);
+        bazaarManager.createSellListing(p,itm, amount, price);
     }
 
 

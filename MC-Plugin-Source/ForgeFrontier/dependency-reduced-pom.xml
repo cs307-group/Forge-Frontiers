@@ -22,6 +22,23 @@
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <relocations>
+                <relocation>
+                  <pattern>net.wesjd.anvilgui</pattern>
+                  <shadedPattern>com.forgefrontier.forgefrontier.anvilgui</shadedPattern>
+                </relocation>
+              </relocations>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludeDefaults>false</excludeDefaults>
+                  <includes>
+                    <include>com.forgefrontier.forgefrontier.anvilgui</include>
+                  </includes>
+                </filter>
+              </filters>
+            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -5,10 +5,7 @@ import com.forgefrontier.forgefrontier.bazaarshop.BazaarEntry;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.inventory.ItemStack;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -96,6 +93,40 @@ public class BazaarDB extends DBConnection {
         if(cs != null)
             cs.close();
         return null;
+    }
+
+
+    public ArrayList<BazaarEntry> loadListings() {
+        ArrayList<BazaarEntry> listings = new ArrayList<>();
+        String query = "SELECT order_id, order_type, lister_id, slot_id, amount, price, listdate FROM bazaar_orders;";
+        ConnectionSet cs = createQuery(query);
+        try {
+            while (cs.getResult().next()) {
+                ResultSet rs = cs.getResult();
+                UUID orderID = UUID.fromString(rs.getString("order_id"));
+                BazaarEntry.EntryType orderType = rs.getBoolean("order_type") ?
+                        BazaarEntry.EntryType.BUY : BazaarEntry.EntryType.SELL;
+                UUID listerID = UUID.fromString(rs.getString("lister_id"));
+                int slotID = rs.getInt("slot_id");
+                int amount = rs.getInt("amount");
+                double price = rs.getDouble("price");
+                Timestamp listDate = rs.getTimestamp("listdate");
+
+                BazaarEntry bzrEntry = new BazaarEntry(orderID,orderType,slotID,amount,price,listerID,listDate);
+                listings.add(bzrEntry);
+            }
+            return listings;
+
+
+        } catch (SQLException e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[QUERY FAILURE IN LOADING BAZAAR LOOKUP]\n" + e.getMessage());
+            return listings;
+        } catch (Exception e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                    "[FAILURE IN LOADING BAZAAR LOOKUP]\n" + e.getMessage());
+            return listings;
+        }
     }
 
     /**
