@@ -32,3 +32,5 @@ commands:
       - "ff"
   customspawn:
     description: "Command used for spawning custom entities."
+  mining:
+    description: "Command used for creating and changing mining areas."

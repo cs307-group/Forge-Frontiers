@@ -38,7 +38,7 @@ public class BazaarManager {
 
     public BazaarManager(ForgeFrontier plugin) {
         this.plugin = plugin;
-        this.bazaarDB = plugin.getDBConnection().bazaarDB;
+        this.bazaarDB = plugin.getDatabaseManager().getBazaarDB();
         DEFAULT_NULL_ITEM = (new ItemStackBuilder(Material.BARRIER).setDisplayName("" + ChatColor.RED + "N/A").build());
     }
 
@@ -139,7 +139,7 @@ public class BazaarManager {
             return false;
         }
         if (itm == null) {
-            if (plugin.getDBConnection().bazaarDB.deleteSlotID(idx)) {
+            if (plugin.getDatabaseManager().getBazaarDB().deleteSlotID(idx)) {
                 lookupItems.set(idx, (new ItemStackBuilder(Material.BARRIER)
                         .setDisplayName("" + ChatColor.RED + "N/A").build()));
                 return true;
@@ -150,7 +150,7 @@ public class BazaarManager {
         String name = ItemUtil.itemName(itm);
         String lore = ItemUtil.getStringLore(itm);
         String cdata = ItemUtil.getCustomData(itm);
-        if (plugin.getDBConnection().bazaarDB.setLookup(
+        if (plugin.getDatabaseManager().getBazaarDB().setLookup(
                 idx, itm.getType().toString(), name, lore, cdata)) {
             lookupItems.set(idx, (new ItemStackBuilder(itm).build()));
             return true;
@@ -174,7 +174,7 @@ public class BazaarManager {
         }
         if (ItemUtil.hasItem(p, lookupItems.get(idx),amount)) {
             BazaarEntry entry = new BazaarEntry(false, idx, amount, price, p.getUniqueId());
-            if (plugin.getDBConnection().bazaarDB.insertListing(entry)) {
+            if (bazaarDB.insertListing(entry)) {
                 ItemUtil.take(p, itm, amount);
                 p.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.GOLD + "Successfully created listing!");
                 localInsertListing(entry);

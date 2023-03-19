@@ -3,22 +3,21 @@ package com.forgefrontier.forgefrontier;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarCommand;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.commands.*;
-import com.forgefrontier.forgefrontier.connections.DBConnection;
+import com.forgefrontier.forgefrontier.connections.DatabaseManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.items.CustomGiveCommand;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
-import com.forgefrontier.forgefrontier.items.ItemCommandExecutor;
-import com.forgefrontier.forgefrontier.items.gear.GearItem;
 import com.forgefrontier.forgefrontier.items.gear.GearItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
-import com.forgefrontier.forgefrontier.mobs.CustomEntity;
+import com.forgefrontier.forgefrontier.mining.MiningCommandExecutor;
+import com.forgefrontier.forgefrontier.mining.MiningManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.EntityCommandExecutor;
 import com.forgefrontier.forgefrontier.mobs.chickens.TestChicken;
@@ -26,7 +25,10 @@ import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,64 +38,75 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import revxrsal.commands.autocomplete.AutoCompleter;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 
-import java.util.logging.Logger;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ForgeFrontier extends JavaPlugin {
 
     private static ForgeFrontier inst;
 
     public static String CHAT_PREFIX;
-    private static Economy econ = null;
-    private static Permission perms = null;
-    private static Chat chat = null;
-    private static final Logger log = Logger.getLogger("Minecraft");
-    private static DBConnection postGresConnection = null;
 
-    GeneratorManager generatorManager;
-    CustomItemManager customItemManager;
-    PlayerManager playerManager;
-    GearItemManager gearItemManager;
-    CustomEntityManager customEntityManager;
+    private Map<String, FileConfiguration> configFiles;
+
+    private DatabaseManager databaseManager;
+    private GeneratorManager generatorManager;
+    private CustomItemManager customItemManager;
+    private PlayerManager playerManager;
+    private GearItemManager gearItemManager;
+    private CustomEntityManager customEntityManager;
+    private MiningManager miningManager;
+
     private Shop itemShop;
     private BazaarManager bazaarManager;
-    BukkitCommandHandler commandHandler;
+    private BukkitCommandHandler commandHandler;
+
+    private Economy econ;
+    private Permission perms;
+    private Chat chat;
 
     @Override
     public void onEnable() {
         inst = this;
         CHAT_PREFIX = ChatColor.GRAY + "[" + ChatColor.RED + ChatColor.BOLD + "Forge" + ChatColor.GOLD + ChatColor.BOLD + "Frontier" + ChatColor.GRAY + "] " + ChatColor.YELLOW;
+        this.configFiles = new HashMap<>();
 
-        if (!this.getDataFolder().exists()) {
-            this.getDataFolder().mkdirs();
-        }
-        this.saveDefaultConfig();
-        //setupDatabaseConnection();
+        this.createConfig("config");
+        this.createConfig("generators");
+        this.createConfig("mining");
+        this.createConfig("gear-shop");
+        this.createConfig("reroll");
+
         if (!setupEconomy() ) {
-            log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            getLogger().severe("Disabled due to no Vault dependency found!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
         setupPermissions();
         setupChat();
-        //TODO: re-enable database
-        setupDBConnection();
 
         // Managers
+        this.databaseManager = new DatabaseManager(this);
         this.generatorManager = new GeneratorManager(this);
         this.customItemManager = new CustomItemManager(this);
         this.playerManager = new PlayerManager(this);
         this.gearItemManager = new GearItemManager(this);
         this.customEntityManager = new CustomEntityManager(this);
         this.bazaarManager = new BazaarManager(this);
+        this.miningManager = new MiningManager(this);
 
+        this.databaseManager.init();
         this.customItemManager.init();
         this.generatorManager.init();
         this.playerManager.init();
         this.gearItemManager.init();
         this.customEntityManager.init();
         this.bazaarManager.init();
+        this.miningManager.init();
 
         // Player Shop
         this.setupPlayerShop();
@@ -114,6 +127,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.playerManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.gearItemManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.customEntityManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.miningManager, this);
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
@@ -122,57 +136,93 @@ public class ForgeFrontier extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.databaseManager.disable();
         this.generatorManager.disable();
         this.customItemManager.disable();
         this.playerManager.disable();
         this.gearItemManager.disable();
         this.customEntityManager.disable();
+        this.miningManager.disable();
+    }
+
+    private void createConfig(String name) {
+        File customConfigFile = new File(getDataFolder(), name + ".yml");
+        if (!customConfigFile.exists()) {
+            customConfigFile.getParentFile().mkdirs();
+            saveResource(name + ".yml", false);
+        }
+
+        configFiles.put(name, YamlConfiguration.loadConfiguration(customConfigFile));
+    }
+
+    private void registerCommand(String name, CommandExecutor executor) {
+        PluginCommand cmd = Bukkit.getPluginCommand(name);
+        if(cmd != null)
+            cmd.setExecutor(executor);
     }
 
     /**
      * REQUIREMENT: COMMANDS MUST BE REGISTERED **AFTER** EVERYTHING IS DONE LOADING
      */
     private void registerCommands() {
-        // Commands
-        PluginCommand genCmd = Bukkit.getPluginCommand("gen");
-        if(genCmd != null)
-            genCmd.setExecutor(new GeneratorCommandExecutor());
-        PluginCommand genshopCmd = Bukkit.getPluginCommand("genshop");
-        if(genshopCmd != null)
-            genshopCmd.setExecutor(new GeneratorShopCommandExecutor());
-        PluginCommand gearshopCmd = Bukkit.getPluginCommand("gearshop");
-        if(gearshopCmd != null)
-            gearshopCmd.setExecutor(new GearShopCommandExecutor());
-        PluginCommand shopCmd = Bukkit.getPluginCommand("shop");
-        if (shopCmd != null)
-            shopCmd.setExecutor(itemShop.getCommandExecutor());
-//        PluginCommand customItemCmd = Bukkit.getPluginCommand("customgive");
-//        if (customItemCmd != null)
-//            customItemCmd.setExecutor(new ItemCommandExecutor());
-        PluginCommand inspectCmd = Bukkit.getPluginCommand("inspect");
-        if (inspectCmd != null)
-            inspectCmd.setExecutor(new InspectCommandExecutor(playerManager));
-        PluginCommand islandCmd = Bukkit.getPluginCommand("island");
-        if (islandCmd != null)
-            islandCmd.setExecutor(new IslandCommandExecutor());
-        PluginCommand linkCmd = Bukkit.getPluginCommand("link");
-        if (linkCmd != null)
-            linkCmd.setExecutor(new LinkCommandExecutor());
-        PluginCommand rerollCmd = Bukkit.getPluginCommand("reroll");
-        if (rerollCmd != null)
-            rerollCmd.setExecutor(new RerollCommandExecutor());
-        PluginCommand forgefrontierCmd = Bukkit.getPluginCommand("forgefrontier");
-        if (forgefrontierCmd != null)
-            forgefrontierCmd.setExecutor(new ForgeFrontierCommandExecutor());
-        PluginCommand entityCmd = Bukkit.getPluginCommand("customspawn");
-        if (entityCmd != null)
-            entityCmd.setExecutor(new EntityCommandExecutor());
-        this.commandHandler = BukkitCommandHandler.create(this);
-        this.commandHandler.register(new BazaarCommand(this));
-        this.commandHandler.getAutoCompleter().registerSuggestion
-                ("cgive", customItemManager.getItemNames());
-        this.commandHandler.register(new CustomGiveCommand(this));
+        // Bukkit-Registered Commands
+        registerCommand("gen"          , new GeneratorCommandExecutor());
+        registerCommand("genshop"      , new GeneratorShopCommandExecutor());
+        registerCommand("gearshop"     , new GearShopCommandExecutor());
+        registerCommand("shop"         , itemShop.getCommandExecutor());
+        registerCommand("inspect"      , new InspectCommandExecutor());
+        registerCommand("island"       , new IslandCommandExecutor());
+        registerCommand("link"         , new LinkCommandExecutor());
+        registerCommand("reroll"       , new RerollCommandExecutor());
+        registerCommand("forgefrontier", new ForgeFrontierCommandExecutor());
+        registerCommand("customspawn"  , new EntityCommandExecutor());
+        registerCommand("mining"       , new MiningCommandExecutor());
 
+        // Wrapper-Registered Commands
+        BukkitCommandHandler commandHandler = BukkitCommandHandler.create(this);
+        commandHandler.register(new BazaarCommand(this));
+
+        // Auto-Completer Registrations
+        AutoCompleter autoCompleter = commandHandler.getAutoCompleter();
+        autoCompleter.registerSuggestion("cgive", customItemManager.getItemNames());
+
+        commandHandler.register(new CustomGiveCommand(this));
+
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = this.getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
+    private void setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+    }
+
+    private void setupChat() {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+    }
+
+    public void setupPlayerShop() {
+        this.itemShop = new Shop();
+        this.getDatabaseManager().getShopDB().loadListings();
+    }
+
+    public FileConfiguration getConfig(String name) {
+        return this.configFiles.get(name);
+    }
+
+    public DatabaseManager getDatabaseManager() {
+        return this.databaseManager;
     }
 
     public CustomItemManager getCustomItemManager() {
@@ -195,61 +245,26 @@ public class ForgeFrontier extends JavaPlugin {
         return this.customEntityManager;
     }
 
-    // Singleton Pattern
-    public static ForgeFrontier getInstance() {
-        return inst;
+    public BazaarManager getBazaarManager() {
+        return this.bazaarManager;
     }
 
-    public static Economy getEconomy() {
-        return econ;
-    }
-
-    private void setupDBConnection() {
-        postGresConnection = new DBConnection();
-        boolean result = postGresConnection.init();
-        if (result)
-            postGresConnection.testConnection();
-    }
-
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = this.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
-    }
-
-    private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
-    }
-
-    private boolean setupChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
-    }
-
-    public DBConnection getDBConnection() {
-        return postGresConnection;
+    public MiningManager getMiningManager() {
+        return this.miningManager;
     }
 
     public Shop getPlayerShop() {
         return this.itemShop;
     }
 
-    public void setupPlayerShop() {
-        this.itemShop = new Shop();
-        postGresConnection.shopDB.loadListings();
+    public Economy getEconomy() {
+        return this.econ;
     }
 
-    public BazaarManager getBazaarManager() {
-        return this.bazaarManager;
+    // Singleton Pattern
+    public static ForgeFrontier getInstance() {
+        return inst;
     }
+
 }
 

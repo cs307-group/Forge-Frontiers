@@ -1,0 +1,21 @@
+world: "world"
+mining_areas:
+  0:
+    pos1:
+      x: 0
+      y: 0
+      z: 0
+    pos2:
+      x: 10
+      y: 200
+      z: 10
+    resources:
+      - item_id: "SilverIngot"
+        block: RAW_IRON_BLOCK
+        time: 2
+        drops:
+          - amount: 1
+            chance: 1
+          - amount: 1
+            chance: 0.5
+    replace: STONE

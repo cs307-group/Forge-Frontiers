@@ -18,8 +18,8 @@ public class InspectCommandExecutor implements CommandExecutor {
 
     PlayerManager playerManager;
 
-    public InspectCommandExecutor(PlayerManager playerManager) {
-        this.playerManager = playerManager;
+    public InspectCommandExecutor() {
+        this.playerManager = ForgeFrontier.getInstance().getPlayerManager();
     }
 
     @Override

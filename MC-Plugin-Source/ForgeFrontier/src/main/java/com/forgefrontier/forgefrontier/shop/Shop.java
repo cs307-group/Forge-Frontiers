@@ -44,7 +44,7 @@ public class Shop {
         listingsSorted = new TreeMap<>();
         shopGUI = new ShopHolder(this);
         shopCommands = new ShopCommandExecutor(this);
-        this.econ = ForgeFrontier.getEconomy();
+        this.econ = ForgeFrontier.getInstance().getEconomy();
     }
 
     /**
@@ -92,7 +92,7 @@ public class Shop {
             p.sendMessage(GEN_SHOP_ERR);
             return false;
         }
-        if (ForgeFrontier.getInstance().getDBConnection().shopDB.removeListing(l.getID())) {
+        if (ForgeFrontier.getInstance().getDatabaseManager().getShopDB().removeListing(l.getID())) {
             ItemGiver.giveItem(p, l.getItem());
             removeListing(l.getID());
             return true;
@@ -184,13 +184,13 @@ public class Shop {
                 .append("\nCustomData: ").append(customData);
         ForgeFrontier.getInstance().getLogger().log(Level.INFO,"ADDING TO DB: \n" + info);
 
-        ForgeFrontier.getInstance().getDBConnection().shopDB.insertShopListing
+        ForgeFrontier.getInstance().getDatabaseManager().getShopDB().insertShopListing
                 (listingId,itemID,itemMaterial,itemname,lore,price,amount
                 ,listerID,null,-1,dateListed,customData,listerName);
     }
 
     public boolean setSoldDB(UUID listing_id, UUID player) {
-        return ForgeFrontier.getInstance().getDBConnection().shopDB
+        return ForgeFrontier.getInstance().getDatabaseManager().getShopDB()
                 .setListingSold(listing_id, player, System.currentTimeMillis());
     }
 

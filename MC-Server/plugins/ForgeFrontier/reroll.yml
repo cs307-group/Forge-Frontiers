@@ -1,0 +1,6 @@
+reroll-costs:
+  - material_type: "coin"
+    amount: 10000
+  - material_type: "item"
+    item_id: "SilverIngot"
+    amount: 32

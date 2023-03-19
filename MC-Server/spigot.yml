@@ -157,6 +157,8 @@ world-settings:
     trident-despawn-rate: 1200
     zombie-aggressive-towards-villager: true
     end-portal-sound-radius: 0
+  worldeditregentempworld:
+    verbose: false
 advancements:
   disable-saving: false
   disabled:
