@@ -16,7 +16,7 @@ import java.util.logging.Level;
 
 public class BazaarManager {
     private final ForgeFrontier plugin;
-    private final BazaarDB bazaarDB;
+    private BazaarDB bazaarDB;
     private final int MIN_SLOT = 0;
     private final int MAX_SLOT = 28;
 
@@ -38,11 +38,14 @@ public class BazaarManager {
 
     public BazaarManager(ForgeFrontier plugin) {
         this.plugin = plugin;
-        this.bazaarDB = plugin.getDatabaseManager().getBazaarDB();
         DEFAULT_NULL_ITEM = (new ItemStackBuilder(Material.BARRIER).setDisplayName("" + ChatColor.RED + "N/A").build());
     }
 
+
+
+
     public void init() {
+        this.bazaarDB = plugin.getDatabaseManager().getBazaarDB();
         // Pull Bazaar items from database
         lookupItems = bazaarDB.loadLookup(MAX_SLOT);
 
