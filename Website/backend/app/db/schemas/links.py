@@ -14,7 +14,7 @@ class Links(db.Model):
         nullable=False,
         primary_key=True,
         default=uuid4,
-        server_default=text("gen_random_uuid()"),
+        server_default=text("public.gen_random_uuid()"),
     )
     player_uuid: str = db.Column(TEXT, unique=True, nullable=False)
     link_code: str = db.Column(TEXT, unique=True, nullable=False)

@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import {useState} from "react";
 
 import {AppLayout} from "@/components/Layout/AppLayout";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
@@ -17,7 +18,6 @@ const keyToTableMap: Record<keyof PlayerStats, string> = {
   current_health: "Health",
   CDMG: "CDMG",
   CRATE: "CRATE",
-
   DEF: "DEF",
   DEX: "DEX",
   HP: "HP",
@@ -28,7 +28,7 @@ const keyToTableMap: Record<keyof PlayerStats, string> = {
 export default function Profile({
   userData,
   cookie,
-  stats,
+  stats: stats_,
 }: {
   stats: PlayerStats;
   userData: UserDataSecure;
@@ -36,9 +36,12 @@ export default function Profile({
 }) {
   useCookieSync(cookie);
   if (!userData) return <div>User not found!</div>;
-  stats = Object.fromEntries(
-    Object.entries(stats).filter((x) => x[0] !== "player_uuid")
-  ) as any;
+  const [stats, setStats] = useState(
+    () =>
+      Object.fromEntries(
+        Object.entries(stats_).filter((x) => x[0] !== "player_uuid")
+      ) as any
+  );
 
   return (
     <>
@@ -76,7 +79,7 @@ export default function Profile({
                 <tr className="border-b border-slate-700 p-4 pl-8 text-slate-400">
                   {Object.entries(stats).map((x) => (
                     <td key={`${x[0]}-${x[1]}`}>
-                      <span>{x[1]}</span>
+                      <span>{x[1] as any}</span>
                     </td>
                   ))}
                 </tr>
@@ -106,10 +109,23 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
     userData.extractTokens() || JSON.parse(c.req.cookies.tokens);
 
   const stats = await getPlayerStats(t);
-  const json = await stats.json();
-  if (!stats.ok) {
-    return {props: json};
+  let json: PlayerStats = (await stats.json())?.data;
+  console.log(stats.status);
+  if (!stats.ok && stats.status !== 404) {
+    return {props: json || null};
   }
-
-  return userData.addCustomData({stats: json?.data}).toSSPropsResult;
+  if (stats.status === 404) {
+    json = {
+      ATK: 0,
+      CDMG: 0,
+      CRATE: 0,
+      current_health: 100,
+      DEF: 0,
+      DEX: 0,
+      HP: 0,
+      player_uuid: "unknown",
+      STR: 0,
+    };
+  }
+  return userData.addCustomData({stats: json || null}).toSSPropsResult;
 });

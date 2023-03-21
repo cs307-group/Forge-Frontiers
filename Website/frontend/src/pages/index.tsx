@@ -1,6 +1,8 @@
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 
+import Logo from "@/images/logo.png";
 import {Raleway} from "@next/font/google";
 
 const raleway = Raleway({subsets: ["latin"]});
@@ -17,7 +19,14 @@ export default function Home() {
         style={raleway.style}
         className="mx-auto text-center pt-8 forge_background h-full w-full text-white border-[1px] border-transparent"
       >
-        Welcome to Forge Frontiers: Something cool here soon..
+        <Image
+          className="mx-auto rounded-md"
+          alt="Logo"
+          src={Logo.src}
+          width={Logo.width}
+          height={Logo.height}
+        />
+        <div>Welcome to Forge Frontiers</div>
         <br />
         <div className="flex items-center justify-center gap-4 mt-6">
           <div>

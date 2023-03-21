@@ -9,7 +9,7 @@ from ..base import db
 class Shop(db.Model):
     # pylint: disable=E1101
     id_: str = db.Column(TEXT, unique=True, nullable=False, primary_key=True)
-    item_id: str = db.Column(TEXT, unique=True, nullable=False)
+    item_id: str = db.Column(TEXT, unique=False, nullable=False)
     item_material: str = db.Column(db.String(100), unique=True, nullable=False)
     item_name: str = db.Column(db.String(100), nullable=False)
     item_lore: str = db.Column(TEXT, nullable=False)
