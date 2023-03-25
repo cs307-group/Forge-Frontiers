@@ -12,20 +12,20 @@ public class GeneratorInstance implements Locatable {
 
     String databaseId;
     Generator generator;
-    BoundingBox boundingBox;
+    Location location;
     int level;
     long lastCollectTime;
 
     public GeneratorInstance(Generator generator, Location location) {
         this.generator = generator;
-        this.boundingBox = new BoundingBox(location);
+        this.location = location;
         this.level = 0;
         this.lastCollectTime = System.currentTimeMillis();
     }
 
     public GeneratorInstance(Generator generator, Location location, int level, long lastCollectTime, String databaseId) {
         this.generator = generator;
-        this.boundingBox = new BoundingBox(location);
+        this.location = location;
         this.level = level;
         this.lastCollectTime = lastCollectTime;
         this.databaseId = databaseId;
@@ -57,10 +57,6 @@ public class GeneratorInstance implements Locatable {
         });
     }
 
-    public BoundingBox getBoundingBox() {
-        return this.boundingBox;
-    }
-
     private void setAmountLeft(int amtLeft, long currentTime, int remainingTime) {
         GeneratorLevel currentLevel = getGeneratorLevel();
 
@@ -80,6 +76,10 @@ public class GeneratorInstance implements Locatable {
         }
 
         return collectAmt;
+    }
+
+    public Location getLocation() {
+        return this.location;
     }
 
     public long getLastCollectTime() {
@@ -122,17 +122,17 @@ public class GeneratorInstance implements Locatable {
 
     @Override
     public int getX() {
-        return this.boundingBox.getLocation().getBlockX();
+        return this.getLocation().getBlockX();
     }
 
     @Override
     public int getY() {
-        return this.boundingBox.getLocation().getBlockY();
+        return this.getLocation().getBlockY();
     }
 
     @Override
     public int getZ() {
-        return this.boundingBox.getLocation().getBlockZ();
+        return this.getLocation().getBlockZ();
     }
 
     @Override

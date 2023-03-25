@@ -47,6 +47,8 @@ public abstract class CustomItem {
 
             assert(nmsItem.getTag() != null);
 
+            itemInstance.getData().put("base-code", code);
+
             nmsItem.getTag().putString("base-code", code);
             nmsItem.getTag().putString("custom-data", itemInstance.data.toJSONString());
 

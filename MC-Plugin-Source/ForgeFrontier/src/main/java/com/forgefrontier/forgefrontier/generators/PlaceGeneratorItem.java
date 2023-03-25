@@ -64,7 +64,7 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
                 }
                 if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
                     e.getItem().setAmount(e.getItem().getAmount() - 1);
-                generatorInstance.getBoundingBox().getLocation().getBlock().setType(generatorInstance.generator.getMaterialRepresentation());
+                generatorInstance.getLocation().getBlock().setType(generatorInstance.generator.getMaterialRepresentation());
             });
         });
     }

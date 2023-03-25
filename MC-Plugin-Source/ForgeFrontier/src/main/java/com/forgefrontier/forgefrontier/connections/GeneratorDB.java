@@ -51,7 +51,7 @@ public class GeneratorDB extends DBConnection {
                     Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator("silver-gen");
                     GeneratorInstance instance = new GeneratorInstance(generator, location, level, lastCollectionTime, databaseId);
                     boolean success = ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(instance);
-                    System.out.println("Adding generator " + instance.getBoundingBox().getLocation() + ": success: " + success);
+                    System.out.println("Adding generator " + instance.getLocation() + ": success: " + success);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -68,7 +68,7 @@ public class GeneratorDB extends DBConnection {
         wrapper.fullInsert("location_x", instance.getX());
         wrapper.fullInsert("location_y", instance.getY());
         wrapper.fullInsert("location_z", instance.getZ());
-        wrapper.fullInsert("location_world", instance.getBoundingBox().getLocation().getWorld().getName());
+        wrapper.fullInsert("location_world", instance.getLocation().getWorld().getName());
         wrapper.executeAsyncQuery(this.dbConn, (insertResult) -> {
             if(insertResult.isSuccess()) {
                 instance.setDatabaseId(insertResult.getInsertId());
