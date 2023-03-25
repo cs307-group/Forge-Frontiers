@@ -8,6 +8,7 @@ import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -46,6 +47,8 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
     @Override
     public void onInteract(PlayerInteractEvent e, CustomItemInstance instance) {
         if(e.isCancelled())
+            return;
+        if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             return;
         Location newLocation = e.getClickedBlock().getLocation().add(e.getBlockFace().getDirection());
         if(!e.getClickedBlock().getWorld().getBlockAt(newLocation).isEmpty()) {

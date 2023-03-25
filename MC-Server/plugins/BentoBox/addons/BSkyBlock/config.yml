@@ -201,9 +201,9 @@ world:
     BREAK_SPAWNERS: 500
     LEVER: 500
     ELYTRA: 0
-    CAKE: 500
-    HURT_MONSTERS: 0
     RIDING: 500
+    HURT_MONSTERS: 0
+    CAKE: 500
     ARMOR_STAND: 500
     NAME_TAG: 500
     TRADING: 0
@@ -214,8 +214,8 @@ world:
     NETHER_PORTAL: 500
     LECTERN: 500
     ITEM_PICKUP: 0
-    DROPPER: 500
     BREWING: 500
+    DROPPER: 500
     TNT_PRIMING: 500
     COLLECT_WATER: 500
     BUTTON: 500
@@ -225,10 +225,10 @@ world:
     TRAPDOOR: 500
     EXPERIENCE_BOTTLE_THROWING: 500
     PRESSURE_PLATE: 0
-    HIVE: 500
     DYE: 500
-    ITEM_FRAME: 500
+    HIVE: 500
     PLACE_BLOCKS: 500
+    ITEM_FRAME: 500
     CRAFTING: 0
     ENCHANTING: 0
     SHEARING: 500
@@ -241,25 +241,25 @@ world:
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
     LEASH: 500
-    MOUNT_INVENTORY: 500
     BREAK_BLOCKS: 500
+    MOUNT_INVENTORY: 500
     CHORUS_FRUIT: 500
     CONTAINER: 500
-    JUKEBOX: 500
     POTION_THROWING: 500
+    JUKEBOX: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
     PVP_NETHER: false
     LEAF_DECAY: true
-    MONSTER_SPAWNERS_SPAWN: true
     TNT_DAMAGE: true
+    MONSTER_SPAWNERS_SPAWN: true
     ANIMAL_NATURAL_SPAWN: true
     MONSTER_NATURAL_SPAWN: true
     FIRE_IGNITE: true
     FIRE_SPREAD: true
-    FIRE_BURNING: true
     ANIMAL_SPAWNERS_SPAWN: true
+    FIRE_BURNING: true
     PVP_OVERWORLD: false
   # These settings/flags are hidden from users
   # Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings

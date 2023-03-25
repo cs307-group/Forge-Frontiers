@@ -11,4 +11,8 @@ public class PlaceStashItemInstance extends UniqueCustomItem.UniqueCustomItemIns
         super(itemStack);
 
     }
+
+    public void setStashId(String stashId) {
+        this.stashId = stashId;
+    }
 }

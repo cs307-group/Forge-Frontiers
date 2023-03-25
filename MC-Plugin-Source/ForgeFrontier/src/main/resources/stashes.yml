@@ -1,14 +1,11 @@
 stash-shop:
   0: "basic-stash"
-  1: ""
 
 stashes:
   0:
     id: "basic-stash"
     friendly_name: "&7Basic Stash"
     representation_material: "IRON_BLOCK"
-    material_type: "item"
-    item_id: "SilverIngot"
     costs:
       0:
         material_type: "coin"
@@ -17,26 +14,3 @@ stashes:
       0:
         item_id: "SilverIngot"
         max_amount: 512
-
-  1:
-    id: "coin-gen"
-    friendly_name: "&eCoin Generator"
-    representation_material: "RAW_GOLD_BLOCK"
-    material_type: "coin"
-    costs:
-      0:
-        material_type: "coin"
-        amount: 10000
-    levels:
-      0:
-        generation_rate: 3000
-        max_size: 10000
-        req_tier: 0
-        upgrade_costs:
-          0:
-            material_type: "coin"
-            amount: 10000
-      1:
-        generation_rate: 2000
-        max_size: 10000
-        req_tier: 1

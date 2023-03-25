@@ -34,13 +34,13 @@ public class GeneratorManager extends Manager implements Listener {
 
     public GeneratorManager(ForgeFrontier plugin) {
         super(plugin);
+        this.generatorInstanceTree = new HashMap<>();
+        this.generators = new HashMap<>();
+        this.shopMenuList = new ArrayList<>();
     }
 
     @Override
     public void init() {
-        this.generatorInstanceTree = new HashMap<>();
-        this.generators = new HashMap<>();
-        this.shopMenuList = new ArrayList<>();
 
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem());
 

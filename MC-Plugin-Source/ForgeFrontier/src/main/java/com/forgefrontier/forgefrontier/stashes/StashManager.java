@@ -3,44 +3,101 @@ package com.forgefrontier.forgefrontier.stashes;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.Generator;
 import com.forgefrontier.forgefrontier.generators.GeneratorInstance;
+import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import com.forgefrontier.forgefrontier.utils.QuadTree;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.api.events.BentoBoxReadyEvent;
 import world.bentobox.bentobox.database.objects.Island;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class StashManager extends Manager implements Listener {
 
     Map<String, QuadTree<StashInstance>> stashInstances;
     Map<String, Stash> stashes;
+    List<Stash> shopStashesList;
 
     public StashManager(ForgeFrontier plugin) {
         super(plugin);
         this.stashInstances = new HashMap<>();
         this.stashes = new HashMap<>();
-
+        this.shopStashesList = new ArrayList<>();
     }
 
     @Override
     public void init() {
 
+        this.plugin.getCustomItemManager().registerCustomItem(new PlaceStashItem());
+
+        int stashInd = 0;
+        ConfigurationSection configSection;
+        while((configSection = this.plugin.getConfig("stashes").getConfigurationSection("stashes." + stashInd)) != null) {
+            Stash stash = new Stash(configSection);
+            this.stashes.put(stash.getId(), stash);
+            stashInd += 1;
+        }
+
+        stashInd = 0;
+        String stashId;
+        while((stashId = this.plugin.getConfig("stashes").getString("stash-shop." + stashInd)) != null) {
+            shopStashesList.add(this.stashes.get(stashId));
+            stashInd += 1;
+        }
+
+    }
+
+    @EventHandler
+    public void onBentoBoxReady(BentoBoxReadyEvent e) {
+        //plugin.getDatabaseManager().getGeneratorDB().importGenerators();
     }
 
     @Override
     public void disable() {
+
+    }
+
+    @EventHandler
+    public void onInteractStash(PlayerInteractEvent e) {
+        if(e.getClickedBlock() == null) return;
+        Location location = e.getClickedBlock().getLocation();
+        Optional<Island> island = BentoBox.getInstance().getIslandsManager().getIslandAt(location);
+        if(island.isEmpty()) {
+            return;
+        }
+        QuadTree<StashInstance> insts = this.stashInstances.get(island.get().getUniqueId());
+        if(insts == null) return;
+        StashInstance instance = insts.get(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        if(instance == null) return;
+        e.getPlayer().sendMessage("Clicked a stash, eh?");
+        //e.getPlayer().openInventory(instance.getInventory());
+        e.setCancelled(true);
+
+        /*ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().updateGenerator(instance, (status) -> {
+            Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                switch(status) {
+                    case UPDATE_NEEDED:
+                        e.getPlayer().openInventory(instance.getInventory());
+                        break;
+                    case ERROR:
+                        plugin.getLogger().severe("An error occurred when attempting to look for updates to a generator.");
+                        break;
+                }
+            });
+        });
+         */
 
     }
 
@@ -49,7 +106,8 @@ public class StashManager extends Manager implements Listener {
     }
 
     public void initializeStashInstance(StashInstance stashInstance, Consumer<Boolean> callback) {
-        this.addStashInstance(stashInstance);
+        boolean success = this.addStashInstance(stashInstance);
+        callback.accept(success);
     }
 
     public boolean addStashInstance(StashInstance stashInstance) {
@@ -69,4 +127,7 @@ public class StashManager extends Manager implements Listener {
         return true;
     }
 
+    public List<Stash> getStashShopList() {
+        return this.shopStashesList;
+    }
 }

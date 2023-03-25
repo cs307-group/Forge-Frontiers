@@ -7,6 +7,8 @@ import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
 import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import com.forgefrontier.forgefrontier.stashes.PlaceStashItemInstance;
+import com.forgefrontier.forgefrontier.stashes.Stash;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -64,6 +66,52 @@ public class GeneratorShopInventoryHolder extends BaseInventoryHolder {
                 e.getWhoClicked().getInventory().addItem(generatorItem);
                 e.getWhoClicked().closeInventory();
                 e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully bought the " + generatorItem.getItemMeta().getDisplayName() + ".");
+            });
+            i++;
+        }
+
+
+
+        List<Stash> shopStashes = this.plugin.getStashManager().getStashShopList();
+
+        i = 0;
+        for(Stash stash: shopStashes) {
+            final int slotId = 4 * 9 + 1 + i;
+            ItemStackBuilder builder =
+                    new ItemStackBuilder(stash.getMaterialRepresentation())
+                            .setDisplayName(stash.getFriendlyName());
+            for(MaterialCost cost: stash.getShopCost()) {
+                builder.addLoreLine("&7>> &f" + cost.getAmount() + "&7x " + cost.getMaterial().getRepresentation().getItemMeta().getDisplayName());
+            }
+            this.setItem(slotId, builder.build());
+            final List<MaterialCost> costs = stash.getShopCost();
+            this.addHandler(slotId, (e) -> {
+                if(e.getWhoClicked().getInventory().firstEmpty() == -1) {
+                    this.replaceItemTemporarily(slotId, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("&cYou do not have enough to space in your inventory.").build());
+                    e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "You do not have enough to space in your inventory.");
+                    return;
+                }
+                boolean works = true;
+                for(MaterialCost cost: costs) {
+                    if(!cost.hasBalance((Player) e.getWhoClicked())) {
+                        works = false;
+                        break;
+                    }
+                }
+                if(!works) {
+                    this.replaceItemTemporarily(slotId, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("&cYou do not have enough to buy this item.").build());
+                    e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "You do not have enough to buy this item.");
+                    return;
+                }
+                for(MaterialCost cost: costs) {
+                    cost.take((Player) e.getWhoClicked());
+                }
+                PlaceStashItemInstance placeStashItemInstance = (PlaceStashItemInstance) CustomItemManager.getCustomItem("PlaceStashBlock").asInstance(null);
+                placeStashItemInstance.setStashId(stash.getId());
+                ItemStack stashItem = placeStashItemInstance.asItemStack();
+                e.getWhoClicked().getInventory().addItem(stashItem);
+                e.getWhoClicked().closeInventory();
+                e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully bought the " + stashItem.getItemMeta().getDisplayName() + ".");
             });
             i++;
         }

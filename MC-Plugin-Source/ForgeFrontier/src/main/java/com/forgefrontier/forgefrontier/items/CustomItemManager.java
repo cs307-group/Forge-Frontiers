@@ -65,7 +65,6 @@ public class CustomItemManager extends Manager implements Listener {
     // Prevent crafting using custom items.
     @EventHandler
     public void playerPrepareCraft(PrepareItemCraftEvent e) {
-        System.out.println("oh");
         for(ItemStack item: e.getInventory().getMatrix()) {
             if(item == null)
                 continue;
@@ -78,7 +77,6 @@ public class CustomItemManager extends Manager implements Listener {
 
     @EventHandler
     public void playerCraft(CraftItemEvent e) {
-        System.out.println("oh");
         for(ItemStack item: e.getInventory().getMatrix()) {
             if(item == null)
                 continue;

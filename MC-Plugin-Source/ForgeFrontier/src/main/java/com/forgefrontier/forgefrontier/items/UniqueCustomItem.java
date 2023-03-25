@@ -24,7 +24,7 @@ public abstract class UniqueCustomItem extends CustomItem {
         this.registerItemStackAccumulator(((instance, itemStack) -> {
             UniqueCustomItemInstance inst = (UniqueCustomItemInstance) instance;
 
-            inst.getData().put("unique-code", inst.uniqueId);
+            inst.getData().put("unique-code", inst.uniqueId.toString());
 
             return itemStack;
         }));
