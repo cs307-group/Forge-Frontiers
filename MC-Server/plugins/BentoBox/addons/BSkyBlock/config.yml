@@ -138,9 +138,9 @@ world:
     dragon-spawn: false
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
+  - ZOMBIE_VILLAGER
   - WITHER
   - ENDERMAN
-  - ZOMBIE_VILLAGER
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -227,8 +227,8 @@ world:
     PRESSURE_PLATE: 0
     DYE: 500
     HIVE: 500
-    PLACE_BLOCKS: 500
     ITEM_FRAME: 500
+    PLACE_BLOCKS: 500
     CRAFTING: 0
     ENCHANTING: 0
     SHEARING: 500

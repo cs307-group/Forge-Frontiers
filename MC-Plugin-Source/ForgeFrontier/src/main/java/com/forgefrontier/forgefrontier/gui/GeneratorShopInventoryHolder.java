@@ -24,13 +24,22 @@ public class GeneratorShopInventoryHolder extends BaseInventoryHolder {
 
         this.fillPanes();
 
+        for(int x = 0; x < 7; x++) {
+            for(int y = 0; y < 2; y++) {
+                int slotId = (x + 1) + (y+1) * 9;
+                this.setItem(slotId, new ItemStack(Material.AIR));
+            }
+            int slotId = (x + 1) + 4 * 9;
+            this.setItem(slotId, new ItemStack(Material.AIR));
+        }
+
         this.plugin = ForgeFrontier.getInstance();
 
         List<Generator> shopGenerators = this.plugin.getGeneratorManager().getShopMenuList();
 
         int i = 0;
         for(Generator generator: shopGenerators) {
-            final int slotId = 9 + 1 + i*2 + (i / 4) * 9 * 3;
+            final int slotId = 9 + 1 + i + (i / 7) * 9;
             ItemStackBuilder builder =
                     new ItemStackBuilder(generator.getMaterialRepresentation())
                             .setDisplayName(generator.getFriendlyName());

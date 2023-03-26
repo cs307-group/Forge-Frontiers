@@ -54,5 +54,9 @@ public class Stash {
     public List<MaterialCost> getShopCost() {
         return this.shopCosts;
     }
+
+    public List<StashItem> getStashItems() {
+        return this.stashItems;
+    }
 }
 

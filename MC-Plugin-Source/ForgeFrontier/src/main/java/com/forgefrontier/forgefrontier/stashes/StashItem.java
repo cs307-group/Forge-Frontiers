@@ -13,4 +13,12 @@ public class StashItem {
         this.maxAmount = config.getInt("max_amount");
     }
 
+    public CustomItem getItem() {
+        return this.item;
+    }
+
+    public int getMaxAmount() {
+        return this.maxAmount;
+    }
+
 }

@@ -15,12 +15,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class BaseInventoryHolder implements InventoryHolder {
 
-    public void fillPanes() {
+    public ItemStack getPaneItem() {
         ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.BLACK.toString());
         item.setItemMeta(meta);
-        this.fill(item);
+        return item;
+    }
+
+    public void fillPanes() {
+        this.fill(this.getPaneItem());
     }
 
     public interface InventoryClickHandler {

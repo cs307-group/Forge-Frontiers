@@ -81,8 +81,7 @@ public class StashManager extends Manager implements Listener {
         if(insts == null) return;
         StashInstance instance = insts.get(location.getBlockX(), location.getBlockY(), location.getBlockZ());
         if(instance == null) return;
-        e.getPlayer().sendMessage("Clicked a stash, eh?");
-        //e.getPlayer().openInventory(instance.getInventory());
+        e.getPlayer().openInventory(instance.getInventory());
         e.setCancelled(true);
 
         /*ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().updateGenerator(instance, (status) -> {
@@ -112,9 +111,7 @@ public class StashManager extends Manager implements Listener {
 
     public boolean addStashInstance(StashInstance stashInstance) {
         Location location = stashInstance.getLocation().clone();
-        //BentoBox.getInstance().getIslandsManager().
         Island island = BentoBox.getInstance().getIslandsManager().getIslandCache().getIslandAt(location);
-        //System.out.println("Island: " + island);
         if(island == null)
             return false;
         QuadTree<StashInstance> tree = stashInstances.get(island.getUniqueId());
@@ -129,5 +126,17 @@ public class StashManager extends Manager implements Listener {
 
     public List<Stash> getStashShopList() {
         return this.shopStashesList;
+    }
+
+    public void removeStashInstance(StashInstance stashInstance) {
+        Location location = stashInstance.getLocation().clone();
+        Island island = BentoBox.getInstance().getIslandsManager().getIslandCache().getIslandAt(location);
+        if(island == null)
+            return;
+        QuadTree<StashInstance> tree = stashInstances.get(island.getUniqueId());
+        if(tree == null)
+            return;
+        tree.remove(stashInstance);
+        stashInstance.getLocation().getBlock().setType(Material.AIR);
     }
 }
