@@ -26,7 +26,6 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
                     .setDisplayName(generator.getFriendlyName() + "&7 - Lvl &f" + (i + 1))
                     .addLoreLine("&7Generation Rate: &f" + ((float) genLevel.generatorRate / 1000) + "&7 seconds per item")
                     .addLoreLine("&7Max Size: &f" + genLevel.maxSize)
-                    .setShiny(i <= generatorInstance.level)
                     .build());
             i++;
         }
@@ -49,7 +48,6 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
                     .setDisplayName("&6Current Level: " + generator.getFriendlyName() + "&7 - Lvl &f" + (level+1))
                     .addLoreLine("&7Generation Rate: &f" + ((float) genLevel.generatorRate / 1000) + "&7 seconds per item")
                     .addLoreLine("&7Max Size: &f" + genLevel.maxSize)
-                    .setShiny(i <= generatorInstance.level)
                     .build());
         if(generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts == null) {
             this.setItem(9 * 3 + 7, new ItemStackBuilder(Material.GREEN_WOOL)

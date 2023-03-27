@@ -29,6 +29,10 @@ public class QuadTree<T extends Locatable> {
         this.totalAmt = 0;
     }
 
+    public QuadTree() {
+
+    }
+
     public T get(int x, int y, int z) {
         for(T item: items) {
             if(item == null) return null;

@@ -30,19 +30,14 @@ public class TestChicken extends CustomChicken {
 
         static {
             try {
-                attributeField = AttributeMapBase.class.getDeclaredField("b");
-                attributeField.setAccessible(true);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         public void registerGenericAttribute(org.bukkit.entity.Entity entity, Attribute attribute) throws IllegalAccessException {
-            AttributeMapBase attributeMapBase = ((CraftLivingEntity) entity).getHandle().eq();
-            Map<AttributeBase, AttributeModifiable> map = (Map<AttributeBase, AttributeModifiable>) attributeField.get(attributeMapBase);
-            AttributeBase attributeBase = CraftAttributeMap.toMinecraft(attribute);
-            AttributeModifiable attributeModifiable = new AttributeModifiable(attributeBase, AttributeModifiable::a);
-            map.put(attributeBase, attributeModifiable);
+
         }
 
         public BossBar bossBar;
@@ -64,9 +59,6 @@ public class TestChicken extends CustomChicken {
             this.setCustomNameVisible(true);
 
             this.setAI(true);
-
-            AttributeMapBase attributeMapBase = handle.eq();
-            attributeMapBase.b().add(new AttributeModifiable(GenericAttributes.f, (a) -> {a.a(8.0);}));
 
             try {
                 registerGenericAttribute(this, Attribute.GENERIC_ATTACK_DAMAGE);
@@ -104,6 +96,8 @@ public class TestChicken extends CustomChicken {
                 handle.drops.add(CustomItemManager.getCustomItem("WoodenSword").asInstance(null).asItemStack());
             }
         }
+
+
     }
 
     /** Constructor for TestChicken instance */
@@ -123,12 +117,6 @@ public class TestChicken extends CustomChicken {
             System.out.println("INSTANCE OF TEST");
         }
         return chicken;
-    }
-
-    /** defines the behaviour of the entity */
-    @Override
-    public void executeBehavior() {
-
     }
 
     /**

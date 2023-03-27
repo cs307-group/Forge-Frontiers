@@ -25,6 +25,7 @@ import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
+import com.forgefrontier.forgefrontier.stashes.StashManager;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -55,6 +56,7 @@ public class ForgeFrontier extends JavaPlugin {
 
     private DatabaseManager databaseManager;
     private GeneratorManager generatorManager;
+    private StashManager stashManager;
     private CustomItemManager customItemManager;
     private PlayerManager playerManager;
     private GearItemManager gearItemManager;
@@ -77,6 +79,7 @@ public class ForgeFrontier extends JavaPlugin {
 
         this.createConfig("config");
         this.createConfig("generators");
+        this.createConfig("stashes");
         this.createConfig("mining");
         this.createConfig("gear-shop");
         this.createConfig("reroll");
@@ -92,6 +95,7 @@ public class ForgeFrontier extends JavaPlugin {
         // Managers
         this.databaseManager = new DatabaseManager(this);
         this.generatorManager = new GeneratorManager(this);
+        this.stashManager = new StashManager(this);
         this.customItemManager = new CustomItemManager(this);
         this.playerManager = new PlayerManager(this);
         this.gearItemManager = new GearItemManager(this);
@@ -102,6 +106,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.databaseManager.init();
         this.customItemManager.init();
         this.generatorManager.init();
+        this.stashManager.init();
         this.playerManager.init();
         this.gearItemManager.init();
         this.customEntityManager.init();
@@ -123,6 +128,7 @@ public class ForgeFrontier extends JavaPlugin {
 
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.stashManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.customItemManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.playerManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.gearItemManager, this);
@@ -138,6 +144,7 @@ public class ForgeFrontier extends JavaPlugin {
     public void onDisable() {
         this.databaseManager.disable();
         this.generatorManager.disable();
+        this.stashManager.disable();
         this.customItemManager.disable();
         this.playerManager.disable();
         this.gearItemManager.disable();
@@ -231,6 +238,10 @@ public class ForgeFrontier extends JavaPlugin {
 
     public GeneratorManager getGeneratorManager() {
         return this.generatorManager;
+    }
+
+    public StashManager getStashManager() {
+        return this.stashManager;
     }
 
     public PlayerManager getPlayerManager() {

@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class ItemStackBuilder {
     public ItemStackBuilder(ItemStack m) {
         copy = m;
         this.displayName = ItemUtil.itemName(m);
+        this.lore = m.getItemMeta().getLore();
         amt = m.getAmount();
         copyBuild = true;
     }
@@ -68,17 +70,17 @@ public class ItemStackBuilder {
         return this;
     }
 
+    public ItemStackBuilder setFullLore(List<String> lore) {
+        this.lore = new ArrayList<>(lore);
+        return this;
+    }
+
     /** Add a new line to the lore of the generated item */
     public ItemStackBuilder addLoreLine(String loreLine) {
         if(this.lore == null)
             this.lore = new ArrayList<>();
         this.lore.add(ChatColor.translateAlternateColorCodes('&', loreLine));
 
-        return this;
-    }
-
-    /* Add an invisible enchant to make the item shine. */
-    public ItemStackBuilder setShiny(boolean shiny) {
         return this;
     }
 
@@ -122,4 +124,7 @@ public class ItemStackBuilder {
         return i;
     }
 
+    public String getDisplayName() {
+        return this.displayName;
+    }
 }

@@ -9,9 +9,7 @@ public abstract class UniqueCustomItem extends CustomItem {
 
     // CustomItemInstance for unique items. They will have their own unique id to identify them.
     public static abstract class UniqueCustomItemInstance extends CustomItemInstance {
-
         UUID uniqueId;
-
         public UniqueCustomItemInstance(ItemStack itemStack) {
             super(itemStack);
         }
@@ -26,11 +24,7 @@ public abstract class UniqueCustomItem extends CustomItem {
         this.registerItemStackAccumulator(((instance, itemStack) -> {
             UniqueCustomItemInstance inst = (UniqueCustomItemInstance) instance;
 
-            net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-
-            nmsItem.t().a("unique-code", inst.uniqueId.toString());
-
-            itemStack = CraftItemStack.asBukkitCopy(nmsItem);
+            inst.getData().put("unique-code", inst.uniqueId.toString());
 
             return itemStack;
         }));
@@ -48,9 +42,7 @@ public abstract class UniqueCustomItem extends CustomItem {
             }
 
             // Otherwise, access the id of the existing item, and put it into the custom item's instance.
-            net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-
-            uniqueInstance.uniqueId = UUID.fromString(nmsItem.t().l("unique-code"));
+            uniqueInstance.uniqueId = UUID.fromString((String) uniqueInstance.getData().get("unique-code"));
 
             return uniqueInstance;
         }));

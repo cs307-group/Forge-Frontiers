@@ -34,13 +34,13 @@ public class GeneratorManager extends Manager implements Listener {
 
     public GeneratorManager(ForgeFrontier plugin) {
         super(plugin);
+        this.generatorInstanceTree = new HashMap<>();
+        this.generators = new HashMap<>();
+        this.shopMenuList = new ArrayList<>();
     }
 
     @Override
     public void init() {
-        this.generatorInstanceTree = new HashMap<>();
-        this.generators = new HashMap<>();
-        this.shopMenuList = new ArrayList<>();
 
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem());
 
@@ -127,7 +127,7 @@ public class GeneratorManager extends Manager implements Listener {
     }
 
     public boolean addGeneratorInstance(GeneratorInstance generatorInstance) {
-        Location location = generatorInstance.getBoundingBox().getLocation().clone();
+        Location location = generatorInstance.getLocation().clone();
         //BentoBox.getInstance().getIslandsManager().
         Island island = BentoBox.getInstance().getIslandsManager().getIslandCache().getIslandAt(location);
         //System.out.println("Island: " + island);
@@ -144,7 +144,7 @@ public class GeneratorManager extends Manager implements Listener {
     }
 
     public void removeGeneratorInstance(GeneratorInstance generatorInstance) {
-        Location l = generatorInstance.getBoundingBox().getLocation().clone();
+        Location l = generatorInstance.getLocation().clone();
         l.setY(0);
         Optional<Island> island = BentoBox.getInstance().getIslandsManager().getIslandAt(l);
         if(island.isEmpty()) {
@@ -157,7 +157,7 @@ public class GeneratorManager extends Manager implements Listener {
             return;
         }
         tree.remove(generatorInstance);
-        generatorInstance.getBoundingBox().getLocation().getBlock().setType(Material.AIR);
+        generatorInstance.getLocation().getBlock().setType(Material.AIR);
         ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().removeGenerator(generatorInstance);
     }
 

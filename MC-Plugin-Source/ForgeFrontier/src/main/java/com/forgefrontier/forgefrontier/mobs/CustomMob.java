@@ -1,13 +1,9 @@
 package com.forgefrontier.forgefrontier.mobs;
 
-import com.forgefrontier.forgefrontier.mobs.chickens.CustomCraftChicken;
-import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.level.ServerLevel;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
@@ -43,7 +39,7 @@ public abstract class CustomMob implements CustomEntity {
      */
     @Override
     public CraftEntity spawnCustomEntity(Location loc, CraftEntity craftEntity) {
-        WorldServer worldServer = ((CraftWorld)Bukkit.getServer().getWorld("world")).getHandle();
+        ServerLevel worldServer = ((CraftWorld)Bukkit.getServer().getWorld("world")).getHandle();
         worldServer.addFreshEntity(craftEntity.getHandle(), CreatureSpawnEvent.SpawnReason.CUSTOM);
         craftEntity.teleport(loc);
         return craftEntity;
@@ -61,11 +57,6 @@ public abstract class CustomMob implements CustomEntity {
     /** Returns the code attribute for the CustomMob */
     public String getCode() {
         return this.code;
-    }
-
-    @Override
-    public void executeBehavior() {
-
     }
 
     /**

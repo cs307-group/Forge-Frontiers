@@ -1,0 +1,16 @@
+stash-shop:
+  0: "basic-stash"
+
+stashes:
+  0:
+    id: "basic-stash"
+    friendly_name: "&7Basic Stash"
+    representation_material: "IRON_BLOCK"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 10000
+    contents:
+      0:
+        item_id: "SilverIngot"
+        max_amount: 512

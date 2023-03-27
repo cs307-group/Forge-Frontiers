@@ -5,11 +5,14 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.resources.SilverIngot;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -59,6 +62,32 @@ public class CustomItemManager extends Manager implements Listener {
         customItemInst.getBaseItem().onInteract(e, customItemInst);
     }
 
+    // Prevent crafting using custom items.
+    @EventHandler
+    public void playerPrepareCraft(PrepareItemCraftEvent e) {
+        for(ItemStack item: e.getInventory().getMatrix()) {
+            if(item == null)
+                continue;
+            if(CustomItemManager.getCustomItem(item) != null) {
+                e.getInventory().setResult(new ItemStack(Material.AIR));
+                return;
+            }
+        }
+    }
+
+    @EventHandler
+    public void playerCraft(CraftItemEvent e) {
+        for(ItemStack item: e.getInventory().getMatrix()) {
+            if(item == null)
+                continue;
+            if(CustomItemManager.getCustomItem(item) != null) {
+                e.getInventory().setResult(new ItemStack(Material.AIR));
+                e.setCancelled(true);
+                return;
+            }
+        }
+    }
+
     // Check when a player attacks with a custom item, if it's a custom item, run the attack event on it.
     @EventHandler
     public void onAttack(EntityDamageByEntityEvent e) {
@@ -102,10 +131,11 @@ public class CustomItemManager extends Manager implements Listener {
     private static String extractCode(ItemStack itemStack) {
 
         net.minecraft.world.item.ItemStack item2 = CraftItemStack.asNMSCopy(itemStack);
-        if(item2.t() == null) {
+        if(item2.getTag() == null) { //TODO: (Isaac) check to make sure that the method is correct - item2.getTag()
             return null;
         }
-        return item2.t().l("base-code");
+        //TODO: (Isaac) check to make sure that the method is correct - item2.getTag()
+        return item2.getTag().getString("base-code");
     }
 
     public Map<String, CustomItem> getItems() {
