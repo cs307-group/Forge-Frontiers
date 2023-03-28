@@ -17,7 +17,7 @@ const NAV_ITEMS = {
 
 export interface LayoutProps {
   children?: any;
-  active: keyof typeof NAV_ITEMS;
+  active: keyof typeof NAV_ITEMS | null;
   title?: string;
 }
 function Menu({active}: LayoutProps) {
@@ -51,7 +51,7 @@ export function AppLayout({children, active, title}: LayoutProps) {
   );
 }
 
-function MobileHeader({active}: {active: string}) {
+function MobileHeader({active}: {active: string | null}) {
   const [open, setOpen] = useState(false);
   return (
     <header className="h-12 flex relative">
@@ -68,7 +68,7 @@ function MobileHeader({active}: {active: string}) {
     </header>
   );
 }
-function DesktopSideBar({active}: {active: string}) {
+function DesktopSideBar({active}: {active: string | null}) {
   return (
     <div className="flex-shrink flex-grow-0 px-4 m-4 min-w-[200px] rounded-2xl bg-[#262C2C] flex flex-col items-center">
       <Link href="/" className="text-ff-theme text-xl ff_shadow my-6">
@@ -97,7 +97,7 @@ function MobileNav({
   setOpen,
   active,
 }: {
-  active: string;
+  active: string | null;
   open: any;
   setOpen: any;
 }) {

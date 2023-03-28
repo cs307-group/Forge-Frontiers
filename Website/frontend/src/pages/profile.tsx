@@ -1,26 +1,14 @@
 import Head from "next/head";
-import Image from "next/image";
 import {useState} from "react";
 
 import {AppLayout} from "@/components/Layout/AppLayout";
+import {ProfileViewer} from "@/components/Profile/Viewer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
 import {PlayerStats, Tokens, UserDataSecure} from "@/handlers/types";
 import {fetchUserData, getPlayerStats} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
-import avatarImage from "@/images/avatar.png";
-
-const keyToTableMap: Record<keyof PlayerStats, string> = {
-  ATK: "ATK",
-  current_health: "Health",
-  CDMG: "CDMG",
-  CRATE: "CRATE",
-  DEF: "DEF",
-  DEX: "DEX",
-  HP: "HP",
-  player_uuid: "uuid",
-  STR: "STR",
-};
+import {DEFAULT_STATS} from "@/util/default-stats";
 
 export default function Profile({
   data,
@@ -49,45 +37,7 @@ export default function Profile({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout active="profile" title={`${data.name}'s Profile`}>
-        <div>
-          <div className="sm:block flex items-center justify-center">
-            <Image
-              className="h-80 w-40 mt-4"
-              width={316}
-              height={512}
-              src={
-                data.mc_user
-                  ? `https://visage.surgeplay.com/full/512/${data.mc_user}`
-                  : avatarImage.src
-              }
-              alt="Avatar"
-            />
-          </div>
-          <div className="flex-1">
-            <table className="border-collapse table-auto w-full max-w-[600px] mx-auto">
-              <thead>
-                <tr className="border-b border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-200 text-left">
-                  {Object.keys(stats).map((x) => (
-                    <th key={x}>{keyToTableMap[x as keyof PlayerStats]}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="bg-slate-800">
-                <tr className="border-b border-slate-700 p-4 pl-8 text-slate-400">
-                  {Object.entries(stats).map((x) => (
-                    <td key={`${x[0]}-${x[1]}`}>
-                      <span>{x[1] as any}</span>
-                    </td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="flex item-center justify-between">
-            <h2 className="text-xl">Inventory</h2>
-            <h2 className="text-xl">Market Listings</h2>
-          </div>
-        </div>
+        <ProfileViewer data={data} stats={stats} />
       </AppLayout>
     </>
   );
@@ -99,30 +49,14 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
     return userData.resp;
   }
 
-  // if (!hasToken(c.req.cookies.tokens)) {
-  //   return {props: {error: "unknown"}};
-  // }
-  const t: Tokens =
-    userData.extractTokens() || JSON.parse(c.req.cookies.tokens);
-
-  const stats = await getPlayerStats(t);
+  const stats = await getPlayerStats(userData.resp.id_);
   let json: PlayerStats = (await stats.json())?.data;
   console.log(stats.status);
   if (!stats.ok && stats.status !== 404) {
     return {props: json || null};
   }
   if (stats.status === 404) {
-    json = {
-      ATK: 0,
-      CDMG: 0,
-      CRATE: 0,
-      current_health: 100,
-      DEF: 0,
-      DEX: 0,
-      HP: 0,
-      player_uuid: "unknown",
-      STR: 0,
-    };
+    json = DEFAULT_STATS;
   }
   return userData.addCustomData({stats: json || null}).toSSPropsResult;
 });

@@ -24,7 +24,8 @@ export const routes = {
     getApiURL(`/users/search?q=${encodeURIComponent(x)}`),
   refreshToken: getApiURL("/users/-/token/refresh"),
   linkAccount: getApiURL("/users/-/link"),
-  mcStats: getApiURL("/users/-/stats"),
+  mcStats: (id: string) => getApiURL(`/users/-/stats/${id}`),
+  userById: (id: string) => getApiURL(`/users/id/${id}`),
 };
 
 /**

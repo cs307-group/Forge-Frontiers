@@ -79,9 +79,21 @@ export async function fetchUserData(c: AuthReqContext) {
   throw new Error("unreachable");
 }
 
-export function getPlayerStats(tokens: Tokens) {
-  return jsonRequest(routes.mcStats, {
+export async function getPlayerById(id: string) {
+  const getResponse = () =>
+    jsonRequest(routes.userById(id), {
+      method: "get",
+    });
+  const resp = await getResponse();
+  if (!resp.ok) {
+    return new ErrorResponse({props: await resp.json()});
+  }
+  const userData: UserData = (await resp.json()).data.user_data;
+  return new EdgeFunctionResponse(userData);
+}
+
+export function getPlayerStats(id: string) {
+  return jsonRequest(routes.mcStats(id), {
     method: "get",
-    headers: getAuthenticationHeaders(tokens),
   });
 }
