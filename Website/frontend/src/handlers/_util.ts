@@ -20,6 +20,8 @@ export const routes = {
   register: getApiURL("/users/-/register"),
   login: getApiURL("/users/-/login"),
   userInfo: getApiURL("/users/me"),
+  searchUser: (x: string) =>
+    getApiURL(`/users/search?q=${encodeURIComponent(x)}`),
   refreshToken: getApiURL("/users/-/token/refresh"),
   linkAccount: getApiURL("/users/-/link"),
   mcStats: getApiURL("/users/-/stats"),

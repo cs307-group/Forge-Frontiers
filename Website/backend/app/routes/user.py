@@ -4,7 +4,7 @@ from app.db.mutations.user import create_user
 from app.db.mutations.util import commit
 from app.db.queries.links import get_link_by_link_code
 from app.db.queries.stats import get_stats_by_player_uuid
-from app.db.queries.user import get_user_by_id, get_user_by_username
+from app.db.queries.user import get_user_by_id, get_user_by_username, search
 from app.decorators.api_response import api
 from app.exceptions.app_exception import AppException
 from app.internal.context import Context
@@ -91,6 +91,18 @@ def user_details(user: str):
         UserOutSecure.from_db(user_data) if show_secure else UserOut.from_db(user_data)
     )
     return {"user_data": model.dict()}
+
+
+@router.get("/search")
+@api.strict
+def api_search_for_user():
+    req = Context()
+    q = req.args.get("q")
+    if not q:
+        raise AppException("Invalid")
+    users = search(q)
+    res = [UserOut.from_db(x).dict() for x in users]
+    return res
 
 
 @router.patch("/<user>/")
