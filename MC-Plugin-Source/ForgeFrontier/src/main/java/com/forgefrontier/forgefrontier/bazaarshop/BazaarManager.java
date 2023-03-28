@@ -33,18 +33,22 @@ public class BazaarManager {
 
     // Items to be displayed
     private ArrayList<ItemStack> displayItems;
+    public static BazaarManager bazaarManager = null;
 
     private static ItemStack DEFAULT_NULL_ITEM;
-
+    public static String bazaarPrefix = "" + ChatColor.GOLD + "[Bazaar] " + ChatColor.WHITE;
+    public static boolean enabled = false;
     public BazaarManager(ForgeFrontier plugin) {
         this.plugin = plugin;
         DEFAULT_NULL_ITEM = (new ItemStackBuilder(Material.BARRIER).setDisplayName("" + ChatColor.RED + "N/A").build());
+        enabled = false;
+        if (bazaarManager == null)
+            bazaarManager = this;
     }
 
 
-
-
     public void init() {
+        enabled = false;
         this.bazaarDB = plugin.getDatabaseManager().getBazaarDB();
         // Pull Bazaar items from database
         lookupItems = bazaarDB.loadLookup(MAX_SLOT);
@@ -61,6 +65,7 @@ public class BazaarManager {
                         \tListings: %d
                         """.formatted(loaded));
         refreshListingDisplay(100);
+        enabled = true;
     }
 
     public int loadListings() {
@@ -136,6 +141,18 @@ public class BazaarManager {
         }
     }
 
+    public void clear() {
+        this.lookupItems.clear();
+        this.displayItems.clear();
+        this.playerListings.clear();
+        this.buyLookup.clear();
+        this.sellLookup.clear();
+    }
+
+    public static void reload() {
+        bazaarManager.clear();
+        bazaarManager.init();
+    }
 
     public boolean setItemSlot(ItemStack itm, int idx) {
         if (idx < MIN_SLOT || idx > MAX_SLOT) {
@@ -198,6 +215,10 @@ public class BazaarManager {
         if (be != null)
             return be.getPrice();
         else return 100;
+    }
+
+    public ItemStack getRealItem(int idx) {
+        return lookupItems.get(idx);
     }
 
     public void localInsertListing(BazaarEntry be) {

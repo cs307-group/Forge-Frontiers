@@ -56,7 +56,7 @@ public class BazaarGUI extends BaseInventoryHolder {
                             idx, optionHolder).getInventory());
                 },
                 () -> {
-                    p.openInventory(new OrderCreationGUI(27,"Create Sell Order",true,
+                    p.openInventory(new OrderCreationGUI(27,"Create Sell Order",false,
                             idx, optionHolder).getInventory());
                 });
         p.openInventory(optionHolder.getInventory());
