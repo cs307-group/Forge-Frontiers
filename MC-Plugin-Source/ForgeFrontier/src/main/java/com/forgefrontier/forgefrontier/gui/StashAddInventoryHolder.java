@@ -77,6 +77,11 @@ public class StashAddInventoryHolder extends BaseInventoryHolder {
         } else {
             stashInstance.setAmount(stashItem, total);
         }
+        ForgeFrontier.getInstance().getDatabaseManager().getStashDB().sendStashUpdate(stashInstance, (success) -> {
+            if(!success) {
+                ForgeFrontier.getInstance().getLogger().severe("Unable to send stash update to database. An unknown error occurred in doing so.");
+            }
+        });
         Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
             e.getPlayer().openInventory(new StashInventoryHolder(this.stashInstance).getInventory());
         });

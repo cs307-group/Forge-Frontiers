@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class GeneratorCommandExecutor implements CommandExecutor {
 
-
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if(!(commandSender instanceof Player)) {

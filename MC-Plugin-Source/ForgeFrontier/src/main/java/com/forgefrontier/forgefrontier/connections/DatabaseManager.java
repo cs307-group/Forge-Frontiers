@@ -18,6 +18,7 @@ public class DatabaseManager extends Manager {
     ShopDB shopDB;
     BazaarDB bazaarDB;
     GeneratorDB generatorDB;
+    StashDB stashDB;
     PlayerDB playerDB;
 
     public DatabaseManager(ForgeFrontier plugin) {
@@ -32,6 +33,7 @@ public class DatabaseManager extends Manager {
         this.shopDB = new ShopDB(dbConn);
         this.bazaarDB = new BazaarDB(dbConn);
         this.generatorDB = new GeneratorDB(dbConn);
+        this.stashDB = new StashDB(dbConn);
         this.playerDB = new PlayerDB(dbConn);
     }
 
@@ -133,6 +135,10 @@ public class DatabaseManager extends Manager {
 
     public GeneratorDB getGeneratorDB() {
         return generatorDB;
+    }
+
+    public StashDB getStashDB() {
+        return stashDB;
     }
 
     public PlayerDB getPlayerDB() {

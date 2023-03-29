@@ -27,11 +27,11 @@ public class MiningCommandExecutor implements CommandExecutor {
         }
         Player p = (Player) sender;
         if(args.length >= 1) {
-            if(args[0].equals("wand")) {
+            if(args[0].equalsIgnoreCase("wand")) {
                 p.getInventory().addItem(CustomItemManager.getCustomItem("mining-wand").asInstance(null).asItemStack());
                 return true;
             }
-            if(args[0].equals("create")) {
+            if(args[0].equalsIgnoreCase("create")) {
                 if(args.length < 3) {
                     sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid number of arguments. Usage: \n/mining create <Area Name> <Replacement Material>");
                     return true;
@@ -69,7 +69,7 @@ public class MiningCommandExecutor implements CommandExecutor {
                 sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully registered the new area.");
                 return true;
             }
-            if(args[0].equals("addresource")) {
+            if(args[0].equalsIgnoreCase("addresource")) {
                 if(args.length < 5) {
                     sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid number of arguments. Usage: \n/mining addresource <Area Name> <Item> <Block Material> <Time>");
                     return true;
@@ -109,11 +109,25 @@ public class MiningCommandExecutor implements CommandExecutor {
                 sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully added the given resource.");
                 return true;
             }
+            if(args[0].equalsIgnoreCase("remove")) {
+                if(args.length < 2) {
+                    sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid number of arguments. Usage: \n/mining remove <Area Name>");
+                    return true;
+                }
+                String areaName = args[1];
+                if(ForgeFrontier.getInstance().getMiningManager().getMiningArea(areaName) == null) {
+                    sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to find mining area with name: " + areaName);
+                    return true;
+                }
+                sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully delted mining area with name: " + areaName);
+                ForgeFrontier.getInstance().getMiningManager().removeMiningArea(areaName);
+            }
         }
         sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid command arguments. Usage:");
         sender.sendMessage(ChatColor.RED + "1. " + ChatColor.YELLOW + "/mining wand");
         sender.sendMessage(ChatColor.RED + "2. " + ChatColor.YELLOW + "/mining create <Area Name> <Replacement Material>");
         sender.sendMessage(ChatColor.RED + "3. " + ChatColor.YELLOW + "/mining addresource <Area Name> <Item> <Block Material> <Time>");
+        sender.sendMessage(ChatColor.RED + "4. " + ChatColor.YELLOW + "/mining remove <Area Name>");
         return true;
     }
 }

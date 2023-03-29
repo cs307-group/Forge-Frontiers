@@ -10,7 +10,7 @@ RUN npm install
 # RUN npm ci
 
 ENV NEXT_TELEMETRY_DISABLED 1
-
+ENV IS_FLY 1
 # Add `ARG` instructions below if you need `NEXT_PUBLIC_` variables
 # then put the value on your fly.toml
 # Example:
