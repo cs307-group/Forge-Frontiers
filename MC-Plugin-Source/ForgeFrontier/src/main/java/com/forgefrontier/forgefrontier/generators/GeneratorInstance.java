@@ -47,25 +47,26 @@ public class GeneratorInstance implements Locatable {
                 player.sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to update your generator. Please try again later.");
                 return;
             }
-            ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().sendGeneratorUpdate(this, (success) -> {
-                if(!success) {
-                    ForgeFrontier.getInstance().getLogger().severe("Unable to send generator update to database. An unknown error occurred in doing so.");
-                    player.sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to update your generator. Please try again later.");
-                    return;
+            Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                long currentTime = System.currentTimeMillis();
+
+                GeneratorLevel currentLevel = getGeneratorLevel();
+
+                int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
+                int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.generatorRate;
+                if(collectAmt >= currentLevel.maxSize) {
+                    collectAmt = currentLevel.maxSize;
+                    nextTimeRemain = 0;
                 }
-                Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
-                    long currentTime = System.currentTimeMillis();
-
-                    GeneratorLevel currentLevel = getGeneratorLevel();
-
-                    int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
-                    int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.generatorRate;
-                    if(collectAmt >= currentLevel.maxSize) {
-                        collectAmt = currentLevel.maxSize;
-                        nextTimeRemain = 0;
+                int amtLeft = this.generator.primaryMaterial.collect(player, collectAmt);
+                this.setAmountLeft(amtLeft, currentTime, nextTimeRemain);
+                ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().sendGeneratorUpdate(this, (success) -> {
+                    if(!success) {
+                        Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                            ForgeFrontier.getInstance().getLogger().severe("Unable to send generator update to database. An unknown error occurred in doing so.");
+                            player.sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to update your generator. Please try again later.");
+                        });
                     }
-                    int amtLeft = this.generator.primaryMaterial.collect(player, collectAmt);
-                    this.setAmountLeft(amtLeft, currentTime, nextTimeRemain);
                 });
             });
         });
@@ -74,7 +75,7 @@ public class GeneratorInstance implements Locatable {
     private void setAmountLeft(int amtLeft, long currentTime, int remainingTime) {
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        this.lastCollectTime = (int) (currentTime - remainingTime) - amtLeft * currentLevel.generatorRate;
+        this.lastCollectTime = currentTime - remainingTime - amtLeft * currentLevel.generatorRate;
 
     }
 

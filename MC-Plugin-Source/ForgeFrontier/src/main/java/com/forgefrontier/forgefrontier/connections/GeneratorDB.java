@@ -53,7 +53,7 @@ public class GeneratorDB extends DBConnection {
                     Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(generatorId);
                     GeneratorInstance instance = new GeneratorInstance(generator, location, level, lastCollectionTime, databaseId);
                     boolean success = ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(instance);
-                    System.out.println("Adding generator " + instance.getLocation() + ": success: " + success);
+                    //System.out.println("Adding generator " + instance.getLocation() + ": success: " + success);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

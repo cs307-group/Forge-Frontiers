@@ -53,7 +53,7 @@ public class StashDB extends DBConnection {
                     Stash stash = ForgeFrontier.getInstance().getStashManager().getStash(stashId);
                     StashInstance instance = new StashInstance(stash, location, jsonContents, databaseId);
                     boolean success = ForgeFrontier.getInstance().getStashManager().addStashInstance(instance);
-                    System.out.println("Adding stash " + instance.getLocation() + ": success: " + success);
+                    //System.out.println("Adding stash " + instance.getLocation() + ": success: " + success);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

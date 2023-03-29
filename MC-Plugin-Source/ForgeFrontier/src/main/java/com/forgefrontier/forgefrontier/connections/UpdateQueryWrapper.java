@@ -15,6 +15,8 @@ public class UpdateQueryWrapper {
     Map<String, Object> values;
 
     public UpdateQueryWrapper() {
+        this.conditions = new ArrayList<>();
+        this.keyIndices = new TreeMap<>();
         this.fields = new ArrayList<>();
         this.values = new HashMap<>();
     }
@@ -71,16 +73,19 @@ public class UpdateQueryWrapper {
             queryBuilder.append(" SET ");
             for(int i = 0; i < fields.size(); i++) {
                 queryBuilder.append(fields.get(i));
+                queryBuilder.append(" = ?");
                 if(i != fields.size() - 1)
                     queryBuilder.append(", ");
             }
-            queryBuilder.append(") VALUES (");
-            for(int i = 0; i < fields.size(); i++) {
-                queryBuilder.append("?");
-                if(i != fields.size() - 1)
-                    queryBuilder.append(", ");
+            if(this.conditions.size() != 0) {
+                queryBuilder.append(" WHERE (");
+                for (int i = 0; i < conditions.size(); i++) {
+                    queryBuilder.append(conditions.get(i));
+                    if (i != conditions.size() - 1)
+                        queryBuilder.append(") AND (");
+                }
+                queryBuilder.append(")");
             }
-            queryBuilder.append(")");
             PreparedStatement preparedStatement = databaseConnection.prepareStatement(queryBuilder.toString(), Statement.RETURN_GENERATED_KEYS);
             int index;
             for(index = 1; index <= fields.size(); index++) {

@@ -91,7 +91,6 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDeath (EntityDeathEvent event) {
-        System.out.println("REGISTERED DEATH EVENT");
         LivingEntity entity = event.getEntity();
 
         // Removes the boss health bar if the entity contains metadata for it

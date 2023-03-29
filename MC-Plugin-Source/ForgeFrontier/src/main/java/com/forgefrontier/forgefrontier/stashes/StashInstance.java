@@ -105,8 +105,17 @@ public class StashInstance implements Locatable {
             e.printStackTrace();
             ForgeFrontier.getInstance().getLogger().severe("Unable to import stash contents with JSON string: " + jsonContents);
         }
-        this.stashContents = (Map<String, Integer>) contentsObj;
-
+        this.stashContents = new HashMap<>();
+        for(Object key: contentsObj.keySet()) {
+            Object val = contentsObj.get(key);
+            if(val instanceof Long) {
+                this.stashContents.put((String) key, ((Long) val).intValue());
+            } else if(val instanceof Integer) {
+                this.stashContents.put((String) key, (Integer) val);
+            } else {
+                ForgeFrontier.getInstance().getLogger().severe("Unable to import stash contents with key: " + key + ", and value: " + val);
+            }
+        }
     }
 
     public Island getIsland() {
