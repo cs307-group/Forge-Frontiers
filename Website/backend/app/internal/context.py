@@ -10,6 +10,7 @@ class Context(Generic[M]):
 
     def __init__(self, model: Callable[[], M] = None):
         self._reqest = request
+        self.args = request.args
         if request.method.lower() in {"get", "head", "options"}:
             self.json = {}
         else:

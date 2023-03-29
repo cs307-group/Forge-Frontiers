@@ -1,78 +1,54 @@
-import {IncomingMessage} from "http";
-
-import {GetServerSidePropsContext, GetServerSidePropsResult} from "next";
-
 import {config} from "@/config";
-import {noBrowser} from "@/util/no-browser";
 
 import {getAuthenticationHeaders, jsonRequest, routes} from "./_util";
-import {handleTokenRefresh, isRefreshSuccess} from "./auth";
-import {Tokens, UserDataSecure} from "./types";
+import {
+  AuthReqContext,
+  EdgeFunctionResponse,
+  ErrorResponse,
+  handleAuthRefresh,
+} from "./fetch-util";
+import {Tokens, UserData, UserDataSecure} from "./types";
 
-noBrowser();
-export class ErrorResponse {
-  constructor(public resp: GetServerSidePropsResult<any>) {}
-}
-
-export class UserDataRespoonse {
-  private customData: Record<any, any> = {};
-  public get toSSPropsResult(): GetServerSidePropsResult<any> {
-    return {props: {userData: this.resp, ...this.customData}};
+export async function searchUserData(c: AuthReqContext) {
+  const {
+    req,
+    query: {q},
+  } = c;
+  if (!q || Array.isArray(q)) {
+    return new ErrorResponse({props: {error: "Invalid search"}});
   }
-
-  constructor(public resp: UserDataSecure) {}
-  public addCustomData(obj: Record<any, any>) {
-    this.customData = {...this.customData, ...obj};
-    return this;
-  }
-  public extractTokens(): Tokens | null {
-    if ("cookie" in this.customData) {
-      try {
-        return JSON.parse(this.customData.cookie?.tokens) as Tokens;
-      } catch (_) {
-        return null;
-      }
+  const getResponse = ($tokens: Tokens) =>
+    jsonRequest(routes.searchUser(q), {
+      method: "get",
+      headers: getAuthenticationHeaders($tokens),
+    });
+  const result = await handleAuthRefresh(req, getResponse);
+  if (Array.isArray(result)) {
+    const [newResp, newTokens] = result;
+    const searchResults: UserData[] = (await newResp.json()).data;
+    const ret = new EdgeFunctionResponse(searchResults);
+    if (newTokens == null) {
+      return ret;
+    } else {
+      return ret.addCustomData({cookie: {tokens: JSON.stringify(newTokens)}});
     }
-    return null;
   }
+  return result;
 }
 
-export function isErrorResponse(x: unknown): x is ErrorResponse {
-  return x instanceof ErrorResponse;
-}
-
-export async function fetchUserData(
-  c: GetServerSidePropsContext<any, any> & {
-    req: IncomingMessage & {
-      cookies: {
-        tokens: string;
-      };
-    };
-  }
-) {
+export async function fetchUserData(c: AuthReqContext) {
   const {req} = c;
-  const tokens: Tokens = JSON.parse(req.cookies.tokens);
 
   const getResponse = ($tokens: Tokens) =>
     jsonRequest(routes.userInfo, {
       method: "get",
       headers: getAuthenticationHeaders($tokens),
     });
-  let resp = await getResponse(tokens);
-
-  if (!resp.ok) {
-    const refresh = await handleTokenRefresh(resp, tokens);
-    if (isRefreshSuccess(refresh)) {
-      const newTokens = refresh.tokens;
-      const newResp = await getResponse(newTokens);
-
-      if (!newResp.ok) {
-        return new ErrorResponse({
-          props: {
-            error: (await resp.json()).error,
-          },
-        });
-      }
+  // let resp = await getResponse(tokens);
+  const result = await handleAuthRefresh(req, getResponse);
+  if (Array.isArray(result)) {
+    const [newResp, newTokens] = result;
+    if (newTokens == null) {
       const userData: UserDataSecure = (await newResp.json()).data.user_data;
       if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
         if (userData.mc_user == null) {
@@ -81,29 +57,43 @@ export async function fetchUserData(
           });
         }
       }
-      return new UserDataRespoonse(userData).addCustomData({
-        cookie: {
-          tokens: JSON.stringify(newTokens),
-        },
-      });
-    } else {
-      return new ErrorResponse(refresh.response);
+      return new EdgeFunctionResponse(userData);
     }
-  }
-  const userData: UserDataSecure = (await resp.json()).data.user_data;
-  if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
-    if (userData.mc_user == null) {
-      return new ErrorResponse({
-        redirect: {destination: "/link", statusCode: 302},
-      });
+    const userData: UserDataSecure = (await newResp.json()).data.user_data;
+    if (config.REQUIRE_ACCOUNT_LINK_TO_PROCEED) {
+      if (userData.mc_user == null) {
+        return new ErrorResponse({
+          redirect: {destination: "/link", statusCode: 302},
+        });
+      }
     }
+    return new EdgeFunctionResponse(userData).addCustomData({
+      cookie: {
+        tokens: JSON.stringify(newTokens),
+      },
+    });
   }
-  return new UserDataRespoonse(userData);
+  if (result instanceof ErrorResponse) {
+    return result;
+  }
+  throw new Error("unreachable");
 }
 
-export function getPlayerStats(tokens: Tokens) {
-  return jsonRequest(routes.mcStats, {
+export async function getPlayerById(id: string) {
+  const getResponse = () =>
+    jsonRequest(routes.userById(id), {
+      method: "get",
+    });
+  const resp = await getResponse();
+  if (!resp.ok) {
+    return new ErrorResponse({props: await resp.json()});
+  }
+  const userData: UserData = (await resp.json()).data.user_data;
+  return new EdgeFunctionResponse(userData);
+}
+
+export function getPlayerStats(id: string) {
+  return jsonRequest(routes.mcStats(id), {
     method: "get",
-    headers: getAuthenticationHeaders(tokens),
   });
 }

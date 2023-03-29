@@ -1,5 +1,4 @@
 from secrets import token_urlsafe
-from time import time
 from sqlalchemy.dialects.postgresql import UUID, TEXT
 from sqlalchemy import text
 from uuid import uuid4

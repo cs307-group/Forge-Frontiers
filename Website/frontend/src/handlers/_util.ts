@@ -3,15 +3,9 @@ import {noBrowser} from "@/util/no-browser";
 import {Tokens} from "./types";
 
 noBrowser();
-export const {
-  IS_DEV: _isDev,
-  API_HOST_PROD,
-  API_HOST_DEVELOPMENT,
-} = process.env;
+export const {API_URL, IS_DEV: _isDev} = process.env;
 
 export const IS_DEV = _isDev === "1";
-const API_URL = IS_DEV ? API_HOST_DEVELOPMENT : API_HOST_PROD;
-
 export function getApiURL(url: string) {
   return new URL(url, API_URL).href;
 }
@@ -20,9 +14,12 @@ export const routes = {
   register: getApiURL("/users/-/register"),
   login: getApiURL("/users/-/login"),
   userInfo: getApiURL("/users/me"),
+  searchUser: (x: string) =>
+    getApiURL(`/users/search?q=${encodeURIComponent(x)}`),
   refreshToken: getApiURL("/users/-/token/refresh"),
   linkAccount: getApiURL("/users/-/link"),
-  mcStats: getApiURL("/users/-/stats"),
+  mcStats: (id: string) => getApiURL(`/users/-/stats/${id}`),
+  userById: (id: string) => getApiURL(`/users/id/${id}`),
 };
 
 /**
@@ -49,6 +46,7 @@ export function jsonRequest(
     body: null as any,
   }
 ) {
+  console.log("[fetch] ", method, url);
   const reqHeaders = new Headers(headers);
   reqHeaders.set("content-type", "application/json");
   reqHeaders.set("x-debug-from", "serverless-functions"); // maybe make it a secret?)

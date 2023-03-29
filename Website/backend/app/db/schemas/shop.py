@@ -9,18 +9,18 @@ from ..base import db
 class Shop(db.Model):
     # pylint: disable=E1101
     id_: str = db.Column(TEXT, unique=True, nullable=False, primary_key=True)
-    item_id: str = db.Column(TEXT, unique=True, nullable=False)
+    item_id: str = db.Column(TEXT, unique=False, nullable=False)
     item_material: str = db.Column(db.String(100), unique=True, nullable=False)
     item_name: str = db.Column(db.String(100), nullable=False)
     item_lore: str = db.Column(TEXT, nullable=False)
     player_name: str = db.Column(TEXT, nullable=False)
     # DO NOT store as float, we don't want floating point errors
     price: str = db.Column(TEXT, nullable=False, default="0")
-    amount: int = db.Column(db.Integer, default=0)
+    amount: int = db.Column(db.BigInteger, default=0)
     lister_player_id = db.Column(TEXT, nullable=False)
     buyer_id: str = db.Column(TEXT, nullable=True)
-    date_sold: int = db.Column(db.Integer)
-    created_at: int = db.Column(db.Integer)
+    date_sold: int = db.Column(db.BigInteger)
+    created_at: int = db.Column(db.BigInteger)
     custom_data: str = db.Column(TEXT)
 
     # pylint: enable=E1101

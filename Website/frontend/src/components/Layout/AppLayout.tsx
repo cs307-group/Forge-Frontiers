@@ -10,13 +10,13 @@ const NAV_ITEMS = {
   profile: "My Profile",
   generators: "Generators",
   leaderboard: "Leaderboard",
-  "player-lookup": "Player Lookup",
+  search: "Player Lookup",
   "market-viewer": "Market Viewer",
 } as const;
 
 export interface LayoutProps {
   children?: any;
-  active: keyof typeof NAV_ITEMS;
+  active: keyof typeof NAV_ITEMS | null;
   title?: string;
 }
 function Menu({active}: LayoutProps) {
@@ -36,7 +36,7 @@ export function AppLayout({children, active, title}: LayoutProps) {
         </Client>
         <main
           role="main"
-          className="flex-1 sm:w-full sm:flex-grow sm:pt-1 sm:px-3 sm:rounded-2xl sm:bg-[#262C2C] sm:m-4"
+          className="flex-1 sm:w-full sm:flex-grow sm:pt-1 sm:px-8 sm:rounded-2xl sm:bg-[#262C2C] sm:m-4"
         >
           {title && (
             <div className="text-2xl mt-4 text-center sm:text-left">
@@ -50,7 +50,7 @@ export function AppLayout({children, active, title}: LayoutProps) {
   );
 }
 
-function MobileHeader({active}: {active: string}) {
+function MobileHeader({active}: {active: string | null}) {
   const [open, setOpen] = useState(false);
   return (
     <header className="h-12 flex relative">
@@ -67,7 +67,7 @@ function MobileHeader({active}: {active: string}) {
     </header>
   );
 }
-function DesktopSideBar({active}: {active: string}) {
+function DesktopSideBar({active}: {active: string | null}) {
   return (
     <div className="flex-shrink flex-grow-0 px-4 m-4 min-w-[200px] rounded-2xl bg-[#262C2C] flex flex-col items-center">
       <Link href="/" className="text-ff-theme text-xl ff_shadow my-6">
@@ -96,7 +96,7 @@ function MobileNav({
   setOpen,
   active,
 }: {
-  active: string;
+  active: string | null;
   open: any;
   setOpen: any;
 }) {

@@ -48,7 +48,7 @@ class UserIn(_UserBase):
 
 
 class UserOut(CustomBase):
-    id_ = str
+    id_: str = Field(alias="id_")
     name: str
     mc_user: Optional[str]
     created_at: int
