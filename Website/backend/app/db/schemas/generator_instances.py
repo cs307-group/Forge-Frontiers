@@ -20,12 +20,12 @@ from ..base import db
 class GeneratorInstances(db.Model):
     # pylint: disable=E1101
     id_: str = db.Column(TEXT, primary_key=True)
-    level: int = db.Column(db.Integer, default=-1)
-    last_collection_time: int = db.Column(db.Integer)
-    collected_amount: int = db.Column(db.Integer)
-    location_x: int = db.Column(db.Integer)
-    location_y: int = db.Column(db.Integer)
-    location_z: int = db.Column(db.Integer)
+    level: int = db.Column(db.BigInteger, default=-1)
+    last_collection_time: int = db.Column(db.BigInteger)
+    collected_amount: int = db.Column(db.BigInteger)
+    location_x: int = db.Column(db.BigInteger)
+    location_y: int = db.Column(db.BigInteger)
+    location_z: int = db.Column(db.BigInteger)
     location_world: str = db.Column(TEXT)
     owner_uuid: str = db.Column(TEXT)
     # pylint: enable=E1101
