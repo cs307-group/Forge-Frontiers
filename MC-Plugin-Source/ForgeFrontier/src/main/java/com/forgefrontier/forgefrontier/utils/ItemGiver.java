@@ -20,4 +20,14 @@ public class ItemGiver {
         }
     }
 
+    public static void giveItem(Player p, ItemStack itm, int amt) {
+        while (amt > 0) {
+            int toGive = Math.min(amt, 64);
+            itm.setAmount(toGive);
+            giveItem(p,itm.clone());
+            amt -= toGive;
+        }
+    }
+
+
 }

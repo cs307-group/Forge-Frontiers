@@ -49,17 +49,7 @@ public class BazaarGUI extends BaseInventoryHolder {
     }
 
     public void slotClick(Player p, int idx) {
-        TwoOptionHolder optionHolder = new TwoOptionHolder("Select Buy/Sell");
-        optionHolder.setOpts(
-                () -> {
-                    p.openInventory(new OrderCreationGUI(27,"Create Buy Order",true,
-                            idx, optionHolder).getInventory());
-                },
-                () -> {
-                    p.openInventory(new OrderCreationGUI(27,"Create Sell Order",false,
-                            idx, optionHolder).getInventory());
-                });
-        p.openInventory(optionHolder.getInventory());
+        p.openInventory(new NowLaterGUI(27,idx).getInventory());
     }
 
     public void updateGUI() {

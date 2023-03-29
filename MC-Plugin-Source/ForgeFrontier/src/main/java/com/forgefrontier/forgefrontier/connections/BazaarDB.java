@@ -162,6 +162,29 @@ public class BazaarDB extends DBConnection {
 
     }
 
+    public boolean updateOrder(UUID old, BazaarEntry updated) {
+        UpdateQueryWrapper wrapper = new UpdateQueryWrapper();
+        wrapper.setTable("public.bazaar_orders");
+        wrapper.fullInsert("order_id",updated.getEntryID().toString());
+        wrapper.fullInsert("order_type",updated.getBType());
+        wrapper.fullInsert("lister_id",updated.getListerID().toString());
+        wrapper.fullInsert("slot_id",updated.getSlotID());
+        wrapper.fullInsert("amount",updated.getAmount());
+        wrapper.fullInsert("price",updated.getPrice());
+        wrapper.fullInsert("listdate",updated.getListdate());
+        wrapper.setConditionString("order_id = '" + old.toString() + "'");
+        UpdateQueryWrapper.InsertResult ir = wrapper.executeSyncQuery(this.dbConn);
+        return ir.isSuccess();
+    }
+    public boolean massDeleteOrders(ArrayList<BazaarEntry> toDelete) {
+        if (toDelete.size() == 0) return true;
+        MassDeleteQueryWrapper wrapper = new MassDeleteQueryWrapper();
+        wrapper.setTable("public.bazaar_orders");
+        for (BazaarEntry be : toDelete)
+            wrapper.addDeleteable("order_id", be.getEntryID().toString());
+        return wrapper.executeSyncQuery(this.dbConn);
+    }
+
 
 
 }
