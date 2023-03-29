@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarEntry;
+import com.forgefrontier.forgefrontier.bazaarshop.BazaarStash;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.inventory.ItemStack;
 
@@ -183,6 +184,43 @@ public class BazaarDB extends DBConnection {
         for (BazaarEntry be : toDelete)
             wrapper.addDeleteable("order_id", be.getEntryID().toString());
         return wrapper.executeSyncQuery(this.dbConn);
+    }
+
+    public boolean stashInsertUpdate(BazaarStash bs) {
+        SelectQueryWrapper wrapper = new SelectQueryWrapper();
+        wrapper.setTable("public.bazaar_redeem");
+        wrapper.setFields("order_id", "player_id", "item_id", "amount");
+        wrapper.addCondition("order_id = %orderid%","orderid");
+        wrapper.addValue("orderid", bs.getOrderID().toString());
+        ResultSet rs = wrapper.executeSyncQuery(dbConn);
+        int prevTotal = 0;
+        try {
+            if (rs != null && rs.next()) {
+                prevTotal += rs.getInt("amount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (prevTotal != 0) {
+            // UPDATE
+            UpdateQueryWrapper uwrap = new UpdateQueryWrapper();
+            uwrap.setTable("public.bazaar_redeem");
+            uwrap.fullInsert("amount", prevTotal + bs.getAmount());
+            uwrap.setConditionString("order_id = '" + bs.getOrderID().toString() + "'");
+            UpdateQueryWrapper.InsertResult ir = uwrap.executeSyncQuery(dbConn);
+            return ir.isSuccess();
+        } else {
+            // INSERT
+            InsertQueryWrapper iwrap = new InsertQueryWrapper();
+            iwrap.setTable("public.bazaar_redeem");
+            iwrap.fullInsert("order_id", bs.getOrderID().toString());
+            iwrap.fullInsert("player_id", bs.getPlayerID().toString());
+            iwrap.fullInsert("item_id", bs.getItemID());
+            iwrap.fullInsert("amount", bs.getAmount());
+            InsertQueryWrapper.InsertResult ir = iwrap.executeSyncQuery(dbConn);
+            return ir.isSuccess();
+        }
     }
 
 

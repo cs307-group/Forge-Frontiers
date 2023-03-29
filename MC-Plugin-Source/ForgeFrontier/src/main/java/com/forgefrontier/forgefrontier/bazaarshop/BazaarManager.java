@@ -13,8 +13,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.A;
-
+import java.util.AbstractMap.SimpleEntry;
 import java.awt.desktop.OpenFilesEvent;
 import java.util.*;
 import java.util.logging.Level;
@@ -30,7 +29,7 @@ public class BazaarManager {
     private HashMap<Integer, PriorityQueue<BazaarEntry>> sellLookup;
 
     // { PlayerID -> Bazaar Entry }
-    private HashMap<UUID, BazaarEntry> playerListings;
+    private HashMap<String, ArrayList<BazaarEntry>> playerListings;
 
 
     // Items to be compared to ("looked up")
@@ -91,7 +90,12 @@ public class BazaarManager {
 
         // Store listings in data structures
         for (BazaarEntry entry : listings) {
-            playerListings.put(entry.getListerID(), entry);
+            String player = entry.getListerID().toString();
+            if (!playerListings.containsKey(player)) {
+                playerListings.put(player,  new ArrayList<>());
+            }
+            ArrayList<BazaarEntry> list = playerListings.get(player);
+            list.add(entry);
             if (entry.getBType())
                 buyLookup.get(entry.getSlotID()).add(entry);
             else
@@ -197,6 +201,91 @@ public class BazaarManager {
 
 
     /**
+     * Player p FILLS a buy order -- p will sell their items to someone wanting to buy
+     * @param p Player
+     * @param itmIdx Item to sell
+     * @param amount Amount
+     * @return -2 Not enough items, -1 Generic Error, 0 Success
+     */
+    public double execBuyOrder(Player p, int itmIdx, int amount) {
+        ItemStack itm = getRealItem(itmIdx);
+        if (!ItemUtil.hasItem(p, itm, amount)) {
+            return -2;
+        }
+        // Amount - Total money gained
+        PriorityQueue<BazaarEntry> lkup = buyLookup.get(itmIdx);
+        int amt = amount;
+        double total = 0;
+        int nItem = 0;
+        ArrayList<BazaarEntry> removed = new ArrayList<>();
+        BazaarEntry modified = null; BazaarEntry modifiedOrig = null;
+        while (amt > 0) {
+            BazaarEntry be = lkup.peek();
+            if (be == null) break;
+            if (amt >= be.getAmount()) {
+                total += (double)be.getAmount() * be.getPrice();
+                amt -= be.getAmount();
+                nItem += be.getAmount();
+                be.setValid(false);
+                removed.add(be);
+                lkup.poll();
+            } else {
+                modifiedOrig = new BazaarEntry(be);
+                be.setValid(false);
+                modified = be;
+                total += amt * be.getPrice();
+                nItem += amt;
+                be.setAmount(be.getAmount() - amt);
+                amt = 0;
+            }
+        }
+
+        // Delete and update order listings.
+        if (nItem > amount || !bazaarDB.massDeleteOrders(removed) ||
+            (modified != null && !bazaarDB.updateOrder(modified.getEntryID(),modified))) {
+            for (BazaarEntry be : removed) {
+                be.setValid(true);
+                lkup.add(be);
+            }
+            if (modified != null)
+                modified.copy_content(modifiedOrig);
+            return -1;
+        }
+        // Give Items
+        double toGive = 0;
+        for (BazaarEntry be : removed) {
+            // 1. Check if stash exists for order -- if so add to it
+            // 2. If stash does not exist, create a new stash, add to it
+            // 3. take items from player inventory
+            // Failure in step 1 or 2 -> Revert
+
+            BazaarStash bs = new BazaarStash(be, be.getAmount());
+            if (!bazaarDB.stashInsertUpdate(bs)) {
+                plugin.getLogger().log(Level.SEVERE, "BAZAAR STASH UPDATE FAILURE...");
+            } else {
+                ItemUtil.take(p,itm,be.getAmount());
+                toGive += be.getAmount() * be.getPrice();
+            }
+
+        }
+        // Partial
+        if (modified != null) {
+            BazaarStash bs = new BazaarStash(modified, modifiedOrig.getAmount() - modified.getAmount());
+            if (!bazaarDB.stashInsertUpdate(bs)) {
+                plugin.getLogger().log(Level.SEVERE, "BAZAAR STASH UPDATE FAILURE...");
+            } else {
+                toGive += (modifiedOrig.getAmount() - modified.getAmount()) * modified.getPrice();
+                ItemUtil.take(p,itm,bs.getAmount());
+            }
+        }
+        econ.depositPlayer(p,toGive);
+        return toGive;
+    }
+
+
+
+
+    /**
      * Player p RECIEVES items from this
      * @param p     Player buying from sell order
      * @return      Success or not
@@ -271,6 +360,25 @@ public class BazaarManager {
         return true;
     }
 
+    public SimpleEntry<Integer, Double> walkBuyTotal(int item, int amount) {
+        PriorityQueue<BazaarEntry> lkup = buyLookup.get(item);
+        Iterator<BazaarEntry> itr = lkup.iterator();
+        double total = 0;
+        int amt = amount;
+        while (amt > 0 && itr.hasNext()) {
+            BazaarEntry be = itr.next();
+            if (amt >= be.getAmount()) {
+                total += (double)be.getAmount() * be.getPrice();
+                amt -= be.getAmount();
+            } else {
+                total += amt * be.getPrice();
+                amt = 0;
+            }
+        }
+        return new SimpleEntry<>(amount - amt, total);
+
+    }
+
     public double walkSellPrice(int item, int amount, double max_price) {
         PriorityQueue<BazaarEntry> lkup = sellLookup.get(item);
         Iterator<BazaarEntry> itr = lkup.iterator();
@@ -293,7 +401,6 @@ public class BazaarManager {
 
 
     public boolean createBuyListing(Player p, int idx, int amount, double price) {
-        ItemStack itm = lookupItems.get(idx);
         double bal = econ.getBalance(p);
 
         if (bal >= amount * price) {
@@ -357,11 +464,19 @@ public class BazaarManager {
     }
 
     public void localInsertListing(BazaarEntry be) {
-        playerListings.put(be.getListerID(),be);
+        // player uuid -> listings
+        if (!playerListings.containsKey(be.getListerID().toString()))
+            playerListings.put(be.getListerID().toString(),new ArrayList<>());
+        playerListings.get(be.getListerID().toString()).add(be);
+
         if (be.getBType())
             buyLookup.get(be.getSlotID()).add(be);
         else
             sellLookup.get(be.getSlotID()).add(be);
         refreshListingDisplay(REFRESH_AMT);
+    }
+
+    public ArrayList<BazaarEntry> getPlayerListings(UUID playerUUID) {
+        return this.playerListings.get(playerUUID.toString());
     }
 }

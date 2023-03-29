@@ -44,7 +44,6 @@ public class BazaarEntry {
         this.slotID = slot;
         this.amount = amount;
         this.price = price;
-
         this.entryID = UUID.randomUUID();
         this.listerID = lister;
         this.listdate = new Timestamp(System.currentTimeMillis());
@@ -80,6 +79,7 @@ public class BazaarEntry {
         this.price = price;
         listdate = creationTime;
         this.listerID = listerID;
+        this.valid = true;
     }
     public UUID getEntryID() {
         return entryID;

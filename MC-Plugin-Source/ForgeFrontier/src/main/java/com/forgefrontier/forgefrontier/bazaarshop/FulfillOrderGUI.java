@@ -75,6 +75,17 @@ public class FulfillOrderGUI extends BaseInventoryHolder{
             // 1. Check if item has items
             // 2. execute transaction & delete listing
             // 3. Send other player items to their stash
+            double res = bazaarManager.execBuyOrder(p,itmIdx,amount);
+            if (res == -2) {
+                p.sendMessage(BazaarManager.bazaarPrefix + ChatColor.RED + "Not enough items");
+            } else if (res == -1) {
+                p.sendMessage(BazaarManager.bazaarPrefix + ChatColor.RED + "Error purchasing item...");
+            } else if (res >= 0) {
+                p.sendMessage(BazaarManager.bazaarPrefix + ChatColor.GREEN +
+                        "You have gained " + ChatColor.YELLOW + res + "g " + ChatColor.GREEN +
+                        " from selling to bazaar!");
+            }
+            p.closeInventory();
         }
 
 

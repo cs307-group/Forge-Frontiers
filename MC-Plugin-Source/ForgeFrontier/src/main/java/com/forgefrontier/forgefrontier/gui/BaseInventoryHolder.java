@@ -31,7 +31,7 @@ public class BaseInventoryHolder implements InventoryHolder {
         void onClick(InventoryClickEvent e);
     }
 
-    int size;
+    protected int size;
     Inventory inventory;
 
     InventoryClickHandler[] handlers;
