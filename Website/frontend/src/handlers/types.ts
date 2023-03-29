@@ -28,3 +28,28 @@ export interface PlayerStats {
   CDMG: number;
   DEF: number;
 }
+
+export interface BazaarLookup {
+  slot_id: number;
+  item_name: string;
+  item_lore: string;
+  item_material: string;
+  custom_data: any;
+}
+export interface MarketState {
+  order_id: number;
+  order_type: boolean;
+  lister_id: string;
+  slot_id: number;
+  amount: number;
+  price: number;
+  listdate: string;
+  item: BazaarLookup;
+}
+
+export interface MarketStateFetch {
+  bazaar: MarketState[];
+  lookup: BazaarLookup[];
+  cheapest: Record<number, MarketState>;
+  counts: Record<number, number>;
+}
