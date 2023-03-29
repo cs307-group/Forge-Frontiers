@@ -10,9 +10,8 @@ const NAV_ITEMS = {
   profile: "My Profile",
   generators: "Generators",
   leaderboard: "Leaderboard",
-  "player-lookup": "Player Lookup",
+  search: "Player Lookup",
   "market-viewer": "Market Viewer",
-  search: "Search",
 } as const;
 
 export interface LayoutProps {

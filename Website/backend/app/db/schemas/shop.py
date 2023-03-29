@@ -16,11 +16,11 @@ class Shop(db.Model):
     player_name: str = db.Column(TEXT, nullable=False)
     # DO NOT store as float, we don't want floating point errors
     price: str = db.Column(TEXT, nullable=False, default="0")
-    amount: int = db.Column(db.Integer, default=0)
+    amount: int = db.Column(db.BigInteger, default=0)
     lister_player_id = db.Column(TEXT, nullable=False)
     buyer_id: str = db.Column(TEXT, nullable=True)
-    date_sold: int = db.Column(db.Integer)
-    created_at: int = db.Column(db.Integer)
+    date_sold: int = db.Column(db.BigInteger)
+    created_at: int = db.Column(db.BigInteger)
     custom_data: str = db.Column(TEXT)
 
     # pylint: enable=E1101
