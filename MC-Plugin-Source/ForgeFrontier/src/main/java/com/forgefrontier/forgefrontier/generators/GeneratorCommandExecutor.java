@@ -17,9 +17,12 @@ public class GeneratorCommandExecutor implements CommandExecutor {
             commandSender.sendMessage("You must be a player to use this command.");
             return true;
         }
-        commandSender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Generator command is not current functional.");
+        commandSender.sendMessage("If you want...");
+        Player p = (Player) commandSender;
+        p.getInventory().addItem(CustomItemManager.getInstanceFromData("{\"base-code\": \"SilverIngot\"}").asItemStack());
+        //commandSender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Generator command is not current functional.");
 
-        ForgeFrontier.getInstance().getLogger().info(ForgeFrontier.getInstance().getGeneratorManager().generatorInstanceTree.toString());
+        //ForgeFrontier.getInstance().getLogger().info(ForgeFrontier.getInstance().getGeneratorManager().generatorInstanceTree.toString());
 
         return true;
     }
