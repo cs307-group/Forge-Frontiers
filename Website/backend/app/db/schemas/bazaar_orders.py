@@ -43,5 +43,6 @@ class BazaarOrders(db.Model):
             "slot_id": self.slot_id,
             "amount": self.amount,
             "price": self.price,
-            "listdate": self.listdate,
+            "listdate": self.listdate.isoformat(),
+            "item": self.item.as_json,
         }

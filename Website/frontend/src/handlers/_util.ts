@@ -3,11 +3,11 @@ import {noBrowser} from "@/util/no-browser";
 import {Tokens} from "./types";
 
 noBrowser();
-export const {API_URL, IS_DEV: _isDev} = process.env;
+export const {API_URL, IS_DEV: _isDev, IS_FLY} = process.env;
 
 export const IS_DEV = _isDev === "1";
 export function getApiURL(url: string) {
-  return new URL(url, API_URL).href;
+  return new URL(url, IS_FLY ? "https://ff-api.fly.dev" : API_URL).href;
 }
 
 export const routes = {
@@ -20,6 +20,7 @@ export const routes = {
   linkAccount: getApiURL("/users/-/link"),
   mcStats: (id: string) => getApiURL(`/users/-/stats/${id}`),
   userById: (id: string) => getApiURL(`/users/id/${id}`),
+  marketState: getApiURL("/market/"),
 };
 
 /**
