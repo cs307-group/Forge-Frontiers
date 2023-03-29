@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.mining;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 
 public class MiningResource {
 
@@ -24,6 +25,12 @@ public class MiningResource {
         this.time = time;
     }
 
+    public MiningResource(ConfigurationSection config) {
+        this.item = CustomItemManager.getCustomItem(config.getString("item_id"));
+        this.blockMaterial = Material.matchMaterial(config.getString("block"));
+        this.time = config.getInt("time");
+    }
+
     public CustomItem getItem() {
         return item;
     }
@@ -42,6 +49,12 @@ public class MiningResource {
 
     public void setLastTime(int lastTime) {
         this.lastTime = lastTime;
+    }
+
+    public void save(ConfigurationSection config) {
+        config.set("item_id", item.getCode());
+        config.set("block", blockMaterial.toString());
+        config.set("time", time);
     }
 
 }

@@ -128,9 +128,7 @@ public class GeneratorManager extends Manager implements Listener {
 
     public boolean addGeneratorInstance(GeneratorInstance generatorInstance) {
         Location location = generatorInstance.getLocation().clone();
-        //BentoBox.getInstance().getIslandsManager().
         Island island = BentoBox.getInstance().getIslandsManager().getIslandCache().getIslandAt(location);
-        //System.out.println("Island: " + island);
         if(island == null)
             return false;
         QuadTree<GeneratorInstance> tree = generatorInstanceTree.get(island.getUniqueId());
@@ -144,14 +142,8 @@ public class GeneratorManager extends Manager implements Listener {
     }
 
     public void removeGeneratorInstance(GeneratorInstance generatorInstance) {
-        Location l = generatorInstance.getLocation().clone();
-        l.setY(0);
-        Optional<Island> island = BentoBox.getInstance().getIslandsManager().getIslandAt(l);
-        if(island.isEmpty()) {
-            ForgeFrontier.getInstance().getLogger().severe("Unable to find Generator Instance to remove.");
-            return;
-        }
-        QuadTree<GeneratorInstance> tree = generatorInstanceTree.get(island.get().getUniqueId());
+        Island island = generatorInstance.getIsland();
+        QuadTree<GeneratorInstance> tree = generatorInstanceTree.get(island.getUniqueId());
         if(tree == null) {
             ForgeFrontier.getInstance().getLogger().severe("Unable to find Generator Instance to remove.");
             return;

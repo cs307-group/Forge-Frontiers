@@ -25,7 +25,6 @@ generators:
         generation_rate: 9000
         max_size: 512
         req_tier: 2
-
   1:
     id: "coin-gen"
     friendly_name: "&eCoin Generator"

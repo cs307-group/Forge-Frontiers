@@ -3,6 +3,8 @@ package com.forgefrontier.forgefrontier.connections;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.Generator;
 import com.forgefrontier.forgefrontier.generators.GeneratorInstance;
+import com.forgefrontier.forgefrontier.stashes.Stash;
+import com.forgefrontier.forgefrontier.stashes.StashInstance;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -12,7 +14,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class GeneratorDB extends DBConnection {
+public class StashDB extends DBConnection {
 
     public enum Status {
         UPDATE_NEEDED,
@@ -20,40 +22,38 @@ public class GeneratorDB extends DBConnection {
         ERROR
     }
 
-    public GeneratorDB(Connection dbConn) {
+    public StashDB(Connection dbConn) {
         super(dbConn);
     }
 
-    public void importGenerators() {
+    public void importStashes() {
         new Thread(() -> {
             SelectQueryWrapper wrapper = new SelectQueryWrapper();
-            wrapper.setTable("public.generator_instances");
+            wrapper.setTable("public.stash_instances");
             wrapper.setFields(
                 "id_",
-                "level",
-                "generator_id",
-                "last_collection_time",
+                "stash_id",
                 "location_x",
                 "location_y",
                 "location_z",
-                "location_world"
+                "location_world",
+                "contents_json"
             );
             ResultSet rs = wrapper.executeSyncQuery(dbConn);
             try {
                 while(rs != null && rs.next()) {
                     String databaseId = rs.getString("id_");
-                    String generatorId = rs.getString("generator_id");
-                    int level = rs.getInt("level");
-                    long lastCollectionTime = rs.getLong("last_collection_time");
+                    String stashId = rs.getString("stash_id");
                     int x = rs.getInt("location_x");
                     int y = rs.getInt("location_y");
                     int z = rs.getInt("location_z");
                     String world = rs.getString("location_world");
+                    String jsonContents = rs.getString("contents_json");
                     Location location = new Location(Bukkit.getWorld(world), x, y, z);
-                    Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(generatorId);
-                    GeneratorInstance instance = new GeneratorInstance(generator, location, level, lastCollectionTime, databaseId);
-                    boolean success = ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(instance);
-                    System.out.println("Adding generator " + instance.getLocation() + ": success: " + success);
+                    Stash stash = ForgeFrontier.getInstance().getStashManager().getStash(stashId);
+                    StashInstance instance = new StashInstance(stash, location, jsonContents, databaseId);
+                    boolean success = ForgeFrontier.getInstance().getStashManager().addStashInstance(instance);
+                    System.out.println("Adding stash " + instance.getLocation() + ": success: " + success);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -61,18 +61,17 @@ public class GeneratorDB extends DBConnection {
         }).start();
     }
 
-    public void insertGenerator(GeneratorInstance instance, Consumer<InsertQueryWrapper.InsertResult> callback) {
+    public void insertStash(StashInstance instance, Consumer<InsertQueryWrapper.InsertResult> callback) {
         InsertQueryWrapper wrapper = new InsertQueryWrapper();
-        wrapper.setTable("public.generator_instances");
+        wrapper.setTable("public.stash_instances");
         wrapper.fullInsert("id_", UUID.randomUUID().toString());
-        wrapper.fullInsert("generator_id", instance.getGenerator().getId());
-        wrapper.fullInsert("island_id", instance.getIsland().getUniqueId());
-        wrapper.fullInsert("level", instance.getLevelInt());
-        wrapper.fullInsert("last_collection_time", instance.getLastCollectTime());
+        wrapper.fullInsert("stash_id", instance.getStash().getId());
         wrapper.fullInsert("location_x", instance.getX());
         wrapper.fullInsert("location_y", instance.getY());
         wrapper.fullInsert("location_z", instance.getZ());
         wrapper.fullInsert("location_world", instance.getLocation().getWorld().getName());
+        wrapper.fullInsert("contents_json", instance.getJsonContentsString());
+        wrapper.fullInsert("island_id", instance.getIsland().getUniqueId());
         wrapper.executeAsyncQuery(this.dbConn, (insertResult) -> {
             if(insertResult.isSuccess()) {
                 instance.setDatabaseId(insertResult.getInsertId());
@@ -81,34 +80,34 @@ public class GeneratorDB extends DBConnection {
         });
     }
 
-    public void removeGenerator(GeneratorInstance instance) {
+    public void removeStash(StashInstance instance) {
         DeleteQueryWrapper wrapper = new DeleteQueryWrapper();
-        wrapper.setTable("public.generator_instances");
+        wrapper.setTable("public.stash_instances");
         wrapper.addCondition("id_ = %id%", "id");
         wrapper.addValue("id", instance.getDatabaseId());
         wrapper.executeAsyncQuery(this.dbConn, (success) -> {
             if(!success)
-                ForgeFrontier.getInstance().getLogger().severe("Unable to remove generator instance from database. An error occurred when trying to do so.");
+                ForgeFrontier.getInstance().getLogger().severe("Unable to remove stash instance from database. An error occurred when trying to do so.");
         });
     }
 
-    public void updateGenerator(GeneratorInstance instance, Consumer<Status> updateNeededConsumer) {
+    public void updateStash(StashInstance instance, Consumer<Status> updateNeededConsumer) {
         SelectQueryWrapper wrapper = new SelectQueryWrapper();
 
-        wrapper.setTable("public.generator_instances");
+        wrapper.setTable("public.stash_instances");
         wrapper.setFields(
-            "last_collection_time"
+            "contents_json"
         );
         wrapper.addCondition("id_ = %id%", "id");
         wrapper.addValue("id", instance.getDatabaseId());
         wrapper.executeAsyncQuery(dbConn, (resultSet) -> {
             try {
                 if(resultSet != null && resultSet.next()) {
-                    long lastCollectionTime = resultSet.getLong("last_collection_time");
-                    if(lastCollectionTime == instance.getLastCollectTime()) {
+                    String jsonContents = resultSet.getString("contents_json");
+                    if(jsonContents.equals(instance.getJsonContentsString())) {
                         updateNeededConsumer.accept(Status.UPDATE_NOT_NEEDED);
                     } else {
-                        instance.setLastCollectTime(Math.max(instance.getLastCollectTime(), lastCollectionTime));
+                        instance.setContentsJson(jsonContents);
                         updateNeededConsumer.accept(Status.UPDATE_NEEDED);
                     }
                 } else {
@@ -121,12 +120,11 @@ public class GeneratorDB extends DBConnection {
         });
     }
 
-    public void sendGeneratorUpdate(GeneratorInstance instance, final Consumer<Boolean> callback) {
+    public void sendStashUpdate(StashInstance instance, final Consumer<Boolean> callback) {
         UpdateQueryWrapper wrapper = new UpdateQueryWrapper();
 
-        wrapper.setTable("public.generator_instances");
-        wrapper.fullInsert("last_collection_time", instance.getLastCollectTime());
-        wrapper.fullInsert("level", instance.getLevelInt());
+        wrapper.setTable("public.stash_instances");
+        wrapper.fullInsert("contents_json", instance.getJsonContentsString());
         wrapper.addCondition("id_ = %id%", "id");
         wrapper.insertValue("id", instance.getDatabaseId());
         wrapper.executeAsyncQuery(dbConn, callback);

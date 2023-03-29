@@ -1,9 +1,12 @@
 package com.forgefrontier.forgefrontier.mining;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.stashes.Stash;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -29,6 +32,14 @@ public class MiningManager extends Manager implements Listener {
         String world = plugin.getConfig("mining").getString("world");
         this.miningWorld = world;
 
+        int areaInd = 0;
+        ConfigurationSection configSection;
+        while((configSection = this.plugin.getConfig("mining").getConfigurationSection("mining_areas." + areaInd)) != null) {
+            MiningArea miningArea = new MiningArea(configSection);
+            this.miningAreas.put(miningArea.getAreaName(), miningArea);
+            areaInd += 1;
+        }
+
         MiningRunnable mainMiningRunnable = new MiningRunnable();
         mainMiningRunnable.runTaskTimer(this.plugin, 0, 20);
 
@@ -36,7 +47,14 @@ public class MiningManager extends Manager implements Listener {
 
     @Override
     public void disable() {
-
+        FileConfiguration config = this.plugin.getConfig("mining");
+        config.set("mining_areas", null);
+        int areaInd = 0;
+        for(String name: this.miningAreas.keySet()) {
+            MiningArea area = this.miningAreas.get(name);
+            area.save(config.createSection("mining_areas." + areaInd));
+            areaInd += 1;
+        }
     }
 
     @EventHandler
@@ -74,6 +92,10 @@ public class MiningManager extends Manager implements Listener {
 
     public MiningArea getMiningArea(String areaName) {
         return this.miningAreas.get(areaName);
+    }
+
+    public void removeMiningArea(String areaName) {
+        this.miningAreas.remove(areaName);
     }
 
     public class MiningRunnable extends BukkitRunnable {

@@ -61,7 +61,7 @@ public class StashManager extends Manager implements Listener {
 
     @EventHandler
     public void onBentoBoxReady(BentoBoxReadyEvent e) {
-        //plugin.getDatabaseManager().getGeneratorDB().importGenerators();
+        plugin.getDatabaseManager().getStashDB().importStashes();
     }
 
     @Override
@@ -84,19 +84,18 @@ public class StashManager extends Manager implements Listener {
         e.getPlayer().openInventory(instance.getInventory());
         e.setCancelled(true);
 
-        /*ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().updateGenerator(instance, (status) -> {
+        ForgeFrontier.getInstance().getDatabaseManager().getStashDB().updateStash(instance, (status) -> {
             Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
                 switch(status) {
                     case UPDATE_NEEDED:
                         e.getPlayer().openInventory(instance.getInventory());
                         break;
                     case ERROR:
-                        plugin.getLogger().severe("An error occurred when attempting to look for updates to a generator.");
+                        plugin.getLogger().severe("An error occurred when attempting to look for updates to a stash.");
                         break;
                 }
             });
         });
-         */
 
     }
 
@@ -106,7 +105,13 @@ public class StashManager extends Manager implements Listener {
 
     public void initializeStashInstance(StashInstance stashInstance, Consumer<Boolean> callback) {
         boolean success = this.addStashInstance(stashInstance);
-        callback.accept(success);
+        if(!success) {
+            callback.accept(false);
+            return;
+        }
+        ForgeFrontier.getInstance().getDatabaseManager().getStashDB().insertStash(stashInstance, (insertResult) -> {
+            callback.accept(insertResult.isSuccess());
+        });
     }
 
     public boolean addStashInstance(StashInstance stashInstance) {
@@ -138,5 +143,6 @@ public class StashManager extends Manager implements Listener {
             return;
         tree.remove(stashInstance);
         stashInstance.getLocation().getBlock().setType(Material.AIR);
+        ForgeFrontier.getInstance().getDatabaseManager().getStashDB().removeStash(stashInstance);
     }
 }
