@@ -4,7 +4,7 @@ from app.db.mutations.user import create_user
 from app.db.mutations.util import commit
 from app.db.queries.links import get_link_by_link_code
 from app.db.queries.stats import get_stats_by_player_uuid
-from app.db.queries.user import get_user_by_id, get_user_by_username
+from app.db.queries.user import get_user_by_id, get_user_by_username, search
 from app.decorators.api_response import api
 from app.exceptions.app_exception import AppException
 from app.internal.context import Context
@@ -93,6 +93,37 @@ def user_details(user: str):
     return {"user_data": model.dict()}
 
 
+@router.get("/id/<user>/")
+@api.lax
+def user_details_by_id(user: str):
+    req = Context()
+    auth = req.auth
+    is_me = user == "me"
+    if is_me:
+        if not auth.user:
+            raise AppException("Not authenticated", 401)
+        user = auth.user
+    user_data = get_user_by_id(user)
+    show_secure = user_data.user == auth.user or auth.is_admin
+    model = (
+        UserOutSecure.from_db(user_data) if show_secure else UserOut.from_db(user_data)
+    )
+    return {"user_data": model.dict()}
+
+
+@router.get("/search")
+@api.strict
+def api_search_for_user():
+    req = Context()
+    q = req.args.get("q")
+    if not q:
+        raise AppException("Invalid")
+    INCLUDE_SELF = True
+    users = search(q, None if INCLUDE_SELF else req.auth.user_id)
+    res = [UserOut.from_db(x).dict() for x in users]
+    return res
+
+
 @router.patch("/<user>/")
 @api.strict
 def edit(user: str):
@@ -128,12 +159,10 @@ def link_mc_account():
     return js
 
 
-@router.get("/-/stats")
-@api.strict
-def get_mc_stats():
-    req = Context()
-    user = req.auth.user_id
-    mc_user = get_user_by_id(user).mc_user
+@router.get("/-/stats/<idx>")
+@api.none
+def get_mc_stats(idx: str):
+    mc_user = get_user_by_id(idx).mc_user
     if mc_user is not None:
         stats = get_stats_by_player_uuid(mc_user)
         return stats.as_json

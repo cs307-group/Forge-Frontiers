@@ -5,6 +5,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.resources.SilverIngot;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
+import net.minecraft.nbt.CompoundTag;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -16,10 +17,14 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class CustomItemManager extends Manager implements Listener {
 
@@ -124,6 +129,35 @@ public class CustomItemManager extends Manager implements Listener {
         CustomItem customItem = ForgeFrontier.getInstance().getCustomItemManager().getItems().get(code);
         if(customItem == null)
             return null;
+        return customItem.asInstance(itemStack);
+    }
+
+    private static final JSONParser parser;
+
+    static {
+        parser = new JSONParser();
+    }
+
+    public static CustomItemInstance getInstanceFromData(String dataString) {
+        JSONObject data = null;
+        try {
+            data  = (JSONObject) parser.parse(dataString);
+        } catch (ParseException e) {
+            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "Unable to parse JSON data: " + dataString);
+            return null;
+        }
+
+        String code = (String) data.get("base-code");
+        CustomItem customItem = CustomItemManager.getCustomItem(code);
+        ItemStack itemStack = new ItemStack(Material.COBBLESTONE);
+        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+
+        nmsItem.setTag(new CompoundTag());
+
+        nmsItem.getTag().putString("base-code", code);
+        nmsItem.getTag().putString("custom-data", dataString);
+
+        itemStack = CraftItemStack.asBukkitCopy(nmsItem);
         return customItem.asInstance(itemStack);
     }
 
