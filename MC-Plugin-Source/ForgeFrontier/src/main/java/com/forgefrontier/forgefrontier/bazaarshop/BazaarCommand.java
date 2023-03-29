@@ -28,9 +28,17 @@ public class BazaarCommand {
         this.bazaarManager = plugin.getBazaarManager();
     }
 
+    public boolean preCommandCheck(CommandSender sender) {
+        if (!BazaarManager.enabled) {
+            sender.sendMessage(BazaarManager.bazaarPrefix + "Bazaar is currently disabled");
+            return false;
+        }
+        return  true;
+    }
 
     @DefaultFor({"bazaar"})
     public void bazaarCmd(CommandSender sender) {
+        if (!preCommandCheck(sender)) return;
         if(!(sender instanceof Player)) {
             sender.sendMessage("Unable to open the bazaar GUI for a non-player.");
             throw new SenderNotPlayerException();
@@ -43,6 +51,11 @@ public class BazaarCommand {
 
     }
 
+    @Subcommand({"reload"})
+    public void bazaarReload(CommandSender sender) {
+        BazaarManager.reload();
+    }
+
     /**
      * [ADMIN ONLY] Clear out a bazaar slot
      * Usage: /bazaar set {slot #} -- ITEM IN HAND
@@ -52,6 +65,7 @@ public class BazaarCommand {
      */
     @Subcommand({"set"})
     public void bazaarSet(CommandSender sender, Integer slot) {
+        if (!preCommandCheck(sender)) return;
         if(!(sender instanceof Player)) {
             sender.sendMessage("Unable to open the bazaar GUI for a non-player.");
             throw new SenderNotPlayerException();
@@ -81,6 +95,7 @@ public class BazaarCommand {
 
     @Subcommand({"list buy"})
     public void testBuy(CommandSender sender, @Range(min=0, max=1e9) Double price) {
+        if (!preCommandCheck(sender)) return;
         if(!(sender instanceof Player)) {
             sender.sendMessage("Unable to create buy listings for a non-player.");
             throw new SenderNotPlayerException();
@@ -91,6 +106,7 @@ public class BazaarCommand {
 
     @Subcommand({"list sell"})
     public void testSell(CommandSender sender, @Range(min=1, max=1728) int amount, @Range(min=0, max=1e9) Double price) {
+        if (!preCommandCheck(sender)) return;
         if(!(sender instanceof Player)) {
             sender.sendMessage("Unable to create sell listings for a non-player.");
             throw new SenderNotPlayerException();

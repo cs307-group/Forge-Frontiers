@@ -149,6 +149,8 @@ public class BazaarDB extends DBConnection {
                 String custom_data = rs.getString("custom_data");
                 if (custom_data.isEmpty()) {
                     out.set(slotID, new ItemStackBuilder(material).setDisplayName(name).setFullLore(lore).build());
+                } else {
+
                 }
             }
             return out;
