@@ -3,8 +3,8 @@ import subprocess
 GUNICORN_COMMANDS = (
     [
         "gunicorn",
-        "-c",
-        "app/gunicorn.conf.py",
+        "--access-logfile",
+        "-",
         "runner:core_app",
         "-b",
         "localhost:5000",

@@ -36,7 +36,7 @@ export function AppLayout({children, active, title}: LayoutProps) {
         </Client>
         <main
           role="main"
-          className="flex-1 sm:w-full sm:flex-grow sm:pt-1 sm:px-3 sm:rounded-2xl sm:bg-[#262C2C] sm:m-4"
+          className="flex-1 sm:w-full sm:flex-grow sm:pt-1 sm:px-8 sm:rounded-2xl sm:bg-[#262C2C] sm:m-4"
         >
           {title && (
             <div className="text-2xl mt-4 text-center sm:text-left">

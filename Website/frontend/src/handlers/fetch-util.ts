@@ -56,6 +56,7 @@ export async function handleAuthRefresh(
 
   if (!resp.ok) {
     const refresh = await handleTokenRefresh(resp, tokens);
+    console.log("refreshed:", isRefreshSuccess(refresh));
     if (isRefreshSuccess(refresh)) {
       const newTokens = refresh.tokens;
       const newResp = await __getResponse(newTokens);

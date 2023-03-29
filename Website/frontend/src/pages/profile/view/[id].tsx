@@ -7,16 +7,20 @@ import {DEFAULT_STATS} from "@/util/default-stats";
 import Head from "next/head";
 import {AppLayout} from "@/components/Layout/AppLayout";
 import {ProfileViewer} from "@/components/Profile/Viewer";
+import {useCookieSync} from "@/hooks/use-cookie-sync";
 
 export default function ViewProfile({
   error,
   data,
   stats,
+  cookie,
 }: {
   error: string;
   data: UserData;
   stats: PlayerStats;
+  cookie: object;
 }) {
+  useCookieSync(cookie);
   return (
     <>
       <Head>

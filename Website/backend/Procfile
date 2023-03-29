@@ -1,2 +1,2 @@
 # Modify this Procfile to fit your needs
-web: gunicorn runner:core_app
+web: gunicorn runner:core_app --access-logfile -

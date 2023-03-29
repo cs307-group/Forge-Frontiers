@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  create:
+
+jobs:
+  release:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        name: "Fetch latest tag"
+        id: get-latest-tag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      -
+        name: Build and push Postgres 12
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            PG_VERSION=12.13
+            VERSION=${{ steps.get-latest-tag.outputs.tag }}
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            flyio/postgres:12
+            flyio/postgres:12.13
+      -
+        name: Build and push Postgres 13
+        id: docker_build_13
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            PG_VERSION=13.9
+            VERSION=${{ steps.get-latest-tag.outputs.tag }}
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            flyio/postgres:13
+            flyio/postgres:13.9
+      -
+        name: Build and push Postgres 14
+        id: docker_build_14
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            PG_VERSION=14.6
+            VERSION=${{ steps.get-latest-tag.outputs.tag }}
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            flyio/postgres:14
+            flyio/postgres:14.6
+      -
+        name: Build and push TimescaleDB 14
+        id: docker_build_ts_14
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            PG_VERSION=14.6
+            VERSION=${{ steps.get-latest-tag.outputs.tag }}
+          context: .
+          file: ./Dockerfile-timescaledb
+          push: true
+          tags: |
+            flyio/postgres-timescaledb:14
+            flyio/postgres-timescaledb:14.6
+      -
+        name: Postgres 12 Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+      -
+        name: Postgres 13 Image digest
+        run: echo ${{ steps.docker_build_13.outputs.digest }}
+      -
+        name: Postgres 14 Image digest
+        run: echo ${{ steps.docker_build_14.outputs.digest }}

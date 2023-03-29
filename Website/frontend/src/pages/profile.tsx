@@ -51,7 +51,6 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
 
   const stats = await getPlayerStats(userData.resp.id_);
   let json: PlayerStats = (await stats.json())?.data;
-  console.log(stats.status);
   if (!stats.ok && stats.status !== 404) {
     return {props: json || null};
   }

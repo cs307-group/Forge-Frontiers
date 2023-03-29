@@ -11,10 +11,18 @@ import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
 import {UserData} from "@/handlers/types";
 import {searchUserData} from "@/handlers/user-data";
+import {useCookieSync} from "@/hooks/use-cookie-sync";
 import avatarImage from "@/images/avatar.png";
 
-const DUP_RES = 1;
-export default function Search({data}: {data: UserData[]}) {
+const DUP_RES = 0;
+export default function Search({
+  data,
+  cookie,
+}: {
+  data: UserData[];
+  cookie: object;
+}) {
+  useCookieSync(cookie);
   const {push, query} = useRouter();
   const [q, setQ] = useState(() => {
     const qr = query.q;
