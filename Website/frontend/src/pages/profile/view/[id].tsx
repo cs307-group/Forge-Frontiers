@@ -39,7 +39,14 @@ export default function ViewProfile({
             <b>{error}</b>
           </>
         ) : (
-          <ProfileViewer data={data} stats={stats} />
+          <ProfileViewer
+            data={data}
+            stats={
+              Object.fromEntries(
+                Object.entries(stats).filter((x) => x[0] !== "player_uuid")
+              ) as any
+            }
+          />
         )}
       </AppLayout>
     </>

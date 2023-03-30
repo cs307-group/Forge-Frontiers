@@ -1,5 +1,5 @@
-from secrets import token_urlsafe
-
+import os
+os.path.commonprefix
 from sqlalchemy.dialects.postgresql import TEXT
 
 from ..base import db
@@ -16,7 +16,7 @@ from ..base import db
 # OwnerUUID: uuid (string
 
 
-class ToRedeem(db.Model):
+class BazaarRedeem(db.Model):
     # pylint: disable=E1101
     order_id: str = db.Column(TEXT, primary_key=True)
     player_id: str = db.Column(TEXT)
