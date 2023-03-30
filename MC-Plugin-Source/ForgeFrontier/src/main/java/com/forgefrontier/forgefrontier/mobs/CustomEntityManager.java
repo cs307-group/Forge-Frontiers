@@ -1,15 +1,20 @@
 package com.forgefrontier.forgefrontier.mobs;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.utils.Manager;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftChicken;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 
 import java.util.*;
@@ -65,33 +70,62 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof CraftChicken) {
-            CraftChicken entity = (CraftChicken) event.getEntity(); //TODO: Change this to more generic class type
+        CraftLivingEntity entity = (CraftLivingEntity) event.getEntity(); //TODO: Change this to more generic class type
 
-            // Updates the boss health bar if the entity contains metadata for it
-            if (entity.hasMetadata("bossbar")) {
-                Object o = entity.getMetadata("bossbar").get(0).value();
-                if (o instanceof BossBar bossBar) {
-                    System.out.println("UPDATE BAR");
-                    double currHealth = (entity.getHealth() - event.getDamage());
-                    if (currHealth < 0)
-                        currHealth = 0;
-                    bossBar.setProgress(currHealth / entity.getMaxHealth());
-                }
-            }
+        if (entity.hasMetadata("code")) {
+            // sets the nameplate of the chicken
+            entity.setCustomName(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
+                        ": " + ((int) entity.getHealth()) + "/" + ((int) entity.getMaxHealth()));
+            entity.setCustomNameVisible(true);
+        }
 
-            if (entity.hasMetadata("code")) {
-                //TODO: this is temporary, would re-create instance and call function to execute same
-                // entity.getHandle().du().a(Activity.b);
-                // entity.setTarget((Player) event.getDamager());
-                // entity.attack(event.getDamager());
+        // Updates the boss health bar if the entity contains metadata for it
+        if (entity.hasMetadata("bossbar")) {
+            Object o = entity.getMetadata("bossbar").get(0).value();
+            if (o instanceof BossBar bossBar) {
+                double currHealth = (entity.getHealth() - event.getDamage());
+                if (currHealth < 0)
+                    currHealth = 0;
+                bossBar.setProgress(currHealth / entity.getMaxHealth());
             }
+        }
+
+        if (entity.hasMetadata("code")) {
+            //TODO: this is temporary, would re-create instance and call function to execute same
+            // entity.getHandle().du().a(Activity.b);
+            // entity.setTarget((Player) event.getDamager());
+            // entity.attack(event.getDamager());
         }
     }
 
     @EventHandler
     public void onEntityDeath (EntityDeathEvent event) {
         LivingEntity entity = event.getEntity();
+
+        // handles custom item drops
+        if (entity.hasMetadata("custom-drop-keys") && entity.hasMetadata("custom-drop-table")) {
+            event.getDrops().clear();
+            HashMap<String, Integer> dropTable = (HashMap<String, Integer>) entity.getMetadata("custom-drop-table").get(0).value();
+            ArrayList<String> dropKeys = (ArrayList<String>) entity.getMetadata("custom-drop-keys").get(0).value();
+            for (String dropKey : dropKeys) {
+                int rand = (int) (Math.random() * 100) + 1;
+                if (rand <= dropTable.get(dropKey)) {
+                    event.getDrops().add(CustomItemManager.getCustomItem(dropKey).asInstance(null).asItemStack());
+                }
+            }
+        }
+
+        // handles native item drops
+        if (entity.hasMetadata("drop-keys") && entity.hasMetadata("drop-table")) {
+            HashMap<Material, Integer> dropTable = (HashMap<Material, Integer>) entity.getMetadata("drop-table").get(0).value();
+            ArrayList<Material> dropKeys = (ArrayList<Material>) entity.getMetadata("drop-keys").get(0).value();
+            for (Material dropKey : dropKeys) {
+                int rand = (int) (Math.random() * 100) + 1;
+                if (rand <= dropTable.get(dropKey)) {
+                    event.getDrops().add(new ItemStack(dropKey));
+                }
+            }
+        }
 
         // Removes the boss health bar if the entity contains metadata for it
         if (entity.hasMetadata("bossbar")) {
@@ -100,12 +134,11 @@ public class CustomEntityManager extends Manager implements Listener {
                 bossBar.setProgress(0);
                 bossBar.removeAll();
             }
-            plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
+            if (entity.getKiller() != null) {
+                // upgrades the player's tier when killed
+                plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
+            }
         }
-    }
-
-    private LootContext buildLootContext(LivingEntity entity) {
-        return null;
     }
 
     /** getter for the entities hashmap in the manager */
