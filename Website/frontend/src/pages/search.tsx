@@ -29,6 +29,7 @@ export default function Search({
     if (!qr || Array.isArray(qr)) return "";
     return qr;
   });
+  const isQueryStale = query.q == q;
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const params = new URLSearchParams({q});
@@ -59,9 +60,11 @@ export default function Search({
           </div>
         </form>
         <ul className="mx-auto max-w-[400px] w-[95%]">
-          {data?.length > 0 ? (
-            (DUP_RES ? data.concat(data).concat(data).concat(data) : data).map(
-              (item) => (
+          {data?.length > 0
+            ? (DUP_RES
+                ? data.concat(data).concat(data).concat(data)
+                : data
+              ).map((item) => (
                 <li key={item.id_} className="w-full rounded-md py-2">
                   <Link
                     href={`/profile/view/${item.id_}`}
@@ -82,19 +85,23 @@ export default function Search({
                   </Link>
                   <hr />
                 </li>
-              )
-            )
-          ) : (
-            <div>
-              <div>Your search did not return any results. You could try:</div>
-              <ul>
-                <li className="list-disc ml-8">
-                  Ensuring you did not make any typos
-                </li>
-                <li className="list-disc ml-8">Searching a part of the username</li>
-              </ul>
-            </div>
-          )}
+              ))
+            : q &&
+              isQueryStale && (
+                <div>
+                  <div>
+                    Your search did not return any results. You could try:
+                  </div>
+                  <ul>
+                    <li className="list-disc ml-8">
+                      Ensuring you did not make any typos
+                    </li>
+                    <li className="list-disc ml-8">
+                      Searching a part of the username
+                    </li>
+                  </ul>
+                </div>
+              )}
         </ul>
       </AppLayout>
     </>

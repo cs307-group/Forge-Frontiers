@@ -27,6 +27,7 @@ export function ProfileViewer({
         <Image
           className="h-80 w-40 mt-4"
           width={316}
+          priority
           height={512}
           src={
             data.mc_user

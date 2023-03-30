@@ -1,7 +1,8 @@
-from app.db.schemas.bazaar_orders import BazaarOrders
-from app.db.schemas.bazaar_lookup import BazaarLookup
 from sqlalchemy import func
-from sqlalchemy import and_
+
+from app.db.schemas.bazaar_lookup import BazaarLookup
+from app.db.schemas.bazaar_orders import BazaarOrders
+
 from ..base import db
 
 
@@ -49,3 +50,15 @@ def get_lookup_count():
             .all()
         )
     }
+
+
+def get_orders_for_slot(i: int):
+    res: list[BazaarOrders] = BazaarOrders.query.filter_by(slot_id=i).all()
+    ret = {"buy": [], "sell": []}
+    for item in res:
+        if item.order_type:
+            # buy order
+            ret["buy"].append(item.as_json)
+        else:
+            ret["sell"].append(item.as_json)
+    return ret
