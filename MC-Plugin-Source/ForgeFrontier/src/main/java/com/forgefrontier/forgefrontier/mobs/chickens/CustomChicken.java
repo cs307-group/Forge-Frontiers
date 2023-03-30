@@ -30,17 +30,4 @@ public abstract class CustomChicken extends CustomMob {
     public CraftEntity spawnCustomEntity(Location loc, CraftEntity craftEntity) {
         return super.spawnCustomEntity(loc, craftEntity);
     }
-
-    /**
-     * @return the corresponding CraftEntity wrapper class of this entity wrapper class
-     */
-    @Override
-    public Class<? extends CraftEntity> getCorrespondingCraftEntity() {
-        return CustomCraftChicken.class;
-    }
-
-    @Override
-    public int getID() {
-        return 93;
-    }
 }

@@ -1,47 +1,49 @@
 package com.forgefrontier.forgefrontier.mobs.chickens;
 
-import net.minecraft.world.entity.Entity;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.mobs.CustomEntity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.*;
-import net.minecraft.world.entity.ai.behavior.FollowTemptation;
-import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Chicken;
-import net.minecraft.world.entity.monster.PatrollingMonster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.event.entity.EntityDeathEvent;
 
-public class CustomChickenEntity extends Chicken {
+import java.util.ArrayList;
+import java.util.HashMap;
 
-    private long lastDamageTime = 0;
+/**
+ * Class that overwrites basic chicken AI and attributes, and allows for overwriting them
+ */
+public abstract class CustomChickenEntity extends Chicken implements CustomEntity {
 
-    public CustomChickenEntity(EntityType<? extends Chicken> entitytypes, Level world) {
-        super(entitytypes, world);
+    public long lastDamageTime = 0;
+
+    public CustomChickenEntity(EntityType<? extends Chicken> entityTypes, Level world) {
+        super(entityTypes, world);
     }
 
+    /**
+     * Overwrites basic Chicken AI
+     */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 1.0, 10));
-        this.goalSelector.addGoal(2, new FollowMobGoal(this, 1.0, 10, 1));
-        //this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1.0, 25));
+        // removes all previous AI
     }
 
+    /**
+     * Called once a tick to update the entity
+     */
     @Override
     public void tick() {
         super.tick();
+        this.customTick();
+    }
 
-        Player nearestPlayer = this.getLevel().getNearestPlayer(this, 15.0);
-        if (nearestPlayer != null) {
-            this.setTarget(nearestPlayer);
-            org.bukkit.entity.Player spigotPlayer = Bukkit.getPlayer(nearestPlayer.getUUID());
-            if (spigotPlayer != null && System.currentTimeMillis() - lastDamageTime > 1000 &&
-                    nearestPlayer.distanceTo(this) <= 1) {
-                spigotPlayer.damage(1);
-                lastDamageTime = System.currentTimeMillis();
-            }
-        } else {
-            this.setTarget(null);
-        }
+    /**
+     * Function to define AI of mob in
+     */
+    @Override
+    public void customTick() {
     }
 }

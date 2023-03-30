@@ -20,14 +20,14 @@ import com.forgefrontier.forgefrontier.mining.MiningCommandExecutor;
 import com.forgefrontier.forgefrontier.mining.MiningManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.EntityCommandExecutor;
-import com.forgefrontier.forgefrontier.mobs.chickens.TestChicken;
+import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChicken;
+import com.forgefrontier.forgefrontier.mobs.chickens.hostile.poison.PoisonChicken;
 import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
 import com.forgefrontier.forgefrontier.stashes.StashManager;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -124,7 +124,8 @@ public class ForgeFrontier extends JavaPlugin {
         this.getCustomItemManager().registerCustomItem(new LeatherChestplate());
 
         // Custom Mobs
-        this.getCustomEntityManager().registerCustomEntity(new TestChicken());
+        this.getCustomEntityManager().registerCustomEntity(new HostileChicken());
+        this.getCustomEntityManager().registerCustomEntity(new PoisonChicken());
 
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);

@@ -139,8 +139,8 @@ world:
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
   - ENDERMAN
-  - ZOMBIE_VILLAGER
   - WITHER
+  - ZOMBIE_VILLAGER
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -201,11 +201,11 @@ world:
     BREAK_SPAWNERS: 500
     LEVER: 500
     ELYTRA: 0
-    RIDING: 500
     HURT_MONSTERS: 0
     CAKE: 500
-    ARMOR_STAND: 500
+    RIDING: 500
     NAME_TAG: 500
+    ARMOR_STAND: 500
     TRADING: 0
     EGGS: 500
     ITEM_DROP: 0
@@ -223,15 +223,15 @@ world:
     COMMAND_RANKS: 500
     BEACON: 500
     TRAPDOOR: 500
-    EXPERIENCE_BOTTLE_THROWING: 500
     PRESSURE_PLATE: 0
-    HIVE: 500
+    EXPERIENCE_BOTTLE_THROWING: 500
     DYE: 500
+    HIVE: 500
     PLACE_BLOCKS: 500
     ITEM_FRAME: 500
     CRAFTING: 0
-    ENCHANTING: 0
     SHEARING: 500
+    ENCHANTING: 0
     BOAT: 500
     BED: 500
     SPAWN_EGGS: 500
@@ -241,8 +241,8 @@ world:
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
     LEASH: 500
-    BREAK_BLOCKS: 500
     MOUNT_INVENTORY: 500
+    BREAK_BLOCKS: 500
     CHORUS_FRUIT: 500
     CONTAINER: 500
     JUKEBOX: 500
@@ -252,14 +252,14 @@ world:
     PVP_END: false
     PVP_NETHER: false
     LEAF_DECAY: true
-    TNT_DAMAGE: true
     MONSTER_SPAWNERS_SPAWN: true
+    TNT_DAMAGE: true
     ANIMAL_NATURAL_SPAWN: true
     MONSTER_NATURAL_SPAWN: true
     FIRE_IGNITE: true
     FIRE_SPREAD: true
-    ANIMAL_SPAWNERS_SPAWN: true
     FIRE_BURNING: true
+    ANIMAL_SPAWNERS_SPAWN: true
     PVP_OVERWORLD: false
   # These settings/flags are hidden from users
   # Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings
