@@ -1,21 +1,24 @@
 package com.forgefrontier.forgefrontier.mobs.chickens.hostile.poison;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.chickens.CustomCraftChicken;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChicken;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class PoisonChicken extends HostileChicken {
 
     /** class representing the custom CraftEntity for the TestChicken */
     public static class CraftPoisonChicken extends CraftHostileChicken {
-        public CraftPoisonChicken(CraftServer server) {
+        public CraftPoisonChicken(CraftServer server, CraftWorld world) {
             super(server, "PoisonChicken", 15,
-                    new PoisonChickenEntity(EntityType.CHICKEN, ((CraftWorld)server.getWorld("world")).getHandle()));
+                    new PoisonChickenEntity(EntityType.CHICKEN, world.getHandle()));
         }
 
         @Override
@@ -26,6 +29,12 @@ public class PoisonChicken extends HostileChicken {
             registerDropItem("SilverIngot", 50);
             registerDropItem("SilverIngot", 50);
             registerDropItem("SilverIngot", 50);
+        }
+
+        @Override
+        public void saveMetaData() {
+            super.saveMetaData();
+            this.setMetadata("code", new FixedMetadataValue(ForgeFrontier.getInstance(), "PoisonChicken"));
         }
     }
 
@@ -41,7 +50,7 @@ public class PoisonChicken extends HostileChicken {
      * @return the entity instance in the world
      */
     @Override
-    public CraftEntity createCustomEntity() {
-        return new CraftPoisonChicken((CraftServer) Bukkit.getServer());
+    public CraftEntity createCustomEntity(CraftWorld world) {
+        return new CraftPoisonChicken((CraftServer) Bukkit.getServer(), world);
     }
 }

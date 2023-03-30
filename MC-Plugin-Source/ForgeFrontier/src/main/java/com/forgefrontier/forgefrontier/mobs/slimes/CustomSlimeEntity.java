@@ -1,21 +1,18 @@
-package com.forgefrontier.forgefrontier.mobs.chickens;
+package com.forgefrontier.forgefrontier.mobs.slimes;
 
 import com.forgefrontier.forgefrontier.mobs.CustomEntity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 
-/**
- * Class that overwrites basic chicken AI and attributes, and allows for overwriting them
- */
-public abstract class CustomChickenEntity extends Chicken implements CustomEntity {
+public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
 
-    public CustomChickenEntity(EntityType<? extends Chicken> entityTypes, Level world) {
+    public CustomSlimeEntity(EntityType<? extends Slime> entityTypes, Level world) {
         super(entityTypes, world);
     }
 
     /**
-     * Overwrites basic Chicken AI
+     * Overwrites basic Slime AI
      */
     @Override
     protected void registerGoals() {

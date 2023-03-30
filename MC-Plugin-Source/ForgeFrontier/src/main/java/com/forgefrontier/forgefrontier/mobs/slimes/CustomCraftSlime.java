@@ -1,8 +1,8 @@
-package com.forgefrontier.forgefrontier.mobs.chickens;
+package com.forgefrontier.forgefrontier.mobs.slimes;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
-import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.monster.Slime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,20 +10,17 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftChicken;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftSlime;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.*;
 
-/**
- * Class to represent the actual chicken entity in game
- */
-public abstract class CustomCraftChicken extends CraftChicken implements CustomCraftEntity {
+public abstract class CustomCraftSlime extends CraftSlime implements CustomCraftEntity {
 
     public String code;
     public String customCraftName;
-    public Chicken handle;
+    public Slime handle;
     public HashMap<String, Integer> customDropTable;
     public HashMap<Material, Integer> dropTable;
     public ArrayList<String> customDropKeys;
@@ -33,9 +30,9 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
      * Constructor
      * @param server the CraftServer instance
      */
-    public CustomCraftChicken(CraftServer server, String chickenType, CustomChickenEntity entity) {
+    public CustomCraftSlime(CraftServer server, String slimeType, CustomSlimeEntity entity) {
         super(server, entity);
-        this.code = chickenType;
+        this.code = slimeType;
         this.handle = this.getHandle();
         initDropTable();
     }
@@ -51,9 +48,11 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
      * @param maxHealth
      */
     public void setDefaultHealth(int maxHealth) {
-        // sets the health of the chicken
+        // sets the health of the entity
+        System.out.println("Setting Health: " + maxHealth);
         this.setMaxHealth(maxHealth);
         this.setHealth(maxHealth);
+        System.out.println(this.getHealth());
     }
 
     /**
@@ -62,8 +61,7 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
      * @param name displays the name, current health, and custom health
      */
     public void updateNamePlate(String name) {
-        // sets the nameplate of the chicken
-        System.out.println("Updating nameplate");
+        // sets the nameplate of the entity
         this.setCustomName(ChatColor.WHITE + name + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
         this.setCustomNameVisible(true);
     }
@@ -79,7 +77,6 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
         bossBar = Bukkit.createBossBar(name, BarColor.RED, BarStyle.SOLID);
         bossBar.setVisible(true);
         bossBar.setProgress(1);
-
 
         //TODO: Change this later (Currently Grabs every player on the server and displays the boss bar
         //      Need to change in order to only grab players nearby

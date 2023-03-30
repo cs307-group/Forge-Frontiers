@@ -52,7 +52,7 @@ public abstract class CustomMob {
      *
      * @return entity spawned
      */
-    public CraftEntity createCustomEntity() {
+    public CraftEntity createCustomEntity(CraftWorld world) {
         return null;
     }
 

@@ -1,23 +1,19 @@
-package com.forgefrontier.forgefrontier.mobs.chickens;
+package com.forgefrontier.forgefrontier.mobs.slimes;
 
 import com.forgefrontier.forgefrontier.mobs.CustomMob;
-import org.bukkit.*;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 
-/**
- * Superclass for all chicken entities in Forge Frontier
- */
-public abstract class CustomChicken extends CustomMob {
+public abstract class CustomSlime extends CustomMob {
 
     /**
-     * Constructor for a custom chicken entity
+     * Constructor for a custom slime entity
      *
-     * @param customName name of the custom chicken
+     * @param customName name of the custom slime
      */
-    public CustomChicken(String customName) {
+    public CustomSlime(String customName) {
         super(customName);
     }
-
 
     /**
      * spawns an instance of the entity at the location

@@ -26,8 +26,8 @@ public class HostileChicken extends CustomChicken {
          *
          * @param server the CraftServer instance
          */
-        public CraftHostileChicken(CraftServer server) {
-            super(server, "HostileChicken", new HostileChickenEntity(EntityType.CHICKEN, ((CraftWorld)server.getWorld("world")).getHandle()));
+        public CraftHostileChicken(CraftServer server, CraftWorld world) {
+            super(server, "HostileChicken", new HostileChickenEntity(EntityType.CHICKEN, world.getHandle()));
             initCraftChicken("HostileChicken", 10);
             saveMetaData();
         }
@@ -70,7 +70,7 @@ public class HostileChicken extends CustomChicken {
         public void saveMetaData() {
             super.saveMetaData();
             // Sets the metadata for the mob
-            this.setMetadata("code", new FixedMetadataValue(ForgeFrontier.getInstance(), "TestChicken"));
+            this.setMetadata("code", new FixedMetadataValue(ForgeFrontier.getInstance(), "HostileChicken"));
             // this.setMetadata("bossbar", new FixedMetadataValue(ForgeFrontier.getInstance(), bossBar));
         }
     }
@@ -91,7 +91,7 @@ public class HostileChicken extends CustomChicken {
      * @return the entity instance in the world
      */
     @Override
-    public CraftEntity createCustomEntity() {
-        return new CraftHostileChicken((CraftServer) Bukkit.getServer());
+    public CraftEntity createCustomEntity(CraftWorld world) {
+        return new CraftHostileChicken((CraftServer) Bukkit.getServer(), world);
     }
 }
