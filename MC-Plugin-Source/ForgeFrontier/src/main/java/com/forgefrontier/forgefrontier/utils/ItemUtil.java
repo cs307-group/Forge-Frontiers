@@ -7,6 +7,7 @@ import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -54,6 +55,11 @@ public class ItemUtil {
         }
         out.deleteCharAt(out.length()-1);
         return out.toString();
+    }
+
+    public static int getEnchantmentLevelInHand(Player p, Enchantment e) {
+        ItemStack item = p.getInventory().getItemInMainHand();
+        return item.getEnchantmentLevel(e);
     }
 
 
