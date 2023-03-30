@@ -11,6 +11,7 @@ public class HostileChickenEntity extends CustomChickenEntity {
 
     private float idleSpeed;
     private float aggroSpeed;
+    public long lastDamageTime = 0;
 
     public HostileChickenEntity(EntityType<? extends Chicken> entityTypes, Level world) {
         super(entityTypes, world);

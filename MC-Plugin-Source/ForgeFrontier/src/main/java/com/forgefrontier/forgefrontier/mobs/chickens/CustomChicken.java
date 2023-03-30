@@ -3,8 +3,6 @@ package com.forgefrontier.forgefrontier.mobs.chickens;
 import com.forgefrontier.forgefrontier.mobs.CustomMob;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.entity.*;
-
 
 /**
  * Superclass for all chicken entities in Forge Frontier

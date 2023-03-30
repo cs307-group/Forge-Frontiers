@@ -2,14 +2,21 @@ package com.forgefrontier.forgefrontier.mobs;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBox;
+import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BossBar;
+import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftChicken;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -64,7 +71,7 @@ public class CustomEntityManager extends Manager implements Listener {
             return false;
         }
         System.out.println("Spawning at " + player.getLocation().toVector());
-        mob.spawnCustomEntity(player.getLocation(), mob.createCustomEntity());
+        mob.spawnCustomEntity(player.getLocation(), mob.createCustomEntity((CraftWorld)player.getWorld()));
         return true;
     }
 
@@ -72,11 +79,14 @@ public class CustomEntityManager extends Manager implements Listener {
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
         CraftLivingEntity entity = (CraftLivingEntity) event.getEntity(); //TODO: Change this to more generic class type
 
-        if (entity.hasMetadata("code")) {
-            // sets the nameplate of the chicken
-            entity.setCustomName(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
+        if (entity.hasMetadata("code"))
+            // checks if the entity is a hitbox entity
+            if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {{
+                // sets the nameplate of the entity
+                entity.setCustomName(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
                         ": " + ((int) entity.getHealth()) + "/" + ((int) entity.getMaxHealth()));
-            entity.setCustomNameVisible(true);
+                entity.setCustomNameVisible(true);
+            }
         }
 
         // Updates the boss health bar if the entity contains metadata for it
@@ -139,6 +149,29 @@ public class CustomEntityManager extends Manager implements Listener {
                 // upgrades the player's tier when killed
                 plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
             }
+        }
+
+
+        if (entity.hasMetadata("code")) {
+            // checks if the entity is a hitbox entity
+            System.out.println("I AM HERE 0");
+            //if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {
+               // System.out.println("I AM HERE 1");
+                if (entity instanceof Slime slime) {
+                    System.out.println("I AM HERE 2");
+                    if (slime instanceof CraftEntity craftEntity) {
+                        System.out.println("IS INSTANCE OF HITBOX");
+                        HitBoxEntity hitBoxEntity = (HitBoxEntity) craftEntity.getHandle();
+                        if (hitBoxEntity != null) {
+                            hitBoxEntity.setLoc(null);
+                        }
+                    }
+                    System.out.println("I AM HERE 3");
+                    slime.setHealth(1);
+                    slime.teleport(new Location(slime.getWorld(), 0, -70, 0));
+                    slime.setGravity(true);
+                }
+            //}
         }
     }
 

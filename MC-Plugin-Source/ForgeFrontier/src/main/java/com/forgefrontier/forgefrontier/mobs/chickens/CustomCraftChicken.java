@@ -2,8 +2,6 @@ package com.forgefrontier.forgefrontier.mobs.chickens;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
-import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChickenEntity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Chicken;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +10,6 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftChicken;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -49,7 +46,7 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
     }
 
     /**
-     * Sets the health of the chicken
+     * Sets the health of the entity
      *
      * @param maxHealth
      */
