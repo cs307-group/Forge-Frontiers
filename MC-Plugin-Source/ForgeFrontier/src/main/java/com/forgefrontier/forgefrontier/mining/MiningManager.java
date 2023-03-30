@@ -12,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -54,6 +56,11 @@ public class MiningManager extends Manager implements Listener {
             MiningArea area = this.miningAreas.get(name);
             area.save(config.createSection("mining_areas." + areaInd));
             areaInd += 1;
+        }
+        try {
+            config.save(new File(plugin.getDataFolder(), "mining.yml"));
+        } catch (IOException e) {
+            ForgeFrontier.getInstance().getLogger().severe("Unable to save mining configuration.");
         }
     }
 

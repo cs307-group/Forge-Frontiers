@@ -1,6 +1,6 @@
-world: "world"
+world: world
 mining_areas:
-  0:
+  '0':
     pos1:
       x: 0
       y: 0
@@ -9,12 +9,24 @@ mining_areas:
       x: 10
       y: 200
       z: 10
-    resources:
-      - item_id: "SilverIngot"
-        block: RAW_IRON_BLOCK
-        drops:
-          - amount: 1
-            chance: 1
-          - amount: 1
-            chance: 0.5
     replace: STONE
+  '1':
+    pos1:
+      x: 295
+      y: 72
+      z: 141
+    pos2:
+      x: 306
+      y: 87
+      z: 160
+    name: Test
+    replace: STONE
+    resources:
+      '0':
+        item_id: SilverIngot
+        block: IRON_ORE
+        time: 1
+      '1':
+        item_id: SilverIngot
+        block: GOLD_ORE
+        time: 1
