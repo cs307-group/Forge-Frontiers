@@ -21,6 +21,7 @@ import com.forgefrontier.forgefrontier.mining.MiningManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.EntityCommandExecutor;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChicken;
+import com.forgefrontier.forgefrontier.mobs.chickens.hostile.chickenboss.ChickBoss;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.poison.PoisonChicken;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBox;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
@@ -129,6 +130,7 @@ public class ForgeFrontier extends JavaPlugin {
         // Custom Mobs
         this.getCustomEntityManager().registerCustomEntity(new HostileChicken());
         this.getCustomEntityManager().registerCustomEntity(new PoisonChicken());
+        this.getCustomEntityManager().registerCustomEntity(new ChickBoss());
         this.getCustomEntityManager().registerCustomEntity(new HitBox());
         this.getCustomEntityManager().registerCustomEntity(new EggBox());
 

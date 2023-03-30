@@ -33,23 +33,24 @@ public class EggBox extends HitBox {
 
         @Override
         public void defineDropTable() {
-            for (int i = 0; i < 16; i++) {
-                registerDropItem("SilverIngot", 100);
-            }
-            for (int i = 0; i < 16; i++) {
-                registerDropItem("SilverIngot", 50);
-            }
-            for (int i = 0; i < 16; i++) {
-                registerDropItem("SilverIngot", 20);
+            EggBoxEntity entity = (EggBoxEntity) handle;
+            if (entity != null) {
+                for (int i = 0; i < 16; i++) {
+                    entity.registerDropItem("SilverIngot", 100);
+                }
+                for (int i = 0; i < 16; i++) {
+                    entity.registerDropItem("SilverIngot", 50);
+                }
+                for (int i = 0; i < 16; i++) {
+                    entity.registerDropItem("SilverIngot", 20);
+                }
             }
         }
 
         @Override
         public void updateNamePlate(String name) {
-            System.out.println("OOOO...    ");
             EggBoxEntity entity = (EggBoxEntity) handle;
             if (entity != null) {
-                System.out.println("OUCH ||| " + name + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
                 entity.setNamePlate(ChatColor.WHITE + name + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
             }
         }

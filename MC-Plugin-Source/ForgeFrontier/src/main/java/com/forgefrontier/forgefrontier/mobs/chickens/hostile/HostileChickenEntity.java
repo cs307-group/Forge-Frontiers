@@ -12,17 +12,25 @@ public class HostileChickenEntity extends CustomChickenEntity {
     private float idleSpeed;
     private float aggroSpeed;
     public long lastDamageTime = 0;
+    private double damage;
 
     public HostileChickenEntity(EntityType<? extends Chicken> entityTypes, Level world) {
         super(entityTypes, world);
         idleSpeed = 1.0f;
         aggroSpeed = 1.2f;
+        damage = 1;
     }
 
     @Override
     public void customTick() {
         super.customTick();
+        doHostileBehavior();
+    }
 
+    /**
+     * Defines behavior similar to a zombie's default behavior
+     */
+    public void doHostileBehavior() {
         // gets the nearest player as a target
         Player nearestPlayer = this.getLevel().getNearestPlayer(this, 20.0);
 
@@ -48,7 +56,7 @@ public class HostileChickenEntity extends CustomChickenEntity {
     }
 
     public void attack(org.bukkit.entity.Player player) {
-        player.damage(1);
+        player.damage(this.damage);
         lastDamageTime = System.currentTimeMillis();
     }
 
@@ -66,5 +74,13 @@ public class HostileChickenEntity extends CustomChickenEntity {
 
     public void setIdleSpeed(float speed) {
         this.idleSpeed = speed;
+    }
+
+    public double getDamage() {
+        return this.damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 }

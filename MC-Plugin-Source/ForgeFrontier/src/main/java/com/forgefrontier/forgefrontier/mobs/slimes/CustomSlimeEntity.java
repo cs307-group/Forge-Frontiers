@@ -34,6 +34,4 @@ public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
     @Override
     public void customTick() {
     }
-
-
 }

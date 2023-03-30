@@ -7,6 +7,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
@@ -59,6 +61,12 @@ public class HitBox extends CustomSlime {
             this.setSize(size);
             this.setCollidable(false);
             this.setInvisible(true);
+
+            AttributeInstance atk = this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+            if (atk != null) {
+                System.out.println("ATTRIBUTE SUCCESS!!!");
+                atk.setBaseValue(0);
+            }
         }
 
         @Override

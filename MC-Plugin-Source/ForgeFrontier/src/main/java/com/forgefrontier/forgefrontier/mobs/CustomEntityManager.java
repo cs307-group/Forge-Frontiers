@@ -2,16 +2,13 @@ package com.forgefrontier.forgefrontier.mobs;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
-import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBox;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftChicken;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
@@ -22,7 +19,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.LootContext;
 
 import java.util.*;
 
@@ -80,17 +76,14 @@ public class CustomEntityManager extends Manager implements Listener {
         CraftLivingEntity entity = (CraftLivingEntity) event.getEntity();
 
         if (entity.hasMetadata("code")) {
-            System.out.println("Damaged: ");
             // checks if the entity is a hitbox entity
             if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {
                 // sets the nameplate of the entity
-                System.out.println("Naming: ");
                 int currHealth = (((int) (entity.getHealth() - event.getDamage())));
                 if (currHealth < 0) {
                     currHealth = 0;
                 }
                 if (entity.getHandle() instanceof HitBoxEntity hitBox) {
-                    System.out.println("WE ARE HERE FOR IT");
                     hitBox.setNamePlate(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
                             ": " + currHealth + "/" + ((int) entity.getMaxHealth()));
                 } else {
@@ -122,7 +115,6 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDeath (EntityDeathEvent event) {
-        System.out.println("REGISTERED DEATH EVENT");
         LivingEntity entity = event.getEntity();
 
         // handles custom item drops
@@ -159,10 +151,12 @@ public class CustomEntityManager extends Manager implements Listener {
             }
             if (entity.getKiller() != null) {
                 // upgrades the player's tier when killed
-                plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
+                if (entity.hasMetadata("tier")) {
+                    int tier = (int) entity.getMetadata("tier").get(0).value();
+                    plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
+                }
             }
         }
-
 
         if (entity.hasMetadata("code")) {
             // checks if the entity is a hitbox entity
@@ -170,8 +164,8 @@ public class CustomEntityManager extends Manager implements Listener {
                 if (slime instanceof CraftEntity craftEntity) {
                     HitBoxEntity hitBoxEntity = (HitBoxEntity) craftEntity.getHandle();
                     if (hitBoxEntity != null) {
+                        hitBoxEntity.dropItems();
                         hitBoxEntity.setLoc(null);
-                        hitBoxEntity.destroyItem();
                     }
                 }
                 slime.setHealth(1);

@@ -1,6 +1,5 @@
 package com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox;
 
-import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
@@ -10,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 public class EggBoxEntity extends HitBoxEntity {
@@ -46,7 +44,8 @@ public class EggBoxEntity extends HitBoxEntity {
     }
 
     @Override
-    public void destroyItem() {
+    public void dropItems() {
+        super.dropItems();
         eggEntity.setCustomName("");
         eggEntity.setCustomNameVisible(false);
         eggEntity.setPickupDelay(1);
