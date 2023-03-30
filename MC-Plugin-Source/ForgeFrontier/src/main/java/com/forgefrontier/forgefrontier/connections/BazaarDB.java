@@ -208,9 +208,9 @@ public class BazaarDB extends DBConnection {
             UpdateQueryWrapper uwrap = new UpdateQueryWrapper();
             uwrap.setTable("public.bazaar_redeem");
             uwrap.fullInsert("amount", prevTotal + bs.getAmount());
-            uwrap.setConditionString("order_id = '" + bs.getOrderID().toString() + "'");
-            UpdateQueryWrapper.InsertResult ir = uwrap.executeSyncQuery(dbConn);
-            return ir.isSuccess();
+            uwrap.addCondition("order_id = %order_id%", "order_id");
+            uwrap.insertValue("order_id", bs.getAmount());
+            return uwrap.executeSyncQuery(dbConn);
         } else {
             // INSERT
             InsertQueryWrapper iwrap = new InsertQueryWrapper();

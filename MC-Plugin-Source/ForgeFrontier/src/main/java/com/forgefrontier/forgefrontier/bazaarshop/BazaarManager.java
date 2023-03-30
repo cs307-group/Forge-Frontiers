@@ -318,7 +318,7 @@ public class BazaarManager {
                 modifiedOrig = new BazaarEntry(be);
                 be.setValid(false);
                 modified = be;
-                total += amt * be.getPrice();
+                total += (double) amt * be.getPrice();
                 be.setAmount(be.getAmount() - amt);
                 amt = 0;
             }
@@ -338,6 +338,7 @@ public class BazaarManager {
 
 
         // perform transactions
+        plugin.getLogger().log(Level.INFO, "Taking " + total + " gold from " + p.getName());
         econ.withdrawPlayer(p, total);
         for (BazaarEntry be : removed) {
             OfflinePlayer op = plugin.getServer().getOfflinePlayer(be.getListerID());
@@ -356,7 +357,7 @@ public class BazaarManager {
         }
         ItemStack realItem = getRealItem(item);
         ItemGiver.giveItem(p,realItem, amount);
-        refreshListingDisplay(100);
+        refreshListingDisplay();
         return true;
     }
 

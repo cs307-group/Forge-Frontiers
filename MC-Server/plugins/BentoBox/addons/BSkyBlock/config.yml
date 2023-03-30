@@ -141,8 +141,10 @@ world:
   # World flags. These are boolean settings for various flags for this world
   flags:
     OBSIDIAN_SCOOPING: true
+    LIQUIDS_FLOWING_OUT: false
     REMOVE_MOBS: true
     CLEAN_SUPER_FLAT: false
+    PREVENT_TELEPORT_WHEN_FALLING: false
     NATURAL_SPAWNING_OUTSIDE_RANGE: true
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
