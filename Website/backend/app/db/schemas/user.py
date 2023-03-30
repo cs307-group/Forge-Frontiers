@@ -17,6 +17,7 @@ class User(db.Model):
     password_hash: str = db.Column(TEXT, nullable=False)
     created_at: int = db.Column(db.Integer)
     is_admin: bool = db.Column(db.Boolean, default=False)
+    island_id: str = db.Column(db.TEXT)
     # pylint: enable=E1101
 
     def __init__(
@@ -25,6 +26,7 @@ class User(db.Model):
         name: str = None,
         password_hash: str = None,
         mc_user: str = None,
+        island_id: str = None,
     ):
         self.id_ = token_urlsafe(20)
         self.user = user
@@ -32,6 +34,7 @@ class User(db.Model):
         self.name = name
         self.password_hash = password_hash
         self.created_at = time()
+        self.island_id = island_id
 
     @property
     def as_json(self):
@@ -41,6 +44,7 @@ class User(db.Model):
             "created_at": self.created_at,
             "is_admin": self.is_admin,
             "mc_user": self.mc_user,
+            "island_id": self.island_id,
             "_secure_": {
                 "user": self.user,
             },

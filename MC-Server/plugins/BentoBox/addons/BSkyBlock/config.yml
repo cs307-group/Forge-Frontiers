@@ -141,7 +141,7 @@ world:
   # World flags. These are boolean settings for various flags for this world
   flags:
     OBSIDIAN_SCOOPING: true
-    LIQUIDS_FLOWING_OUT: false
+    ENTER_EXIT_MESSAGES: true
     REMOVE_MOBS: true
     CLEAN_SUPER_FLAT: false
     PREVENT_TELEPORT_WHEN_FALLING: false

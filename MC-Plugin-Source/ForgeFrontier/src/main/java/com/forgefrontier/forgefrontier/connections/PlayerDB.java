@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.generators.GeneratorInstance;
 import com.forgefrontier.forgefrontier.player.PlayerStat;
 
 import java.sql.Connection;
@@ -172,6 +173,17 @@ public class PlayerDB extends DBConnection {
                 consumer.accept(null);
             }
         }).start();
+    }
+
+    public void updatePlayerIsland(UUID playerUUID, String islandId, final Consumer<Boolean> callback) {
+        UpdateQueryWrapper wrapper = new UpdateQueryWrapper();
+
+        wrapper.setTable("public.user");
+        wrapper.fullInsert("island_id", islandId);
+        wrapper.addCondition("mc_user = %player_uuid%", "player_uuid");
+        wrapper.insertValue("player_uuid", playerUUID.toString());
+        wrapper.executeAsyncQuery(dbConn, callback);
+
     }
 
 }

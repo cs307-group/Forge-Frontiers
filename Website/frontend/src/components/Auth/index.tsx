@@ -1,8 +1,7 @@
 import {motion} from "framer-motion";
+import {Raleway} from "next/font/google";
 import Link from "next/link";
 import {PropsWithChildren} from "react";
-
-import {Raleway} from "@next/font/google";
 
 const raleway = Raleway({subsets: ["latin"]});
 export interface AuthProps extends PropsWithChildren {}
