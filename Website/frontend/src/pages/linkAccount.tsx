@@ -1,7 +1,8 @@
+import {Raleway} from "next/font/google";
+
 import {Auth, AuthSideText, AuthSideType} from "@/components/Auth";
 import {LinkAccount} from "@/components/Auth/LinkAccount";
 import {Spacer} from "@/components/Spacer";
-import {Raleway} from "@next/font/google";
 
 const raleway = Raleway({preload: false, variable: "--raleway"});
 

@@ -20,3 +20,5 @@ def api_list_marketplace():
     res["cheapest"] = get_cheapest_per_lookup()
     res["counts"] = get_lookup_count()
     return res
+
+
