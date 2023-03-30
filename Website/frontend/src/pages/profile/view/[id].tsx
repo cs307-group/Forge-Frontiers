@@ -53,7 +53,7 @@ export default function ViewProfile({
   );
 }
 
-export const getServerSideProps = (async (c) => {
+export const getServerSideProps: GetServerSideProps = (async (c) => {
   if (!c.query.id || Array.isArray(c.query.id)) {
     return {props: {error: "Invalid"}};
   }

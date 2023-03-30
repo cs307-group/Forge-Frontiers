@@ -5,6 +5,7 @@ from app.db.queries.bazaar import (
     get_current_marketplace_lookup,
     get_cheapest_per_lookup,
     get_lookup_count,
+    get_orders_for_slot,
 )
 
 router = Blueprint("market", __name__, url_prefix="/market")
@@ -22,3 +23,7 @@ def api_list_marketplace():
     return res
 
 
+@router.get("/<int:idx>")
+@api.none
+def api_view_slot(idx: int):
+    return get_orders_for_slot(idx)

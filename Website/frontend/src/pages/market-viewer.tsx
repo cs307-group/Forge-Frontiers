@@ -67,7 +67,6 @@ export default function Market({
 }
 
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
-  const resp = await getMarketState(c);
-
+  const resp = await getMarketState();
   return resp.toSSPropsResult;
 });
