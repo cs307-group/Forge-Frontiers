@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.bazaarshop.BazaarCommand;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.commands.*;
 import com.forgefrontier.forgefrontier.connections.DatabaseManager;
+import com.forgefrontier.forgefrontier.fishing.FishingManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
@@ -45,6 +46,7 @@ import revxrsal.commands.bukkit.BukkitCommandHandler;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class ForgeFrontier extends JavaPlugin {
 
@@ -62,6 +64,7 @@ public class ForgeFrontier extends JavaPlugin {
     private GearItemManager gearItemManager;
     private CustomEntityManager customEntityManager;
     private MiningManager miningManager;
+    private FishingManager fishingManager;
 
     private Shop itemShop;
     private BazaarManager bazaarManager;
@@ -83,6 +86,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.createConfig("mining");
         this.createConfig("gear-shop");
         this.createConfig("reroll");
+        this.createConfig("fishing");
 
         if (!setupEconomy() ) {
             getLogger().severe("Disabled due to no Vault dependency found!");
@@ -102,6 +106,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.customEntityManager = new CustomEntityManager(this);
         this.bazaarManager = new BazaarManager(this);
         this.miningManager = new MiningManager(this);
+        this.fishingManager = new FishingManager(this);
 
         this.databaseManager.init();
         this.customItemManager.init();
@@ -112,6 +117,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.customEntityManager.init();
         this.bazaarManager.init();
         this.miningManager.init();
+        this.fishingManager.init();
 
         // Player Shop
         this.setupPlayerShop();
@@ -134,7 +140,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.gearItemManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.customEntityManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.miningManager, this);
-
+        Bukkit.getServer().getPluginManager().registerEvents(this.fishingManager, this);
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
         this.registerCommands();
@@ -263,7 +269,9 @@ public class ForgeFrontier extends JavaPlugin {
     public MiningManager getMiningManager() {
         return this.miningManager;
     }
-
+    public FishingManager getFishingManager() {
+        return fishingManager;
+    }
     public Shop getPlayerShop() {
         return this.itemShop;
     }
