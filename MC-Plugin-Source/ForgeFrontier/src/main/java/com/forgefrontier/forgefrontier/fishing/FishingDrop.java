@@ -6,8 +6,10 @@ import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Random;
 import java.util.logging.Level;
 
 public class FishingDrop {
@@ -18,6 +20,16 @@ public class FishingDrop {
     private final String custom_data;
     private ItemStack item;
 
+
+
+
+    public FishingDrop(ItemStack item, int rarity, int min, int max) {
+        this.isCustom = false;
+        this.custom_data = "";
+        this.item = item;
+        this.minAmt = min;
+        this.maxAmt = max;
+    }
 
     public FishingDrop(String material, String lore, String displayName, int rarity, int minAmt, int maxAmt) {
 
@@ -76,6 +88,14 @@ public class FishingDrop {
 
     public ItemStack getItem() {
         return item;
+    }
+
+    public ItemStack roll(Random r) {
+        int diff = maxAmt - minAmt + 1;
+        int res = r.nextInt() % diff;
+        int amt = res + minAmt;
+        this.item.setAmount(amt);
+        return item.clone();
     }
 
     public void setItem(ItemStack item) {

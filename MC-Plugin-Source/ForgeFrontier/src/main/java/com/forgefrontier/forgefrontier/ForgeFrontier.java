@@ -194,7 +194,7 @@ public class ForgeFrontier extends JavaPlugin {
         // Wrapper-Registered Commands
         BukkitCommandHandler commandHandler = BukkitCommandHandler.create(this);
         commandHandler.register(new BazaarCommand(this));
-
+        commandHandler.register(new FishingCommands(this));
         // Auto-Completer Registrations
         AutoCompleter autoCompleter = commandHandler.getAutoCompleter();
         autoCompleter.registerSuggestion("cgive", customItemManager.getItemNames());
