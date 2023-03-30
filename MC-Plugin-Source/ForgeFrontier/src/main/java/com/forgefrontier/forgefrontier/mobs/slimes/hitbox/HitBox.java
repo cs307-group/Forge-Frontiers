@@ -54,17 +54,17 @@ public class HitBox extends CustomSlime {
         }
 
         public void initHitBox(String name, int health, int size) {
-            this.setDefaultHealth(health);
             this.setAI(true);
 
             defineDropTable();
             this.setSize(size);
+            this.setDefaultHealth(health); // NOTE: must set health after the size since health is reset from size as
+                                           // n*n. This is similar for damage as well
             this.setCollidable(false);
             this.setInvisible(true);
 
             AttributeInstance atk = this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
             if (atk != null) {
-                System.out.println("ATTRIBUTE SUCCESS!!!");
                 atk.setBaseValue(0);
             }
         }

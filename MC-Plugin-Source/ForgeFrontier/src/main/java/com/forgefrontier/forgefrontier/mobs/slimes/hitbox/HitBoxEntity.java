@@ -21,7 +21,7 @@ public class HitBoxEntity extends CustomSlimeEntity {
     public ArrayList<String> customDropKeys;
     public HashMap<Material, Integer> dropTable;
     public ArrayList<Material> dropKeys;
-    World world;
+    public World world;
 
     public HitBoxEntity(EntityType<? extends Slime> entityTypes, Level world) {
         super(entityTypes, world);

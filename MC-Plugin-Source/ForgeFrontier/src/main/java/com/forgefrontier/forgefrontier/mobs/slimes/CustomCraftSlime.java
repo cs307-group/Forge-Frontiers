@@ -48,9 +48,11 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
      * @param maxHealth
      */
     public void setDefaultHealth(int maxHealth) {
-        // sets the health of the chicken
+        // sets the health of the entity
+        System.out.println("Setting Health: " + maxHealth);
         this.setMaxHealth(maxHealth);
         this.setHealth(maxHealth);
+        System.out.println(this.getHealth());
     }
 
     /**
@@ -59,7 +61,7 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
      * @param name displays the name, current health, and custom health
      */
     public void updateNamePlate(String name) {
-        // sets the nameplate of the chicken
+        // sets the nameplate of the entity
         this.setCustomName(ChatColor.WHITE + name + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
         this.setCustomNameVisible(true);
     }

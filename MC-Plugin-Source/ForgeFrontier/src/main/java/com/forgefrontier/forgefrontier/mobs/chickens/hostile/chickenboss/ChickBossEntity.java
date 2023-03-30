@@ -1,9 +1,12 @@
 package com.forgefrontier.forgefrontier.mobs.chickens.hostile.chickenboss;
 
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChickenEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.eggsplosive.EggsplosiveEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.level.Level;
+
+import java.util.ArrayList;
 
 public class ChickBossEntity extends HostileChickenEntity {
 
@@ -11,6 +14,7 @@ public class ChickBossEntity extends HostileChickenEntity {
     int failCounter;
     long invulnTime;
     long lastTickTime;
+    ArrayList<EggsplosiveEntity> eggs;
 
     public ChickBossEntity(EntityType<? extends Chicken> entityTypes, Level world) {
         super(entityTypes, world);
@@ -54,5 +58,9 @@ public class ChickBossEntity extends HostileChickenEntity {
             failCounter++;
             System.out.println("FAIL: END OF INVULNERABLE: " + failCounter);
         }
+    }
+
+    public void removeEgg(EggsplosiveEntity egg) {
+        this.eggs.remove(egg);
     }
 }

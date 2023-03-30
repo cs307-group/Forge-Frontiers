@@ -31,6 +31,17 @@ public class EggBox extends HitBox {
             saveMetaData();
         }
 
+        /**
+         * Constructor for inheritance
+         *
+         * @param server the CraftServer instance
+         */
+        public CraftEggBox(CraftServer server, String name, int health, HitBoxEntity entity, int size) {
+            super(server, name, health, entity, size);
+            initHitBox(name, health, size);
+            saveMetaData();
+        }
+
         @Override
         public void defineDropTable() {
             EggBoxEntity entity = (EggBoxEntity) handle;

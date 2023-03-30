@@ -13,8 +13,8 @@ import org.bukkit.util.Vector;
 
 public class EggBoxEntity extends HitBoxEntity {
 
-    boolean existed;
-    Item eggEntity;
+    public boolean existed;
+    public Item eggEntity;
 
     public EggBoxEntity(EntityType<? extends Slime> entityTypes, Level world) {
         super(entityTypes, world);
@@ -29,6 +29,7 @@ public class EggBoxEntity extends HitBoxEntity {
     @Override
     public void whileAlive() {
         super.whileAlive();
+        // runs once on spawn
         if (this.loc != null && !existed) {
             existed = true;
             ItemStack egg = new ItemStack(Material.EGG);
