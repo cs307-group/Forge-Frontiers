@@ -1,16 +1,18 @@
 package com.forgefrontier.forgefrontier.mobs;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import net.minecraft.server.level.ServerLevel;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 /**
  * Abstract class to represent all custom mobs
  */
-public abstract class CustomMob implements CustomEntity {
+public abstract class CustomMob {
 
     /** the world that the entity will exist in */
     World world;
@@ -37,9 +39,9 @@ public abstract class CustomMob implements CustomEntity {
      *
      * @param loc the lcoation the entity will be spawned
      */
-    @Override
     public CraftEntity spawnCustomEntity(Location loc, CraftEntity craftEntity) {
-        ServerLevel worldServer = ((CraftWorld)Bukkit.getServer().getWorld("world")).getHandle();
+        loc.getWorld();
+        ServerLevel worldServer = ((CraftWorld) loc.getWorld()).getHandle();
         worldServer.addFreshEntity(craftEntity.getHandle(), CreatureSpawnEvent.SpawnReason.CUSTOM);
         craftEntity.teleport(loc);
         return craftEntity;
@@ -57,13 +59,5 @@ public abstract class CustomMob implements CustomEntity {
     /** Returns the code attribute for the CustomMob */
     public String getCode() {
         return this.code;
-    }
-
-    /**
-     * @return null since CustomMob doesn't have a corresponding craft entity
-     */
-    @Override
-    public Class<? extends CraftEntity> getCorrespondingCraftEntity() {
-        return null;
     }
 }

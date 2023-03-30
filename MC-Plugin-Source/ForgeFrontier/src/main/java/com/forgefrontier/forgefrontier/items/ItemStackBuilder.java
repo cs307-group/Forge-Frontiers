@@ -3,13 +3,11 @@ package com.forgefrontier.forgefrontier.items;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,6 +22,7 @@ public class ItemStackBuilder {
 
     ItemStack copy;
     boolean copyBuild;
+    boolean isloreModified = false;
 
     /** Begin Building w/ material of itemstack */
     public ItemStackBuilder(Material m) {
@@ -63,6 +62,7 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder setFullLore(String newlineSepLore) {
+        isloreModified = true;
         if (newlineSepLore.isEmpty()) {
             return this;
         }
@@ -71,15 +71,20 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder setFullLore(List<String> lore) {
+        isloreModified = true;
         this.lore = new ArrayList<>(lore);
         return this;
     }
 
     /** Add a new line to the lore of the generated item */
     public ItemStackBuilder addLoreLine(String loreLine) {
+        isloreModified = true;
         if(this.lore == null)
             this.lore = new ArrayList<>();
-        this.lore.add(ChatColor.translateAlternateColorCodes('&', loreLine));
+        ArrayList<String> str = new ArrayList<String>(Arrays.asList(loreLine.split("\n")));
+        str.forEach((e) -> e = ChatColor.translateAlternateColorCodes('&', e));
+        this.lore.addAll(str);
+        //this.lore.add(ChatColor.translateAlternateColorCodes('&', loreLine));
 
         return this;
     }
@@ -114,6 +119,11 @@ public class ItemStackBuilder {
     public ItemStack copy(ItemStack other, int amt) {
         ItemStack i = new ItemStack(other.getType());
         i.setItemMeta(other.getItemMeta());
+        if (lore != null && isloreModified && i.getItemMeta() != null) {
+            ItemMeta imeta = i.getItemMeta();
+            imeta.setLore(lore);
+            i.setItemMeta(imeta);
+        }
         i.setAmount(amt);
         return i;
     }
@@ -121,6 +131,11 @@ public class ItemStackBuilder {
     public ItemStack copy(ItemStack other) {
         ItemStack i = new ItemStack(other.getType());
         i.setItemMeta(other.getItemMeta());
+        if (lore != null && isloreModified && i.getItemMeta() != null) {
+            ItemMeta imeta = i.getItemMeta();
+            imeta.setLore(lore);
+            i.setItemMeta(imeta);
+        }
         return i;
     }
 

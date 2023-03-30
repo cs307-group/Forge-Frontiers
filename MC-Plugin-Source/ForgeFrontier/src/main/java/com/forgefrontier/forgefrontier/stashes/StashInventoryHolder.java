@@ -1,12 +1,14 @@
 package com.forgefrontier.forgefrontier.stashes;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.connections.StashDB;
 import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItemInstance;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
 import com.forgefrontier.forgefrontier.gui.StashAddInventoryHolder;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -21,14 +23,6 @@ public class StashInventoryHolder extends BaseInventoryHolder {
 
         this.fillPanes();
 
-        /*for(int x = 0; x < 7; x++) {
-            for(int y = 0; y < 2; y++) {
-                int slotId = (x + 1) + (y+1) * 9;
-                this.setItem(slotId, new ItemStack(Material.AIR));
-            }
-        }*/
-
-
         int i = 0;
         for(StashItem stashItem: stashInstance.getStash().getStashItems()) {
             ItemStack itemStack = stashItem.getItem().asInstance(null).asItemStack();
@@ -39,14 +33,32 @@ public class StashInventoryHolder extends BaseInventoryHolder {
                 .build()
             );
             this.addHandler(i + 1 + 1 * 9, (e) -> {
-                e.getWhoClicked().openInventory(new StashAddInventoryHolder(stashInstance, stashItem).getInventory());
+                ForgeFrontier.getInstance().getDatabaseManager().getStashDB().updateStash(stashInstance, (status) -> {
+                    Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                        if(status == StashDB.Status.ERROR) {
+                            ForgeFrontier.getInstance().getLogger().severe("An error occurred when attempting to look for updates to a stash.");
+                            e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to access the stash. Please try again later.");
+                            return;
+                        }
+                        e.getWhoClicked().openInventory(new StashAddInventoryHolder(stashInstance, stashItem).getInventory());
+                    });
+                });
             });
             this.setItem(i + 1 + 3 * 9, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
                     .setDisplayName("&cRemove " + ChatColor.stripColor(displayName) + "(s) from the stash")
                     .build()
             );
             this.addHandler(i + 1 + 3 * 9, (e) -> {
-                e.getWhoClicked().openInventory(new StashRemoveInventoryHolder(stashInstance, stashItem).getInventory());
+                ForgeFrontier.getInstance().getDatabaseManager().getStashDB().updateStash(stashInstance, (status) -> {
+                    Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                        if(status == StashDB.Status.ERROR) {
+                            ForgeFrontier.getInstance().getLogger().severe("An error occurred when attempting to look for updates to a stash.");
+                            e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to access the stash. Please try again later.");
+                            return;
+                        }
+                        e.getWhoClicked().openInventory(new StashRemoveInventoryHolder(stashInstance, stashItem).getInventory());
+                    });
+                });
             });
             this.setItem(i + 1 + 2 * 9, new ItemStackBuilder(itemStack.getType())
                 .setAmount(Math.max(1, Math.min(64, stashInstance.getAmount(stashItem))))

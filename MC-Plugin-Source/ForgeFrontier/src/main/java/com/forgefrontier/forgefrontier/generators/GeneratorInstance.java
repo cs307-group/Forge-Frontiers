@@ -7,9 +7,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.database.objects.Island;
+
+import java.util.Optional;
 
 public class GeneratorInstance implements Locatable {
 
+    Island island;
     String databaseId;
     Generator generator;
     Location location;
@@ -37,10 +42,12 @@ public class GeneratorInstance implements Locatable {
 
     public void collect(Player player) {
         ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().updateGenerator(this, (status) -> {
+            if(status == GeneratorDB.Status.ERROR) {
+                ForgeFrontier.getInstance().getLogger().severe("Unable to get information for a generator instance when updating.");
+                player.sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to update your generator. Please try again later.");
+                return;
+            }
             Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
-                if(status == GeneratorDB.Status.ERROR) {
-                    ForgeFrontier.getInstance().getLogger().severe("Unable to get information for a generator instance when updating.");
-                }
                 long currentTime = System.currentTimeMillis();
 
                 GeneratorLevel currentLevel = getGeneratorLevel();
@@ -53,6 +60,14 @@ public class GeneratorInstance implements Locatable {
                 }
                 int amtLeft = this.generator.primaryMaterial.collect(player, collectAmt);
                 this.setAmountLeft(amtLeft, currentTime, nextTimeRemain);
+                ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().sendGeneratorUpdate(this, (success) -> {
+                    if(!success) {
+                        Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                            ForgeFrontier.getInstance().getLogger().severe("Unable to send generator update to database. An unknown error occurred in doing so.");
+                            player.sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to update your generator. Please try again later.");
+                        });
+                    }
+                });
             });
         });
     }
@@ -60,7 +75,7 @@ public class GeneratorInstance implements Locatable {
     private void setAmountLeft(int amtLeft, long currentTime, int remainingTime) {
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        this.lastCollectTime = currentTime - amtLeft * currentLevel.generatorRate - remainingTime;
+        this.lastCollectTime = currentTime - remainingTime - amtLeft * currentLevel.generatorRate;
 
     }
 
@@ -118,6 +133,11 @@ public class GeneratorInstance implements Locatable {
 
         this.setAmountLeft(collectAmt, currentTime, nextTimeRemain);
 
+        ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().sendGeneratorUpdate(this, (success) -> {
+            if(!success) {
+                ForgeFrontier.getInstance().getLogger().severe("Unable to send generator update to database. An unknown error occurred in doing so.");
+            }
+        });
     }
 
     @Override
@@ -147,6 +167,22 @@ public class GeneratorInstance implements Locatable {
     @Override
     public String toString() {
         return "(" + this.generator.getId() + ", " + this.level + ", " + this.getX() + ", " + this.getY() + ", " + this.getZ() + ")";
+    }
+
+    public Generator getGenerator() {
+        return this.generator;
+    }
+
+    public Island getIsland() {
+        if(island == null) {
+            Location l = this.getLocation().clone();
+            l.setY(0);
+            Optional<Island> island = BentoBox.getInstance().getIslandsManager().getIslandAt(l);
+            if(!island.isPresent())
+                return null;
+            this.island = island.get();
+        }
+        return this.island;
     }
 
 }

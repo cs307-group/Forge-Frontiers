@@ -31,6 +31,7 @@ public class GeneratorDB extends DBConnection {
             wrapper.setFields(
                 "id_",
                 "level",
+                "generator_id",
                 "last_collection_time",
                 "location_x",
                 "location_y",
@@ -41,6 +42,7 @@ public class GeneratorDB extends DBConnection {
             try {
                 while(rs != null && rs.next()) {
                     String databaseId = rs.getString("id_");
+                    String generatorId = rs.getString("generator_id");
                     int level = rs.getInt("level");
                     long lastCollectionTime = rs.getLong("last_collection_time");
                     int x = rs.getInt("location_x");
@@ -48,10 +50,10 @@ public class GeneratorDB extends DBConnection {
                     int z = rs.getInt("location_z");
                     String world = rs.getString("location_world");
                     Location location = new Location(Bukkit.getWorld(world), x, y, z);
-                    Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator("silver-gen");
+                    Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(generatorId);
                     GeneratorInstance instance = new GeneratorInstance(generator, location, level, lastCollectionTime, databaseId);
                     boolean success = ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(instance);
-                    System.out.println("Adding generator " + instance.getLocation() + ": success: " + success);
+                    //System.out.println("Adding generator " + instance.getLocation() + ": success: " + success);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -63,6 +65,8 @@ public class GeneratorDB extends DBConnection {
         InsertQueryWrapper wrapper = new InsertQueryWrapper();
         wrapper.setTable("public.generator_instances");
         wrapper.fullInsert("id_", UUID.randomUUID().toString());
+        wrapper.fullInsert("generator_id", instance.getGenerator().getId());
+        wrapper.fullInsert("island_id", instance.getIsland().getUniqueId());
         wrapper.fullInsert("level", instance.getLevelInt());
         wrapper.fullInsert("last_collection_time", instance.getLastCollectTime());
         wrapper.fullInsert("location_x", instance.getX());
@@ -115,6 +119,18 @@ public class GeneratorDB extends DBConnection {
                 updateNeededConsumer.accept(Status.ERROR);
             }
         });
+    }
+
+    public void sendGeneratorUpdate(GeneratorInstance instance, final Consumer<Boolean> callback) {
+        UpdateQueryWrapper wrapper = new UpdateQueryWrapper();
+
+        wrapper.setTable("public.generator_instances");
+        wrapper.fullInsert("last_collection_time", instance.getLastCollectTime());
+        wrapper.fullInsert("level", instance.getLevelInt());
+        wrapper.addCondition("id_ = %id%", "id");
+        wrapper.insertValue("id", instance.getDatabaseId());
+        wrapper.executeAsyncQuery(dbConn, callback);
+
     }
 
 }

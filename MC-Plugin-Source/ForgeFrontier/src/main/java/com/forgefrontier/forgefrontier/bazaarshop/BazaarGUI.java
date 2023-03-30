@@ -7,12 +7,17 @@ import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
+
+
 public class BazaarGUI extends BaseInventoryHolder {
     private BazaarManager bazaarMgr;
+    private int VIEW_PERSONAL_SLOT = 9 * 5 + 4;
+    private ItemStack personalItem;
     public BazaarGUI() {
         super(54, "" + ChatColor.GOLD + ChatColor.BOLD + "Bazaar");
         this.bazaarMgr = ForgeFrontier.getInstance().getBazaarManager();
@@ -23,8 +28,9 @@ public class BazaarGUI extends BaseInventoryHolder {
         int idx = 0;
         fillBorders();
         ArrayList<ItemStack> displayItems = bazaarMgr.getDisplayItems();
-        ItemStack defaultPane = new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE)
+        ItemStack defaultPane = new ItemStackBuilder(Material.ORANGE_STAINED_GLASS_PANE)
                 .setDisplayName("").build();
+
         for (int i = 1; i < 5; i++) {
             int rbegin = 9 * i + 1;
             for (int j = 0; j < 7; j++) {
@@ -36,7 +42,7 @@ public class BazaarGUI extends BaseInventoryHolder {
                 }
                 // Add callbacks to relevant items
                 if (displayItem != null && displayItem.getType() != Material.BARRIER &&
-                        displayItem.getType() != Material.GRAY_STAINED_GLASS_PANE) {
+                        displayItem.getType() != Material.ORANGE_STAINED_GLASS_PANE) {
                     int finalIdx = idx;
                     this.addHandler(rbegin + j, (e) -> {
                         Player p = (Player) e.getWhoClicked();
@@ -46,20 +52,23 @@ public class BazaarGUI extends BaseInventoryHolder {
                 idx++;
             }
         }
+
+        ItemStack personalItem = new ItemStackBuilder(Material.CHEST_MINECART).setDisplayName("My Orders").build();
+        this.setItem(VIEW_PERSONAL_SLOT,personalItem);
+        this.addHandler(VIEW_PERSONAL_SLOT, this::viewPersonalClick);
+
+
+
+
+
     }
 
+    public void viewPersonalClick(InventoryClickEvent e) {
+        Player p = (Player) e.getWhoClicked();
+        p.openInventory(new ViewOrdersGUI(size,"My Bazaar Listings", p.getUniqueId()).getInventory());
+    }
     public void slotClick(Player p, int idx) {
-        TwoOptionHolder optionHolder = new TwoOptionHolder("Select Buy/Sell");
-        optionHolder.setOpts(
-                () -> {
-                    p.openInventory(new OrderCreationGUI(27,"Create Buy Order",true,
-                            idx, optionHolder).getInventory());
-                },
-                () -> {
-                    p.openInventory(new OrderCreationGUI(27,"Create Sell Order",false,
-                            idx, optionHolder).getInventory());
-                });
-        p.openInventory(optionHolder.getInventory());
+        p.openInventory(new NowLaterGUI(27,idx).getInventory());
     }
 
     public void updateGUI() {
@@ -76,7 +85,7 @@ public class BazaarGUI extends BaseInventoryHolder {
     }
 
     public void fillBorders() {
-        ItemStack item = new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE)
+        ItemStack item = new ItemStackBuilder(Material.ORANGE_STAINED_GLASS_PANE)
                 .setDisplayName("").build();
         for (int i = 0; i < 9; i++) {
             this.setItem(i,item);

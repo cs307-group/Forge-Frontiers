@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Logo from "@/images/logo.png";
-import {Raleway} from "next/font/google";
+import {Raleway} from "@next/font/google";
 
 const raleway = Raleway({subsets: ["latin"]});
 export default function Home() {

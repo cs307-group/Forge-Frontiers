@@ -76,10 +76,30 @@ public class OrderCreationGUI extends BaseInventoryHolder {
         Player p = (Player) e.getWhoClicked();
         if (!this.type) {
             execSellOrder(p);
+        } else {
+            execBuyOrder(p);
         }
 
     }
-
+    private void execBuyOrder(Player p) {
+        double bal = ForgeFrontier.getInstance().getEconomy().getBalance(p);
+        if (bal < amount * price) {
+            p.sendMessage(BazaarManager.bazaarPrefix + ChatColor.RED + "Not enough gold to create order!");
+            this.setItem(confirmSlot,new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
+                    .setDisplayName("" + ChatColor.RED + "Not enough gold to create order!").build());
+            ForgeFrontier.getInstance().getServer().getScheduler()
+                    .runTaskLater(ForgeFrontier.getInstance(),
+                            new ItemSetRunnable(this,confirmSlot,confirmItem),40);
+        } else if (!bazaarManager.createBuyListing(p, itemIdx,amount,price)) {
+            this.setItem(confirmSlot,new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
+                    .setDisplayName("" + ChatColor.RED + "Error in creation of order!").build());
+            ForgeFrontier.getInstance().getServer().getScheduler()
+                    .runTaskLater(ForgeFrontier.getInstance(),
+                            new ItemSetRunnable(this,confirmSlot,confirmItem),40);
+        } else {
+            p.closeInventory();
+        }
+    }
     private void execSellOrder(Player p) {
         ItemStack refItem = bazaarManager.getRealItem(itemIdx);
         if (!ItemUtil.hasItem(p,refItem, amount)) {
@@ -139,7 +159,7 @@ public class OrderCreationGUI extends BaseInventoryHolder {
             .onComplete((completion -> {
                 String input = completion.getText();
                 try {
-                    price = Integer.parseInt(input);
+                    price = Double.parseDouble(input);
                     priceItem = new ItemStackBuilder(Material.PAPER)
                             .setDisplayName(ChatColor.GOLD + "Select Price")
                             .setFullLore("" + ChatColor.GOLD + "%.2f".formatted(price) + "g").build();
