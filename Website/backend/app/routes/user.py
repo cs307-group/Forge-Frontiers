@@ -166,4 +166,4 @@ def get_mc_stats(idx: str):
     if mc_user is not None:
         stats = get_stats_by_player_uuid(mc_user)
         return stats.as_json
-    return {}
+    raise AppException("Stats not found", 404)

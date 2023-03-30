@@ -65,19 +65,7 @@ export const getServerSideProps: GetServerSideProps = (async (c) => {
   if (!stats.ok && stats.status !== 404) {
     return {props: json || null};
   }
-  if (stats.status === 404) {
-    json = {
-      ATK: 0,
-      CDMG: 0,
-      CRATE: 0,
-      current_health: 100,
-      DEF: 0,
-      DEX: 0,
-      HP: 0,
-      player_uuid: "unknown",
-      STR: 0,
-    };
-  }
+
   if (stats.status === 404) {
     json = DEFAULT_STATS;
   }
