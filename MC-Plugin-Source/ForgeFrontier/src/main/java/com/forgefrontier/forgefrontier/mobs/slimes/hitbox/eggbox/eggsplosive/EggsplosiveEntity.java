@@ -19,19 +19,7 @@ public class EggsplosiveEntity extends EggBoxEntity {
     long lastTimeStamp;
     long totalTimeAlive;
     String name;
-
-    /**
-     * for when spawned by boss
-     * @param entityTypes the type of entity (slime)
-     * @param world the world
-     * @param owner the boss instance
-     */
-    public EggsplosiveEntity(EntityType<? extends Slime> entityTypes, Level world, ChickBossEntity owner) {
-        super(entityTypes, world);
-        this.owner = owner;
-        lastTimeStamp = 0;
-        totalTimeAlive = 0;
-    }
+    int timeToExplode = 15;
 
     /**
      * For when not spawned by boss
@@ -48,20 +36,17 @@ public class EggsplosiveEntity extends EggBoxEntity {
     @Override
     public void whileAlive() {
         super.whileAlive();
-        
+
         // initializes lastTimeStamp
         if (lastTimeStamp == 0) {
             lastTimeStamp = System.currentTimeMillis();
         }
 
-        if (totalTimeAlive >= 10000) { // explode on failure
+        if (totalTimeAlive >= (timeToExplode * 1000)) { // explode on failure
             explode(40);
             eggEntity.setCustomName("");
             eggEntity.setCustomNameVisible(false);
             eggEntity.remove();
-            if (owner != null) {
-                owner.removeEgg(this);
-            }
             this.remove(RemovalReason.KILLED);
         } else {
             totalTimeAlive += System.currentTimeMillis() - lastTimeStamp;
@@ -74,13 +59,16 @@ public class EggsplosiveEntity extends EggBoxEntity {
     public void dropItems() {
         super.dropItems();
         explode(20);
+        if (owner != null) {
+            owner.removeEgg(this);
+        }
     }
 
     @Override
     public void setNamePlate(String name) {
         if (existed) {
             this.name = name;
-            eggEntity.setCustomName(name + " | " + (10 - (totalTimeAlive / 1000)));
+            eggEntity.setCustomName(name + " | " + (timeToExplode - (totalTimeAlive / 1000)));
             eggEntity.setCustomNameVisible(true);
         }
     }
@@ -96,5 +84,9 @@ public class EggsplosiveEntity extends EggBoxEntity {
                 player.damage(damage);
             }
         }
+    }
+
+    public void setOwner(ChickBossEntity owner) {
+        this.owner = owner;
     }
 }

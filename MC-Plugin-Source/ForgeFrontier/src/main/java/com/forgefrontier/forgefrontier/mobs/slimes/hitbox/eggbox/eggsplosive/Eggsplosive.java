@@ -30,12 +30,6 @@ public class Eggsplosive extends EggBox {
             saveMetaData();
         }
 
-        public CraftEggsplosive(CraftServer server, CraftWorld world, ChickBossEntity owner) {
-            super(server, "Eggsplosive", 100, new EggsplosiveEntity(EntityType.SLIME, world.getHandle(), owner), 4);
-            this.updateNamePlate("Eggsplosive");
-            saveMetaData();
-        }
-
         @Override
         public void updateNamePlate(String name) {
             EggBoxEntity entity = (EggBoxEntity) handle;

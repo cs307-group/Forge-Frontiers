@@ -66,9 +66,24 @@ public class CustomEntityManager extends Manager implements Listener {
         if (mob == null) {
             return false;
         }
-        System.out.println("Spawning at " + player.getLocation().toVector());
         mob.spawnCustomEntity(player.getLocation(), mob.createCustomEntity((CraftWorld)player.getWorld()));
         return true;
+    }
+
+
+    /**
+     * Spawns an entity with the specified code
+     *
+     * @param code the code corresponding to the mob to be spawned
+     * @param loc the location to be spawned at
+     * @return if the execution was successful
+     */
+    public static CraftEntity spawnEntity(String code, Location loc) {
+        CustomMob mob = ForgeFrontier.getInstance().getCustomEntityManager().getEntities().get(code);
+        if (mob == null) {
+            return null;
+        }
+        return mob.spawnCustomEntity(loc, mob.createCustomEntity((CraftWorld)loc.getWorld()));
     }
 
     @EventHandler
