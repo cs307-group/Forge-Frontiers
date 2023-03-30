@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { PlayerStats, UserData } from "@/handlers/types";
+import {PlayerStats, UserData} from "@/handlers/types";
 import avatarImage from "@/images/avatar.png";
 
 const keyToTableMap: Record<keyof PlayerStats, string> = {
@@ -38,18 +38,26 @@ export function ProfileViewer({
         />
       </div>
       <div className="flex-1">
-        <table className="border-collapse table-auto w-full max-w-[600px] mx-auto">
+        <table className="mx-auto divide-y divide-gray-200 w-full max-w-[600px]">
           <thead>
-            <tr className="border-b border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-200 text-left">
+            <tr>
               {Object.keys(stats).map((x) => (
-                <th key={x}>{keyToTableMap[x as keyof PlayerStats]}</th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  key={x}
+                >
+                  {keyToTableMap[x as keyof PlayerStats]}
+                </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-slate-800">
-            <tr className="border-b border-slate-700 p-4 pl-8 text-slate-400">
+          <tbody>
+            <tr>
               {Object.entries(stats).map((x) => (
-                <td key={`${x[0]}-${x[1]}`}>
+                <td
+                  className="px-6 py-4 whitespace-nowrap"
+                  key={`${x[0]}-${x[1]}`}
+                >
                   <span>{x[1] as any}</span>
                 </td>
               ))}

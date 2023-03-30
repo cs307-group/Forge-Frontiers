@@ -2,9 +2,9 @@ import {jsonRequest, routes} from "./_util";
 import {AuthReqContext, EdgeFunctionResponse} from "./fetch-util";
 import {MarketStateFetch} from "./types";
 
-export async function getMarketState() {
+export async function getMarketState(c: AuthReqContext) {
   const getResponse = () =>
-    jsonRequest(routes.marketState, {
+    jsonRequest(routes.marketState((c.query.q ?? "") as any as string), {
       method: "get",
     });
   const result = await getResponse();
