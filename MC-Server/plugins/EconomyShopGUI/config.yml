@@ -92,16 +92,13 @@ enable-disabled-worlds: false
 # If a command is not added or the list with worlds for the specified command is empty,
 # the command will work in every world.
 disabled-worlds-per-command:
-
-  shop:
-    - "testbuilding"
-
-  sellall:
-    - "randompvp"
-
-  editshop:
-    - "boss-fights"
-    - "Survival-Spawn"
+    shop:
+    - 'testbuilding'
+    sellall:
+    - 'randompvp'
+    editshop:
+    - 'boss-fights'
+    - 'Survival-Spawn'
 
 # NOTE: Commands disabled inside worlds with the feature above will still be registered inside the server,
 # meaning that a command still can conflict with the same command from another plugin.
@@ -122,18 +119,18 @@ economy-provider: VAULT
 # Any currency's from gems-economy and ultra-economy will use the default currency formats,
 # though this can be overridden by setting it manually below per currency if desired
 currency-formats:
-  player-points:
-    singular: "Point"
-    plural: "Points"
-    friendly: "Points"
-  vault:
-    singular: "%currency-symbol%"
-    plural: "%currency-symbol%"
-    friendly: "money"
-  gems-economy:Example:
-    singular: "Example"
-    plural: "Examples"
-    friendly: "Examples"
+    player-points:
+      singular: Point
+      plural: Points
+      friendly: Points
+    vault:
+      singular: '%currency-symbol%'
+      plural: '%currency-symbol%'
+      friendly: money
+    gems-economy:Example:
+      singular: Example
+      plural: Examples
+      friendly: Examples
 
 
 #--------------------------------------------SpawnerProvider--------------------------------------------
@@ -171,34 +168,34 @@ enable-discordsrv-hook: false
 # %items% - The item names used in this transaction
 # %price% - The total price for all items used in this transaction
 discordsrv-transactions:
-  channel: shop-transactions
-  raw: ""
-  embed:
-    color: "0x006FFF"
-    title: ""
-    description: ""
-    author:
-      title: "New shop transaction"
-      imageURL: "https://api.creepernation.net/avatar/%player_name%"
-    fields:
-      1:
-        title: "Player"
-        message: "```%player_displayname%```"
-      2:
-        title: "Mode"
-        message: "```%bought/sold%```"
-      3:
-        title: "Amount"
-        message: "```%amount%```"
-      4:
-        title: "Product(s)"
-        message: "```%items%```"
-      5:
-        title: "Price"
-        message: "```%price%```"
-    footer:
-      title: ""
-      imageURL: ""
+    channel: shop-transactions
+    raw: ''
+    embed:
+      color: '0x006FFF'
+      title: ''
+      description: ''
+      author:
+        title: New shop transaction
+        imageURL: https://api.creepernation.net/avatar/%player_name%
+      fields:
+        1:
+          title: Player
+          message: '```%player_displayname%```'
+        2:
+          title: Mode
+          message: '```%bought/sold%```'
+        3:
+          title: Amount
+          message: '```%amount%```'
+        4:
+          title: Product(s)
+          message: '```%items%```'
+        5:
+          title: Price
+          message: '```%price%```'
+      footer:
+        title: ''
+        imageURL: ''
 
 
 #------------------------------------------PlayerTransactions-------------------------------------------
@@ -221,8 +218,8 @@ sell-shulker-boxes: true
 # Players will not be able to buy/sell items, nor use /sellall and /sellgui while inside any of the below gamemodes
 # Possible values: ADVENTURE, CREATIVE, SPECTATOR and SURVIVAL
 banned-gamemodes:
-  - CREATIVE
-  - SPECTATOR
+- 'CREATIVE'
+- 'SPECTATOR'
 
 # When purchasing a item from shop, should the transaction message say which material was sold/bought from shop or should it be the item name?
 use-item-name: true
@@ -262,128 +259,128 @@ resize-gui-for-bedrock: true
 
 # The navigation bar that appears in the main menu
 main-menu-nav-bar:
-  1:
-    material: player_head
-    skullowner: "%player_name%"
-    name: "%player_displayname%"
-    lore:
-      - "%translations-money%: &c%player_balance%"
-  2:
-    material: air
-  3:
-    material: air
-  4:
-    material: air
-  5:
-    material: air
-  6:
-    material: air
-  7:
-    material: air
-  8:
-    material: air
-  9:
-    material: barrier
-    name: "%translations-cancel%"
-    action: BACK
+    1:
+      material: player_head
+      skullowner: '%player_name%'
+      name: '%player_displayname%'
+      lore:
+      - '%translations-money%: &c%player_balance%'
+    2:
+      material: air
+    3:
+      material: air
+    4:
+      material: air
+    5:
+      material: air
+    6:
+      material: air
+    7:
+      material: air
+    8:
+      material: air
+    9:
+      material: barrier
+      name: '%translations-cancel%'
+      action: BACK
 
 # The navigation bar that appears in every shop category
 shops-nav-bar:
-  1:
-    material: player_head
-    skullowner: "%player_name%"
-    name: "%player_displayname%"
-    lore:
-      - "%translations-money%: &c%player_balance%"
-  2:
-    material: air
-  3:
-    material: air
-  4:
-    material: red_stained_glass_pane
-    name: "%translations-previous-page%"
-    action: PAGE_BACK
-  5:
-    material: paper
-    name: "%translations-current-page%"
-  6:
-    material: blue_stained_glass_pane
-    name: "%translations-next-page%"
-    action: PAGE_NEXT
-  7:
-    material: air
-  8:
-    material: air
-  9:
-    material: barrier
-    name: "%translations-back%"
-    action: BACK
+    1:
+      material: player_head
+      skullowner: '%player_name%'
+      name: '%player_displayname%'
+      lore:
+      - '%translations-money%: &c%player_balance%'
+    2:
+      material: air
+    3:
+      material: air
+    4:
+      material: red_stained_glass_pane
+      name: '%translations-previous-page%'
+      action: PAGE_BACK
+    5:
+      material: paper
+      name: '%translations-current-page%'
+    6:
+      material: blue_stained_glass_pane
+      name: '%translations-next-page%'
+      action: PAGE_NEXT
+    7:
+      material: air
+    8:
+      material: air
+    9:
+      material: barrier
+      name: '%translations-back%'
+      action: BACK
 
 # The navigation bar that appears in the buy/sell screens and the buy stacks screen
 # Available action: 'TOGGLE_MODE' - Switches between buy/sell mode
 transaction-screens-nav-bar:
-  1:
-    material: player_head
-    skullowner: "%player_name%"
-    name: "%player_displayname%"
-    lore:
-      - "%translations-money%: &c%player_balance%"
-  2:
-    material: air
-  3:
-    material: air
-  4:
-    material: air
-  5:
-    material: REDSTONE_TORCH
-    name: '&c&lToggle buying/selling'
-    action: TOGGLE_MODE
-    onlyEnableForGeyserPlayers: true
-  6:
-    material: air
-  7:
-    material: air
-  8:
-    material: air
-  9:
-    material: barrier
-    name: "%translations-back%"
-    action: BACK
+    1:
+      material: player_head
+      skullowner: '%player_name%'
+      name: '%player_displayname%'
+      lore:
+      - '%translations-money%: &c%player_balance%'
+    2:
+      material: air
+    3:
+      material: air
+    4:
+      material: air
+    5:
+      material: REDSTONE_TORCH
+      name: '&c&lToggle buying/selling'
+      action: TOGGLE_MODE
+      onlyEnableForGeyserPlayers: true
+    6:
+      material: air
+    7:
+      material: air
+    8:
+      material: air
+    9:
+      material: barrier
+      name: '%translations-back%'
+      action: BACK
 
 # The navigation bar that appears in the /sellGUI screen
 sellgui-nav-bar:
-  1:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
-  2:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
-  3:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
-  4:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
-  5:
-    material: NETHER_STAR
-    name: "&a&lSellGUI"
-    lore:
-      - "&6Drop items in to sell"
-      - "&6upon closing, everything will be sold."
-      - "&eItems that couldn't be sold"
-      - "&ewill be given back to you."
-  6:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
-  7:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
-  8:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
-  9:
-    material: "GRAY_STAINED_GLASS_PANE"
-    name: " "
+    1:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
+    2:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
+    3:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
+    4:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
+    5:
+      material: NETHER_STAR
+      name: '&a&lSellGUI'
+      lore:
+      - '&6Drop items in to sell'
+      - '&6upon closing, everything will be sold.'
+      - '&eItems that couldn''t be sold'
+      - '&ewill be given back to you.'
+    6:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
+    7:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
+    8:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
+    9:
+      material: GRAY_STAINED_GLASS_PANE
+      name: ' '
 
 
 #---------------------------------------------ItemSettings----------------------------------------------
@@ -408,7 +405,7 @@ allow-illegal-stacks: true
 # For example:
 # When a tool/armor is damaged it cannot be sold to the server by default, if you add the 'Damage' tag to the list below. A damaged item can be sold to the shop
 sold-items-ignored-NBTtags:
-  - "RepairCost"
+- 'RepairCost'
 # The 'RepairCost' tag is added by default since all items that get repaired by anvil/mending will get it, if we don't add it to the ignored list, a item repaired will not be able to be sold to the server
 
 # Set the limit for maximum pages inside a shop section, default is 50 but you can expand it to 100 if needed
@@ -433,186 +430,163 @@ max-shop-pages: 50
 
 # Buy screen
 buy-screen:
-  menu-size: 5
-  items:
-    1:
-      material: magenta_stained_glass_pane
-      name: "%translations-min-thirty-two%"
-      stack-size: 32
-      action: REMOVE32
-      slot: 19
-
-    2:
-      material: magenta_stained_glass_pane
-      name: "%translations-min-sixteen%"
-      stack-size: 16
-      action: REMOVE16
-      slot: 20
-
-    3:
-      material: magenta_stained_glass_pane
-      name: "%translations-min-one%"
-      action: REMOVE1
-      slot: 21
-
-    4:
-      material: light_blue_stained_glass_pane
-      name: "%translations-plus-one%"
-      action: ADD1
-      slot: 23
-
-    5:
-      material: light_blue_stained_glass_pane
-      name: "%translations-plus-sixteen%"
-      stack-size: 16
-      action: ADD16
-      slot: 24
-
-    6:
-      material: light_blue_stained_glass_pane
-      name: "%translations-plus-thirty-two%"
-      stack-size: 32
-      action: ADD32
-      slot: 25
-
-    7: # Confirm buy
-      material: paper
-      name: "%translations-buy%"
-      lore:
-        - "&3%price%"
-      action: CONFIRM_TRANSACTION
-      slot: 13
-      type: CONFIRM
-
-    8: # Selected shop item
-      slot: 22
-      type: SELECTED_ITEM
-
-    9: # Open buy-stacks screen
-      material: chest
-      name: "%translations-buy-stacks%"
-      slot: 31
-      action: OPEN_BUY_STACKS
+    menu-size: 5
+    items:
+      1:
+        material: magenta_stained_glass_pane
+        name: '%translations-min-thirty-two%'
+        stack-size: 32
+        action: REMOVE32
+        slot: 19
+      2:
+        material: magenta_stained_glass_pane
+        name: '%translations-min-sixteen%'
+        stack-size: 16
+        action: REMOVE16
+        slot: 20
+      3:
+        material: magenta_stained_glass_pane
+        name: '%translations-min-one%'
+        action: REMOVE1
+        slot: 21
+      4:
+        material: light_blue_stained_glass_pane
+        name: '%translations-plus-one%'
+        action: ADD1
+        slot: 23
+      5:
+        material: light_blue_stained_glass_pane
+        name: '%translations-plus-sixteen%'
+        stack-size: 16
+        action: ADD16
+        slot: 24
+      6:
+        material: light_blue_stained_glass_pane
+        name: '%translations-plus-thirty-two%'
+        stack-size: 32
+        action: ADD32
+        slot: 25
+      7:
+        material: paper
+        name: '%translations-buy%'
+        lore:
+        - '&3%price%'
+        action: CONFIRM_TRANSACTION
+        slot: 13
+        type: CONFIRM
+      8:
+        slot: 22
+        type: SELECTED_ITEM
+      9:
+        material: chest
+        name: '%translations-buy-stacks%'
+        slot: 31
+        action: OPEN_BUY_STACKS
 
 # Sell screen
 sell-screen:
-  menu-size: 5
-  items:
-    1:
-      material: magenta_stained_glass_pane
-      name: "%translations-min-thirty-two%"
-      stack-size: 32
-      action: REMOVE32
-      slot: 19
-
-    2:
-      material: magenta_stained_glass_pane
-      name: "%translations-min-sixteen%"
-      stack-size: 16
-      action: REMOVE16
-      slot: 20
-
-    3:
-      material: magenta_stained_glass_pane
-      name: "%translations-min-one%"
-      action: REMOVE1
-      slot: 21
-
-    4:
-      material: light_blue_stained_glass_pane
-      name: "%translations-plus-one%"
-      action: ADD1
-      slot: 23
-
-    5:
-      material: light_blue_stained_glass_pane
-      name: "%translations-plus-sixteen%"
-      stack-size: 16
-      action: ADD16
-      slot: 24
-
-    6:
-      material: light_blue_stained_glass_pane
-      name: "%translations-plus-thirty-two%"
-      stack-size: 32
-      action: ADD32
-      slot: 25
-
-    7: # Confirm sell
-      material: paper
-      name: "%translations-sell%"
-      lore:
-        - "&3%price%"
-      action: CONFIRM_TRANSACTION
-      slot: 13
-      type: CONFIRM
-
-    8: # Selected shop item
-      slot: 22
-      type: SELECTED_ITEM
-
-    9: # Sell all items
-      material: emerald
-      name: "%translations-sell-all%"
-      slot: 31
-      action: SELL_ALL
+    menu-size: 5
+    items:
+      1:
+        material: magenta_stained_glass_pane
+        name: '%translations-min-thirty-two%'
+        stack-size: 32
+        action: REMOVE32
+        slot: 19
+      2:
+        material: magenta_stained_glass_pane
+        name: '%translations-min-sixteen%'
+        stack-size: 16
+        action: REMOVE16
+        slot: 20
+      3:
+        material: magenta_stained_glass_pane
+        name: '%translations-min-one%'
+        action: REMOVE1
+        slot: 21
+      4:
+        material: light_blue_stained_glass_pane
+        name: '%translations-plus-one%'
+        action: ADD1
+        slot: 23
+      5:
+        material: light_blue_stained_glass_pane
+        name: '%translations-plus-sixteen%'
+        stack-size: 16
+        action: ADD16
+        slot: 24
+      6:
+        material: light_blue_stained_glass_pane
+        name: '%translations-plus-thirty-two%'
+        stack-size: 32
+        action: ADD32
+        slot: 25
+      7:
+        material: paper
+        name: '%translations-sell%'
+        lore:
+        - '&3%price%'
+        action: CONFIRM_TRANSACTION
+        slot: 13
+        type: CONFIRM
+      8:
+        slot: 22
+        type: SELECTED_ITEM
+      9:
+        material: emerald
+        name: '%translations-sell-all%'
+        slot: 31
+        action: SELL_ALL
 
 # Buy stacks screen
 buy-stacks-screen:
-  menu-size: 5
-  items:
-    1:
-      material: magenta_stained_glass
-      name: "%translations-min-thirty-two%"
-      stack-size: 32
-      action: REMOVE32
-      slot: 19
-
-    2:
-      material: magenta_stained_glass
-      name: "%translations-min-sixteen%"
-      stack-size: 16
-      action: REMOVE16
-      slot: 20
-
-    3:
-      material: magenta_stained_glass
-      name: "%translations-min-one%"
-      action: REMOVE1
-      slot: 21
-
-    4:
-      material: light_blue_stained_glass
-      name: "%translations-plus-one%"
-      action: ADD1
-      slot: 23
-
-    5:
-      material: light_blue_stained_glass
-      name: "%translations-plus-sixteen%"
-      stack-size: 16
-      action: ADD16
-      slot: 24
-
-    6:
-      material: light_blue_stained_glass
-      name: "%translations-plus-thirty-two%"
-      stack-size: 32
-      action: ADD32
-      slot: 25
-
-    7: # Confirm buy
-      material: paper
-      name: "%translations-buy%"
-      lore:
-        - "&3%price%"
-      action: CONFIRM_TRANSACTION
-      slot: 13
-      type: CONFIRM
-
-    8: # Selected shop item
-      slot: 22
-      type: SELECTED_ITEM
+    menu-size: 5
+    items:
+      1:
+        material: magenta_stained_glass
+        name: '%translations-min-thirty-two%'
+        stack-size: 32
+        action: REMOVE32
+        slot: 19
+      2:
+        material: magenta_stained_glass
+        name: '%translations-min-sixteen%'
+        stack-size: 16
+        action: REMOVE16
+        slot: 20
+      3:
+        material: magenta_stained_glass
+        name: '%translations-min-one%'
+        action: REMOVE1
+        slot: 21
+      4:
+        material: light_blue_stained_glass
+        name: '%translations-plus-one%'
+        action: ADD1
+        slot: 23
+      5:
+        material: light_blue_stained_glass
+        name: '%translations-plus-sixteen%'
+        stack-size: 16
+        action: ADD16
+        slot: 24
+      6:
+        material: light_blue_stained_glass
+        name: '%translations-plus-thirty-two%'
+        stack-size: 32
+        action: ADD32
+        slot: 25
+      7:
+        material: paper
+        name: '%translations-buy%'
+        lore:
+        - '&3%price%'
+        action: CONFIRM_TRANSACTION
+        slot: 13
+        type: CONFIRM
+      8:
+        slot: 22
+        type: SELECTED_ITEM
 
 #-----------------------------------------------Discounts-----------------------------------------------
 
@@ -622,18 +596,15 @@ enable-discounts: false
 # Here you can set all discounts active inside the shop
 # Every entry is a shop section that holds the permission nodes with its discounts
 discounts:
-  # Section blocks
-  Blocks:
-    # Players with the permission node EconomyShopGUI.discounts.vip inside your permissions system will get 20% discount on every item inside this section.
-    vip: 20
-    # Players with the permission node EconomyShopGUI.discounts.gold inside your permissions system will get 5% discount on every item inside this section.
-    gold: 5
-  Farming:
-    vip: 15
-  Redstone:
-    diamond: 30
-  all: # Players will get 2.5% discount on any item inside any section they buy items from
-    coal: 2.5
+    Blocks:
+      vip: 20
+      gold: 5
+    Farming:
+      vip: 15
+    Redstone:
+      diamond: 30
+    all:
+      coal: 2.5
 # If a player has for example access to 2 permission discounts inside the same shop section, the discount with the highest value will be active
 
 
@@ -645,16 +616,12 @@ enable-sell-multipliers: false
 # Configure this option to use sell multipliers
 # Every entry is a shop section that holds the permission nodes with its multipliers
 sell-multipliers:
-  all:
-    # Players with the permission 'EconomyShopGUI.sell-multipliers.vip' will get an 20% multiplier on any item
-    vip: 20
-    # Players with the permission 'EconomyShopGUI.sell-multipliers.gold' will get an 2.5% multiplier on any item
-    gold: 2.5
-    # Players with the permission 'EconomyShopGUI.sell-multipliers.coal' will get an 1% multiplier on any item
-    coal: 1
-  Spawners:
-    # Players with the permission 'EconomyShopGUI.sell-multipliers.gold' will get an extra 10% multiplier in this section
-    gold: 12.5
+    all:
+      vip: 20
+      gold: 2.5
+      coal: 1
+    Spawners:
+      gold: 12.5
 # If a player has for example access to 2 sell multipliers inside the same shop section, the multiplier with the highest value will be active
 
 
@@ -675,35 +642,25 @@ old-sellall-command: false
 # These are the commands included in EconomyShopGUI
 # Set a command to true to enable it, and set a command to false in order to disable it.
 commands:
-
-  # SellAll command lets you sell all items inside your inventory that are listed in the shop, or you can sell a specific item.
-  sellall: true
-
-  # The shop command opens the main shop.
-  shop: true
-
-  # Reload command allows you to reload all configuration files.
-  sreload: true
-
-  # With this command you can add/remove items without configuring the shops config
-  editshop: true
-
-  # This command opens a sell GUI to sell items
-  sellgui: true
+    sellall: true
+    shop: true
+    sreload: true
+    editshop: true
+    sellgui: true
 
 # Set different aliases for the main shop command, defaults to /shop if empty
 # Do not use a slash('/') before the command name or it will not work
 shop-commands:
-  - "shop"
+- 'shop'
 # - "market"
 
 # Set different aliases for the sellall command, defaults to /sellall if empty
 sellall-commands:
-  - "sellall"
+- 'sellall'
 
 # Set different aliases for the sellgui command, defaults to /sellgui if empty
 sellgui-commands:
-  - "sellgui"
+- 'sellgui'
 
 
 #-------------------------------------------DisableBackButton-------------------------------------------
@@ -750,19 +707,18 @@ player-placed-spawners-drop-exp: false
 # Set the items that are allowed to break a spawner
 # If a spawner gets broken with another item then listed here, the spawner will not be given to the player
 spawner-break-tools:
-
-  1:
-    material: DIAMOND_PICKAXE
-    enchantments:
-    - "SILK_TOUCH"
-  2:
-    material: IRON_PICKAXE
-    enchantments:
-    - "SILK_TOUCH"
-    - "EFFICIENCY:2" # This means that the pickaxe needs ATLEAST efficiency 2 for a spawner to be mined
-  3:
-    material: NETHERITE_PICKAXE
-    enchantments:
-      - "SILK_TOUCH"
+    1:
+      material: DIAMOND_PICKAXE
+      enchantments:
+      - 'SILK_TOUCH'
+    2:
+      material: IRON_PICKAXE
+      enchantments:
+      - 'SILK_TOUCH'
+      - 'EFFICIENCY:2'
+    3:
+      material: NETHERITE_PICKAXE
+      enchantments:
+      - 'SILK_TOUCH'
 
 # NOTE: When any other 3rd party spawner provider is enabled and setup, these options will no longer work since they are not controlled anymore by ESGUI

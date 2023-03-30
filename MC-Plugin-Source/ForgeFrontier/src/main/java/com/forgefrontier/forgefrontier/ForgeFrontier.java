@@ -204,6 +204,7 @@ public class ForgeFrontier extends JavaPlugin {
         registerCommand("forgefrontier", new ForgeFrontierCommandExecutor());
         registerCommand("customspawn"  , new EntityCommandExecutor());
         registerCommand("mining"       , new MiningCommandExecutor());
+        registerCommand("openshop"     , new OpenshopCommandExecutor());
 
         // Wrapper-Registered Commands
         BukkitCommandHandler commandHandler = BukkitCommandHandler.create(this);
