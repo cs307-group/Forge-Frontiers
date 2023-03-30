@@ -24,6 +24,7 @@ import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChicken;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.poison.PoisonChicken;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBox;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.EggBox;
 import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
@@ -129,6 +130,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.getCustomEntityManager().registerCustomEntity(new HostileChicken());
         this.getCustomEntityManager().registerCustomEntity(new PoisonChicken());
         this.getCustomEntityManager().registerCustomEntity(new HitBox());
+        this.getCustomEntityManager().registerCustomEntity(new EggBox());
 
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);

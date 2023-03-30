@@ -1,26 +1,25 @@
 package com.forgefrontier.forgefrontier.mobs.slimes.hitbox;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.mobs.chickens.CustomCraftChicken;
-import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChicken;
-import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChickenEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomCraftSlime;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlime;
-import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
+/**
+ * Class which represents invisible hitboxes
+ *
+ * NOTE: When killed, you must spawn in any items you would like to drop in the tick function
+ * in the corresponding entity class (i.e. HitBoxEntity). This is due to the necessity of teleporting
+ * the slime entity to the void in order to avoid splitting.
+ */
 public class HitBox extends CustomSlime {
 
     /** class representing the custom CraftEntity for the TestChicken */

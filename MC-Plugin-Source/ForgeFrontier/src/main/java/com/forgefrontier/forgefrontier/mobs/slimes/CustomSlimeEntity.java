@@ -5,7 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 
-public class CustomSlimeEntity extends Slime implements CustomEntity {
+public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
 
     public CustomSlimeEntity(EntityType<? extends Slime> entityTypes, Level world) {
         super(entityTypes, world);

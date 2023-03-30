@@ -77,15 +77,27 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
-        CraftLivingEntity entity = (CraftLivingEntity) event.getEntity(); //TODO: Change this to more generic class type
+        CraftLivingEntity entity = (CraftLivingEntity) event.getEntity();
 
-        if (entity.hasMetadata("code"))
+        if (entity.hasMetadata("code")) {
+            System.out.println("Damaged: ");
             // checks if the entity is a hitbox entity
-            if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {{
+            if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {
                 // sets the nameplate of the entity
-                entity.setCustomName(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
-                        ": " + ((int) entity.getHealth()) + "/" + ((int) entity.getMaxHealth()));
-                entity.setCustomNameVisible(true);
+                System.out.println("Naming: ");
+                int currHealth = (((int) (entity.getHealth() - event.getDamage())));
+                if (currHealth < 0) {
+                    currHealth = 0;
+                }
+                if (entity.getHandle() instanceof HitBoxEntity hitBox) {
+                    System.out.println("WE ARE HERE FOR IT");
+                    hitBox.setNamePlate(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
+                            ": " + currHealth + "/" + ((int) entity.getMaxHealth()));
+                } else {
+                    entity.setCustomName(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
+                            ": " + currHealth + "/" + ((int) entity.getMaxHealth()));
+                    entity.setCustomNameVisible(true);
+                }
             }
         }
 
@@ -154,24 +166,18 @@ public class CustomEntityManager extends Manager implements Listener {
 
         if (entity.hasMetadata("code")) {
             // checks if the entity is a hitbox entity
-            System.out.println("I AM HERE 0");
-            //if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {
-               // System.out.println("I AM HERE 1");
-                if (entity instanceof Slime slime) {
-                    System.out.println("I AM HERE 2");
-                    if (slime instanceof CraftEntity craftEntity) {
-                        System.out.println("IS INSTANCE OF HITBOX");
-                        HitBoxEntity hitBoxEntity = (HitBoxEntity) craftEntity.getHandle();
-                        if (hitBoxEntity != null) {
-                            hitBoxEntity.setLoc(null);
-                        }
+            if (entity instanceof Slime slime) {
+                if (slime instanceof CraftEntity craftEntity) {
+                    HitBoxEntity hitBoxEntity = (HitBoxEntity) craftEntity.getHandle();
+                    if (hitBoxEntity != null) {
+                        hitBoxEntity.setLoc(null);
+                        hitBoxEntity.destroyItem();
                     }
-                    System.out.println("I AM HERE 3");
-                    slime.setHealth(1);
-                    slime.teleport(new Location(slime.getWorld(), 0, -70, 0));
-                    slime.setGravity(true);
                 }
-            //}
+                slime.setHealth(1);
+                slime.teleport(new Location(slime.getWorld(), 0, -70, 0));
+                slime.setGravity(true);
+            }
         }
     }
 

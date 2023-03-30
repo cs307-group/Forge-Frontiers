@@ -6,12 +6,6 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftSlime;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class HitBoxEntity extends CustomSlimeEntity {
 
@@ -29,12 +23,24 @@ public class HitBoxEntity extends CustomSlimeEntity {
         super.customTick();
 
         if (loc != null) {
-            this.teleportTo(loc.getX(), loc.getY(), loc.getZ());
-            loc.getWorld().spawnParticle(Particle.SLIME, loc, 1);
+            whileAlive();
         }
+    }
+
+    public void whileAlive() {
+        this.teleportTo(loc.getX(), loc.getY(), loc.getZ());
+        loc.getWorld().spawnParticle(Particle.SLIME, loc, 1);
     }
 
     public void setLoc(Location loc) {
         this.loc = loc;
+    }
+
+    public void destroyItem() {
+
+    }
+
+    public void setNamePlate(String name) {
+
     }
 }

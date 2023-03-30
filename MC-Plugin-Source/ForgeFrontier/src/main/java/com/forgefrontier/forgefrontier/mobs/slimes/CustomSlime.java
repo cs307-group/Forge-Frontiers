@@ -4,7 +4,7 @@ import com.forgefrontier.forgefrontier.mobs.CustomMob;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 
-public class CustomSlime extends CustomMob {
+public abstract class CustomSlime extends CustomMob {
 
     /**
      * Constructor for a custom slime entity
