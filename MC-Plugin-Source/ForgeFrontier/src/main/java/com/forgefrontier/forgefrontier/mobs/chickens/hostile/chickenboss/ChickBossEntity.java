@@ -17,19 +17,18 @@ import java.util.ArrayList;
 public class ChickBossEntity extends HostileChickenEntity {
 
     int totalInvulnTime = 15;
+    int eggsToBeDestroyed = 4;
 
     boolean hasBeenInvuln;
     long invulnTime;
     int failCounter;
     long lastTickTime;
     ArrayList<EggsplosiveEntity> eggs;
-    int eggsToBeDestroyed;
 
     public ChickBossEntity(EntityType<? extends Chicken> entityTypes, Level world) {
         super(entityTypes, world);
 
         eggs = new ArrayList<>();
-        eggsToBeDestroyed = 3;
 
         setIdleSpeed(1.0f);
         setAggroSpeed(1.0f);
