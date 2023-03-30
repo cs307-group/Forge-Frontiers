@@ -17,6 +17,7 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
+import com.forgefrontier.forgefrontier.listeners.BentoBoxListener;
 import com.forgefrontier.forgefrontier.mining.MiningCommandExecutor;
 import com.forgefrontier.forgefrontier.mining.MiningManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
@@ -144,6 +145,9 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.fishingManager, this);
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new BentoBoxListener(this), this);
+
+        // Register commands
         this.registerCommands();
     }
 
