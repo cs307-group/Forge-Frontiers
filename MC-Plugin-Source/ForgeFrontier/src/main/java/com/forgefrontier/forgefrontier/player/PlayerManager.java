@@ -70,7 +70,7 @@ public class PlayerManager extends Manager implements Listener {
 
         players.put(player.getUniqueId(), player);
         playersByName.put(player.getName(), player);
-        ffPlayers.put(player.getUniqueId(), FFPlayer.getPlayerFromDatabase(player.getUniqueId()));
+        ffPlayers.put(player.getUniqueId(), new FFPlayer(player.getUniqueId()));
     }
 
     /**
@@ -84,6 +84,7 @@ public class PlayerManager extends Manager implements Listener {
 
         players.remove(player.getUniqueId());
         playersByName.remove(player.getName(), player);
+        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(ffPlayers.get(player.getUniqueId()));
         ffPlayers.remove(player.getUniqueId());
     }
 

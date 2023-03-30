@@ -58,5 +58,15 @@ public class Stash {
     public List<StashItem> getStashItems() {
         return this.stashItems;
     }
+
+    public StashItem getStashItem(String code) {
+        for(StashItem item: this.stashItems) {
+            if(item.getItem().getCode().equals(code)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
 }
 

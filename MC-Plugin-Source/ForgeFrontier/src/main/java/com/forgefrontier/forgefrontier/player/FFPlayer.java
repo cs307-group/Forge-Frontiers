@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * FFPlayer
@@ -49,12 +50,11 @@ public class FFPlayer {
      * @param playerID the ID of the player
      * @return the instance FFPlayer representation of the player
      */
-    public static FFPlayer getPlayerFromDatabase(UUID playerID) {
+    /*
+    public static void getPlayerFromDatabase(UUID playerID, Consumer<FFPlayer> callback) {
         ForgeFrontier plugin = ForgeFrontier.getInstance();
-        FFPlayer ffPlayer = new FFPlayer(playerID);
-        /*
-        AtomicReference<FFPlayer> ffPlayer = new AtomicReference<>();
-        plugin.getDBConnection().getExistingPlayerStats(playerID, (Map<String, Object> result) -> {
+        callback.accept(new FFPlayer(playerID));
+        plugin.getDatabaseManager().getPlayerDB().getExistingPlayerStats(playerID, (Map<String, Object> result) -> {
             if (result != null) {
                 PlayerStat[] stats = new PlayerStat[7];
                 stats[0] = new PlayerStat((int) result.get("HP"), StatEnum.HP);
@@ -64,16 +64,16 @@ public class FFPlayer {
                 stats[4] = new PlayerStat((int) result.get("CRATE"), StatEnum.CRATE);
                 stats[5] = new PlayerStat((int) result.get("CDMG"), StatEnum.CDMG);
                 stats[6] = new PlayerStat((int) result.get("DEF"), StatEnum.DEF);
-                ffPlayer.set(new FFPlayer(playerID, (Double) result.get("current_health"), stats));
+
+                callback.accept(new FFPlayer(playerID, (Double) result.get("current_health"), stats));
             } else {
-                ffPlayer.set(new FFPlayer(playerID));
-                plugin.getDBConnection().createPlayerStats(playerID, ffPlayer.get().getStats());
+                FFPlayer ffPlayer = new FFPlayer(playerID);
+                callback.accept(ffPlayer);
+                plugin.getDatabaseManager().getPlayerDB().createPlayerStats(playerID, ffPlayer.getStats());
             }
         });
-        return ffPlayer.get();
-         */
-        return ffPlayer;
     }
+    */
 
     /**
      * Constructs the FFPlayer class given a player object (sets the stats to a level 1 character if the character
@@ -202,6 +202,7 @@ public class FFPlayer {
                 stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].removeStat(gemValue.getStat());
             }
         }
+        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
     }
 
     /**
@@ -241,6 +242,7 @@ public class FFPlayer {
                 stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].removeStat(gemValue.getStat());
             }
         }
+        //ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
 
         return damage;
     }
