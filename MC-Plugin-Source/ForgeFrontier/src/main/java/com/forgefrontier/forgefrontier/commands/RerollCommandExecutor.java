@@ -14,7 +14,7 @@ public class RerollCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage("Unable to open the gear shop GUI for a non-player.");
+            sender.sendMessage("Unable to open the reroll GUI for a non-player.");
             return true;
         }
         Player p = (Player) sender;

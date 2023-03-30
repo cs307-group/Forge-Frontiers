@@ -1,0 +1,282 @@
+#This is the Simplified Chinese language file, set "language-file" in the config.yml to "lang-zh.yml" to use this file!
+#You can see this site for all color codes ----> https://minecraft.tools/en/color-code.php
+# Help translate this file over on our Crowdin: https://crowdin.com/project/economyshopgui
+
+#StartUp/Reload
+shops,yml-not-found: "未找到 Shops.yml，正在创建……"
+shops,yml-created: "已创建 Shops.yml！"
+shops,yml-found: "已找到 Shops.yml！"
+sections,yml-not-found: "未找到 Sections.yml，正在创建……"
+sections,yml-created: "已创建 Sections.yml！"
+sections,yml-found: "已找到 Sections.yml！"
+updating-shop-settings: "正在更新商店设置……"
+adding-new-shop-shops,yml: "正在向 shops.yml 添加商店“%shopsection%”。"
+adding-new-shop-sections,yml: "正在向 sections.yml 添加商店“%shopsection%”。"
+disabled-due-no-vault: "已禁用。Vault 前置未找到，请安装 Vault。"
+disabled-due-no-economy: "已禁用。未找到经济插件，请安装经济插件（如 EssentialsX）。"
+update-available: "EconomyShopGUI 有更新可用。您正在使用 v%plugin_version%，找到 v%latest_version% 的更新。"
+done: "初始化完毕 - 用时 %millis% 毫秒"
+updating-sections-config: "正在更新分类的配置文件……"
+debug-mode-enabled: "已启用调试模式。"
+economy-provider-null: "无经济前置（EconomyProvider）。"
+successfully-hooked-into-vault: "已连接到 Vault。"
+language-file-using: "正在使用的语言文件为 %languagefile%。"
+cannot-find-language-file: "无法找到语言文件！"
+minecraft-version-using: "正在运行的 Minecraft 版本为 %version%……"
+checking-each-item: "正在遍历所有项目，查找错值或漏值……"
+loading-items: "正在加载所有物品……"
+could-not-find-valid-version: "无法找到此服务器版本适用的实现。本插件将无可用版本，大量物品、操作将不可用。请使用本插件支持的 Minecraft 版本。"
+updating-configs: "发现新版本，正在更新配置……"
+creating-backup: "正在备份旧文件“%fileName%”。可在 EconomyShopGUI 插件文件夹的备份（backups）文件夹中找到此文件。"
+discounts-feature-unavailable: "未找到权限插件，无法启用折扣功能。"
+
+#SellGUI inventory
+inventory-sellgui-title: "&8&l售卖界面"
+
+#Main Shop Inventory
+inventory-main-shop-title: "&8&l服务器商店"
+profile: "&a资料"
+name: "&6名字"
+money: "&6金钱"
+level: "&6等级"
+
+#Buystacks Inventory title
+inventory-buystacks-title: "&8选择物品数量 &l个数"
+
+#HowMuchSell/HowMuchBuy Inventory
+inventory-howmuchsell-title: "&8选择物品数量 &l出售"
+inventory-howmuchbuy-title: "&8 选择物品数量 &l 购买"
+plus-one: "&b+1"
+min-one: "&5-1"
+plus-sixteen: "&b+16"
+min-sixteen: "&5-16"
+plus-thirty-two: "&b+32"
+min-thirty-two: "&5-32"
+sell: "&a出售"
+sell-all: "&c全部出售"
+buy: "&a购买"
+buy-stacks: "&c批量购买"
+
+#All Inventory's
+back: "&4返回"
+cancel: "&4取消"
+
+#Previous/Next/Current page
+previous-page: "&d上一页"
+next-page: "&b下一页"
+current-page: "&7页数："
+
+#Shop item lore
+left-click-buy: "&a左键单击：购买：&c%amounttopay%"
+right-click-sell: "&6右键单击：出售：&c%amounttopay%"
+item-location-in-shop: "&8分类：%shopsection%，索引：%itemLoc%"
+
+#Buy/Sell Messages
+pay-confirmation: "&a您用 &c%amounttopay% 购买了 &1%amount% x &b%material% &a"
+sell-confirmation: "&a您以 &c%amounttopay% 出售了 &1%amount% x &b%material% &a"
+sell-confirmation-multiple-items: "&a您以 &c%amounttopay% 出售了 &1%amount% 件物品"
+no-item-to-be-sold: "&c您的物品栏里没有此物品。"
+item-cannot-be-bought: "&c无法购买此商品。"
+item-cannot-be-sold: "&c无法出售此商品。"
+player-made-transaction: "%playername%通过%buy/sell-method%花费%amountofmoney% %bought/sold% %amount%个%material%。"
+buy-screen: "购买界面"
+sell-screen: "出售界面"
+buystacks-screen: "整组购买界面"
+sellall-screen: "全部售出界面"
+sellall-command: "全部售出命令"
+sellgui-screen: "售卖图形界面"
+bought: "购入"
+sold: "卖出"
+transaction-screen-total-price: "&3%price%"
+transaction-screen-total-amount: "&5x %amount%"
+
+#CurrencySymbol
+currencysymbol: "%price%圆"
+symbol-pricing-format: "%price%%symbol%"
+named-pricing-format: "%price% &l%currency-format%"
+
+#All commands
+command-disabled-in-world: "&c此命令在此世界中被禁用。"
+
+#Edit-shop subcommand descriptions
+editshop-add-item-subcommand-desc: "&a添加一件新物品到商店。"
+editshop-edit-item-subcommand-desc: "&a添加一件商店已有物品到商店。"
+editshop-remove-item-subcommand-desc: "&a从商店中删除一个物品。"
+editshop-add-hand-item-subcommand-desc: "&a从你手中添加一件物品到商店。"
+editshop-import-subcommand-desc: "&a从其他位置或插件导入文件/设置。"
+editshop-add-section-subcommand-desc: "&a为商店添加一个分区"
+editshop-edit-section-subcommand-desc: "&a编辑一个现有商店分区。"
+editshop-remove-section-subcommand-desc: "&a从商店中删除一个现有分区。"
+
+#Edit-shop subcommand syntaxes
+editshop-add-item-subcommand-syntax: "&a/editshop additem <分区> <显示材质> <购买价格> <销售价格> [显示名称]"
+editshop-edit-item-subcommand-syntax: "&a/editshop edititem <分区> <物品> <操作> <特效类型> <价格>"
+editshop-remove-item-subcommand-syntax: "&a/editshop deleteitem <分区> <物品>"
+editshop-add-hand-item-subcommand-syntax: "&a/editshop addhanditem <分区> <购买价格> <卖出价格>"
+editshop-import-subcommand-syntax: "&a/editshop import <插件> <文件>"
+editshop-add-section-subcommand-syntax: "&a/editshop addsection <分区> <显示材质> <显示名称> <位置>"
+editshop-edit-section-subcommand-syntax: "&a/editshop editsection <分区> <操作> <特效类型> <值>"
+editshop-remove-section-subcommand-syntax: "&a/editshop deletesection <分区>"
+
+#Edit-shop command messages
+editshop-adding-item: "&a正在添加新的物品到商店配置文件shops.yml中..."
+editshop-add-item-successful: "&a已将'%itemPath%'添加到商店。"
+editshop-adding-section: "&a正在向sections.yml添加新商店分区..."
+editshop-add-section-successful: "&a成功向'%itemPath%'下的商店添加了新分区。"
+editshop-editing-item: "正在更新物品"
+editshop-edit-item-successful: "&a已将'%itemPath%'添加到分类。"
+editshop-editing-section: "&a正在更新分类..."
+editshop-removing-item: "&a正在从商店中移除物品..."
+editshop-remove-item-successful: "&a已将''%itemPath%''从商店中移除。"
+editshop-removing-section: "&a正在从商店删除这个分区..."
+editshop-removed-section: "&a已从商店删除了'%itemPath%' 。"
+editshop-reload-shop-to-see-changes: "&a使用指令/sreload加载商店内部的更改。"
+file-replaced: "&a旧文件 %fileName% 已经被新文件替换, 如果发生错误可以在文件夹“backups”中找到旧文件。"
+
+#Edit-shop command errors
+section-does-not-contain-item: "&c分区'%shopsection%'不含此项'%itemLoc%'。"
+no-valid-action: "&c'%action%'不是一个有效的操作。\n当前操作%actions%可用。"
+no-valid-key: "&c'%key%'不是一个有效的特效类型。 \n当前特效类型%keys%可用。"
+action-not-valid-on-key: "&c无法对特效类型'%key%'进行操作%action%。"
+edit-item-material-invalid: "&c正在尝试编辑的物品中的显示材质''%material%''不正确。"
+key-already-defined: "&c'%key%'这个特效已绑定。不能添加两个一样的特效。"
+key-is-not-found: "&c'%key%'找不到这个特效，无法从物品中删除。"
+no-valid-slot-for-item: "&c无法将物品放置在此物品槽'%slot%'中。物品槽大小必须为1 - %maxShopSize%。"
+plugin-not-found: "&c找不到使用该名称指定的插件，请检查我们是否支持该插件。"
+file-not-found: "&c在%pluginName%的插件文件夹中找不到名为%fileName%的文件。"
+slot-already-in-use: "&c此物品槽已被占用。\n所有可用物品槽: %available-slots%"
+slot-needs-to-be-number: "&c主菜单中物品槽的位置必须是数字。"
+
+#Reload Command
+configs-reloaded: "&a所有配置已重新加载。"
+
+#Sellall command usages
+sellall-command-usages: "&a命令使用方法:"
+sellall-inventory-command-usage: "&7/sellall inventory &f- &7售出你背包内所有物品"
+sellall-hand-command-usage: "&7/sellall hand &8[amount] &f- &7售出你手上所有物品"
+sellall-item-command-usage: "&7/sellall <item> &8[amount] &f- &7售出你背包中所有符合提供的名称的物品"
+
+#Balance Command
+check-balance: "&b你目前持有&c%amountofmoney%&b。"
+check-balance-other-player: "&b%playername%&a现在持有&c%amountofmoney%&a。"
+
+#Givemoney Command
+givemoneycommand-example: "&9/givemoney <玩家> <数量>"
+givemoney-complete: "&a已给予金钱。"
+
+#Pay Command
+minimum-amount: "&c支付给玩家的最低数量是%minimumamount%。"
+payment-complete: "&a支付完成。"
+player-received-money: "&a收到来自&2%playername%的&c%amounttogive%&a！"
+need-player-and-amount: "&9请指定玩家和金额。"
+need-amount: "&9请指定金额。"
+paycommand-example: "&9/pay <玩家> <数量>"
+
+#Player breaks spawner
+default-spawner-name: "&9&l%spawner-type%&r刷怪箱"
+spawner-broke-and-applied-to-inventory: "&a您成功采掘了一个&9%spawner-type%&a，该物品已经添加到你的库存。"
+need-silk-touch: "&c你需要使用一把附魔有精准采集的稿进行采掘！"
+
+#JoinMessage
+join-message: "&2欢迎光临，您的余额还有%balance%！"
+
+#Level event
+level-event-message: "&2[Levels] &5冲冲冲！！&c%amount%&5已添加到你的余额。"
+
+#Item error's
+displayname-null: "无法获取显示名称。"
+item-name-null: "无法获取物品的名称。"
+need-item-material: "不能创建一个没有材质的物品。"
+item-material-null: "无法获得物品的材质。如果你认为这是一个错误、请报告给我们的discord服务器。'%material%'"
+item-enchantment-null: "无法获得该物品的附魔。"
+need-item-enchantment: "不能用空白值创造附魔。"
+item-enchantment-not-supported: "此附魔在此Minecraft版本中并不支持。"
+enchantment-cannot-apply-to-item: "想要对物品施加附魔，此材料需要是附魔的书或适合附魔的工具。"
+item-spawnertype-null: "无法获取物品的刷怪类型。"
+need-item-spawnertype: "不能创建空刷怪类型的刷怪箱。"
+material-needs-to-be-spawner: "要对物品应用刷怪箱类型（实体类型），物品的材质必须是刷怪箱。"
+item-potiontype-null: "无法获得该药水的类型。"
+need-item-potiontype: "不能用空白值创建一个药水类型"
+potiontype-not-supported: "此Minecraft版本不支持这个药水类型。"
+material-needs-to-be-potion: "想要应用药水的效果，这个物品需要是药水或箭。"
+cant-bind-multiple-applyments: "无法创建具有多个应用程序（如附魔/刷怪箱类型或药剂效果类型）的物品。"
+item-error: "&c物品错误。详情见控制台。"
+material-not-supported: "这个道具材料在此Minecraft版本中不支持。"
+item-needs-buy-and-sell-value: "商店里的每件商品都需要有购买/出售价值。"
+sell-value-wrong: "卖出的价格需要是一个小数或整数。"
+buy-value-wrong: "买入的价格必须是一个小数或整数。"
+option-type-changed: "要在Shop中创建刷怪箱，请将'type'选项更改为'spawnertype'。在2.2版中，选项的名称已更改，以更清楚地说明它们的含义。"
+option-meta-changed: "要使用Shop创建显示命名项目，请将'meta'选项更改为'displayname'。在2.2版中，选项的名称已更改，以更清楚地说明它们的含义。"
+cannot-display-shopsection: "无法创建分类'%shopsection%'，因为分类位置必须介于0和%maxInvSize%之间。"
+need-recipe-material: "配方不能为空。"
+cannot-get-recipe-material: "无法创建具有空白值的配方材料。请检查项目名称是否拼写错误或项目是否存在。"
+recipe-material-not-supported: "当前运行的Minecraft版本不支持指定的配方。"
+material-needs-to-be-book: "要将附魔应用到物品上，对象需要是知识之书（只可使用指令获得）。"
+need-skullowner: "无法创建玩家头，因为没有指定的玩家（Skull Owner）。"
+material-needs-to-be-skull: "要应用皮肤（Skull Owner），对象必须是玩家的头部。"
+material-needs-to-be-leather-armor: "要应用颜色，对象必须是皮革防具。"
+
+#Item path
+items-path-in-shops-config: "shops.yml设置中的项目路径：%location%"
+items-path-in-sections-config: "sections.yml设置中的项目路径：%location%"
+items-path-in-config: "config.yml设置中的项目路径：%location%"
+
+#Compatibility
+rosestacker-compatibility-enabled: "使用RoseStacker作为刷怪箱的配置文件"
+rosestacker-not-found: "未找到RoseStacker"
+could-not-integrate-with-rosestacker: "RoseStacker加载失败"
+rosestacker-found: "已找到RoseStacker，正在加载..."
+using-rosestacker-spawners: "RoseStacker加载成功。"
+ultimatestacker-compatibility-enabled: "使用UltimateStacker作为刷怪箱的配置文件"
+ultimatestacker-not-found: "未找到UltimateStacker"
+could-not-integrate-with-ultimatestacker: "UltimateStacker加载失败"
+ultimatestacker-found: "已找到UltimateStacker，正在加载..."
+using-ultimatestacker-spawners: "UltimateStacker加载成功。"
+
+spawner-compatibility-enabled: "使用%provider%作为刷怪箱的配置文件。"
+spawner-provider-not-found: "%provider%没有找到"
+spawner-provider-found: "%provider%已找到。正在加载..."
+failed-spawner-provider-integration: "%provider%加载失败"
+using-external-spawners: "%provider%加载成功。"
+
+silkspawners-compatibility-enabled: "使用SilkSpawners作为刷怪箱的配置文件。"
+silkspawners-not-found: "未找到SilkSpawners"
+silkspawners-found: "已找到SilkSpawners，正在加载..."
+could-not-integrate-with-silkspawners: "SilkSpawners加载失败"
+using-silkspawners-spawners: "SilkSpawners加载成功。"
+using-default-spawners: "插件使用默认配置文件加载。"
+
+#Error's
+cannot-find-discounted-section: "分类'%section%'无法添加折扣。请检查分类是否无效或未找到。"
+cannot-find-discounted-group: "无法为权限组'%permsGroup%'添加折扣，如果它存在于您的权限插件中请检查插件。"
+disabling-plugin: "正在禁用插件..."
+not-spawn-able: "此实体类型'%spawnertype%'无法生成。"
+real-player: "此命令只能由玩家执行。"
+player-not-online: "&c该玩家不存在或脱机。"
+cannot-sell-air: "&c你不能出售空气..."
+no-permissions: "&c您没有此权限！"
+no-permissions-to-open-shop: "你没有权限打开这个商店分类。"
+cannot-do-that: "&4您不能这样做！"
+more-space-needed: "&c请在您的库存中留出更多的空间，然后重试。"
+could-not-store-all-items: "&c%amount%不能添加到你的库存中，背包已满。"
+not-enough-space-inside-inventory: "&4你的库存没有足够的空间，剩余的物品将会被扔到地上。"
+insufficient-money: "&c你没有足够的钱。"
+canceling-transaction-no-space: "&4您的库存没有足够的空间，交易取消。\n请在您的库存中清理出更多的空间，然后重试。"
+no-items-in-section: "不能打开商店分类%shopsection%，因为没有找到物品！"
+no-item-found: "&c未找到该物品。"
+item-null: "&c该物品不存在。"
+item-cannot-be-sold-to-server: "&c商店出现错误，无法销售此物品(%material%)。请将此问题报告给服务器管理员或腐竹蓝狗suika。"
+could-not-save-shops,yml: "&4无法保存shops.yml的更改。"
+could-not-save-sections,yml: "&4无法保存sections.yml的更改。"
+could-not-save-config: "无法保存%fileName%的设置。"
+rgb-color-formatted-wrong: "RGB颜色必须在%path%指定'0x000000'、'#000000'或'000000'中的一种。"
+no-shop-found: "&c未找到此名称的商店分类！"
+no-valid-amount: "&c不是有效的金额数量"
+restart-plugin: "无法打开商店分类。请尝试重新启动插件或加入discord服务器以获得支持。"
+could-not-check-for-updates: "&c无法检查更新。"
+cannot-update-config: "&c配置文件 config.yml 无法更新。"
+cannot-read-config: "无法读取%fileName%的设置，原因是设置不正确。使用在线Yaml解析器确定问题的原因并解决。如果您自己无法确定问题，请加入我们的Discord服务器并获得支持。"
+error-occured-while-reloading: "&4重新加载插件时出错。请在控制台中确认错误信息。"
+could-not-get-the-limitedstock-mode: "不能获取这种限购模式: %limitedStockMode%"
+could-not-enable-limitedstock: "由于数据库连接错误，不能启用限购。"
+error-occurred-while-connecting-to-database: "尝试连接数据库时发生了一个错误。"

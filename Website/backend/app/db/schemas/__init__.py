@@ -5,4 +5,5 @@ from .links import Links
 from .shop import Shop
 from .stash_instances import StashInstance
 from .stats import Stats
+from .bazaar_redeem import BazaarRedeem
 from .user import User

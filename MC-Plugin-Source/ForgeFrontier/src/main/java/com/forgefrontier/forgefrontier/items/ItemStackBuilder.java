@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Build Basic ItemStacks
@@ -81,10 +82,10 @@ public class ItemStackBuilder {
         isloreModified = true;
         if(this.lore == null)
             this.lore = new ArrayList<>();
-        ArrayList<String> str = new ArrayList<String>(Arrays.asList(loreLine.split("\n")));
-        str.forEach((e) -> e = ChatColor.translateAlternateColorCodes('&', e));
+        List<String> str = Arrays.asList(
+            ChatColor.translateAlternateColorCodes('&', loreLine).split("\n")
+        );
         this.lore.addAll(str);
-        //this.lore.add(ChatColor.translateAlternateColorCodes('&', loreLine));
 
         return this;
     }
