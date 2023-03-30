@@ -1,0 +1,69 @@
+{
+	"generator-shop": {
+	  "0": "silver-gen",
+	  "1": "coin-gen"
+	},
+	"generators": {
+	  "0": {
+		"id": "silver-gen",
+		"friendly_name": "&fSilver Generator",
+		"representation_material": "RAW_IRON_BLOCK",
+		"material_type": "item",
+		"item_id": "SilverIngot",
+		"costs": {
+		  "0": {
+			"material_type": "coin",
+			"amount": 10000
+		  }
+		},
+		"levels": {
+		  "0": {
+			"generation_rate": 10000,
+			"max_size": 256,
+			"req_tier": 1,
+			"upgrade_costs": {
+			  "0": {
+				"material_type": "coin",
+				"amount": 10000
+			  }
+			}
+		  },
+		  "1": {
+			"generation_rate": 9000,
+			"max_size": 512,
+			"req_tier": 2
+		  }
+		}
+	  },
+	  "1": {
+		"id": "coin-gen",
+		"friendly_name": "&eCoin Generator",
+		"representation_material": "RAW_GOLD_BLOCK",
+		"material_type": "coin",
+		"costs": {
+		  "0": {
+			"material_type": "coin",
+			"amount": 10000
+		  }
+		},
+		"levels": {
+		  "0": {
+			"generation_rate": 3000,
+			"max_size": 10000,
+			"req_tier": 0,
+			"upgrade_costs": {
+			  "0": {
+				"material_type": "coin",
+				"amount": 10000
+			  }
+			}
+		  },
+		  "1": {
+			"generation_rate": 2000,
+			"max_size": 10000,
+			"req_tier": 1
+		  }
+		}
+	  }
+	}
+  }
