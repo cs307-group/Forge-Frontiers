@@ -13,8 +13,10 @@ export default function Profile({
   cookie?: object;
 }) {
   useCookieSync(cookie);
-
-  return <AppLayout active="generators">ok</AppLayout>;
+  console.log(userData);
+  return (
+    <AppLayout active="generators" title={`${userData.name}'s Generators`}></AppLayout>
+  );
 }
 
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
