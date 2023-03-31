@@ -63,13 +63,14 @@ export interface GeneratorState {
   location_y: number;
   location_z: number;
   location_world: string;
+  generator_id: string;
   island_id: string;
 }
 export interface StashState {
   id_: string;
   stash_id: string;
   location_x: number;
-  location_y: number
+  location_y: number;
   location_z: number;
   location_world: string;
   contents_json: string;
@@ -79,4 +80,15 @@ export interface StashState {
 export interface GeneratorStateFetch {
   generators: GeneratorState[];
   stashes: StashState[];
+}
+
+export interface GeneratorConfigStatic {
+  "silver-gen": {
+    resource: string;
+    levels: Record<number, {generation_rate: number; max_size: number}>;
+  };
+  "coin-gen": {
+    resource: string;
+    levels: Record<number, {generation_rate: number; max_size: number}>;
+  };
 }
