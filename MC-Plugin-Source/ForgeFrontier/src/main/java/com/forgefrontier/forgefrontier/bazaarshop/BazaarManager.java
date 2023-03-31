@@ -286,6 +286,7 @@ public class BazaarManager {
                 ItemUtil.take(p,itm,bs.getAmount());
             }
         }
+        refreshListingDisplay();
         econ.depositPlayer(p,toGive);
         return toGive;
     }
@@ -418,7 +419,7 @@ public class BazaarManager {
                 econ.withdrawPlayer(p,amount * price);
                 p.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.GOLD + "Successfully created listing!");
                 localInsertListing(entry);
-
+                refreshListingDisplay();
                 return true;
             } else {
                 p.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.RED +
@@ -449,6 +450,7 @@ public class BazaarManager {
                 ItemUtil.take(p, itm, amount);
                 p.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.GOLD + "Successfully created listing!");
                 localInsertListing(entry);
+                refreshListingDisplay();
                 return true;
             } else {
                 p.sendMessage(ForgeFrontier.CHAT_PREFIX + ChatColor.RED +
@@ -506,8 +508,9 @@ public class BazaarManager {
         return this.playerStashes.get(player);
     }
 
-    public void removeListingSync(BazaarEntry listing) {
-        if (!listing.getValid()) return;
+    public boolean removeListingSync(BazaarEntry listing) {
+
+        if (listing == null || !listing.getValid()) return true;
         else {
             if (listing.getBType()) {
                 buyLookup.get(listing.getSlotID()).removeIf(
@@ -518,17 +521,22 @@ public class BazaarManager {
             }
         }
         listing.setValid(false);
-        bazaarDB.removeOrderSync(listing);
+        refreshListingDisplay();
+        return bazaarDB.removeOrderSync(listing);
     }
     public void removeListingAsync(BazaarEntry listing, Consumer<Boolean> callback) {
         if (!listing.getValid()) return;
         else {
             if (listing.getBType()) {
                 buyLookup.get(listing.getSlotID()).removeIf(
-                        (be) -> be.getEntryID().toString().equals(listing.getEntryID().toString()));
+                        (be) -> {
+                            if(be == null) return true;
+                            return be.getEntryID().toString().equals(listing.getEntryID().toString());});
             } else {
                 sellLookup.get(listing.getSlotID()).removeIf(
-                        (be) -> be.getEntryID().toString().equals(listing.getEntryID().toString()));
+                        (be) -> {
+                            if (be == null) return true;
+                            return be.getEntryID().toString().equals(listing.getEntryID().toString()); });
             }
         }
         listing.setValid(false);
@@ -551,4 +559,10 @@ public class BazaarManager {
         });
     }
 
+    public HashMap<Integer, PriorityQueue<BazaarEntry>> getBuyLookup() {
+        return buyLookup;
+    }
+    public HashMap<Integer, PriorityQueue<BazaarEntry>> getSellLookup() {
+        return sellLookup;
+    }
 }

@@ -92,3 +92,16 @@ export interface GeneratorConfigStatic {
     levels: Record<number, {generation_rate: number; max_size: number}>;
   };
 }
+
+export interface ShopData {
+  id_: string;
+  item_material: string;
+  item_name: string;
+  item_lore: string;
+  price: number;
+  amount: number;
+  lister_player_id: string;
+  buyer_id: string;
+  date_sold: number;
+  custom_data: string;
+}

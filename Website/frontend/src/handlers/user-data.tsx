@@ -97,3 +97,9 @@ export function getPlayerStats(id: string) {
     method: "get",
   });
 }
+
+export function getPlayerShop(id: string) {
+  return jsonRequest(routes.mcShop(id), {
+    method: "get",
+  });
+}

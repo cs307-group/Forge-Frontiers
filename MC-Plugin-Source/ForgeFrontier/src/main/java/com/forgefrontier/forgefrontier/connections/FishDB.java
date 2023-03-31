@@ -2,6 +2,8 @@ package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.fishing.PlayerFishStat;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -45,7 +47,7 @@ public class FishDB extends DBConnection {
                 int sr = rs.getInt("sr");
                 int ur = rs.getInt("ur");
                 int leg = rs.getInt("legendary");
-                hmap.put(playerID, new PlayerFishStat(playerID,fishcaught,fishlevel, false));
+                hmap.put(playerID, new PlayerFishStat(playerID,fishcaught,fishlevel,c,uc,rare,sr,ur,leg, false));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,8 +68,11 @@ public class FishDB extends DBConnection {
             }
         });
     }
-
     public void saveFishJob(HashMap<UUID, PlayerFishStat> stats) {
+        saveFishJob(stats, null);
+    }
+
+    public void saveFishJob(HashMap<UUID, PlayerFishStat> stats, CommandSender sender) {
         // Already doing job
         if (currentlyUpdating) {
             return;
@@ -81,6 +86,12 @@ public class FishDB extends DBConnection {
                 wrapper.fullInsert("player_id", pfs.getPlayerID().toString());
                 wrapper.fullInsert("fishcaught", pfs.getFishCaught());
                 wrapper.fullInsert("fishlevel", pfs.getLevel());
+                wrapper.fullInsert("common", pfs.getCommon());
+                wrapper.fullInsert("uncommon", pfs.getUncommon());
+                wrapper.fullInsert("rare", pfs.getRare());
+                wrapper.fullInsert("sr", pfs.getSuperrare());
+                wrapper.fullInsert("ur", pfs.getUltrarare());
+                wrapper.fullInsert("legendary", pfs.getLegendary());
                 wrapper.addCondition("player_id = %id%","id");
                 wrapper.insertValue("id",pfs.getPlayerID().toString());
                 wrapper.executeSyncQuery(dbConn);
@@ -88,6 +99,9 @@ public class FishDB extends DBConnection {
             }
             ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Fish Stats sent to DB.");
             this.currentlyUpdating = false;
+            if (sender != null)
+                sender.sendMessage("Finished saving fishing stats.");
+
         });
         this.updateThread.start();
         this.currentlyUpdating = true;

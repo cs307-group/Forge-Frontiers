@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.bazaarshop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
+import com.forgefrontier.forgefrontier.testing.BazaarTests;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -115,6 +116,17 @@ public class BazaarCommand {
         ItemStack itm = p.getInventory().getItemInMainHand();
         plugin.getLogger().log(Level.INFO,"Listing amount: " + amount + " for price: " + price);
         bazaarManager.createSellListing(p,itm, amount, price);
+    }
+
+    @Subcommand({"test"})
+    public void testCommand(CommandSender sender) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage("Unable to run bazaar tests for a non-player.");
+            throw new SenderNotPlayerException();
+        }
+        Player p = (Player) sender;
+        BazaarTests test = new BazaarTests(plugin, p);
+        test.runTests();
     }
 
 

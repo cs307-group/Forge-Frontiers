@@ -19,6 +19,7 @@ export const routes = {
   refreshToken: getApiURL("/users/-/token/refresh"),
   linkAccount: getApiURL("/users/-/link"),
   mcStats: (id: string) => getApiURL(`/users/-/stats/${id}`),
+  mcShop: (id: string) => getApiURL(`/users/id/mc/${id}/shop`),
   userById: (id: string) => getApiURL(`/users/id/${id}`),
   marketState: (q: string) => getApiURL(`/market?q=${encodeURIComponent(q)}`),
   ordersBySlotId: (id: number) => getApiURL(`/market/${id}`),

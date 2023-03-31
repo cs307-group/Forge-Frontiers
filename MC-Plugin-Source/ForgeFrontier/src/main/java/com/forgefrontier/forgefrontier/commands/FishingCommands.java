@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.fishing.FishingManager;
 import com.forgefrontier.forgefrontier.fishing.PlayerFishStat;
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,7 +51,7 @@ public class FishingCommands {
 
     @Subcommand({"save"})
     public void fishSave(CommandSender sender) {
-        fishingManager.fishDB.saveFishJob(fishingManager.playerFishStats);
+        fishingManager.fishDB.saveFishJob(fishingManager.playerFishStats, sender);
         sender.sendMessage("Began save fish job");
     }
 
@@ -69,6 +70,13 @@ public class FishingCommands {
         p.sendMessage("" + ChatColor.AQUA + "--- Fish Stats ---");
         p.sendMessage("" + ChatColor.AQUA + "Level: " + pfs.getLevel());
         p.sendMessage("" + ChatColor.AQUA + "Fish Caught: " + pfs.getFishCaught());
+        p.sendMessage("" + ChatColor.GRAY + "Common: " + pfs.getCommon() +
+                ChatColor.DARK_GREEN + "    Uncommon: " + pfs.getUncommon() + "\n");
+        p.sendMessage("" + ChatColor.BLUE + "Rare: " + pfs.getRare() +
+                ChatColor.LIGHT_PURPLE + "    Super Rare: " + pfs.getSuperrare() + "\n");
+        p.sendMessage("" + ChatColor.DARK_RED + "Ultra Rare: " + pfs.getUltrarare() +
+                ChatColor.GOLD + "    Legendary: " + pfs.getLegendary() + "\n");
+
         p.sendMessage("" + ChatColor.AQUA + "----------------");
     }
 
