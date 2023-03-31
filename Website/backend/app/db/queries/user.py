@@ -25,7 +25,7 @@ def search(idx: str, user_id: str) -> list[User]:
     if not idx:
         return guard(None, message)
     p = f"%{idx}%"
-    
+
     args = (
         (or_(User.name.ilike(p), User.mc_user.ilike(p)),)
         if user_id is None
