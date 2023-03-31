@@ -1,8 +1,12 @@
 import {GetServerSideProps} from "next";
 
 import {isErrorResponse} from "@/handlers/fetch-util";
-import {PlayerStats, UserData} from "@/handlers/types";
-import {getPlayerById, getPlayerStats} from "@/handlers/user-data";
+import {PlayerStats, ShopData, UserData} from "@/handlers/types";
+import {
+  getPlayerById,
+  getPlayerShop,
+  getPlayerStats,
+} from "@/handlers/user-data";
 import {DEFAULT_STATS} from "@/util/default-stats";
 import Head from "next/head";
 import {AppLayout} from "@/components/Layout/AppLayout";
@@ -14,10 +18,12 @@ export default function ViewProfile({
   data,
   stats,
   cookie,
+  shop,
 }: {
   error: string;
   data: UserData;
   stats: PlayerStats;
+  shop: ShopData[];
   cookie: object;
 }) {
   useCookieSync(cookie);
@@ -41,6 +47,7 @@ export default function ViewProfile({
         ) : (
           <ProfileViewer
             data={data}
+            shop={shop}
             stats={
               Object.fromEntries(
                 Object.entries(stats).filter((x) => x[0] !== "player_uuid")
@@ -59,8 +66,16 @@ export const getServerSideProps: GetServerSideProps = (async (c) => {
   }
 
   const resp = getPlayerById(c.query.id);
-  const _stats = getPlayerStats(c.query.id);
-  const stats = await _stats;
+  const [stats, shop] = await Promise.all([
+    getPlayerStats(c.query.id),
+    resp.then((x) =>
+      !isErrorResponse(x)
+        ? getPlayerShop(x.resp.mc_user)
+            .then((shop) => shop.json())
+            .then((x) => x.data)
+        : []
+    ),
+  ]);
   let json: PlayerStats = (await stats.json())?.data;
   if (!stats.ok && stats.status !== 404) {
     return {props: json || null};
@@ -74,5 +89,5 @@ export const getServerSideProps: GetServerSideProps = (async (c) => {
     return userResponse.resp;
   }
 
-  return userResponse.addCustomData({stats: json}).toSSPropsResult;
+  return userResponse.addCustomData({stats: json, shop}).toSSPropsResult;
 }) satisfies GetServerSideProps;

@@ -4,16 +4,15 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {FormEvent, useState} from "react";
 
+import {Button} from "@/components/Button";
+import {GenBlock} from "@/components/Gens/GenBlock"
 import {AppLayout} from "@/components/Layout/AppLayout";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
 import {fetchGeneratorsByIsland} from "@/handlers/gens";
-import {GeneratorStateFetch, UserDataSecure, GeneratorState} from "@/handlers/types";
+import {GeneratorState, GeneratorStateFetch, UserDataSecure} from "@/handlers/types";
 import {fetchUserData} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
-import {Button} from "@/components/Button";
-import {GenBlock} from "@/components/Gens/GenBlock"
-
 
 export default function Profile({
   data: userData,
