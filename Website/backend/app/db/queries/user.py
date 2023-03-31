@@ -1,5 +1,6 @@
 from app.internal.helpers.guard import guard
 from ..schemas.user import User
+from ..schemas.shop import Shop
 from sqlalchemy import or_
 import email_validator
 
@@ -27,8 +28,12 @@ def search(idx: str, user_id: str) -> list[User]:
     p = f"%{idx}%"
 
     args = (
-        (or_(User.name.ilike(p), User.mc_user.ilike(p)),)
+        (or_(User.name.ilike(p), User.mc_user == idx),)
         if user_id is None
-        else (or_(User.name.ilike(p), User.mc_user.ilike(p)), User.id_ != user_id)
+        else (or_(User.name.ilike(p), User.mc_user == idx), User.id_ != user_id)
     )
     return User.query.filter(*args).all()
+
+
+def get_shop_by_mc(mc_id: str) -> list[Shop]:
+    return [x.as_json for x in Shop.query.filter(Shop.lister_player_id == mc_id).all()]

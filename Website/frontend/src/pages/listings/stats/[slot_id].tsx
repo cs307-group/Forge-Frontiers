@@ -2,7 +2,7 @@ import Highcharts from "highcharts";
 import {HighchartsReact} from "highcharts-react-official";
 import Head from "next/head";
 import Image from "next/image";
-import {useMemo} from "react";
+import {useMemo, useState} from "react";
 
 import {AppLayout} from "@/components/Layout/AppLayout";
 import {Spacer} from "@/components/Spacer";
@@ -68,6 +68,14 @@ function useParsedData(data: MarketState[]) {
     [data]
   );
 }
+const dateFmt = (date: Date) => {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const year = String(date.getFullYear()).padStart(4, "0");
+
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+};
 export default function ViewBySlotIdGraph({
   data,
 }: {
@@ -77,10 +85,31 @@ export default function ViewBySlotIdGraph({
     lookup: BazaarLookup;
   };
 }) {
-  const buyData = useParsedData(data.buy);
-  const sellData = useParsedData(data.sell);
-  const options = useChartOptions(buyData, sellData);
+  const _buyData = useParsedData(data.buy);
+  const _sellData = useParsedData(data.sell);
+  const combined = useMemo(
+    () => _buyData.concat(_sellData).sort((a, b) => +a.x - +b.x),
+    []
+  );
+  const [start, setStart] = useState(() => {
+    return combined[0].x;
+  });
+  const [end, setEnd] = useState(() => {
+    return combined[combined.length - 1].x;
+  });
+
   useRefresh();
+  const buyData = useMemo(() => {
+    return _buyData.filter((x) => {
+      return +x.x >= +start && +x.x <= +end;
+    });
+  }, [start, end, _buyData]);
+  const sellData = useMemo(() => {
+    return _sellData.filter((x) => +x.x >= +start && +x.x <= +end);
+  }, [start, end, _sellData]);
+
+  const options = useChartOptions(buyData, sellData);
+
   return (
     <>
       <Head>
@@ -109,6 +138,29 @@ export default function ViewBySlotIdGraph({
 
         <div className="w-[90%] h-96 bg-white rounded-md mx-auto">
           <HighchartsReact highcharts={Highcharts} options={options} />
+        </div>
+        <Spacer y={100} />
+        <div>
+          <div className="text-xl mx-auto text-center mb-4">Range</div>
+          <div className="mx-auto flex items-center flex-row justify-center gap-4 text-black">
+            <input
+              type="date"
+              value={dateFmt(start)}
+              onChange={(e) => {
+                const [y, m, d] = e.currentTarget.value.split("-");
+                setStart(new Date(+y, +m - 1, +d));
+              }}
+            />{" "}
+            -{" "}
+            <input
+              type="date"
+              value={dateFmt(end)}
+              onChange={(e) => {
+                const [y, m, d] = e.currentTarget.value.split("-");
+                setEnd(new Date(+y, +m - 1, +d));
+              }}
+            />
+          </div>
         </div>
       </AppLayout>
     </>

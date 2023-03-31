@@ -11,6 +11,7 @@ import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {getMarketState} from "@/handlers/market";
 import {MarketStateFetch} from "@/handlers/types";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {useRefresh} from "@/hooks/use-refresh";
 
 export default function Market({
   data,
@@ -28,6 +29,7 @@ export default function Market({
     if (!qr || Array.isArray(qr)) return "";
     return qr;
   });
+  useRefresh();
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const params = new URLSearchParams({q: search});

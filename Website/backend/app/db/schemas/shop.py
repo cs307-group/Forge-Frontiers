@@ -60,7 +60,7 @@ class Shop(db.Model):
             "item_lore": self.item_lore,
             "price": self.price,
             "amount": self.amount,
-            "listed_player_id": self.listed_player_id,
+            "lister_player_id": self.lister_player_id,
             "buyer_id": self.buyer_id,
             "date_sold": self.date_sold,
             "custom_data": self.custom_data,
