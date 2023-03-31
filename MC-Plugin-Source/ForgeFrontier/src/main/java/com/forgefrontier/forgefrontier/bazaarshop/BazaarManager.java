@@ -168,6 +168,7 @@ public class BazaarManager {
         this.playerListings.clear();
         this.buyLookup.clear();
         this.sellLookup.clear();
+        playerStashes.clear();
     }
 
     public static void reload() {
@@ -351,6 +352,7 @@ public class BazaarManager {
         econ.withdrawPlayer(p, total);
         for (BazaarEntry be : removed) {
             OfflinePlayer op = plugin.getServer().getOfflinePlayer(be.getListerID());
+            plugin.getLogger().log(Level.INFO,"Sending balance to: " + op.getName());
             if (!op.hasPlayedBefore()) { plugin.getLogger().log(Level.SEVERE,"Unknown player listing fulfilled"); }
             else {
                 econ.depositPlayer(p,be.getPrice() * be.getAmount());
