@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.GeneratorInstance;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerStat;
 
 import java.sql.Connection;
@@ -81,6 +82,7 @@ public class PlayerDB extends DBConnection {
     /**
      * Gets existing player stat information before creating new information.
      */
+    /*
     public boolean createPlayerStats(UUID uniqueId, PlayerStat[] stats) {
         try {
             PreparedStatement preparedStatement = dbConn.prepareStatement("INSERT INTO public.stats " +
@@ -103,38 +105,51 @@ public class PlayerDB extends DBConnection {
             return false;
         }
     }
+     */
 
     /**
      * Updates player stat information with new information.
      */
-    public boolean updatePlayerStats(UUID uniqueId, double currentHealth, PlayerStat[] stats) {
-        try {
-            PreparedStatement preparedStatement = dbConn.prepareStatement(
-                    "UPDATE public.stats " +
-                            "(player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\") " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
-            preparedStatement.setString(1, uniqueId.toString());
-            preparedStatement.setDouble(2, currentHealth);
-            preparedStatement.setInt(3, stats[0].getStatValue());
-            preparedStatement.setInt(4, stats[1].getStatValue());
-            preparedStatement.setInt(5, stats[2].getStatValue());
-            preparedStatement.setInt(6, stats[3].getStatValue());
-            preparedStatement.setInt(7, stats[4].getStatValue());
-            preparedStatement.setInt(8, stats[5].getStatValue());
-            preparedStatement.setInt(9, stats[6].getStatValue());
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (Exception e) {
-            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "[QUERY UPDATE PLAYER STATS FAILURE]\n" + e.getMessage());
-            return false;
-        }
+    public void updatePlayerStats(UUID uniqueId, double currentHealth, PlayerStat[] stats) {
+        new Thread(() -> {
+            try {
+
+                String sql = "INSERT INTO public.stats (player_uuid, current_health, \"HP\", \"ATK\", \"STR\", \"DEX\", \"CRATE\", \"CDMG\", \"DEF\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (player_uuid) DO UPDATE SET " +
+                        "current_health = ?, \"HP\" = ?, \"ATK\" = ?, \"STR\" = ?, \"DEX\" = ?, \"CRATE\" = ?, \"CDMG\" = ?, \"DEF\" = ?;";
+
+                /* OLD:
+                "UPDATE public.stats " +
+                        "(player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\") " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
+                */
+                PreparedStatement preparedStatement = dbConn.prepareStatement(sql);
+                preparedStatement.setString(1, uniqueId.toString());
+                preparedStatement.setDouble(2, currentHealth);
+                for (int i = 0; i < 7; i++) {
+                    preparedStatement.setInt(3 + i, stats[i].getStatValue());
+                }
+                preparedStatement.setDouble(10, currentHealth);
+                for (int i = 0; i < 7; i++) {
+                    preparedStatement.setInt(11 + i, stats[i].getStatValue());
+                }
+                preparedStatement.executeUpdate();
+            } catch (Exception e) {
+                ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "[QUERY UPDATE PLAYER STATS FAILURE]\n" + e.getMessage());
+            }
+        }).start();
     }
+
+    public void updatePlayerStats(FFPlayer ffPlayer) {
+        updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(), ffPlayer.getStats());
+    }
+
 
     /**
      * Gets existing player link information before creating a new one.
      *
      * Upon completion, runs the consumer giving the map of values of existing link, if it exists.
      */
+    /*
     public void getExistingPlayerStats(UUID playerUuid, Consumer<Map<String, Object>> consumer) {
         new Thread(() -> {
             try {
@@ -174,6 +189,7 @@ public class PlayerDB extends DBConnection {
             }
         }).start();
     }
+     */
 
     public void updatePlayerIsland(UUID playerUUID, String islandId, final Consumer<Boolean> callback) {
         UpdateQueryWrapper wrapper = new UpdateQueryWrapper();

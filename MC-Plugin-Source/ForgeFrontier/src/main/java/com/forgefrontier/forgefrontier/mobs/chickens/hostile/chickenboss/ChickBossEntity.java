@@ -8,8 +8,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
@@ -43,6 +46,12 @@ public class ChickBossEntity extends HostileChickenEntity {
     public void customTick() {
 
         if (hasBeenInvuln && failCounter < 3 && !eggs.isEmpty() && invulnTime < totalInvulnTime * 1000) {
+            if (this.getHealth() < 100) {
+                this.setHealth(100);
+                CraftLivingEntity craftEntity = (CraftLivingEntity) Bukkit.getEntity(this.getUUID());
+                craftEntity.setCustomName(ChatColor.WHITE + (String) craftEntity.getMetadata("name").get(0).value() +
+                        ": " + craftEntity.getHealth() + "/" + ((int) craftEntity.getMaxHealth()));
+            }
             invulnTime += System.currentTimeMillis() - lastTickTime;
             lastTickTime = System.currentTimeMillis();
         } else if (hasBeenInvuln && eggs.isEmpty()) { // increased attack
@@ -65,6 +74,9 @@ public class ChickBossEntity extends HostileChickenEntity {
             this.setInvulnerable(false);
             hasBeenInvuln = false;
             this.setHealth(150);
+            CraftLivingEntity craftEntity = (CraftLivingEntity) Bukkit.getEntity(this.getUUID());
+            craftEntity.setCustomName(ChatColor.WHITE + (String) craftEntity.getMetadata("name").get(0).value() +
+                    ": " + craftEntity.getHealth() + "/" + ((int) craftEntity.getMaxHealth()));
             invulnTime = 0;
             lastTickTime = 0;
             failCounter++;

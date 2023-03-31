@@ -63,7 +63,7 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
      */
     public void updateNamePlate(String name) {
         // sets the nameplate of the chicken
-        System.out.println("Updating nameplate");
+        // System.out.println("Updating nameplate");
         this.setCustomName(ChatColor.WHITE + name + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
         this.setCustomNameVisible(true);
     }
