@@ -22,6 +22,7 @@ export const routes = {
   userById: (id: string) => getApiURL(`/users/id/${id}`),
   marketState: getApiURL("/market/"),
   ordersBySlotId: (id: number) => getApiURL(`/market/${id}`),
+  generatorsByIsland: (island_id: string) => getApiURL(`/generators/${island_id}`),
 };
 
 /**

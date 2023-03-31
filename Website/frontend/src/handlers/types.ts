@@ -53,3 +53,14 @@ export interface MarketStateFetch {
   cheapest: Record<number, MarketState>;
   counts: Record<number, number>;
 }
+
+export interface GeneratorStateFetch {
+  id_: string
+  level: number;
+  last_collection_time: number;
+  location_x: number;
+  location_y: number;
+  location_z: number;
+  location_world: string;
+  island_id: string;
+}
