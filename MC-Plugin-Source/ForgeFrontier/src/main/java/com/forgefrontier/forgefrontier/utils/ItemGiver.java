@@ -29,5 +29,10 @@ public class ItemGiver {
         }
     }
 
+    // limited to 64
+    public static void dropItem(Player p, ItemStack itm) {
+        p.getWorld().dropItem(p.getLocation().add(0,1,0), itm);
+    }
+
 
 }

@@ -2,16 +2,15 @@ package com.forgefrontier.forgefrontier.stashes;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.connections.StashDB;
-import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItemInstance;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
 import com.forgefrontier.forgefrontier.gui.StashAddInventoryHolder;
+import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -22,6 +21,35 @@ public class StashInventoryHolder extends BaseInventoryHolder {
         super(45, stashInstance.getStash().getFriendlyName());
 
         this.fillPanes();
+
+        this.registerPlayerInventoryHandler((e) -> {
+            ItemStack itemStack = e.getCurrentItem();
+            CustomItem customItem = CustomItemManager.getCustomItem(itemStack);
+            if(customItem == null) return;
+            StashItem stashItem = stashInstance.getStash().getStashItem(customItem.getCode());
+            if(stashItem == null) return;
+            int amt = stashInstance.getAmount(stashItem);
+            if(amt + itemStack.getAmount() <= stashItem.getMaxAmount()) {
+                stashInstance.setAmount(stashItem, amt + itemStack.getAmount());
+                e.setCurrentItem(new ItemStack(Material.AIR));
+                ForgeFrontier.getInstance().getDatabaseManager().getStashDB().sendStashUpdate(stashInstance, (success) -> {
+                    if(!success) {
+                        ForgeFrontier.getInstance().getLogger().severe("Unable to send stash update to database. An unknown error occurred in doing so.");
+                    }
+                    Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> e.getWhoClicked().openInventory(new StashInventoryHolder(stashInstance).getInventory()));
+                });
+                return;
+            }
+            int remaining = amt + itemStack.getAmount() - stashItem.getMaxAmount();
+            itemStack.setAmount(remaining);
+            stashInstance.setAmount(stashItem, stashItem.getMaxAmount());
+            ForgeFrontier.getInstance().getDatabaseManager().getStashDB().sendStashUpdate(stashInstance, (success) -> {
+                if(!success) {
+                    ForgeFrontier.getInstance().getLogger().severe("Unable to send stash update to database. An unknown error occurred in doing so.");
+                }
+                Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> e.getWhoClicked().openInventory(new StashInventoryHolder(stashInstance).getInventory()));
+            });
+        });
 
         int i = 0;
         for(StashItem stashItem: stashInstance.getStash().getStashItems()) {

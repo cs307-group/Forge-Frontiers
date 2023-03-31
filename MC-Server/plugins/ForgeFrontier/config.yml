@@ -1,90 +1,90 @@
 generator-shop:
-  0: "silver-gen"
-  1: "coin-gen"
-  2: "super-silver-gen"
+  '0': silver-gen
+  '1': coin-gen
+  '2': super-silver-gen
 generators:
-  0:
-    id: "silver-gen"
-    friendly_name: "&fSilver Generator"
-    representation_material: "RAW_IRON_BLOCK"
-    material_type: "item"
-    item_id: "SilverIngot"
+  '0':
+    id: silver-gen
+    friendly_name: '&fSilver Generator'
+    representation_material: RAW_IRON_BLOCK
+    material_type: item
+    item_id: SilverIngot
     costs:
-      0:
-        material_type: "coin"
+      '0':
+        material_type: coin
         amount: 1
     levels:
-      0:
+      '0':
         generation_rate: 1000
         max_size: 256
         upgrade_costs:
-          0:
-            material_type: "coin"
+          '0':
+            material_type: coin
             amount: 10
-      1:
+      '1':
         generation_rate: 900
         max_size: 512
-
-  1:
-    id: "coin-gen"
-    friendly_name: "&eCoin Generator"
-    representation_material: "RAW_GOLD_BLOCK"
-    material_type: "coin"
+  
+  '1':
+    id: coin-gen
+    friendly_name: '&eCoin Generator'
+    representation_material: RAW_GOLD_BLOCK
+    material_type: coin
     costs:
-      0:
-        material_type: "coin"
+      '0':
+        material_type: coin
         amount: 1
     levels:
-      0:
+      '0':
         generation_rate: 3000
         max_size: 10000
         upgrade_costs:
-          0:
-            material_type: "coin"
+          '0':
+            material_type: coin
             amount: 10
-      1:
+      '1':
         generation_rate: 2000
         max_size: 10000
-  2:
-    id: "super-silver-gen"
-    friendly_name: "&fSuper Silver Generator"
-    representation_material: "IRON_BLOCK"
-    material_type: "item"
-    item_id: "SilverIngot"
+  '2':
+    id: super-silver-gen
+    friendly_name: '&fSuper Silver Generator'
+    representation_material: IRON_BLOCK
+    material_type: item
+    item_id: SilverIngot
     costs:
-      0:
-        material_type: "item"
-        item_id: "SilverIngot"
+      '0':
+        material_type: item
+        item_id: SilverIngot
         amount: 16
     levels:
-      0:
+      '0':
         generation_rate: 1000
         max_size: 10000
         upgrade_costs:
-          0:
-            material_type: "item"
-            item_id: "SilverIngot"
+          '0':
+            material_type: item
+            item_id: SilverIngot
             amount: 32
-      1:
+      '1':
         generation_rate: 2000
         max_size: 10000
 
 gear-shop:
-  0:
-    custom_item_id: "WoodenSword"
+  '0':
+    custom_item_id: WoodenSword
     costs:
-      0:
-        material_type: "coin"
+      '0':
+        material_type: coin
         amount: 5
-  1:
-    custom_item_id: "WoodenBow"
+  '1':
+    custom_item_id: WoodenBow
     costs:
-      0:
-        material_type: "item"
-        item_id: "SilverIngot"
+      '0':
+        material_type: item
+        item_id: SilverIngot
         amount: 1
 
 reroll-costs:
-  0:
-    material_type: "coin"
+  '0':
+    material_type: coin
     amount: 5

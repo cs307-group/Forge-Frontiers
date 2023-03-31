@@ -123,6 +123,7 @@ public class StashDB extends DBConnection {
     public void sendStashUpdate(StashInstance instance, final Consumer<Boolean> callback) {
         UpdateQueryWrapper wrapper = new UpdateQueryWrapper();
 
+
         wrapper.setTable("public.stash_instances");
         wrapper.fullInsert("contents_json", instance.getJsonContentsString());
         wrapper.addCondition("id_ = %id%", "id");

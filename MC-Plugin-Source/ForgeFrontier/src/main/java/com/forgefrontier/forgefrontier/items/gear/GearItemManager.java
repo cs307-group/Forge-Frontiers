@@ -68,9 +68,8 @@ public class GearItemManager extends Manager implements Listener {
         }
 
         // Updates player stats in database
-        /*
-        ForgeFrontier.getInstance().getDBConnection().updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(),
-                ffPlayer.getStats());*/
+        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(),
+                ffPlayer.getStats());
     }
 
 
