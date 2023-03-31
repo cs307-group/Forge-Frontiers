@@ -13,7 +13,6 @@
     "@types/node": "18.15.10",
     "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
-    "chart.js": "^4.2.1",
     "clsx": "^1.2.1",
     "cookies-next": "^2.1.1",
     "framer-motion": "^10.9.1",
@@ -21,7 +20,6 @@
     "highcharts-react-official": "^3.2.0",
     "next": "13.2.4",
     "react": "18.2.0",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
     "sharp": "^0.32.0",
@@ -29,17 +27,8 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "@types/d3-array": "^3.0.4",
-    "@types/d3-delaunay": "^6.0.1",
-    "@types/d3-scale": "^4.0.3",
-    "@types/d3-shape": "^3.1.1",
     "autoprefixer": "^10.4.14",
-    "d3-array": "^3.2.3",
-    "d3-delaunay": "^6.0.3",
-    "d3-scale": "^4.0.2",
-    "d3-shape": "^3.2.0",
     "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.7",
-    "ts-toolbelt": "^9.6.0"
+    "tailwindcss": "^3.2.7"
   }
 }
