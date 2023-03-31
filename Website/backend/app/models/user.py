@@ -53,6 +53,7 @@ class UserOut(CustomBase):
     mc_user: Optional[str]
     created_at: int
     is_admin: bool
+    island_id: str
 
 
 class UserOutSecure(UserOut):
