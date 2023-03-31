@@ -17,7 +17,7 @@ export default function Profile({
 }) {
   useCookieSync(cookie);
   // console.log(userData);
-  // console.log(genData);
+  console.log(genData);
   return (
     <AppLayout
       active="generators"
@@ -32,10 +32,13 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   if (isErrorResponse(userData)) {
     return userData.resp;
   }
-  const genData = await fetchGeneratorsByIsland(c);
+  const genData = await fetchGeneratorsByIsland(userData.resp.island_id);
+  //console.log(genData);
   // if (isErrorResponse(genData)) {
   //   return genData.resp;
   // }
+
   const res = userData.addCustomData({gens: genData.resp}).toSSPropsResult;
+  
   return res;
 });

@@ -22,7 +22,7 @@ export const routes = {
   userById: (id: string) => getApiURL(`/users/id/${id}`),
   marketState: (q: string) => getApiURL(`/market?q=${encodeURIComponent(q)}`),
   ordersBySlotId: (id: number) => getApiURL(`/market/${id}`),
-  generatorsByIsland: (island_id: string) => getApiURL(`/generators/${island_id}`),
+  generatorsByIsland: (island_id: string) => getApiURL(`/generators/${island_id}`)
 };
 
 /**
