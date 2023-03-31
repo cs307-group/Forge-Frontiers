@@ -74,7 +74,7 @@ export default function Market({
             >
               <div className="mx-auto text-center"> {b.item_name} </div>
               <div className="flex items-center justify-between flex-1">
-                {data.counts[b.slot_id] > 0 ? (
+                {data.cheapest[b.slot_id]?.amount ? (
                   <div>
                     <div>
                       <>

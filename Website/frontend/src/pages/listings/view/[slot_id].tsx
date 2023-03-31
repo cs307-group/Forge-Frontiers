@@ -2,7 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 
 import {Client} from "@/components/Client";
 import {AppLayout} from "@/components/Layout/AppLayout";
@@ -10,7 +10,10 @@ import {Spacer} from "@/components/Spacer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {getOrdersForSlotId} from "@/handlers/market";
 import {BazaarLookup, MarketState} from "@/handlers/types";
+import {ChevronIcon} from "@/icons/ChevronIcon";
+import {$Iterator, _collectors, arrayIter} from "@hydrophobefireman/lazy";
 
+const {ARRAY_COLLECTOR} = _collectors;
 const intl = new Intl.DateTimeFormat("en", {
   dateStyle: "medium",
   timeStyle: "medium",
@@ -71,56 +74,102 @@ function sort_mode(
 }
 function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
   const sortKey = `sort-${mode}`;
-  const {query} = useRouter();
+  const maxPriceKey = `maxPrice-${mode}`;
+  const {query, push} = useRouter();
   const sortMode = sort_mode(query[sortKey]);
   const amountSort = sortMode.amount || "down";
   const priceSort = sortMode.price || "up";
   const listSort = sortMode.listDate || "down";
-  const sortedData = data.slice().sort((x, y) => {
-    const {amount: amountX, price: priceX, listdate: listDateX} = x;
-    const {amount: amountY, price: priceY, listdate: listDateY} = y;
+  const maxPrice = +((query[maxPriceKey] as any) || 0);
+  const sortedData = arrayIter(
+    data.slice().sort((x, y) => {
+      const {amount: amountX, price: priceX, listdate: listDateX} = x;
+      const {amount: amountY, price: priceY, listdate: listDateY} = y;
 
-    if (sortMode.amount) {
-      if (amountSort === "up") {
-        if (amountX < amountY) return -1;
-        if (amountX > amountY) return 1;
-      } else {
-        if (amountX > amountY) return -1;
-        if (amountX < amountY) return 1;
+      if (sortMode.amount) {
+        if (amountSort === "up") {
+          if (amountX < amountY) return -1;
+          if (amountX > amountY) return 1;
+        } else {
+          if (amountX > amountY) return -1;
+          if (amountX < amountY) return 1;
+        }
       }
-    }
 
-    if (sortMode.price) {
-      if (priceSort === "up") {
-        if (priceX < priceY) return -1;
-        if (priceX > priceY) return 1;
-      } else {
-        if (priceX > priceY) return -1;
-        if (priceX < priceY) return 1;
+      if (sortMode.price) {
+        if (priceSort === "up") {
+          if (priceX < priceY) return -1;
+          if (priceX > priceY) return 1;
+        } else {
+          if (priceX > priceY) return -1;
+          if (priceX < priceY) return 1;
+        }
       }
-    }
-    if (listSort === "up") {
-      if (listDateX < listDateY) return -1;
-      if (listDateX > listDateY) return 1;
-    } else {
-      if (listDateX > listDateY) return -1;
-      if (listDateX < listDateY) return 1;
-    }
+      if (listSort === "up") {
+        if (listDateX < listDateY) return -1;
+        if (listDateX > listDateY) return 1;
+      } else {
+        if (listDateX > listDateY) return -1;
+        if (listDateX < listDateY) return 1;
+      }
 
-    return 0;
+      return 0;
+    })
+  ).filter((f) => {
+    if (maxPrice == 0) return true;
+    return f.price <= maxPrice;
   });
+  const memoDefaultMax = useMemo(
+    () =>
+      arrayIter(data).max_by((a, b) =>
+        a.price > b.price ? -1 : b.price > a.price ? 1 : 0
+      ),
+    [data]
+  );
+
   return (
     <section>
       <h1 className="font-bold text-3xl mx-auto text-center">
         Offers to {mode}
       </h1>
       <Spacer y={20} />
+      <div className="flex items-center justify-center flxe gap-2">
+        Show listings cheaper than:{" "}
+        <form
+          id={`form-listings-${mode}`}
+          action={`/listings/view/${query.slot_id}?${new URLSearchParams(
+            query as any
+          )}`}
+        >
+          <select
+            name={maxPriceKey}
+            className="text-black"
+            defaultValue={maxPrice || "select"}
+            onChange={(e) => {
+              push({query: {...query, [maxPriceKey]: e.currentTarget.value}});
+            }}
+          >
+            <option value="select" disabled>
+              select
+            </option>
+            {Array.from(new Set(data.map((x) => x.price))).map((x) => (
+              <option key={x} value={x}>
+                {x}
+              </option>
+            ))}
+          </select>
+          <noscript>
+            <button>search</button>
+          </noscript>
+        </form>
+      </div>
       {data?.length ? (
         <table className="mx-auto divide-y divide-gray-200 w-[95% ] max-w-[600px]">
           <thead>
             <tr className="">
               <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <Link
+                  className="flex items-center justify-center hover:underline"
                   href={{
                     pathname: `/listings/view/${query.slot_id}`,
                     query: {
@@ -129,11 +178,15 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
                     },
                   }}
                 >
-                  Amount
+                  Amount{" "}
+                  <span className={amountSort === "up" ? "" : "-scale-y-100"}>
+                    <ChevronIcon />
+                  </span>
                 </Link>
               </th>
               <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <Link
+                  className="flex items-center justify-center hover:underline"
                   href={{
                     pathname: `/listings/view/${query.slot_id}`,
                     query: {
@@ -142,11 +195,15 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
                     },
                   }}
                 >
-                  Price
+                  Price{" "}
+                  <span className={priceSort === "up" ? "" : "-scale-y-100"}>
+                    <ChevronIcon />
+                  </span>
                 </Link>
               </th>
               <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
                 <Link
+                  className="flex items-center justify-center hover:underline"
                   href={{
                     pathname: `/listings/view/${query.slot_id}`,
                     query: {
@@ -155,23 +212,28 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
                     },
                   }}
                 >
-                  Listed on
+                  Listed on{" "}
+                  <span className={listSort === "up" ? "" : "-scale-y-100"}>
+                    <ChevronIcon />
+                  </span>
                 </Link>
               </th>
             </tr>
           </thead>
           <tbody>
-            {sortedData.map((x) => (
-              <tr key={x.order_id} className="">
-                <td className="px-6 py-4 whitespace-nowrap">{x.amount}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{x.price}</td>
-                <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
-                  <Client fallback={x.listdate}>
-                    {intl.format(new Date(x.listdate))}
-                  </Client>
-                </td>
-              </tr>
-            ))}
+            {sortedData
+              .map((x) => (
+                <tr key={x.order_id} className="">
+                  <td className="px-6 py-4 whitespace-nowrap">{x.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{x.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                    <Client fallback={x.listdate}>
+                      {intl.format(new Date(x.listdate))}
+                    </Client>
+                  </td>
+                </tr>
+              ))
+              .collect(ARRAY_COLLECTOR)}
           </tbody>
         </table>
       ) : (
