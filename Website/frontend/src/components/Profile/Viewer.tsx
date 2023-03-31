@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import {PlayerStats, ShopData, UserData} from "@/handlers/types";
+import {useRefresh} from "@/hooks/use-refresh";
 import avatarImage from "@/images/avatar.png";
 
 import {Spacer} from "../Spacer";
@@ -33,6 +34,7 @@ export function ProfileViewer({
   stats: PlayerStats;
   shop: ShopData[];
 }) {
+  useRefresh(5000);
   return (
     <div>
       <div className="sm:block flex items-center justify-center">
