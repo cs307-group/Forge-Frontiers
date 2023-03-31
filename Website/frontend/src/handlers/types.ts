@@ -56,7 +56,7 @@ export interface MarketStateFetch {
 }
 
 export interface GeneratorState {
-  id_: string
+  id_: string;
   level: number;
   last_collection_time: number;
   location_x: number;
@@ -65,7 +65,18 @@ export interface GeneratorState {
   location_world: string;
   island_id: string;
 }
+export interface StashState {
+  id_: string;
+  stash_id: string;
+  location_x: number;
+  location_y: number
+  location_z: number;
+  location_world: string;
+  contents_json: string;
+  island_id: string;
+}
 
 export interface GeneratorStateFetch {
   generators: GeneratorState[];
+  stashes: StashState[];
 }
