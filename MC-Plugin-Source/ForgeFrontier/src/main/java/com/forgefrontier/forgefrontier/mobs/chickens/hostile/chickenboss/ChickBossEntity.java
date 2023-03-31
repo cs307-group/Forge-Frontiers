@@ -105,9 +105,9 @@ public class ChickBossEntity extends HostileChickenEntity {
 
     private double getRandMod() {
         if (Math.random() < 0.5) {
-            return -2 - (8 * Math.random());
+            return -2 - (6 * Math.random());
         } else {
-            return 2 + (8 * Math.random());
+            return 2 + (6 * Math.random());
         }
     }
 }

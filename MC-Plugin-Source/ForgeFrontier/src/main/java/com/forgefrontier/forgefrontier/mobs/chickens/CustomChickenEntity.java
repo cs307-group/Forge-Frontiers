@@ -10,6 +10,9 @@ import net.minecraft.world.level.Level;
  */
 public abstract class CustomChickenEntity extends Chicken implements CustomEntity {
 
+    private final int expensiveTickVal = 40;
+    private int expensiveTickCurrVal = 0;
+
     public CustomChickenEntity(EntityType<? extends Chicken> entityTypes, Level world) {
         super(entityTypes, world);
     }
@@ -36,5 +39,14 @@ public abstract class CustomChickenEntity extends Chicken implements CustomEntit
      */
     @Override
     public void customTick() {
+    }
+
+    public boolean determineExpensive() {
+        if (expensiveTickCurrVal == expensiveTickVal) {
+            expensiveTickCurrVal = 0;
+            return true;
+        }
+        expensiveTickCurrVal++;
+        return false;
     }
 }

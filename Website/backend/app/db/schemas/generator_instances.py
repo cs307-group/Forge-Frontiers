@@ -64,4 +64,5 @@ class GeneratorInstances(db.Model):
             "location_z": self.location_z,
             "location_world": self.location_world,
             "island_id": self.island_id,
+            "generator_id": self.generator_id,
         }
