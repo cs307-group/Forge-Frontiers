@@ -4,6 +4,7 @@ export interface UserData {
   created_at: number;
   is_admin: boolean;
   mc_user: string;
+  island_id: string;
 }
 
 export interface UserDataSecure extends UserData {
@@ -54,7 +55,7 @@ export interface MarketStateFetch {
   counts: Record<number, number>;
 }
 
-export interface GeneratorStateFetch {
+export interface GeneratorState {
   id_: string
   level: number;
   last_collection_time: number;
@@ -63,4 +64,8 @@ export interface GeneratorStateFetch {
   location_z: number;
   location_world: string;
   island_id: string;
+}
+
+export interface GeneratorStateFetch {
+  generators: GeneratorState[];
 }
