@@ -11,7 +11,7 @@ import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {getOrdersForSlotId} from "@/handlers/market";
 import {BazaarLookup, MarketState} from "@/handlers/types";
 import {ChevronIcon} from "@/icons/ChevronIcon";
-import {$Iterator, _collectors, arrayIter} from "@hydrophobefireman/lazy";
+import {_collectors, arrayIter} from "@hydrophobefireman/lazy";
 
 const {ARRAY_COLLECTOR} = _collectors;
 const intl = new Intl.DateTimeFormat("en", {

@@ -6,7 +6,7 @@ from app.db.queries.generators import (
 
 router = Blueprint("generators", __name__, url_prefix="/generators")
 
-@router.get("/<str:island_id>")
+@router.get("/<island_id>")
 @api.none
 def api_get_gens(island_id: str):
     print(island_id)
