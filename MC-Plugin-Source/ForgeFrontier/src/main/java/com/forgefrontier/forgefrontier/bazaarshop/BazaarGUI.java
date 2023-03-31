@@ -16,8 +16,13 @@ import java.util.ArrayList;
 
 public class BazaarGUI extends BaseInventoryHolder {
     private BazaarManager bazaarMgr;
+    private int HELP_BOOK = 9 * 5 + 3;
     private int VIEW_PERSONAL_SLOT = 9 * 5 + 4;
+    private int VIEW_STASH = 9 * 5 + 5;
+
+    private ItemStack helpBookItem;
     private ItemStack personalItem;
+    private ItemStack stashItem;
     public BazaarGUI() {
         super(54, "" + ChatColor.GOLD + ChatColor.BOLD + "Bazaar");
         this.bazaarMgr = ForgeFrontier.getInstance().getBazaarManager();
@@ -53,9 +58,19 @@ public class BazaarGUI extends BaseInventoryHolder {
             }
         }
 
-        ItemStack personalItem = new ItemStackBuilder(Material.CHEST_MINECART).setDisplayName("My Orders").build();
+        helpBookItem = new ItemStackBuilder(Material.BOOKSHELF).setDisplayName("Info")
+                .setFullLore("""
+                        Buy and sell common commodities here!
+                        Buy order: List price to buy item.
+                        Sell Order: List items to sell""").build();
+        this.setItem(HELP_BOOK,helpBookItem);
+        personalItem = new ItemStackBuilder(Material.ENCHANTED_BOOK).setDisplayName("My Orders").build();
         this.setItem(VIEW_PERSONAL_SLOT,personalItem);
         this.addHandler(VIEW_PERSONAL_SLOT, this::viewPersonalClick);
+        stashItem = new ItemStackBuilder(Material.CHEST).setDisplayName("My Stash").build();
+        this.setItem(VIEW_STASH,stashItem);
+        this.addHandler(VIEW_STASH, this::viewStashClick);
+
 
 
 
@@ -63,6 +78,10 @@ public class BazaarGUI extends BaseInventoryHolder {
 
     }
 
+    public void viewStashClick(InventoryClickEvent e) {
+        Player p = (Player) e.getWhoClicked();
+        p.openInventory(new ViewStashGUI(size,"My Stash",p.getUniqueId()).getInventory());
+    }
     public void viewPersonalClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
         p.openInventory(new ViewOrdersGUI(size,"My Bazaar Listings", p.getUniqueId()).getInventory());

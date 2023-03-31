@@ -196,26 +196,41 @@ public class Shop {
 
     public boolean loadListing(UUID listing_id, String itemId, String material, String name,
                             String lore, Double price, int amount, UUID listerID, String customData, String playerName) {
-//        if (!customData.equals("")) return false;
-        Material m = Material.matchMaterial(material);
-        if (m == null) {
-            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
-                    "Shop ERROR: loading shop: " + material + " from database.");
-            return false;
+        ItemStack itm;
+        if (!customData.equals("")) {
+            CustomItemInstance cii = CustomItemManager.getInstanceFromData(customData);
+            if (cii == null) {
+                ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                        "Shop ERROR while loading custom item: " + customData);
+                return false;
+            }
+            itm = cii.asItemStack();
         }
+        else {
+            Material m = Material.matchMaterial(material);
+            if (m == null) {
+                ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                        "Shop ERROR: loading shop: " + material + " from database.");
+                return false;
+            }
 
-        ItemStack itm = new ItemStack(m);
-        itm.setAmount(amount);
-        ItemMeta im = itm.getItemMeta();
-        if (im == null) {
-            ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
-                    "Shop ERROR: loading item meta of " + name + " from database.");
-            return false;
+            itm = new ItemStack(m);
+            itm.setAmount(amount);
+            ItemMeta im = itm.getItemMeta();
+            if (im == null && !lore.equals("")) {
+                ForgeFrontier.getInstance().getLogger().log(Level.SEVERE,
+                        "Shop ERROR: loading item meta of " + name + " from database.");
+                return false;
+            } else if (im != null) {
+                if (!lore.equals(""))
+                    im.setLore(List.of(lore.split("\n")));
+                if (!name.equals(ItemUtil.simpleRename(itm.getType())))
+                    im.setDisplayName(name);
+                itm.setItemMeta(im);
+            }
+
+
         }
-        if (!lore.equals(""))
-            im.setLore(List.of(lore.split("\n")));
-        im.setDisplayName(name);
-        itm.setItemMeta(im);
         ShopPlayer sp = new ShopPlayer(listerID, playerName);
         ShopListing sl = new ShopListing(sp,itm,price,listing_id);
         if (this.listings.put(listing_id,sl) != null) {

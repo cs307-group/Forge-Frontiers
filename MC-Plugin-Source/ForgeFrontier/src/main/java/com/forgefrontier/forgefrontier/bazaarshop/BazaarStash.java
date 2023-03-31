@@ -7,18 +7,21 @@ public class BazaarStash {
     private UUID playerID;
     private int amount;
     private int itemID;
+    private boolean redeemed;
 
     public BazaarStash(BazaarEntry be, int amt) {
         this.orderID = be.getEntryID();
         this.playerID = be.getListerID();
         this.amount = amt;
         this.itemID = be.getSlotID();
+        redeemed = false;
     }
     public BazaarStash(UUID orderID, UUID playerID, int amount, int itemID) {
         this.orderID = orderID;
         this.playerID = playerID;
         this.amount = amount;
         this.itemID = itemID;
+        redeemed = false;
     }
 
     public BazaarStash(BazaarStash bs) {
@@ -26,6 +29,15 @@ public class BazaarStash {
         this.playerID = bs.playerID;
         this.amount = bs.amount;
         this.itemID = bs.itemID;
+        redeemed = false;
+    }
+
+    public void setRedeemed() {
+        this.redeemed = true;
+    }
+
+    public boolean isRedeemed() {
+        return redeemed;
     }
 
     public UUID getOrderID() {

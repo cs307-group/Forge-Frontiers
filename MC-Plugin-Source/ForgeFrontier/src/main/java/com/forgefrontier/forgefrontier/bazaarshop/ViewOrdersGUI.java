@@ -2,11 +2,13 @@ package com.forgefrontier.forgefrontier.bazaarshop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
+import com.forgefrontier.forgefrontier.gui.ConfirmationHolder;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -50,9 +52,18 @@ public class ViewOrdersGUI extends BaseInventoryHolder {
             if (slot > rows * 7) break;
             BazaarEntry be = listings.get(i);
             this.setItem(slot, getDisplayable(be));
+            this.addHandler(slot, (e) -> openRemove(e, be));
         }
     }
-
+    public void openRemove(InventoryClickEvent e, BazaarEntry listing) {
+        Player p = (Player) e.getWhoClicked();
+        p.openInventory(new ConfirmationHolder("Delete Listing?",
+                null,() -> {
+            p.closeInventory();
+            bazaarManager.removeListingAsync(listing, (b) ->
+                    p.sendMessage("" + BazaarManager.bazaarPrefix + "Refunded listing!"));
+        }).getInventory());
+    }
     public ItemStack getDisplayable(BazaarEntry be) {
         ItemStack realItem = bazaarManager.getRealItem(be.getSlotID());
         StringBuilder loreLines = new StringBuilder();

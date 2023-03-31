@@ -3,14 +3,14 @@ package com.forgefrontier.forgefrontier.connections;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarEntry;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarStash;
+import com.forgefrontier.forgefrontier.items.CustomItemInstance;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import org.bukkit.inventory.ItemStack;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class BazaarDB extends DBConnection {
@@ -151,7 +151,10 @@ public class BazaarDB extends DBConnection {
                 if (custom_data.isEmpty()) {
                     out.set(slotID, new ItemStackBuilder(material).setDisplayName(name).setFullLore(lore).build());
                 } else {
-
+                    // Create custom item
+                    CustomItemInstance cii = CustomItemManager.getInstanceFromData(custom_data);
+                    if (cii == null) continue;
+                    out.set(slotID, cii.asItemStack());
                 }
             }
             return out;
@@ -185,6 +188,29 @@ public class BazaarDB extends DBConnection {
         for (BazaarEntry be : toDelete)
             wrapper.addDeleteable("order_id", be.getEntryID().toString());
         return wrapper.executeSyncQuery(this.dbConn);
+    }
+
+    public HashMap<UUID, ArrayList<BazaarStash>> loadStash() {
+        HashMap<UUID, ArrayList<BazaarStash>> pStashes = new HashMap<>();
+        SelectQueryWrapper wrapper = new SelectQueryWrapper();
+        wrapper.setTable("public.bazaar_redeem");
+        wrapper.setFields("order_id", "player_id", "item_id", "amount");
+        ResultSet rs = wrapper.executeSyncQuery(dbConn);
+
+        try {
+            while (rs != null && rs.next()) {
+                UUID orderID = UUID.fromString(rs.getString("order_id"));
+                UUID playerID = UUID.fromString(rs.getString("player_id"));
+                int item_id = rs.getInt("item_id");
+                int amount = rs.getInt("amount");
+                pStashes.computeIfAbsent(playerID, k -> new ArrayList<>());
+                pStashes.get(playerID).add(new BazaarStash(orderID, playerID, amount, item_id));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return pStashes;
+        }
+        return pStashes;
     }
 
     public boolean stashInsertUpdate(BazaarStash bs) {
@@ -224,6 +250,28 @@ public class BazaarDB extends DBConnection {
         }
     }
 
+    public void removeStash(BazaarStash stash, Consumer<Boolean> c) {
+        DeleteQueryWrapper wrapper = new DeleteQueryWrapper();
+        wrapper.setTable("public.bazaar_redeem");
+        wrapper.addCondition("order_id = %id%", "id");
+        wrapper.addValue("id", stash.getOrderID().toString());
+        wrapper.executeAsyncQuery(dbConn,c);
+    }
 
+    public void removeOrder(BazaarEntry entry, Consumer<Boolean> c) {
+        DeleteQueryWrapper wrapper = new DeleteQueryWrapper();
+        wrapper.setTable("public.bazaar_orders");
+        wrapper.addCondition("order_id = %id%", "id");
+        wrapper.addValue("id", entry.getEntryID().toString());
+        wrapper.executeAsyncQuery(this.dbConn, c);
+    }
+
+    public boolean removeOrderSync(BazaarEntry entry) {
+        DeleteQueryWrapper wrapper = new DeleteQueryWrapper();
+        wrapper.setTable("public.bazaar_orders");
+        wrapper.addCondition("order_id = %id%", "id");
+        wrapper.addValue("id", entry.getEntryID().toString());
+        return wrapper.executeSyncQuery(this.dbConn);
+    }
 
 }

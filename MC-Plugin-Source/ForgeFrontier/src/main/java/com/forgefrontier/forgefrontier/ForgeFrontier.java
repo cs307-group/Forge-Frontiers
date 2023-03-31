@@ -162,7 +162,7 @@ public class ForgeFrontier extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.databaseManager.disable();
+        this.fishingManager.disable();
         this.generatorManager.disable();
         this.stashManager.disable();
         this.customItemManager.disable();
@@ -170,6 +170,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.gearItemManager.disable();
         this.customEntityManager.disable();
         this.miningManager.disable();
+        this.databaseManager.disable();
     }
 
     private void createConfig(String name) {
@@ -196,7 +197,7 @@ public class ForgeFrontier extends JavaPlugin {
         registerCommand("gen"          , new GeneratorCommandExecutor());
         registerCommand("genshop"      , new GeneratorShopCommandExecutor());
         registerCommand("gearshop"     , new GearShopCommandExecutor());
-        registerCommand("shop"         , itemShop.getCommandExecutor());
+        registerCommand("pshop"         , itemShop.getCommandExecutor());
         registerCommand("inspect"      , new InspectCommandExecutor());
         registerCommand("island"       , new IslandCommandExecutor());
         registerCommand("link"         , new LinkCommandExecutor());

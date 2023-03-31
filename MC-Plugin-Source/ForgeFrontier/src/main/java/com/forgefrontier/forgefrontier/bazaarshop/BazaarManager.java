@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.AbstractMap.SimpleEntry;
 import java.awt.desktop.OpenFilesEvent;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class BazaarManager {
@@ -31,6 +32,8 @@ public class BazaarManager {
     // { PlayerID -> Bazaar Entry }
     private HashMap<String, ArrayList<BazaarEntry>> playerListings;
 
+    // PlayerID -> Bazaar Stashes
+    private HashMap<UUID, ArrayList<BazaarStash>> playerStashes;
 
     // Items to be compared to ("looked up")
     private ArrayList<ItemStack> lookupItems;
@@ -59,7 +62,7 @@ public class BazaarManager {
         this.bazaarDB = plugin.getDatabaseManager().getBazaarDB();
         // Pull Bazaar items from database
         lookupItems = bazaarDB.loadLookup(MAX_SLOT);
-
+        playerStashes = bazaarDB.loadStash();
         // Replace nulls in lookup with unreachable items
         lookupItems.replaceAll(x -> Objects.isNull(x) ? DEFAULT_NULL_ITEM : x);
         displayItems = new ArrayList<>(Collections.nCopies(MAX_SLOT, DEFAULT_NULL_ITEM));
@@ -151,6 +154,7 @@ public class BazaarManager {
             String priceLore = "" + buyStr + "\n" + sellStr;
             ItemStack lookupItm = lookupItems.get(i);
             String lore = ItemUtil.getStringLore(lookupItm);
+            if (!lore.equals("")) lore += "\n";
             lore += priceLore;
             ItemStack displayItem = new ItemStackBuilder(lookupItm.getType())
                     .setDisplayName(ItemUtil.itemName(lookupItm)).setFullLore(lore).build();
@@ -260,6 +264,8 @@ public class BazaarManager {
             // Failure in step 1 or 2 -> Revert
 
             BazaarStash bs = new BazaarStash(be, be.getAmount());
+            playerStashes.computeIfAbsent(bs.getPlayerID(), k -> new ArrayList<>());
+            playerStashes.get(bs.getPlayerID()).add(bs);
             if (!bazaarDB.stashInsertUpdate(bs)) {
                 plugin.getLogger().log(Level.SEVERE, "BAZAAR STASH UPDATE FAILURE...");
             } else {
@@ -271,6 +277,8 @@ public class BazaarManager {
         // Partial
         if (modified != null) {
             BazaarStash bs = new BazaarStash(modified, modifiedOrig.getAmount() - modified.getAmount());
+            playerStashes.computeIfAbsent(bs.getPlayerID(), k -> new ArrayList<>());
+            playerStashes.get(bs.getPlayerID()).add(bs);
             if (!bazaarDB.stashInsertUpdate(bs)) {
                 plugin.getLogger().log(Level.SEVERE, "BAZAAR STASH UPDATE FAILURE...");
             } else {
@@ -480,4 +488,67 @@ public class BazaarManager {
     public ArrayList<BazaarEntry> getPlayerListings(UUID playerUUID) {
         return this.playerListings.get(playerUUID.toString());
     }
+
+    public void refundListing(BazaarEntry listing) {
+        OfflinePlayer p = plugin.getServer().getOfflinePlayer(listing.getListerID());
+        if (listing.getBType()) {
+            // Buy listing, return money
+            econ.depositPlayer(p,listing.getAmount() * listing.getPrice());
+        } else {
+            BazaarStash bStash = new BazaarStash(listing, listing.getAmount());
+            bazaarDB.stashInsertUpdate(bStash);
+            playerStashes.computeIfAbsent(bStash.getPlayerID(), k -> new ArrayList<>());
+            playerStashes.get(bStash.getPlayerID()).add(bStash);
+        }
+    }
+
+    ArrayList<BazaarStash> getBazaarStash(UUID player) {
+        return this.playerStashes.get(player);
+    }
+
+    public void removeListingSync(BazaarEntry listing) {
+        if (!listing.getValid()) return;
+        else {
+            if (listing.getBType()) {
+                buyLookup.get(listing.getSlotID()).removeIf(
+                        (be) -> be.getEntryID().toString().equals(listing.getEntryID().toString()));
+            } else {
+                sellLookup.get(listing.getSlotID()).removeIf(
+                        (be) -> be.getEntryID().toString().equals(listing.getEntryID().toString()));
+            }
+        }
+        listing.setValid(false);
+        bazaarDB.removeOrderSync(listing);
+    }
+    public void removeListingAsync(BazaarEntry listing, Consumer<Boolean> callback) {
+        if (!listing.getValid()) return;
+        else {
+            if (listing.getBType()) {
+                buyLookup.get(listing.getSlotID()).removeIf(
+                        (be) -> be.getEntryID().toString().equals(listing.getEntryID().toString()));
+            } else {
+                sellLookup.get(listing.getSlotID()).removeIf(
+                        (be) -> be.getEntryID().toString().equals(listing.getEntryID().toString()));
+            }
+        }
+        listing.setValid(false);
+        bazaarDB.removeOrder(listing, callback);
+    }
+
+    public void doStashRedeem(Player p, BazaarStash bs) {
+        if (!p.getUniqueId().toString().equals(bs.getPlayerID().toString()) || bs.isRedeemed())
+            return;
+
+        bazaarDB.removeStash(bs,(b) -> {
+            if (!b) return;
+            bazaarManager.getBazaarStash(bs.getPlayerID()).removeIf(
+                    (stsh) -> stsh.getOrderID().toString().equals(bs.getOrderID().toString()));
+            ItemStack itm = getRealItem(bs.getItemID());
+            ItemGiver.giveItem(p, itm,bs.getAmount());
+            bs.setRedeemed();
+            p.sendMessage(BazaarManager.bazaarPrefix + "Stash redeemed!");
+
+        });
+    }
+
 }

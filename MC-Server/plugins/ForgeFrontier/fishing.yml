@@ -1,10 +1,10 @@
 fishing-rarities:
-- Common
-- Uncommon
-- Rare
-- Super Rare
-- Ultra Rare
-- Legendary
+- §7Common
+- §2Uncommon
+- §9Rare
+- §dSuper Rare
+- §4§lUltra Rare
+- §6§lLegendary
 items:
   '0':
     '0':
@@ -84,7 +84,7 @@ items:
       custom_data: ''
       name: ''
 base-rate:
-- 0.5
+- 0.3
 - 0.3
 - 0.2
 - 0.1
@@ -92,15 +92,15 @@ base-rate:
 - 0.03
 rod-rate:
   sealuck:
-    '0': 0
-    '1': 0.05
-    '2': 0.1
-    '3': 0.15
-    '4': 1
+  - 1
+  - 1.05
+  - 1.1
+  - 1.15
+  - 10000
 stat-rate:
   fishlevel:
-    '0': 0
-    '1': 0.05
-    '2': 0.1
-    '3': 0.12
-    '4': 1
+  - 1.0
+  - 1.05
+  - 1.1
+  - 1.12
+  - 10000

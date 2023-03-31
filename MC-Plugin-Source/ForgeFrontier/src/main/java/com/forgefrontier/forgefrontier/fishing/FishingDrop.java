@@ -98,7 +98,16 @@ public class FishingDrop {
         return item.clone();
     }
 
+    public int rollNumber(Random r) {
+        int diff = maxAmt - minAmt + 1;
+        int res = r.nextInt() % diff;
+        return res + minAmt;
+    }
+
     public void setItem(ItemStack item) {
         this.item = item;
     }
+
+
+
 }
