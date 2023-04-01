@@ -118,7 +118,18 @@ public class BazaarCommand {
         bazaarManager.createSellListing(p,itm, amount, price);
     }
 
-    @Subcommand({"test"})
+    @Subcommand({"test clear"})
+    public void testClear(CommandSender sender) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage("Unable to run bazaar tests for a non-player.");
+            throw new SenderNotPlayerException();
+        }
+        Player p = (Player) sender;
+        BazaarTests test = new BazaarTests(plugin, p);
+        test.clear();
+    }
+
+    @Subcommand({"test start"})
     public void testCommand(CommandSender sender) {
         if(!(sender instanceof Player)) {
             sender.sendMessage("Unable to run bazaar tests for a non-player.");

@@ -13,6 +13,7 @@ public class HostileChickenEntity extends CustomChickenEntity {
     private float aggroSpeed;
     public long lastDamageTime = 0;
     private double damage;
+    private Player nearestPlayer;
 
     public HostileChickenEntity(EntityType<? extends Chicken> entityTypes, Level world) {
         super(entityTypes, world);
@@ -31,8 +32,11 @@ public class HostileChickenEntity extends CustomChickenEntity {
      * Defines behavior similar to a zombie's default behavior
      */
     public void doHostileBehavior() {
+        boolean expensive = determineExpensive();
         // gets the nearest player as a target
-        Player nearestPlayer = this.getLevel().getNearestPlayer(this, 20.0);
+        if (expensive) {
+            nearestPlayer = this.getLevel().getNearestPlayer(this, 20.0);
+        }
 
         // checks to see if a player was found within range
         if (nearestPlayer != null) {
@@ -42,6 +46,7 @@ public class HostileChickenEntity extends CustomChickenEntity {
             this.setSpeed(aggroSpeed);
             // follow the player
             this.getNavigation().moveTo(nearestPlayer, this.getSpeed());
+            this.lookAt(nearestPlayer, 0, 0);
 
             // check if enough time has passed for the entity to attack, and if so damage the player
             if (spigotPlayer != null && System.currentTimeMillis() - lastDamageTime > 1000 &&

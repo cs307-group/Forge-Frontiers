@@ -1,0 +1,7 @@
+litesniper-max-brush-size: 5
+undo-cache-size: 20
+message-on-login-enabled: true
+
+worldguard-integration-enabled: false
+plotsquared-integration-enabled: false
+update-checker-enabled: true

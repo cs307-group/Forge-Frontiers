@@ -5,6 +5,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import java.sql.*;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 public class UpdateQueryWrapper {
 
@@ -101,6 +102,8 @@ public class UpdateQueryWrapper {
                     preparedStatement.setInt(index, (Integer) value);
                 else if(value instanceof Boolean)
                     preparedStatement.setBoolean(index, (Boolean) value);
+                if (value instanceof Timestamp)
+                    preparedStatement.setTimestamp(index, (Timestamp) value);
                 else
                     ForgeFrontier.getInstance().getLogger().severe("Unable to create sql query. Value is not a primitive type: " + value);
             }
@@ -118,8 +121,11 @@ public class UpdateQueryWrapper {
                     preparedStatement.setInt(index, (Integer) value);
                 if(value instanceof Boolean)
                     preparedStatement.setBoolean(index, (Boolean) value);
+                if (value instanceof Timestamp)
+                    preparedStatement.setTimestamp(index, (Timestamp) value);
                 index += 1;
             }
+            ForgeFrontier.getInstance().getLogger().log(Level.INFO,"UPDATE: " + preparedStatement.toString());
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {

@@ -15,7 +15,7 @@ commands:
     description: "Command for accessing the gear shop."
   reroll:
     description: "Command for accessing the reroll gui."
-  shop:
+  pshop:
     description: "Command for accessing shop GUI."
   inspect:
     description: "Command used to inspect the statistics of players"
