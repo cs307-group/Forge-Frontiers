@@ -102,7 +102,7 @@ export function ProfileViewer({
             </tr>
           </thead>
           <tbody>
-            {shop.map((x) => (
+            {(shop || []).map((x) => (
               <tr key={x.id_}>
                 <td className="px-6 py-4 whitespace-nowrap">{x.item_name}</td>
                 {/* <td className="px-6 py-4 whitespace-nowrap">

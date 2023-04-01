@@ -10,6 +10,7 @@ import {Spacer} from "@/components/Spacer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {getOrdersForSlotId} from "@/handlers/market";
 import {BazaarLookup, MarketState} from "@/handlers/types";
+import {useRefresh} from "@/hooks/use-refresh";
 import {ChevronIcon} from "@/icons/ChevronIcon";
 import {_collectors, arrayIter} from "@hydrophobefireman/lazy";
 
@@ -28,6 +29,7 @@ export default function ViewBySlotId({
     lookup: BazaarLookup;
   };
 }) {
+  useRefresh();
   return (
     <>
       <Head>

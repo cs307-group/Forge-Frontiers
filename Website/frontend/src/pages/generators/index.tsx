@@ -16,6 +16,7 @@ import {
 } from "@/handlers/types";
 import {fetchUserData} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {useRefresh} from "@/hooks/use-refresh";
 
 export default function Generators({
   data: userData,
@@ -41,6 +42,7 @@ export default function Generators({
     e.preventDefault();
     push(updateActionURL);
   }
+  useRefresh(5000);
   return (
     <>
       <Head>

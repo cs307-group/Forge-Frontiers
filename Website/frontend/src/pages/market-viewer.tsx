@@ -56,7 +56,7 @@ export default function Market({
         <form onSubmit={handleSubmit}>
           <div className="w-[95%] mx-auto max-w-[400px]">
             <BaseInput
-              label="Player"
+              label="Items"
               name="q"
               value={search}
               onChange={(e) => {
