@@ -43,7 +43,7 @@ export default function ViewBySlotId({
         <div className="flex items-center justify-center">
           <div
             key={data.lookup.slot_id}
-            className="bg-[#171717] rounded-md p-4 flex flex-col items-center justify-center"
+            className="flex flex-col items-center justify-center rounded-md bg-[#171717] p-4"
           >
             <div className="mx-auto text-center"> {data.lookup.item_name} </div>
             <Image
@@ -131,11 +131,11 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
 
   return (
     <section>
-      <h1 className="font-bold text-3xl mx-auto text-center">
+      <h1 className="mx-auto text-center text-3xl font-bold">
         Offers to {mode}
       </h1>
       <Spacer y={20} />
-      <div className="flex items-center justify-center flxe gap-2">
+      <div className="flxe flex items-center justify-center gap-2">
         Show listings cheaper than:{" "}
         <form
           id={`form-listings-${mode}`}
@@ -166,10 +166,10 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
         </form>
       </div>
       {data?.length ? (
-        <table className="mx-auto divide-y divide-gray-200 w-[95% ] max-w-[600px]">
+        <table className="w-[95% ] mx-auto max-w-[600px] divide-y divide-gray-200">
           <thead>
             <tr className="">
-              <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                 <Link
                   className="flex items-center justify-center hover:underline"
                   href={{
@@ -186,7 +186,7 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
                   </span>
                 </Link>
               </th>
-              <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                 <Link
                   className="flex items-center justify-center hover:underline"
                   href={{
@@ -203,7 +203,7 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
                   </span>
                 </Link>
               </th>
-              <th className="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
+              <th className="hidden cursor-pointer px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 sm:table-cell">
                 <Link
                   className="flex items-center justify-center hover:underline"
                   href={{
@@ -226,9 +226,9 @@ function OfferViewer({mode, data}: {mode: string; data: MarketState[]}) {
             {sortedData
               .map((x) => (
                 <tr key={x.order_id} className="">
-                  <td className="px-6 py-4 whitespace-nowrap">{x.amount}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{x.price}</td>
-                  <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                  <td className="whitespace-nowrap px-6 py-4">{x.amount}</td>
+                  <td className="whitespace-nowrap px-6 py-4">{x.price}</td>
+                  <td className="hidden whitespace-nowrap px-6 py-4 sm:table-cell">
                     <Client fallback={x.listdate}>
                       {intl.format(new Date(x.listdate))}
                     </Client>

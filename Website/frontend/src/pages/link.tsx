@@ -15,14 +15,14 @@ export default function Links() {
       </Head>
       <Auth>
         <AuthSideType>
-          <div className="text-2xl md:text-5xl mt-4">Link</div>
+          <div className="mt-4 text-2xl md:text-5xl">Link</div>
           <LinkAccount />
         </AuthSideType>
         <AuthSideText>
-          <div className="w-full flex items-center flex-col">
-            <div className="text-2xl text-center md:text-5xl">Hello!</div>
+          <div className="flex w-full flex-col items-center">
+            <div className="text-center text-2xl md:text-5xl">Hello!</div>
           </div>
-          <p className="mt-4 text-lg md:text-2xl w-[80%] text-center flex-1 flex items-center justify-center">
+          <p className="mt-4 flex w-[80%] flex-1 items-center justify-center text-center text-lg md:text-2xl">
             It looks like you haven't linked your Forge Frontier Profile to a
             Minecraft account. To generate a code, use the `/link` command. Link
             your account to continue!

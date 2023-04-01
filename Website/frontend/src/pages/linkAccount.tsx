@@ -18,14 +18,14 @@ export default function LinkAcct() {
       </Head>
       <Auth>
         <AuthSideType>
-          <div className="text-2xl md:text-5xl mt-4">Link Account</div>
+          <div className="mt-4 text-2xl md:text-5xl">Link Account</div>
           <LinkAccount />
         </AuthSideType>
         <AuthSideText>
-          <div className="w-full flex-1 flex items-center flex-col justify-between">
-            <div className="text-2xl text-center md:text-5xl">Hello!</div>
+          <div className="flex w-full flex-1 flex-col items-center justify-between">
+            <div className="text-center text-2xl md:text-5xl">Hello!</div>
             <Spacer y={30} />
-            <p className="mt-4 text-lg md:text-2xl w-[80%] text-center">
+            <p className="mt-4 w-[80%] text-center text-lg md:text-2xl">
               It looks like you haven't linked your Forge Frontier Profile to a
               Minecraft Account. Use the '/link' command to generate a code.
               Link your account to continue!

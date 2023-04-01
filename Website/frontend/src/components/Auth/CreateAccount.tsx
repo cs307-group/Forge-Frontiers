@@ -63,7 +63,7 @@ export function CreateAccount() {
         />
         <Spacer y={50} />
         <div className="mx-auto w-[80%]">
-          <Button className="w-full mt-4 p-2">Sign Up</Button>
+          <Button className="mt-4 w-full p-2">Sign Up</Button>
         </div>
         <Spacer y={50} />
         <div>{status.message}</div>

@@ -66,7 +66,7 @@ export default function Generators({
           <Spacer y={60} />
           <form action={updateActionURL} onSubmit={handleSubmit}>
             <div className="flex items-center justify-center">
-              <Button className="w-36 mt-4 p-2">Collect</Button>
+              <Button className="mt-4 w-36 p-2">Collect</Button>
             </div>
           </form>
         </div>

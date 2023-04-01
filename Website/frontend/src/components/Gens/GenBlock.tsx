@@ -66,7 +66,7 @@ function __GenBlock({level, config, last_collection_time}: GenProps) {
     count >= config.levels[level].max_size ? null : 100
   );
   return (
-    <div className="bg-[#171717] rounded-md p-2 h-30">
+    <div className="h-30 rounded-md bg-[#171717] p-2">
       <Spacer y={10} />
       <p>
         Generator Type: {config.resource} level {level}
@@ -88,7 +88,7 @@ function Progress({curr, max}: {curr: number; max: number}) {
   return (
     <div
       style={{"--x-scale": curr / max} as any}
-      className="w-full rounded-xl bg-[#0070f3] h-4 transform-gpu scale-x-[var(--x-scale)] origin-left"
+      className="h-4 w-full origin-left scale-x-[var(--x-scale)] transform-gpu rounded-xl bg-[#0070f3]"
     ></div>
   );
 }

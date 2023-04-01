@@ -54,7 +54,7 @@ export default function Market({
       </Head>
       <AppLayout active="market-viewer" title="Market Viewer">
         <form onSubmit={handleSubmit}>
-          <div className="w-[95%] mx-auto max-w-[400px]">
+          <div className="mx-auto w-[95%] max-w-[400px]">
             <BaseInput
               label="Items"
               name="q"
@@ -64,18 +64,18 @@ export default function Market({
               }}
             />
             <div className="flex items-center justify-end">
-              <Button className="p-2 my-2">Search</Button>
+              <Button className="my-2 p-2">Search</Button>
             </div>
           </div>
         </form>
-        <div className="p-8 grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 p-8">
           {data.lookup.map((b) => (
             <div
               key={b.slot_id}
-              className="bg-[#171717] rounded-md p-4 h-40 flex flex-col"
+              className="flex h-40 flex-col rounded-md bg-[#171717] p-4"
             >
               <div className="mx-auto text-center"> {b.item_name} </div>
-              <div className="flex items-center justify-between flex-1">
+              <div className="flex flex-1 items-center justify-between">
                 {data.cheapest[b.slot_id]?.amount ? (
                   <div>
                     <div>

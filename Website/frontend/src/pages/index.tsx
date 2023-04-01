@@ -17,7 +17,7 @@ export default function Home() {
       </Head>
       <main
         style={raleway.style}
-        className="mx-auto text-center pt-8 forge_background h-full w-full text-white border-[1px] border-transparent"
+        className="forge_background mx-auto h-full w-full border-[1px] border-transparent pt-8 text-center text-white"
       >
         <Image
           className="mx-auto rounded-md"
@@ -28,10 +28,10 @@ export default function Home() {
         />
         <div>Welcome to Forge Frontiers</div>
         <br />
-        <div className="flex items-center justify-center gap-4 mt-6">
+        <div className="mt-6 flex items-center justify-center gap-4">
           <div>
             <Link
-              className="bg-white inline-block w-24 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+              className="inline-block w-24 rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100"
               href="/login"
             >
               Login
@@ -40,7 +40,7 @@ export default function Home() {
 
           <div>
             <Link
-              className="bg-white inline-block w-24 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+              className="inline-block w-24 rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100"
               href="/register"
             >
               Register

@@ -37,9 +37,9 @@ export function ProfileViewer({
   useRefresh(5000);
   return (
     <div>
-      <div className="sm:block flex items-center justify-center">
+      <div className="flex items-center justify-center sm:block">
         <Image
-          className="h-80 w-40 mt-4"
+          className="mt-4 h-80 w-40"
           width={316}
           priority
           height={512}
@@ -52,12 +52,12 @@ export function ProfileViewer({
         />
       </div>
       <div className="flex-1">
-        <table className="mx-auto divide-y divide-gray-200 w-full max-w-[600px]">
+        <table className="mx-auto w-full max-w-[600px] divide-y divide-gray-200">
           <thead>
             <tr>
               {Object.keys(stats).map((x) => (
                 <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                   key={x}
                 >
                   {keyToTableMap[x as keyof PlayerStats]}
@@ -69,7 +69,7 @@ export function ProfileViewer({
             <tr>
               {Object.entries(stats).map((x) => (
                 <td
-                  className="px-6 py-4 whitespace-nowrap"
+                  className="whitespace-nowrap px-6 py-4"
                   key={`${x[0]}-${x[1]}`}
                 >
                   <span>{x[1] as any}</span>
@@ -79,21 +79,21 @@ export function ProfileViewer({
           </tbody>
         </table>
       </div>
-      <div className="flex item-center justify-between">
+      <div className="item-center flex justify-between">
         <h2 className="text-xl">Inventory</h2>
       </div>
-      <div className="flex item-center justify-between">
+      <div className="item-center flex justify-between">
         <div></div>
       </div>
       <Spacer y={100} />
-      <h2 className="text-xl text-center bold my-8">Market Listings</h2>
+      <h2 className="bold my-8 text-center text-xl">Market Listings</h2>
       <div>
-        <table className="mx-auto divide-y divide-gray-200 w-full max-w-[600px]">
+        <table className="mx-auto w-full max-w-[600px] divide-y divide-gray-200">
           <thead>
             <tr>
               {Object.keys(shopDataKeys).map((x) => (
                 <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                   key={x}
                 >
                   {shopDataKeys[x as keyof typeof shopDataKeys]}
@@ -104,16 +104,16 @@ export function ProfileViewer({
           <tbody>
             {(shop || []).map((x) => (
               <tr key={x.id_}>
-                <td className="px-6 py-4 whitespace-nowrap">{x.item_name}</td>
+                <td className="whitespace-nowrap px-6 py-4">{x.item_name}</td>
                 {/* <td className="px-6 py-4 whitespace-nowrap">
                   {x.item_material}
                 </td> */}
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="whitespace-nowrap px-6 py-4">
                   {x.item_lore || "unknown"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{x.price}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{x.amount}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="whitespace-nowrap px-6 py-4">{x.price}</td>
+                <td className="whitespace-nowrap px-6 py-4">{x.amount}</td>
+                <td className="whitespace-nowrap px-6 py-4">
                   {x.date_sold == -1 ? "Not Sold Yet" : ""}
                 </td>
               </tr>

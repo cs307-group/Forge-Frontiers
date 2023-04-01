@@ -8,27 +8,27 @@ export interface AuthProps extends PropsWithChildren {}
 export function Auth({children}: AuthProps) {
   return (
     // don't ask me why the border-1 border-transparent is needed
-    <main className="forge_background h-full w-full text-white border-[1px] border-transparent">
+    <main className="forge_background h-full w-full border-[1px] border-transparent text-white">
       <motion.section
         layout
-        className="mx-auto mt-8 flex items-center justify-center flex-col"
+        className="mx-auto mt-8 flex flex-col items-center justify-center"
       >
         <Link
           href="/"
           style={raleway.style}
-          className="text-ff-theme text-5xl mb-4"
+          className="mb-4 text-5xl text-ff-theme"
         >
           Forge Frontier
         </Link>
         <motion.div
           layout
           style={raleway.style}
-          className="border-2 border-white w-[90%] sm:w-7/12 mt-4 rounded-md bg-white"
+          className="mt-4 w-[90%] rounded-md border-2 border-white bg-white sm:w-7/12"
         >
           <motion.div
             style={raleway.style}
             layout
-            className="sm:grid grid-cols-2"
+            className="grid-cols-2 sm:grid"
           >
             {children}
           </motion.div>
@@ -43,7 +43,7 @@ export function AuthSideText({children}: AuthProps) {
     <motion.div
       layout
       layoutId="auth-text"
-      className="bg-[#FDF0AD] flex items-center flex-col justify-center text-black rounded-tr-md rounded-br-md p-8"
+      className="flex flex-col items-center justify-center rounded-br-md rounded-tr-md bg-[#FDF0AD] p-8 text-black"
     >
       {children}
     </motion.div>
@@ -55,7 +55,7 @@ export function AuthSideType({children}: AuthProps) {
     <motion.div
       layout
       layoutId="auth-type"
-      className="bg-[#262C2C] flex items-center flex-col justify-center text-white rounded-tl-md rounded-bl-md p-4"
+      className="flex flex-col items-center justify-center rounded-bl-md rounded-tl-md bg-[#262C2C] p-4 text-white"
     >
       {children}
     </motion.div>

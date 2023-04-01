@@ -18,7 +18,7 @@ export interface BaseInputProps extends CustomInputProps {
 export function BaseInput({label, hideLabel, icon, ...rest}: BaseInputProps) {
   const id = useId();
   return (
-    <div className="flex flex-col gap-3 relative">
+    <div className="relative flex flex-col gap-3">
       <label htmlFor={id} className={hideLabel ? "sr-only" : "text-xl"}>
         {label}
       </label>
@@ -28,7 +28,7 @@ export function BaseInput({label, hideLabel, icon, ...rest}: BaseInputProps) {
       <input
         id={id}
         className={clsx(
-          "border-2 border-white outline-none rounded-sm bg-[#262C2C] h-10",
+          "h-10 rounded-sm border-2 border-white bg-[#262C2C] outline-none",
           icon ? "pl-8" : "pl-4"
         )}
         {...rest}

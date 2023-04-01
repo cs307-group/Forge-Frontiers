@@ -27,19 +27,19 @@ function Menu({active}: LayoutProps) {
 
 export function AppLayout({children, active, title}: LayoutProps) {
   return (
-    <div className="forge_background h-full w-full text-white border-[1px] border-transparent flex flex-col sm:block">
-      <div className="sm:w-full sm:flex sm:flex-row sm:flex-nowrap sm:h-fit sm:min-h-full sm:flex-grow">
+    <div className="forge_background flex h-full w-full flex-col border-[1px] border-transparent text-white sm:block">
+      <div className="sm:flex sm:h-fit sm:min-h-full sm:w-full sm:flex-grow sm:flex-row sm:flex-nowrap">
         <Client
-          fallback={<div data-ssr-skeleton className="sm:w-[200px] h-12"></div>}
+          fallback={<div data-ssr-skeleton className="h-12 sm:w-[200px]"></div>}
         >
           <Menu active={active} />
         </Client>
         <main
           role="main"
-          className="flex-1 sm:w-full sm:flex-grow sm:pt-1 sm:px-8 sm:rounded-2xl sm:bg-[#262C2C] sm:m-4"
+          className="flex-1 sm:m-4 sm:w-full sm:flex-grow sm:rounded-2xl sm:bg-[#262C2C] sm:px-8 sm:pt-1"
         >
           {title && (
-            <div className="text-2xl mt-4 text-center sm:text-left">
+            <div className="mt-4 text-center text-2xl sm:text-left">
               <span className="border-b-2 border-ff-theme">{title}</span>
             </div>
           )}
@@ -53,13 +53,13 @@ export function AppLayout({children, active, title}: LayoutProps) {
 function MobileHeader({active}: {active: string | null}) {
   const [open, setOpen] = useState(false);
   return (
-    <header className="h-12 flex relative">
+    <header className="relative flex h-12">
       <MobileNav open={open} setOpen={setOpen} active={active} />
-      <div className="text-ff-theme text-xl flex-1 items-center justify-center flex">
+      <div className="flex flex-1 items-center justify-center text-xl text-ff-theme">
         Forge Frontier
       </div>
       <button
-        className="absolute top-0 right-4 bottom-0"
+        className="absolute bottom-0 right-4 top-0"
         onClick={() => setOpen(!open)}
       >
         <MenuIcon />
@@ -69,8 +69,8 @@ function MobileHeader({active}: {active: string | null}) {
 }
 function DesktopSideBar({active}: {active: string | null}) {
   return (
-    <div className="flex-shrink flex-grow-0 px-4 m-4 min-w-[200px] rounded-2xl bg-[#262C2C] flex flex-col items-center">
-      <Link href="/" className="text-ff-theme text-xl ff_shadow my-6">
+    <div className="m-4 flex min-w-[200px] flex-shrink flex-grow-0 flex-col items-center rounded-2xl bg-[#262C2C] px-4">
+      <Link href="/" className="ff_shadow my-6 text-xl text-ff-theme">
         Forge Frontier
       </Link>
       <nav className="flex flex-col items-center gap-6 text-lg">
@@ -84,7 +84,7 @@ function DesktopSideBar({active}: {active: string | null}) {
           </Link>
         ))}
       </nav>
-      <div className="flex-1 flex items-end mb-4 text-lg">
+      <div className="mb-4 flex flex-1 items-end text-lg">
         <Link href="/settings">Account Settings</Link>
       </div>
     </div>
@@ -112,14 +112,14 @@ function MobileNav({
         }
       }}
       className={
-        "h-screen w-screen transition flex-col m-auto flex fixed z-[1000] items-center justify-end bg-[#3030307a] " +
-        (open ? "" : "pointer-events-none user-select-none opacity-0")
+        "fixed z-[1000] m-auto flex h-screen w-screen flex-col items-center justify-end bg-[#3030307a] transition " +
+        (open ? "" : "user-select-none pointer-events-none opacity-0")
       }
     >
       <nav
         data-clickgrab="1"
         className={
-          "flex flex-col items-center gap-6 text-lg py-4 bg-[#262C2C] rounded-t-lg w-[98%] transition " +
+          "flex w-[98%] flex-col items-center gap-6 rounded-t-lg bg-[#262C2C] py-4 text-lg transition " +
           (open ? "" : "translate-y-64")
         }
       >

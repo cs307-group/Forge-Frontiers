@@ -202,7 +202,7 @@ export default function ViewBySlotIdGraph({
         <div className="flex items-center justify-center">
           <div
             key={data.lookup.slot_id}
-            className="bg-[#171717] rounded-md p-4 flex flex-col items-center justify-center"
+            className="flex flex-col items-center justify-center rounded-md bg-[#171717] p-4"
           >
             <div className="mx-auto text-center"> {data.lookup.item_name} </div>
             <Image
@@ -215,13 +215,13 @@ export default function ViewBySlotIdGraph({
         </div>
         <Spacer y={30} />
 
-        <div className="w-[90%] h-96 bg-white rounded-md mx-auto">
+        <div className="mx-auto h-96 w-[90%] rounded-md bg-white">
           <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
         <Spacer y={100} />
         <div>
-          <div className="text-xl mx-auto text-center mb-4">Range</div>
-          <div className="mx-auto flex items-center flex-row justify-center gap-4 text-black">
+          <div className="mx-auto mb-4 text-center text-xl">Range</div>
+          <div className="mx-auto flex flex-row items-center justify-center gap-4 text-black">
             <input
               type="date"
               value={dateFmt(start)}

@@ -18,15 +18,15 @@ export default function Login() {
       </Head>
       <Auth>
         <AuthSideType>
-          <div className="text-2xl md:text-5xl mt-4">Login</div>
+          <div className="mt-4 text-2xl md:text-5xl">Login</div>
           <LoginToAccount />
         </AuthSideType>
         <AuthSideText>
-          <div className="w-full flex-1 flex items-center flex-col justify-between">
-            <div className="text-2xl text-center md:text-5xl">
+          <div className="flex w-full flex-1 flex-col items-center justify-between">
+            <div className="text-center text-2xl md:text-5xl">
               Welcome Back!
             </div>
-            <p className="mt-4 text-lg md:text-2xl w-[80%] text-center">
+            <p className="mt-4 w-[80%] text-center text-lg md:text-2xl">
               Good to see you again. The world of Forge Frontier eagerly awaits
               your return.
             </p>

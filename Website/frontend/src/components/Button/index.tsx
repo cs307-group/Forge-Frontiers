@@ -10,7 +10,7 @@ export function Button({children, className, ...rest}: ButtonProps) {
   return (
     <button
       className={clsx(
-        "bg-ff-gradient text-black text-xl rounded-3xl transition px-8 hover:scale-95",
+        "rounded-3xl bg-ff-gradient px-8 text-xl text-black transition hover:scale-95",
         className
       )}
       {...rest}

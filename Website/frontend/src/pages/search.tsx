@@ -45,7 +45,7 @@ export default function Search({
       </Head>
       <AppLayout active="search" title="Search">
         <form onSubmit={handleSubmit}>
-          <div className="w-[95%] mx-auto max-w-[400px]">
+          <div className="mx-auto w-[95%] max-w-[400px]">
             <BaseInput
               label="Player"
               name="q"
@@ -55,11 +55,11 @@ export default function Search({
               }}
             />
             <div className="flex items-center justify-end">
-              <Button className="p-2 my-2">Search</Button>
+              <Button className="my-2 p-2">Search</Button>
             </div>
           </div>
         </form>
-        <ul className="mx-auto max-w-[400px] w-[95%]">
+        <ul className="mx-auto w-[95%] max-w-[400px]">
           {data?.length > 0
             ? (DUP_RES
                 ? data.concat(data).concat(data).concat(data)
@@ -68,7 +68,7 @@ export default function Search({
                 <li key={item.id_} className="w-full rounded-md py-2">
                   <Link
                     href={`/profile/view/${item.id_}`}
-                    className="flex items-center w-full gap-2"
+                    className="flex w-full items-center gap-2"
                   >
                     <Image
                       className="h-10 w-10"
@@ -93,10 +93,10 @@ export default function Search({
                     Your search did not return any results. You could try:
                   </div>
                   <ul>
-                    <li className="list-disc ml-8">
+                    <li className="ml-8 list-disc">
                       Ensuring you did not make any typos
                     </li>
-                    <li className="list-disc ml-8">
+                    <li className="ml-8 list-disc">
                       Searching a part of the username
                     </li>
                   </ul>
