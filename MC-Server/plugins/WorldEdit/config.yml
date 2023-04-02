@@ -27,7 +27,7 @@ limits:
         maximum: 20
     max-radius: -1
     max-super-pickaxe-size: 5
-    max-brush-radius: 5
+    max-brush-radius: 50
     butcher-radius:
         default: -1
         maximum: -1
