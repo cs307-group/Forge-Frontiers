@@ -7,7 +7,7 @@
   ],
   "requirePermission": false,
   "blueprints": {
-    "NORMAL": "forge-island",
+    "NORMAL": "cave-island",
     "NETHER": "nether-island",
     "THE_END": "end-island"
   },
