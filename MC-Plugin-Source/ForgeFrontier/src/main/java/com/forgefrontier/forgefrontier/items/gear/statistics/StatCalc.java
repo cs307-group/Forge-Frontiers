@@ -81,7 +81,7 @@ public class StatCalc {
      * @param stat the statistic to be updated
      * @return the calculated total stat value
      */
-    public static double calculateTotalStat(PlayerStat stat) {
+    public static int calculateTotalStat(PlayerStat stat) {
         ArrayList<Double> percentages = stat.getPercentages();
 
         double totalStat = 1;
@@ -89,7 +89,11 @@ public class StatCalc {
             double percentage = percentages.get(i);
             totalStat *= (1.0 - percentage);
         }
-        totalStat = stat.getBaseValue() * (1.0 - totalStat);
-        return stat.getBaseValue() + totalStat;
+        if (stat.getStatType() == StatEnum.CDMG || stat.getStatType() == StatEnum.CRATE) {
+            totalStat = stat.getBaseValue() + 100 * (1.0 - totalStat);
+        } else {
+            totalStat = stat.getBaseValue() * (1.0 - totalStat);
+        }
+        return (int) (stat.getBaseValue() + totalStat);
     }
 }

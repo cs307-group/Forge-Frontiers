@@ -90,7 +90,9 @@ public class CustomEntityManager extends Manager implements Listener {
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
         CraftLivingEntity entity = (CraftLivingEntity) event.getEntity();
 
-        if (entity.hasMetadata("code")) {
+        if (entity.hasMetadata("dynamic")) {
+
+        } else if (entity.hasMetadata("code")) {
             // checks if the entity is a hitbox entity
             if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {
                 // sets the nameplate of the entity

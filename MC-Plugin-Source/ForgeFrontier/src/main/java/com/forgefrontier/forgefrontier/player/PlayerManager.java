@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -125,6 +126,28 @@ public class PlayerManager extends Manager implements Listener {
         Player player = event.getPlayer();
         FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
         ffPlayer.respawn();
+    }
+
+    /**
+     * handles when the player levels up
+     *
+     * @param event the level change event
+     */
+    @EventHandler
+    public void onPlayerLevelChange(PlayerLevelChangeEvent event) {
+       int newLevel = event.getNewLevel();
+       int oldLevel = event.getOldLevel();
+       Player player = event.getPlayer();
+       FFPlayer ffPlayer = getFFPlayerFromID(player.getUniqueId());
+       if (oldLevel < newLevel) {
+           for (int i = 0; i < newLevel - oldLevel; i++) {
+               ffPlayer.levelUp();
+           }
+       } else if (oldLevel > newLevel) {
+           for (int i = 0; i < oldLevel - newLevel; i++) {
+               ffPlayer.levelDown();
+           }
+       }
     }
 
     /** Getter */

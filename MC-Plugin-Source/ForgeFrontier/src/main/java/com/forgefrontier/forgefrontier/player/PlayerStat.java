@@ -59,10 +59,14 @@ public class PlayerStat extends CustomStat {
                 baseValue += stat.getStatValue();
             }
         } else if (stat instanceof BaseStatistic) {
-            baseValue += stat.getStatValue();
+            if (stat.getStatType() == StatEnum.CDMG || stat.getStatType() == StatEnum.CRATE) {
+                percentages.add(((double) stat.getStatValue()) / 100);
+            } else {
+                baseValue += stat.getStatValue();
+            }
         }
 
-        this.setStatValue((int) StatCalc.calculateTotalStat(this));
+        this.setStatValue(StatCalc.calculateTotalStat(this));
     }
 
     /** removes a stat modifier from the PlayerStat */
@@ -74,11 +78,14 @@ public class PlayerStat extends CustomStat {
                 baseValue -= stat.getStatValue();
             }
         } else if (stat instanceof BaseStatistic) {
-            baseValue -= stat.getStatValue();
+            if (stat.getStatType() == StatEnum.CDMG || stat.getStatType() == StatEnum.CRATE) {
+                percentages.remove(((double) stat.getStatValue()) / 100);
+            } else {
+                baseValue -= stat.getStatValue();
+            }
         }
 
-        this.setStatValue((int) StatCalc.calculateTotalStat(this));
-
+        this.setStatValue(StatCalc.calculateTotalStat(this));
     }
 
     /** returns the percentages array */

@@ -22,16 +22,6 @@ import java.util.function.Consumer;
  */
 public class FFPlayer {
 
-    public static final PlayerStat[] baseStats = new PlayerStat[] {
-            new PlayerStat(20, StatEnum.HP),
-            new PlayerStat(1, StatEnum.ATK),
-            new PlayerStat(0, StatEnum.STR),
-            new PlayerStat(0, StatEnum.DEX),
-            new PlayerStat(0, StatEnum.CRATE),
-            new PlayerStat(0, StatEnum.CDMG),
-            new PlayerStat(0, StatEnum.DEF)
-    };
-
     /** an array of PlayerStat objects which represent the stats of the player */
     private final PlayerStat[] stats;
 
@@ -40,6 +30,9 @@ public class FFPlayer {
 
     /** the tier the current player is in */
     public int tier;
+
+    /** the ascension level of the player */
+    public int ascensionLevel;
 
     /** the current health of the player */
     double currentHealth;
@@ -85,7 +78,6 @@ public class FFPlayer {
 
         playerID = player.getUniqueId();
 
-
         stats = new PlayerStat[] {
                 new PlayerStat(20, StatEnum.HP),
                 new PlayerStat(1, StatEnum.ATK),
@@ -99,6 +91,7 @@ public class FFPlayer {
         this.currentHealth = getHP();
 
         this.tier = 0;
+        this.ascensionLevel = 0;
     }
 
 
@@ -124,6 +117,9 @@ public class FFPlayer {
         };
 
         this.currentHealth = getHP();
+
+        this.tier = 0;
+        this.ascensionLevel = 0;
     }
 
 
@@ -142,6 +138,9 @@ public class FFPlayer {
         this.stats = stats;
 
         this.currentHealth = currentHealth;
+
+        this.tier = 0;
+        this.ascensionLevel = 0;
     }
 
     /**
@@ -155,8 +154,26 @@ public class FFPlayer {
      * Increases all player stats by one on level up
      */
     public void levelUp() {
-        for (int i = 0; i < stats.length; i++) {
-            stats[i].addStat(new BaseStatistic(1, stats[i].getStatType()));
+        for (PlayerStat stat : stats) {
+            if (stat.getStatType() == StatEnum.CDMG || stat.getStatType() == StatEnum.CRATE) {
+                stat.addStat(new BaseStatistic(1, stat.getStatType()));
+            } else {
+                stat.addStat(new BaseStatistic(1, stat.getStatType()));
+            }
+        }
+    }
+
+
+    /**
+     * Decreases all player stats by one on level down
+     */
+    public void levelDown() {
+        for (PlayerStat stat : stats) {
+            if (stat.getStatType() == StatEnum.CDMG || stat.getStatType() == StatEnum.CRATE) {
+                stat.removeStat(new BaseStatistic(1, stat.getStatType()));
+            } else {
+                stat.removeStat(new BaseStatistic(1, stat.getStatType()));
+            }
         }
     }
 
@@ -247,6 +264,28 @@ public class FFPlayer {
         return damage;
     }
 
+    /**
+     * Ascends the player, returning their tier to zero, and giving them more base stats
+     */
+    public void ascend() {
+        ascensionLevel++;
+
+        Player player = ForgeFrontier.getInstance().getPlayerManager().getPlayersByUUID().get(playerID);
+        int level = player.getLevel();
+        player.setLevel(0);
+        player.setExp(0);
+        int tier = getTier();
+        setTier(0);
+
+        for (int i = 0; i < level - (level / 10); i++) {
+            levelDown();
+        }
+
+        for (int i = 0; i < tier; i++) {
+            levelUp();
+        }
+    }
+
     /** @return the HP stat value of the FFPlayer */
     public int getHP() {
         return stats[0].getStatValue();
@@ -305,6 +344,10 @@ public class FFPlayer {
     /** Updates the value for current health */
     public void setCurrentHealth(double currentHealth) {
         this.currentHealth = currentHealth;
+    }
+
+    public int getAscension() {
+        return ascensionLevel;
     }
 
     /**
