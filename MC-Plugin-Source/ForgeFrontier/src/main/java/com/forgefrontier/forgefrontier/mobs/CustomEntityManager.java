@@ -89,10 +89,16 @@ public class CustomEntityManager extends Manager implements Listener {
     @EventHandler
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
         CraftLivingEntity entity = (CraftLivingEntity) event.getEntity();
+        String namePlate = ChatColor.WHITE + "";
 
         if (entity.hasMetadata("dynamic")) {
+            HashMap<String, Double> dynamicValues = (HashMap<String, Double>) entity.getMetadata("dynamic").get(0).value();
+            double damage = dynamicValues.get("incoming");
+            event.setDamage(damage);
+            namePlate += "[☆] ";
+        }
 
-        } else if (entity.hasMetadata("code")) {
+        if (entity.hasMetadata("code")) {
             // checks if the entity is a hitbox entity
             if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {
                 // sets the nameplate of the entity
@@ -101,11 +107,13 @@ public class CustomEntityManager extends Manager implements Listener {
                     currHealth = 0;
                 }
                 if (entity.getHandle() instanceof HitBoxEntity hitBox) {
-                    hitBox.setNamePlate(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
-                            ": " + currHealth + "/" + ((int) entity.getMaxHealth()));
+                    namePlate += (String) entity.getMetadata("name").get(0).value() +
+                            ": " + currHealth + "/" + ((int) entity.getMaxHealth());
+                    entity.setCustomName(namePlate);
                 } else {
-                    entity.setCustomName(ChatColor.WHITE + (String) entity.getMetadata("name").get(0).value() +
-                            ": " + currHealth + "/" + ((int) entity.getMaxHealth()));
+                    namePlate += entity.getMetadata("name").get(0).value() +
+                            ": " + currHealth + "/" + ((int) entity.getMaxHealth());
+                    entity.setCustomName(namePlate);
                     entity.setCustomNameVisible(true);
                 }
             }

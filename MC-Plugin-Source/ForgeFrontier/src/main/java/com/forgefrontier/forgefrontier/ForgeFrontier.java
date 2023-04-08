@@ -22,6 +22,7 @@ import com.forgefrontier.forgefrontier.mining.MiningCommandExecutor;
 import com.forgefrontier.forgefrontier.mining.MiningManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.EntityCommandExecutor;
+import com.forgefrontier.forgefrontier.mobs.chickens.dynamic.DynamicChicken;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChicken;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.chickenboss.ChickBoss;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.poison.PoisonChicken;
@@ -142,6 +143,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.getCustomEntityManager().registerCustomEntity(new HitBox());
         this.getCustomEntityManager().registerCustomEntity(new EggBox());
         this.getCustomEntityManager().registerCustomEntity(new Eggsplosive());
+        this.getCustomEntityManager().registerCustomEntity(new DynamicChicken());
 
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);
