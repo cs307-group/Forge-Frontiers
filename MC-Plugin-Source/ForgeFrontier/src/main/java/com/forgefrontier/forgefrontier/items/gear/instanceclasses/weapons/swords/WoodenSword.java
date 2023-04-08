@@ -37,11 +37,6 @@ public class WoodenSword extends CustomWeapon {
         });
     }
 
-    @Override
-    public void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance) {
-
-    }
-
     /**
      * What occurs when the player attacks with the weapon
      *

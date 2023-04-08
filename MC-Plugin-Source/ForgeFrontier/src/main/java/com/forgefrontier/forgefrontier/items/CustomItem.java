@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
@@ -70,10 +71,13 @@ public abstract class CustomItem {
     }
 
     /** Ran whenever a player interacts with the custom item in their hand. */
-    public abstract void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance);
+    public void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance) {}
 
     /** Ran whenever a player attacks an entity with the custom item. */
-    public abstract void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer);
+    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {}
+
+    /** Ran whenver a player clicks on an item with a custom item on their cursor in the inventory */
+    public void onApply(InventoryClickEvent e, CustomItemInstance customItemInst, ItemStack currentItem) {}
 
     // TODO: Add more events, whenever necessary
 

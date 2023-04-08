@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -145,28 +146,9 @@ public class UpgradeGem extends UniqueCustomItem {
         });
     }
 
-    /**
-     * Opens a GUI which allows the player to select a piece of equipment to apply the UpgradeGem to
-     *
-     * @param e the player interact event which describes the interact event
-     * @param itemInstance the instance of the item which is being used to interact with
-     */
     @Override
-    public void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance) {
-        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            //TODO: opens GUI which then allows player to choose from all the
-            //TODO: Weapons/Armor in their inventory and apply the gem
-        }
+    public void onApply(InventoryClickEvent e, CustomItemInstance itemInstance, ItemStack appliedItem) {
+        // TODO: Be able to apply gems
     }
-
-    /**
-     * Can be left empty in this case
-     *
-     * @param e the object describing the event
-     * @param itemInstance the instance of the item being used to attack
-     */
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
-
-    }
+    
 }

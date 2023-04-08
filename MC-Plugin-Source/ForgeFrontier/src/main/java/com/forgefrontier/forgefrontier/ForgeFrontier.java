@@ -9,7 +9,7 @@ import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
-import com.forgefrontier.forgefrontier.items.CustomGiveCommand;
+import com.forgefrontier.forgefrontier.commands.CustomGiveCommand;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.gear.GearItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
@@ -27,7 +27,6 @@ import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChicken;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.chickenboss.ChickBoss;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.poison.PoisonChicken;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBox;
-import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.EggBox;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.eggsplosive.Eggsplosive;
 import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
@@ -53,7 +52,6 @@ import revxrsal.commands.bukkit.BukkitCommandHandler;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class ForgeFrontier extends JavaPlugin {
 

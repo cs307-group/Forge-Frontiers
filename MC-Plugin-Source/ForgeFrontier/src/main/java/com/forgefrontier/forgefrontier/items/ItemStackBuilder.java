@@ -20,6 +20,7 @@ public class ItemStackBuilder {
     String displayName;
     int amt;
     List<String> lore;
+    boolean unbreakable;
 
     ItemStack copy;
     boolean copyBuild;
@@ -107,6 +108,8 @@ public class ItemStackBuilder {
         }
         if(lore != null && meta != null)
             meta.setLore(lore);
+        if(meta != null)
+            meta.setUnbreakable(this.unbreakable);
         itm.setItemMeta(meta);
         return itm;
     }
@@ -142,5 +145,9 @@ public class ItemStackBuilder {
 
     public String getDisplayName() {
         return this.displayName;
+    }
+
+    public void setUnbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
     }
 }

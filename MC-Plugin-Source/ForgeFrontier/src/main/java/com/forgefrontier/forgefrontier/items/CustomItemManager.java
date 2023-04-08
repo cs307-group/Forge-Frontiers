@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -41,7 +42,13 @@ public class CustomItemManager extends Manager implements Listener {
     public void init() {
 
         this.registerCustomItem(new SilverIngot());
-        
+
+        /*ForgeFrontier.getInstance().getDatabaseManager().getConfigDB().loadItems((items) -> {
+            for(GeneralCustomItem generalCustomItem: items) {
+                this.registerCustomItem(generalCustomItem);
+            }
+        });*/
+
     }
 
     @Override
@@ -65,6 +72,20 @@ public class CustomItemManager extends Manager implements Listener {
         if(customItemInst == null)
             return;
         customItemInst.getBaseItem().onInteract(e, customItemInst);
+    }
+
+    // Check when a player clicks a custom item or with a custom item. If it's a custom item, run the click event on it.
+    @EventHandler
+    public void onInventoryApply(InventoryClickEvent e) {
+        if(e.getCurrentItem() == null)
+            return;
+        ItemStack item = e.getCursor();
+        if(item == null)
+            return;
+        CustomItemInstance customItemInst = asCustomItemInstance(item);
+        if(customItemInst == null)
+            return;
+        customItemInst.getBaseItem().onApply(e, customItemInst, e.getClickedInventory().getItem(e.getSlot()));
     }
 
     // Prevent crafting using custom items.

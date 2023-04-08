@@ -5,6 +5,9 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
+import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
+import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.SkillGem;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.entity.Player;
@@ -13,14 +16,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
  * Handles events related to GearItem classes
  */
 public class GearItemManager extends Manager implements Listener {
+
+    Map<String, Skill> skills;
 
     /**
      * Constructor for initializing fields
@@ -33,12 +37,25 @@ public class GearItemManager extends Manager implements Listener {
 
     @Override
     public void init() {
+        this.skills = new HashMap<>();
+
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new SkillGem());
+
+        this.registerSkill(new GroundSmashSkill());
 
     }
 
     @Override
     public void disable() {
 
+    }
+
+    public void registerSkill(Skill skill) {
+        this.skills.put(skill.getId(), skill);
+    }
+
+    public Skill getSkill(String skillId) {
+        return this.skills.get(skillId);
     }
 
     /**
@@ -70,6 +87,16 @@ public class GearItemManager extends Manager implements Listener {
         // Updates player stats in database
         ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(),
                 ffPlayer.getStats());
+    }
+
+    public Skill getRandomSkill() {
+        int index = (int) (Math.random() * this.skills.size());
+        Iterator<String> keyIter = this.skills.keySet().iterator();
+        while(index > 0) {
+            index -= 1;
+            keyIter.next();
+        }
+        return this.skills.get(keyIter.next());
     }
 
 

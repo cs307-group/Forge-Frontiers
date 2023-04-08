@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.connections;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarEntry;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarStash;
+import com.forgefrontier.forgefrontier.connections.wrappers.*;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;

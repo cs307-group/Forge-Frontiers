@@ -39,17 +39,6 @@ public class WoodenBow extends CustomWeapon {
     }
 
     /**
-     * Leave blank, no functionality for this class
-     *
-     * @param e event holding information regarding it
-     * @param itemInstance the item instance that called this event
-     */
-    @Override
-    public void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance) {
-
-    }
-
-    /**
      * Calculates outgoing damage
      *
      * @param e event holding infomration regarding it
@@ -59,4 +48,5 @@ public class WoodenBow extends CustomWeapon {
     public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
         //TODO: calculate outgoing damage
     }
+
 }

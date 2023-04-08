@@ -1,15 +1,15 @@
 package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.connections.wrappers.InsertQueryWrapper;
+import com.forgefrontier.forgefrontier.connections.wrappers.SelectQueryWrapper;
+import com.forgefrontier.forgefrontier.connections.wrappers.UpdateQueryWrapper;
 import com.forgefrontier.forgefrontier.fishing.PlayerFishStat;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Wrapper;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;

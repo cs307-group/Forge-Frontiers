@@ -61,12 +61,6 @@ public final class ExampleZombieSword extends UniqueCustomItem {
         });
     }
 
-    // Zombie Sword doesn't have any abilities, so doesn't matter. Can stay blank.
-    @Override
-    public void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance) {
-
-    }
-
     // Upon attack with Zombie Sword, check if its hitting a zombie. If so, multiply by the multiplier of the sword.
     @Override
     public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance customItemInstance, FFPlayer ffPlayer) {

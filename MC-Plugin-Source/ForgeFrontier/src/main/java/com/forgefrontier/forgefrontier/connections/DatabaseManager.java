@@ -21,6 +21,7 @@ public class DatabaseManager extends Manager {
     StashDB stashDB;
     PlayerDB playerDB;
     FishDB fishDB;
+    ConfigDB configDB;
 
     public DatabaseManager(ForgeFrontier plugin) {
         super(plugin);
@@ -37,6 +38,7 @@ public class DatabaseManager extends Manager {
         this.stashDB = new StashDB(dbConn);
         this.playerDB = new PlayerDB(dbConn);
         this.fishDB = new FishDB(dbConn);
+        this.configDB = new ConfigDB(dbConn);
     }
 
     @Override
@@ -148,4 +150,7 @@ public class DatabaseManager extends Manager {
     }
 
     public FishDB getFishDB() { return fishDB; }
+
+    public ConfigDB getConfigDB() { return configDB; }
+
 }

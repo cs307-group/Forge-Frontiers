@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.generators;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.materials.CustomMaterial;
 import com.forgefrontier.forgefrontier.items.CustomItem;
+import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -17,6 +18,14 @@ public class MaterialCost {
             configSection.getString("item_id")
         );
         this.amount = configSection.getInt("amount");
+    }
+
+    public MaterialCost(JSONWrapper jsonWrapper) {
+        this.material = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial(
+                jsonWrapper.getString("material_type"),
+                jsonWrapper.getString("item_id")
+        );
+        this.amount = jsonWrapper.getInt("amount");
     }
 
     public CustomMaterial getMaterial() {

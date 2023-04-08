@@ -34,16 +34,4 @@ public class LeatherHelmet extends CustomArmor {
             return new LeatherHelmetInstance(itemStack);
         });
     }
-
-    /** Method is empty due to no special events occurring when using this item to interact */
-    @Override
-    public void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance) {
-
-    }
-
-    /** Method is empty due to no special events occurring when using this item to attack */
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
-
-    }
 }

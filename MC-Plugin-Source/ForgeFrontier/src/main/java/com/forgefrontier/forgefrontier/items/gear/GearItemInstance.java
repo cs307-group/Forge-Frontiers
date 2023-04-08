@@ -1,8 +1,10 @@
 package com.forgefrontier.forgefrontier.items.gear;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem.UniqueCustomItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
+import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
@@ -44,6 +46,9 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
 
     /** The lore specific to this item */
     String lore;
+
+    /** The skill of the item. Can be null. */
+    Skill skill;
 
     /** JSON data about this particular GearItemInstance */
     HashMap<String, String> gearData;
@@ -95,6 +100,8 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         gearData.put("material", material.toString());
         gearData.put("durability", Integer.toString(durability));
         gearData.put("lore", lore);
+        if(skill != null)
+            gearData.put("skill", skill.getId());
     }
 
     /**
@@ -141,6 +148,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         material = Material.valueOf(gearData.get("material"));
         durability = Integer.parseInt(gearData.get("durability"));
         lore = gearData.get("lore");
+        skill = ForgeFrontier.getInstance().getGearItemManager().getSkill(gearData.get("skill"));
     }
 
     /** returns the value of this.baseStats */
@@ -187,4 +195,8 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         return material;
     }
 
+    public void setSkill(Skill skill) {
+        gearData.put("skill", skill.getId());
+        this.skill = skill;
+    }
 }

@@ -42,6 +42,13 @@ public class StashManager extends Manager implements Listener {
 
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceStashItem());
 
+        /*this.plugin.getDatabaseManager().getConfigDB().loadStash((stashes) -> {
+            for(Stash stash: stashes) {
+                this.stashes.put(stash.getId(), stash);
+            }
+        });*/
+
+
         int stashInd = 0;
         ConfigurationSection configSection;
         while((configSection = this.plugin.getConfig("stashes").getConfigurationSection("stashes." + stashInd)) != null) {
@@ -49,6 +56,7 @@ public class StashManager extends Manager implements Listener {
             this.stashes.put(stash.getId(), stash);
             stashInd += 1;
         }
+
 
         stashInd = 0;
         String stashId;

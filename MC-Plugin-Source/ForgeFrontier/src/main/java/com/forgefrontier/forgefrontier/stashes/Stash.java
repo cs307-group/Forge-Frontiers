@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.stashes;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.GeneratorLevel;
 import com.forgefrontier.forgefrontier.generators.MaterialCost;
+import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -36,6 +37,19 @@ public class Stash {
         while((configSection = config.getConfigurationSection("contents." + itemInd)) != null) {
             this.stashItems.add(new StashItem(configSection));
             itemInd += 1;
+        }
+    }
+
+    public Stash(String stashId, String friendlyName, Material blockMaterial, List<JSONWrapper> costs, List<JSONWrapper> contents) {
+        this.id = stashId;
+        this.friendlyName = friendlyName;
+        this.materialRepresentation = blockMaterial;
+        this.shopCosts = new ArrayList<>();
+        for(JSONWrapper cost: costs) {
+            this.shopCosts.add(new MaterialCost(cost));
+        }
+        for(JSONWrapper stashItem: contents) {
+            this.stashItems.add(new StashItem(stashItem));
         }
     }
 

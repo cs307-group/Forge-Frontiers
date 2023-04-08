@@ -29,13 +29,4 @@ public class SilverIngot extends CustomItem {
         });
     }
 
-    @Override
-    public void onInteract(PlayerInteractEvent e, CustomItemInstance itemInstance) {
-
-    }
-
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
-
-    }
 }

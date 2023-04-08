@@ -72,8 +72,4 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
         });
     }
 
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance inst, FFPlayer ffPlayer) {
-    }
-
 }
