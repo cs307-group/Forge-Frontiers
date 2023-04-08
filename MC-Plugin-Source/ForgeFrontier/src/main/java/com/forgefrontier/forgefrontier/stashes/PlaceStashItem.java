@@ -72,8 +72,4 @@ public class PlaceStashItem extends UniqueCustomItem {
         });
     }
 
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance inst, FFPlayer ffPlayer) {
-    }
-
 }

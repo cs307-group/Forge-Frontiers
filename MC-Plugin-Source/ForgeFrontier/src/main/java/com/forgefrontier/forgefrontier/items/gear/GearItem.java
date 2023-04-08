@@ -1,5 +1,7 @@
 package com.forgefrontier.forgefrontier.items.gear;
 
+import com.forgefrontier.forgefrontier.items.CustomItemInstance;
+import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
@@ -13,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -20,6 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONObject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * GearItem
@@ -109,6 +113,7 @@ public abstract class GearItem extends UniqueCustomItem {
                 gearItemInstance.durability = durability;
 
                 gearItemInstance.lore = lore;
+
                 gearItemInstance.setGearData();
             } else {
                 // System.out.println("LOADING GEAR FROM PREVIOUS DATA");
@@ -126,41 +131,45 @@ public abstract class GearItem extends UniqueCustomItem {
         this.registerItemStackAccumulator((customItemInstance, itemStack) -> {
             GearItemInstance gearItemInstance = (GearItemInstance) customItemInstance;
 
-            ItemStack item = new ItemStack(gearItemInstance.material);
-            ItemMeta meta = item.getItemMeta();
+            ChatColor qualityColor = gearItemInstance.getQuality().getColor();
 
-            meta.setDisplayName(gearItemInstance.quality.getColor() + gearItemInstance.name);
-            ArrayList<String> loreArr = new ArrayList<>();
-            loreArr.add(ChatColor.GRAY + gearItemInstance.lore);
-            loreArr.add("");
-            loreArr.add(gearItemInstance.quality.getColor() + gearItemInstance.quality.toString());
-            loreArr.add("");
-            loreArr.add(ChatColor.WHITE + "Base Stats");
-            for (int i = 0; i < gearItemInstance.numBaseStats; i++) {
-                loreArr.add(gearItemInstance.quality.getColor() + gearItemInstance.baseStats[i].toString());
+            ItemStackBuilder builder = new ItemStackBuilder(gearItemInstance.material)
+                .setDisplayName(qualityColor + gearItemInstance.name)
+                .addLoreLine(ChatColor.GRAY + gearItemInstance.lore)
+                .addLoreLine("")
+                .addLoreLine(qualityColor + gearItemInstance.quality.toString())
+                .addLoreLine("&fBase Stats")
+                .addLoreLine(Arrays.stream(gearItemInstance.baseStats)
+                    .map(stat -> qualityColor + stat.toString())
+                    .collect(Collectors.joining("\n")))
+                .addLoreLine("")
+                .addLoreLine("&fReforge Stats")
+                .addLoreLine(Arrays.stream(gearItemInstance.reforgeStats)
+                    .map(stat -> qualityColor + stat.toString())
+                    .collect(Collectors.joining("\n")))
+                .addLoreLine("")
+                .addLoreLine(Arrays.stream(gearItemInstance.gems)
+                    .map(gem -> (
+                        gem == null ?
+                            "&7Empty Slot"
+                        :
+                            (gem.getQuality().getColor() + gem.toString())
+                    ))
+                    .collect(Collectors.joining("\n")));
+            if(gearItemInstance.skill != null) {
+                builder
+                    .addLoreLine("&e&fRight Click &7- " + gearItemInstance.skill.getName())
+                    .addLoreLine(gearItemInstance.skill.getDescrption());
             }
-            loreArr.add("");
-            loreArr.add(ChatColor.WHITE + "Reforge Stats");
-            for (int i = 0; i < 3; i++) {
-                loreArr.add(gearItemInstance.quality.getColor() + gearItemInstance.reforgeStats[i].toString());
-            }
-            loreArr.add("");
-            for (int i = 0; i < gearItemInstance.numGemSlots; i++) {
-                if (gearItemInstance.gems[i] == null) {
-                    loreArr.add(ChatColor.DARK_GRAY + "Empty Slot");
-                } else {
-                    loreArr.add(gearItemInstance.gems[i].getQuality().getColor() + gearItemInstance.gems[i].toString());
-                }
-            }
-            meta.setLore(loreArr);
+
+            builder.setUnbreakable(true);
+
+            ItemStack item = builder.build();
+            ItemMeta meta = item.getItemMeta();
 
             // sets the durability of the item to the specified durability
             Damageable damageable = (Damageable) meta;
             damageable.setDamage(gearItemInstance.material.getMaxDurability() - gearItemInstance.durability);
-            // System.out.println("durability: " + durability);
-
-            // makes the item unbreakable
-            meta.setUnbreakable(true);
 
             // set the item to do no damage
             Multimap<Attribute, AttributeModifier> modifiers = meta.getAttributeModifiers();
@@ -181,7 +190,7 @@ public abstract class GearItem extends UniqueCustomItem {
                 meta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier);
             }
 
-            item.setItemMeta(damageable);
+            item.setItemMeta(meta);
 
             // stores the attribute values in the gear-data hashmap
             gearItemInstance.getData().put("gear-data", new JSONObject(gearItemInstance.gearData));
@@ -189,4 +198,6 @@ public abstract class GearItem extends UniqueCustomItem {
             return item;
         });
     }
+
+
 }

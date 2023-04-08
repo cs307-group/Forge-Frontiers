@@ -5,6 +5,7 @@ import com.forgefrontier.forgefrontier.generators.materials.CoinMaterial;
 import com.forgefrontier.forgefrontier.generators.materials.CustomMaterial;
 import com.forgefrontier.forgefrontier.generators.materials.ItemMaterial;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.stashes.Stash;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import com.forgefrontier.forgefrontier.utils.QuadTree;
 import org.bukkit.Bukkit;
@@ -44,6 +45,13 @@ public class GeneratorManager extends Manager implements Listener {
 
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem());
 
+        /*this.plugin.getDatabaseManager().getConfigDB().loadGenerators((generators) -> {
+            for(Generator generator: generators) {
+                this.generators.put(generator.getId(), generator);
+            }
+        });*/
+
+
         int generatorInd = 0;
         ConfigurationSection configSection;
         while((configSection = this.plugin.getConfig("generators").getConfigurationSection("generators." + generatorInd)) != null) {
@@ -51,6 +59,7 @@ public class GeneratorManager extends Manager implements Listener {
             this.generators.put(generator.getId(), generator);
             generatorInd += 1;
         }
+
 
         int genIndex = 0;
         String generatorId;

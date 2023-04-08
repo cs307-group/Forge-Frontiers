@@ -10,9 +10,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -95,24 +97,34 @@ public class PlayerManager extends Manager implements Listener {
      * @param event the event which occurs when an entity (including projectiles) damages another entity
      */
     @EventHandler
-    public void onEntityDamageByEntity (EntityDamageEvent event) {
+    public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
+        System.out.println(event.getDamage());
         //ensures the entity with the incoming damages is a player
         if (event.getEntity() instanceof Player player) {
-            double damage = event.getDamage();
-            FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
-            AttributeInstance maxHealthAttr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-            double maxHealth = 20;
-            if (maxHealthAttr != null) {
-                maxHealth = maxHealthAttr.getValue();
+            System.out.println("IS PLAYER");
+            if (event.getDamager().hasMetadata("dynamic")) { // does not convert damage due to mob being dynamic
+                System.out.println("IS DYNAMIC");
+                HashMap<String, Double> dynamicValues = (HashMap<String, Double>) event.getDamager().getMetadata("dynamic").get(0).value();
+                double damage = dynamicValues.get("outgoing");
+                event.setDamage(damage);
+            } else { // converts damage based on stats
+                double damage = event.getDamage();
+                FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
+                AttributeInstance maxHealthAttr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                double maxHealth = 20;
+                if (maxHealthAttr != null) {
+                    maxHealth = maxHealthAttr.getValue();
+                }
+
+                // Modifies incoming damage based on defense stat
+                damage = StatCalc.modifyIncomingDamage(damage, ffPlayer.getDEF());
+
+                // Modifies incoming damage based on health stat
+                double convertedDamage = StatCalc.convertDamage(damage, maxHealth, ffPlayer);
+                event.setDamage(convertedDamage);
             }
-
-            // Modifies incoming damage based on defense stat
-            damage = StatCalc.modifyIncomingDamage(damage, ffPlayer.getDEF());
-
-            // Modifies incoming damage based on health stat
-            double convertedDamage = StatCalc.convertDamage(damage, maxHealth, ffPlayer);
-            event.setDamage(convertedDamage);
         }
+        System.out.println(event.getDamage());
     }
 
     /**
@@ -125,6 +137,28 @@ public class PlayerManager extends Manager implements Listener {
         Player player = event.getPlayer();
         FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
         ffPlayer.respawn();
+    }
+
+    /**
+     * handles when the player levels up
+     *
+     * @param event the level change event
+     */
+    @EventHandler
+    public void onPlayerLevelChange(PlayerLevelChangeEvent event) {
+       int newLevel = event.getNewLevel();
+       int oldLevel = event.getOldLevel();
+       Player player = event.getPlayer();
+       FFPlayer ffPlayer = getFFPlayerFromID(player.getUniqueId());
+       if (oldLevel < newLevel) {
+           for (int i = 0; i < newLevel - oldLevel; i++) {
+               ffPlayer.levelUp();
+           }
+       } else if (oldLevel > newLevel) {
+           for (int i = 0; i < oldLevel - newLevel; i++) {
+               ffPlayer.levelDown();
+           }
+       }
     }
 
     /** Getter */

@@ -26,6 +26,8 @@ public class BentoBoxListener implements Listener {
         if(island == null)
             return;
         plugin.getDatabaseManager().getPlayerDB().updatePlayerIsland(e.getPlayer().getUniqueId(), island.getUniqueId(), (success) -> {
+            if(success)
+                return;
             plugin.getLogger().severe("Unable to update player island id. Player: " + e.getPlayer().getName());
         });
     }
@@ -33,6 +35,8 @@ public class BentoBoxListener implements Listener {
     @EventHandler
     public void islandJoinEvent(TeamJoinedEvent e) {
         plugin.getDatabaseManager().getPlayerDB().updatePlayerIsland(e.getPlayerUUID(), e.getIsland().getUniqueId(), (success) -> {
+            if(success)
+                return;
             plugin.getLogger().severe("Unable to update player island id. Player: " + Bukkit.getPlayer(e.getPlayerUUID()).getName());
         });
     }
@@ -40,6 +44,8 @@ public class BentoBoxListener implements Listener {
     @EventHandler
     public void islandLeaveEvent(TeamLeaveEvent e) {
         plugin.getDatabaseManager().getPlayerDB().updatePlayerIsland(e.getPlayerUUID(), null, (success) -> {
+            if(success)
+                return;
             plugin.getLogger().severe("Unable to update player island id. Player: " + Bukkit.getPlayer(e.getPlayerUUID()).getName());
         });
     }

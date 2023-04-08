@@ -1,7 +1,7 @@
 package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.generators.GeneratorInstance;
+import com.forgefrontier.forgefrontier.connections.wrappers.UpdateQueryWrapper;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerStat;
 

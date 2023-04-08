@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.generators;
 
+import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -38,4 +39,20 @@ public class GeneratorLevel {
             costInd += 1;
         }
     }
+
+    public GeneratorLevel(JSONWrapper jsonWrapper) {
+
+        this.generatorRate = jsonWrapper.getInt("generation_rate");
+        this.maxSize = jsonWrapper.getInt("max_size");
+        this.requiredTier = jsonWrapper.getInt("req_tier");
+
+        if(jsonWrapper.has("upgrade_costs"))
+            return;
+        this.upgradeCosts = new ArrayList<>();
+        for(JSONWrapper cost: jsonWrapper.getList("upgrade_costs")) {
+            this.upgradeCosts.add(new MaterialCost(cost));
+        }
+
+    }
+
 }

@@ -1,11 +1,15 @@
 package com.forgefrontier.forgefrontier.mobs.chickens.hostile;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.chickens.CustomChickenEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class HostileChickenEntity extends CustomChickenEntity {
 
@@ -61,7 +65,13 @@ public class HostileChickenEntity extends CustomChickenEntity {
     }
 
     public void attack(org.bukkit.entity.Player player) {
-        player.damage(this.damage);
+        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(this.getBukkitEntity(),
+                player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, this.damage);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            double eventDamage = event.getDamage();
+            player.damage(eventDamage);
+        }
         lastDamageTime = System.currentTimeMillis();
     }
 

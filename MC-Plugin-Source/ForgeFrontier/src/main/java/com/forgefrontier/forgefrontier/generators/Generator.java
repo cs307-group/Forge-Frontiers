@@ -4,7 +4,9 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.materials.CoinMaterial;
 import com.forgefrontier.forgefrontier.generators.materials.CustomMaterial;
 import com.forgefrontier.forgefrontier.generators.materials.ItemMaterial;
+import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -42,6 +44,21 @@ public class Generator {
         while((configSection = config.getConfigurationSection("levels." + levelInd)) != null) {
             this.generatorLevels.add(new GeneratorLevel(configSection));
             levelInd += 1;
+        }
+    }
+
+    public Generator(String generatorId, String friendlyName, Material blockMaterial, CustomItem resourceItem, List<JSONWrapper> costs, List<JSONWrapper> levels) {
+        this.id = generatorId;
+        this.friendlyName = friendlyName;
+        this.materialRepresentation = blockMaterial;
+        this.primaryMaterial = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial("item", resourceItem.getCode());
+        this.shopCost = new ArrayList<>();
+        for(JSONWrapper cost: costs) {
+            this.shopCost.add(new MaterialCost(cost));
+        }
+        this.generatorLevels = new ArrayList<>();
+        for(JSONWrapper level: levels) {
+            this.generatorLevels.add(new GeneratorLevel(level));
         }
     }
 

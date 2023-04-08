@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.stashes;
 
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class StashItem {
@@ -11,6 +12,11 @@ public class StashItem {
     public StashItem(ConfigurationSection config) {
         this.item = CustomItemManager.getCustomItem(config.getString("item_id"));
         this.maxAmount = config.getInt("max_amount");
+    }
+
+    public StashItem(JSONWrapper jsonWrapper) {
+        this.item = CustomItemManager.getCustomItem(jsonWrapper.getString("item_id"));
+        this.maxAmount = jsonWrapper.getInt("max_amount");
     }
 
     public CustomItem getItem() {

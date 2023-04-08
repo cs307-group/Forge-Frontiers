@@ -30,13 +30,20 @@ public class InspectCommandExecutor implements CommandExecutor {
             if (args.length == 0) {
 
                 FFPlayer ffPlayer = playerManager.getFFPlayerFromID(player.getUniqueId());
-                sender.sendMessage(ForgeFrontier.CHAT_PREFIX  + "Tier: " + ffPlayer.getTier() + "\n" +  ffPlayer.getStatsString());
+                sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Ascension: " + ffPlayer.getAscension() + "\n"
+                        + "Tier: " + ffPlayer.getTier() + "\n" +  ffPlayer.getStatsString());
 
+            }  else if (args.length == 1 && args[0].equals("ascend")) {
+                FFPlayer ffPlayer = playerManager.getFFPlayerFromID(player.getUniqueId());
+                ffPlayer.ascend();
+                sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Ascension: " + ffPlayer.getAscension() + "\n"
+                        + "Tier: " + ffPlayer.getTier() + "\n" +  ffPlayer.getStatsString());
             } else if (args.length == 1) {
                 if (playerManager.hasPlayerWithName(args[0])) {
                     Player otherPlayer = playerManager.getPlayerByName(args[0]);
                     FFPlayer ffPlayer = playerManager.getFFPlayerFromID(otherPlayer.getUniqueId());
-                    sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Tier: " + ffPlayer.getTier() + "\n" + ffPlayer.getStatsString());
+                    sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Ascension: " + ffPlayer.getAscension() + "\n"
+                            + "Tier: " + ffPlayer.getTier() + "\n" +  ffPlayer.getStatsString());
                 } else {
                     sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Invalid usage: Player Name does not exist or player is not online");
                 }

@@ -92,9 +92,4 @@ public class MiningWandItem extends CustomItem {
         e.getPlayer().getInventory().setItem(slot, itemInstance.asItemStack());
     }
 
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
-
-    }
-
 }

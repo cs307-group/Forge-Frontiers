@@ -1,6 +1,10 @@
 package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.connections.wrappers.DeleteQueryWrapper;
+import com.forgefrontier.forgefrontier.connections.wrappers.InsertQueryWrapper;
+import com.forgefrontier.forgefrontier.connections.wrappers.SelectQueryWrapper;
+import com.forgefrontier.forgefrontier.connections.wrappers.UpdateQueryWrapper;
 import com.forgefrontier.forgefrontier.generators.Generator;
 import com.forgefrontier.forgefrontier.generators.GeneratorInstance;
 import org.bukkit.Bukkit;
