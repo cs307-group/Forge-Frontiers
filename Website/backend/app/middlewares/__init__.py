@@ -1,1 +1,1 @@
-from ._handler import Middleware
+from ._handler import Middleware as Middleware

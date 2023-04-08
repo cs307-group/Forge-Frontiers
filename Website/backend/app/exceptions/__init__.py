@@ -1,1 +1,1 @@
-from .app_exception import AppException
+from .app_exception import AppException as AppException
