@@ -77,7 +77,7 @@ public class CustomItemManager extends Manager implements Listener {
     // Check when a player clicks a custom item or with a custom item. If it's a custom item, run the click event on it.
     @EventHandler
     public void onInventoryApply(InventoryClickEvent e) {
-        if(e.getCurrentItem() == null)
+        if(e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR)
             return;
         ItemStack item = e.getCursor();
         if(item == null)
