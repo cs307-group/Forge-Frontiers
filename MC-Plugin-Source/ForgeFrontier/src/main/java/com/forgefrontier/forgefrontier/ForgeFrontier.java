@@ -29,11 +29,14 @@ import com.forgefrontier.forgefrontier.mobs.chickens.hostile.poison.PoisonChicke
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBox;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.EggBox;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.eggsplosive.Eggsplosive;
+import com.forgefrontier.forgefrontier.particles.ParticleCommands;
+import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
 import com.forgefrontier.forgefrontier.stashes.StashManager;
+import org.bukkit.Particle;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -70,6 +73,7 @@ public class ForgeFrontier extends JavaPlugin {
     private CustomEntityManager customEntityManager;
     private MiningManager miningManager;
     private FishingManager fishingManager;
+    private ParticleManager particleManager;
 
     private Shop itemShop;
     private BazaarManager bazaarManager;
@@ -112,6 +116,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.bazaarManager = new BazaarManager(this);
         this.miningManager = new MiningManager(this);
         this.fishingManager = new FishingManager(this);
+        this.particleManager = new ParticleManager(this);
 
         this.databaseManager.init();
         this.customItemManager.init();
@@ -123,7 +128,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.bazaarManager.init();
         this.miningManager.init();
         this.fishingManager.init();
-
+        this.particleManager.init();
         // Player Shop
         this.setupPlayerShop();
 
@@ -216,6 +221,7 @@ public class ForgeFrontier extends JavaPlugin {
         autoCompleter.registerSuggestion("cgive", customItemManager.getItemNames());
 
         commandHandler.register(new CustomGiveCommand(this));
+        commandHandler.register(new ParticleCommands(this));
 
     }
 
@@ -288,6 +294,8 @@ public class ForgeFrontier extends JavaPlugin {
     public FishingManager getFishingManager() {
         return fishingManager;
     }
+    public ParticleManager getParticleManager() { return particleManager; }
+
     public Shop getPlayerShop() {
         return this.itemShop;
     }
