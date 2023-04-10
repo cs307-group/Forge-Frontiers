@@ -166,4 +166,11 @@ public class GeneratorManager extends Manager implements Listener {
         return this.shopMenuList;
     }
 
+    public Collection<String> getGeneratorIds() {
+        return this.generators.keySet();
+    }
+
+    public void registerGenerator(Generator generator) {
+        this.generators.put(generator.getId(), generator);
+    }
 }

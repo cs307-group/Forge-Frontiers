@@ -23,6 +23,13 @@ public class Generator {
     List<MaterialCost> shopCost;
     List<GeneratorLevel> generatorLevels;
 
+    public Generator(String id) {
+        this.id = id;
+        this.friendlyName = id;
+        this.materialRepresentation = Material.BARRIER;
+        this.primaryMaterial = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial("item", "Null");
+    }
+
     public Generator(ConfigurationSection config) {
         this.id = config.getString("id");
         this.friendlyName = config.getString("friendly_name");
@@ -85,4 +92,17 @@ public class Generator {
     public List<MaterialCost> getShopCost() {
         return shopCost;
     }
+
+    public void setFriendlyName(String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
+
+    public void setBlockMaterial(Material blockMaterial) {
+        this.materialRepresentation = blockMaterial;
+    }
+
+    public void setPrimaryMaterial(CustomItem item) {
+        this.primaryMaterial = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial("item", item.getCode());
+    }
+
 }

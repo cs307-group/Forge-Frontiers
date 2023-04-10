@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -41,13 +42,17 @@ public class CustomItemManager extends Manager implements Listener {
     @Override
     public void init() {
 
-        this.registerCustomItem(new SilverIngot());
+        // Base Null item that will always exist for placeholder purposes.
+        this.registerCustomItem(new GeneralCustomItem("Null", "BARRIER", "&c&lNull", "&7If you got this, then that means we messed up. Whoops!"));
 
-        /*ForgeFrontier.getInstance().getDatabaseManager().getConfigDB().loadItems((items) -> {
+        // Silver ingots for debug purposes.
+        this.registerCustomItem(new GeneralCustomItem("SilverIngot", "IRON_INGOT", "&7Silver Ingot", "&8Ingots of silver from deep beneath the earth."));
+
+        ForgeFrontier.getInstance().getDatabaseManager().getConfigDB().loadItems((items) -> {
             for(GeneralCustomItem generalCustomItem: items) {
                 this.registerCustomItem(generalCustomItem);
             }
-        });*/
+        });
 
     }
 
@@ -55,7 +60,6 @@ public class CustomItemManager extends Manager implements Listener {
     public void disable() {
 
     }
-
 
     // Method to run to register a new CustomItem. If not run, the custom item will not be able to be identified.
     public void registerCustomItem(CustomItem customItem) {
@@ -126,6 +130,14 @@ public class CustomItemManager extends Manager implements Listener {
             return;
         FFPlayer ffPlayer = plugin.getPlayerManager().getFFPlayerFromID(p.getUniqueId());
         customItemInst.getBaseItem().onAttack(e, customItemInst, ffPlayer);
+    }
+
+    @EventHandler
+    public void onPlaceBlock(BlockPlaceEvent e) {
+        CustomItemInstance inst = asCustomItemInstance(e.getItemInHand());
+        if(inst == null)
+            return;
+        e.setCancelled(true);
     }
 
     // Get the custom item associated with the specified code.

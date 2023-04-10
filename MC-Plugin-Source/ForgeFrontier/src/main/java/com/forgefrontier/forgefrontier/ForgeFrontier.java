@@ -5,7 +5,6 @@ import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.commands.*;
 import com.forgefrontier.forgefrontier.connections.DatabaseManager;
 import com.forgefrontier.forgefrontier.fishing.FishingManager;
-import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
@@ -194,10 +193,9 @@ public class ForgeFrontier extends JavaPlugin {
      */
     private void registerCommands() {
         // Bukkit-Registered Commands
-        registerCommand("gen"          , new GeneratorCommandExecutor());
         registerCommand("genshop"      , new GeneratorShopCommandExecutor());
         registerCommand("gearshop"     , new GearShopCommandExecutor());
-        registerCommand("pshop"         , itemShop.getCommandExecutor());
+        registerCommand("pshop"        , itemShop.getCommandExecutor());
         registerCommand("inspect"      , new InspectCommandExecutor());
         registerCommand("island"       , new IslandCommandExecutor());
         registerCommand("link"         , new LinkCommandExecutor());
@@ -207,16 +205,18 @@ public class ForgeFrontier extends JavaPlugin {
         registerCommand("mining"       , new MiningCommandExecutor());
         registerCommand("openshop"     , new OpenshopCommandExecutor());
 
-        // Wrapper-Registered Commands
+        // Wrapper-Registered Commands & Auto-Completer Registrations
         BukkitCommandHandler commandHandler = BukkitCommandHandler.create(this);
-        commandHandler.register(new BazaarCommand(this));
-        commandHandler.register(new FishingCommands(this));
-        // Auto-Completer Registrations
         AutoCompleter autoCompleter = commandHandler.getAutoCompleter();
+
         autoCompleter.registerSuggestion("cgive", customItemManager.getItemNames());
+        autoCompleter.registerSuggestion("gen modify", generatorManager.getGeneratorIds());
+        autoCompleter.registerSuggestion("gen delete", generatorManager.getGeneratorIds());
 
         commandHandler.register(new CustomGiveCommand(this));
-
+        commandHandler.register(new GeneratorCommand(this));
+        commandHandler.register(new BazaarCommand(this));
+        commandHandler.register(new FishingCommands(this));
     }
 
     private boolean setupEconomy() {
