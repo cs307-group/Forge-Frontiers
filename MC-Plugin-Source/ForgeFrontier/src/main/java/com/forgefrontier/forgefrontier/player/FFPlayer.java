@@ -37,6 +37,9 @@ public class FFPlayer {
     /** the current health of the player */
     double currentHealth;
 
+    // The time of the next skill used. Used for cooldowns.
+    long nextSkillTime;
+
     /**
      * gets the FFPlayer value from the database on player join if it exists
      *
@@ -370,4 +373,13 @@ public class FFPlayer {
         }
         return output;
     }
+
+    public long getNextSkillTime() {
+        return nextSkillTime;
+    }
+
+    public void setNextSkillTime(long nextSkillTime) {
+        this.nextSkillTime = nextSkillTime;
+    }
+
 }

@@ -1,21 +1,15 @@
 package com.forgefrontier.forgefrontier.items.gear.upgradegems;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.items.CustomItem;
-import com.forgefrontier.forgefrontier.items.CustomItemInstance;
-import com.forgefrontier.forgefrontier.items.CustomItemManager;
-import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import com.forgefrontier.forgefrontier.items.*;
 import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
-import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
-import com.forgefrontier.forgefrontier.player.FFPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
-public class SkillGem extends CustomItem {
+public class SkillGem extends UniqueCustomItem {
 
     /**
      * CustomItem constructor
@@ -47,29 +41,31 @@ public class SkillGem extends CustomItem {
             builder.addLoreLine("&bSkill&7: " + gemInst.skill.getName());
             builder.addLoreLine(gemInst.skill.getDescrption());
             builder.addLoreLine("");
+
+            gemInst.getData().put("skill-id", gemInst.skill.getId());
+
             return builder.build();
         });
     }
 
     @Override
     public void onApply(InventoryClickEvent e, CustomItemInstance itemInstance, ItemStack appliedItem) {
-        // TODO: Be able to apply gems
-        System.out.println("Skill Gem!");
         CustomItemInstance inst = CustomItemManager.asCustomItemInstance(appliedItem);
-        System.out.println(appliedItem + " " + inst);
+
         if(inst == null)
             return;
         if(!(inst instanceof GearItemInstance gearInstance)) {
             return;
         }
-        System.out.println("Work magic!");
-        SkillGemInstance skillGemInstnace = (SkillGemInstance) itemInstance;
-        gearInstance.setSkill(skillGemInstnace.getSkill());
+
+        SkillGemInstance skillGemInstance = (SkillGemInstance) itemInstance;
+        ForgeFrontier.getInstance().getLogger().info(skillGemInstance.toString());
+        gearInstance.setSkill(skillGemInstance.getSkill());
+
         e.setCancelled(true);
-        e.getClickedInventory().setItem(e.getSlot(), gearInstance.asItemStack());
-        e.getCursor().setAmount(0);
-        //e.setCursor(new ItemStack(Material.AIR));
-        //e.setCancelled(true);
+        e.setCurrentItem(gearInstance.asItemStack());
+        e.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
+        ((Player) e.getWhoClicked()).updateInventory();
     }
 
 }

@@ -196,7 +196,14 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
     }
 
     public void setSkill(Skill skill) {
+        if(skill == null)
+            ForgeFrontier.getInstance().getLogger().severe("Unable to set skill: " + skill);
         gearData.put("skill", skill.getId());
         this.skill = skill;
     }
+
+    public Skill getSkill() {
+        return this.skill;
+    }
+
 }

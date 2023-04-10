@@ -52,7 +52,11 @@ public class PlayerManager extends Manager implements Listener {
 
     @Override
     public void init() {
-
+        for(Player player: Bukkit.getOnlinePlayers()) {
+            players.put(player.getUniqueId(), player);
+            playersByName.put(player.getName(), player);
+            ffPlayers.put(player.getUniqueId(), new FFPlayer(player.getUniqueId()));
+        }
     }
 
     @Override

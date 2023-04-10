@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.items.gear;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem;
@@ -10,11 +11,13 @@ import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
+import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.google.common.collect.Multimap;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -136,8 +139,17 @@ public abstract class GearItem extends UniqueCustomItem {
             ItemStackBuilder builder = new ItemStackBuilder(gearItemInstance.material)
                 .setDisplayName(qualityColor + gearItemInstance.name)
                 .addLoreLine(ChatColor.GRAY + gearItemInstance.lore)
-                .addLoreLine("")
                 .addLoreLine(qualityColor + gearItemInstance.quality.toString())
+                .addLoreLine("");
+
+            if(gearItemInstance.skill != null) {
+                builder
+                    .addLoreLine("&e&fRight Click &7- " + gearItemInstance.skill.getName())
+                    .addLoreLine(gearItemInstance.skill.getDescrption())
+                    .addLoreLine("");
+            }
+
+            builder
                 .addLoreLine("&fBase Stats")
                 .addLoreLine(Arrays.stream(gearItemInstance.baseStats)
                     .map(stat -> qualityColor + stat.toString())
@@ -151,16 +163,11 @@ public abstract class GearItem extends UniqueCustomItem {
                 .addLoreLine(Arrays.stream(gearItemInstance.gems)
                     .map(gem -> (
                         gem == null ?
-                            "&7Empty Slot"
+                            "&7Empty Gem Slot"
                         :
                             (gem.getQuality().getColor() + gem.toString())
                     ))
                     .collect(Collectors.joining("\n")));
-            if(gearItemInstance.skill != null) {
-                builder
-                    .addLoreLine("&e&fRight Click &7- " + gearItemInstance.skill.getName())
-                    .addLoreLine(gearItemInstance.skill.getDescrption());
-            }
 
             builder.setUnbreakable(true);
 
@@ -197,6 +204,22 @@ public abstract class GearItem extends UniqueCustomItem {
 
             return item;
         });
+    }
+
+    @Override
+    public void onInteract(PlayerInteractEvent e, CustomItemInstance inst) {
+        GearItemInstance gearItemInstance = (GearItemInstance) inst;
+        if(gearItemInstance.getSkill() == null)
+            return;
+        FFPlayer ffPlayer = ForgeFrontier.getInstance().getPlayerManager().getFFPlayerFromID(e.getPlayer().getUniqueId());
+        if(System.currentTimeMillis() < ffPlayer.getNextSkillTime()) {
+            e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Cooldown: You must wait " + (int) ((ffPlayer.getNextSkillTime() - System.currentTimeMillis())/1000.0f + 1) + " second(s) before using a skill again.");
+            return;
+        }
+        ffPlayer.setNextSkillTime(System.currentTimeMillis() + gearItemInstance.getSkill().getCooldown());
+        if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            gearItemInstance.getSkill().activate(e.getPlayer());
+        }
     }
 
 

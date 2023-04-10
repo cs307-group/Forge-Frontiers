@@ -4,11 +4,11 @@ bskyblock:
     # Island Command. What command users will run to access their island.
     # To define alias, just separate commands with white space.
     # Added since 1.3.0.
-    island: island is skyblock sb
+    island: bsb
     # The island admin command.
     # To define alias, just separate commands with white space.
     # Added since 1.3.0.
-    admin: bsbadmin bsb skyblockadmin sbadmin sba
+    admin: bsbadmin sba
     # The default action for new player command call.
     # Sub-command of main player command that will be run on first player command call.
     # By default it is sub-command 'create'.
