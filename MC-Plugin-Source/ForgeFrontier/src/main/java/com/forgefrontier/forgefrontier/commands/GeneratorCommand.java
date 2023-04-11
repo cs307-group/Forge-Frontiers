@@ -71,7 +71,7 @@ public class GeneratorCommand {
         }
         Generator generator = plugin.getGeneratorManager().getGenerator(generatorId);
         if(generator == null) {
-            sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to delet the generator. It doesn't exist.");
+            sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to delete the generator. It doesn't exist.");
             return;
         }
     }

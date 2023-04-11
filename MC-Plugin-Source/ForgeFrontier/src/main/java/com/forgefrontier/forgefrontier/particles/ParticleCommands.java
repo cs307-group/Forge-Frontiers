@@ -1,16 +1,13 @@
 package com.forgefrontier.forgefrontier.particles;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.particles.designs.ParticleDesign;
 import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignSphere;
-import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleParticleSpawner;
-import org.bukkit.Color;
+import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleRepeatParticleSpawner;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.DefaultFor;
-import revxrsal.commands.annotation.Range;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.annotation.*;
 
@@ -41,7 +38,7 @@ public class ParticleCommands {
             pds.createStaticPoints(amount, dist);
         } else pds.createStaticPoints();
         ArrayList<Vector> points = pds.getNext();
-        SimpleParticleSpawner sps = new SimpleParticleSpawner(()->{
+        SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(()->{
             for (Vector v : points) {
                 p.spawnParticle(Particle.PORTAL, p.getEyeLocation().add(v).add(0,3,0), 1, 0, 0, 0);
             }

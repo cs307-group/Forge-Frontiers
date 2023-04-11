@@ -5,7 +5,7 @@ import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.commands.*;
 import com.forgefrontier.forgefrontier.connections.DatabaseManager;
 import com.forgefrontier.forgefrontier.fishing.FishingManager;
-import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
+//import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
 import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
@@ -199,7 +199,7 @@ public class ForgeFrontier extends JavaPlugin {
      */
     private void registerCommands() {
         // Bukkit-Registered Commands
-        registerCommand("gen"          , new GeneratorCommandExecutor());
+//        registerCommand("gen"          , new GeneratorCommandExecutor());
         registerCommand("genshop"      , new GeneratorShopCommandExecutor());
         registerCommand("gearshop"     , new GearShopCommandExecutor());
         registerCommand("pshop"         , itemShop.getCommandExecutor());

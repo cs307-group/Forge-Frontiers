@@ -29,7 +29,7 @@ public class FishModifier {
 
     public double getRodModifier(int level) {
         if (level < 0) level = 0;
-        if (level > rodLevel.size()) return rodLevel.get(rodLevel.size()-1);
+        if (level >= rodLevel.size()) return rodLevel.get(rodLevel.size()-1);
         else {
             return rodLevel.get(level);
         }

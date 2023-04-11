@@ -84,18 +84,18 @@ items:
       custom_data: ''
       name: ''
 base-rate:
-- 0.7
-- 0.234
-- 0.055
-- 0.015
-- 0.005
-- 0.001
+- 700
+- 224
+- 55
+- 15
+- 5
+- 1
 rod-rate:
   sealuck:
   - 1
+  - 1.02
   - 1.05
   - 1.1
-  - 1.15
   - 10000
 stat-rate:
   fishlevel:

@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.fishing;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.connections.FishDB;
+import com.forgefrontier.forgefrontier.particles.gameparticles.FishingDropParticle;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import com.forgefrontier.forgefrontier.utils.Manager;
@@ -31,7 +32,7 @@ public class FishingManager extends Manager implements Listener {
         super(plugin);
     }
     public ArrayList<String> rarities;
-    public ArrayList<Double> chances;
+    public ArrayList<Integer> chances;
     public HashMap<Integer, ArrayList<FishingDrop>> drops;
     public FishConfigUtil configUtil;
     public FishModifier rollModifier;
@@ -83,7 +84,9 @@ public class FishingManager extends Manager implements Listener {
             if (caught != null)
                 caught.remove();
             Player p = event.getPlayer();
-            givePlayerFishingDrop(p, event);
+            int rarity = givePlayerFishingDrop(p, event);
+            new FishingDropParticle(rarity, p.getWorld(),
+                    event.getHook().getLocation().add(0,2,0),0, 20).spawnParticle();
         }
     }
 
@@ -94,7 +97,13 @@ public class FishingManager extends Manager implements Listener {
 
 
     public FishingDrop rollFish(double rodmulti, double statmulti) {
+
         int rarity = calculateRarity(rodmulti,statmulti);
+        if (rodmulti == 11) rarity = 0;
+        else if (rodmulti == 12) rarity = 1;
+        else if (rodmulti == 13) rarity = 2;
+        else if (rodmulti == 14) rarity = 3;
+        else if (rodmulti == 15) rarity = 4;
         ArrayList<FishingDrop> poss = drops.get(rarity);
         return poss.get(Math.abs(rand.nextInt()) % poss.size());
     }
@@ -106,11 +115,14 @@ public class FishingManager extends Manager implements Listener {
         int out = 0;
         int accum = 0;
         for (int i = 0; i < chances.size(); i++) {
-            accum += (chances.get(i) * 1000.0);
+            accum += (chances.get(i));
             if (roll <= accum) {
                 out = i;
                 break;
             }
+        }
+        if (roll == 1000) {
+            out = chances.size() - 1;
         }
         plugin.getLogger().log(Level.INFO,"ROLL: " + roll + " GOT: " + out);
         return out;
@@ -120,7 +132,7 @@ public class FishingManager extends Manager implements Listener {
         return rollModifier;
     }
 
-    public void givePlayerFishingDrop(Player p, PlayerFishEvent e) {
+    public int givePlayerFishingDrop(Player p, PlayerFishEvent e) {
 
         // Update stats
         UUID pid = p.getUniqueId();
@@ -138,7 +150,14 @@ public class FishingManager extends Manager implements Listener {
 
         // Calculate roll
 
-        double rodMulti = rollModifier.getRodModifier(ItemUtil.getEnchantmentLevelInHand(p, Enchantment.LUCK));
+        int enchantLevel = ItemUtil.getEnchantmentLevelInHand(p, Enchantment.LUCK);
+        double rodMulti = rollModifier.getRodModifier(enchantLevel);
+        if (enchantLevel == 11) rodMulti = 11;
+        else if (enchantLevel == 12) rodMulti = 12;
+        else if (enchantLevel == 13) rodMulti = 13;
+        else if (enchantLevel == 14) rodMulti = 14;
+        else if (enchantLevel == 15) rodMulti = 15;
+
         double levelMulti = rollModifier.getLevelModifier(pfs.getLevel());
 
         FishingDrop fd = rollFish(rodMulti, levelMulti);
@@ -146,11 +165,12 @@ public class FishingManager extends Manager implements Listener {
             int amount = 100 * fd.rollNumber(rand);
             plugin.getEconomy().depositPlayer(p,100 * fd.rollNumber(rand));
             p.sendMessage("Fished up " + amount + "g!");
-            return;
+            return fd.getRarity();
         }
         pfs.incrementFishCaught(fd.getRarity());
         ItemGiver.giveItem(p, fd.roll(rand));
         p.sendMessage("Fished up " + rarities.get(fd.getRarity()) + " item!");
+        return fd.getRarity();
     }
 
 

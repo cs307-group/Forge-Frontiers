@@ -27,7 +27,10 @@ public class FishConfigUtil {
         fm.rarities.forEach((ra) -> {
             plugin.getLogger().log(Level.INFO,"Loaded Rarity: " + ra);
         });
-        List<Double> chance = config.getDoubleList("base-rate");
+        List<Integer> chance = config.getIntegerList("base-rate");
+        for (int i : chance) {
+            plugin.getLogger().log(Level.INFO,"Rarity Bound: " + i);
+        }
         fm.chances = new ArrayList<>(chance);
     }
 
