@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hydrophobefireman/lazy": "^0.0.5",
+    "@radix-ui/react-switch": "^1.0.2",
     "@types/node": "18.15.11",
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",

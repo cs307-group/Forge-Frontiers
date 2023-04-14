@@ -11,3 +11,4 @@ from .stash_config import StashConfig as StashConfig
 from .stash_instances import StashInstance as StashInstance
 from .stats import Stats as Stats
 from .user import User as User
+from .inventory import Inventory as Inventory

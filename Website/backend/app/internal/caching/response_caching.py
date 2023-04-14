@@ -2,9 +2,10 @@
 """
 # this module exposes a `cache` function which caches any response returned by your
 # code ( usually json ) and
-# when the same route is requested again, it first checks the filesystem for the cached file
-# and then directly sends it to the client instead of parsing the json again
-# this makes response extremely fast as you skip a database hit as well as the json parsing and
+# when the same route is requested again, it first checks the 
+# filesystem for the cached file and then directly sends it to the client 
+# instead of parsing the json again this makes response extremely fast as 
+# you skip a database hit as well as the json parsing and
 # serialising overhead
 # and sending binary using a wsgi server is pretty performant
 
@@ -36,7 +37,7 @@ def file_size(fname):
     try:
         statinfo = stat(fname)
         return statinfo.st_size
-    except:
+    except Exception:
         return 0
 
 
@@ -118,7 +119,7 @@ def cache(key_method, timeout=DEFAULT_CACHE_TIMEOUT, json_cache: bool = False):
                 if json_cache:
                     try:
                         return loads(Path(has_cache).read_text())["data"]
-                    except:
+                    except:  # noqa: E722
                         pass
                 else:
                     resp = get_cache_response(has_cache)

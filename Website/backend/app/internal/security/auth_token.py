@@ -75,7 +75,8 @@ def get_token(strict=True):
 
 def get_bearer_token(headers: Headers) -> str:
     auth = headers.get("Authorization", "")
-    # count= 1 as in the rare case that the bearer token itself has the word Bearer in it we want it intact
+    # count= 1 as in the rare case that the bearer token itself has 
+    # the word Bearer in it we want it intact
     return auth.replace("Bearer", "", 1).strip()
 
 

@@ -1,12 +1,12 @@
 import Head from "next/head";
-import {useState} from "react";
 
 import {AppLayout} from "@/components/Layout/AppLayout";
 import {ProfileViewer} from "@/components/Profile/Viewer";
+import {Spacer} from "@/components/Spacer";
+import {Switch} from "@/components/Switch";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
-import {PlayerStats, UserDataSecure} from "@/handlers/types";
-import {ShopData} from "@/handlers/types";
+import {PlayerStats, ShopData, UserDataSecure} from "@/handlers/types";
 import {
   fetchUserData,
   getPlayerShop,
@@ -15,7 +15,7 @@ import {
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import {DEFAULT_STATS} from "@/util/default-stats";
 
-export default function Profile({
+export default function Settings({
   data,
   cookie,
   stats,
@@ -32,24 +32,15 @@ export default function Profile({
   return (
     <>
       <Head>
-        <title>{`${data.name} | Forge Frontiers`}</title>
-
+        <title>{`${data.name}'s Settings | Forge Frontiers`}</title>
       </Head>
-      <AppLayout active="profile" title={`${data.name}'s Profile`}>
-        <ProfileViewer
-          data={data}
-          shop={shop}
-          stats={
-            Object.fromEntries(
-              Object.entries(stats).filter(([a]) => a !== "player_uuid")
-            ) as any
-          }
-        />
+      <AppLayout active="profile" title={`${data.name}'s Settings`}>
+        <Spacer y={30} />
+        <Switch />
       </AppLayout>
     </>
   );
 }
-
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   const userData = await fetchUserData(c);
   if (isErrorResponse(userData)) {

@@ -11,7 +11,7 @@ def get_user_by_username(idx: str) -> User:
     # email validator??
     try:
         email_validator.validate_email(idx)
-    except Exception as _:
+    except Exception:
         return guard(None, message)
     if not idx:
         return guard(None, message)

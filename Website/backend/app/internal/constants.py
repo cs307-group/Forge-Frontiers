@@ -19,7 +19,7 @@ DISABLE_CACHING = environ.get("DISABLE_CACHING") is not None
 try:
     CACHE_DIR = Path(gettempdir(), "@cache").resolve()
     CACHE_DIR.mkdir(exist_ok=True)
-except:
+except:  # noqa: E722
     CACHE_DIR = Path(path.dirname(path.realpath(__file__)), "@cache").resolve()
     CACHE_DIR.mkdir(exist_ok=True)
 CACHE_DIR = str(CACHE_DIR)

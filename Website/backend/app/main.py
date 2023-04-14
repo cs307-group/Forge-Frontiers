@@ -9,7 +9,7 @@ from app.internal.helpers.client_errors import method_not_allowed, not_found
 from app.routes import common, user, market, gens
 from flask_migrate import Migrate
 
-app = Flask(__name__)
+app = Flask(__name__)  # noqa: F811
 
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
