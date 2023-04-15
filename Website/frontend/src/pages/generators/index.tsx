@@ -47,9 +47,7 @@ export default function Generators({
     <>
       <Head>
         <title>{`Generators | Forge Frontiers`}</title>
-        <meta name="description" content="Forge Frontier Web Client" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+
       </Head>
       <AppLayout active="generators" title={`${userData.name}'s Generators`}>
         <div>

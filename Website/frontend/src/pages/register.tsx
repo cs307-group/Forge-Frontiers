@@ -10,9 +10,7 @@ export default function Register() {
     <>
       <Head>
         <title>Register | Forge Frontiers</title>
-        <meta name="description" content="Forge Frontier Web Client" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+
       </Head>
       <Auth>
         <AuthSideText>

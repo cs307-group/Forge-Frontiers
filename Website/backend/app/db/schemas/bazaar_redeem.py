@@ -1,5 +1,3 @@
-import os
-os.path.commonprefix
 from sqlalchemy.dialects.postgresql import TEXT
 
 from ..base import db

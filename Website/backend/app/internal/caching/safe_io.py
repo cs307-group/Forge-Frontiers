@@ -65,5 +65,5 @@ def safe_mkdir(dir_name: str):
 def safe_remove(filename: str):
     try:
         Path(filename).unlink()
-    except:
+    except:  # noqa: E722
         pass

@@ -1,4 +1,3 @@
-from secrets import token_urlsafe
 from sqlalchemy.dialects.postgresql import TEXT
 from ..base import db
 

@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 public class FFPlayer {
 
     /** an array of PlayerStat objects which represent the stats of the player */
-    private final PlayerStat[] stats;
+    private PlayerStat[] stats;
 
     /** the unique ID of the Player this FFPlayer represents */
     public UUID playerID;
@@ -108,7 +108,6 @@ public class FFPlayer {
 
         this.playerID = playerID;
 
-
         stats = new PlayerStat[] {
                 new PlayerStat(20, StatEnum.HP),
                 new PlayerStat(1, StatEnum.ATK),
@@ -120,9 +119,25 @@ public class FFPlayer {
         };
 
         this.currentHealth = getHP();
-
         this.tier = 0;
         this.ascensionLevel = 0;
+
+        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().getExistingPlayerStats(playerID, (statsMap) -> {
+            if (statsMap != null) {
+                stats = new PlayerStat[] {
+                        new PlayerStat((Integer) statsMap.get("HP"), StatEnum.HP),
+                        new PlayerStat((Integer) statsMap.get("ATK"), StatEnum.ATK),
+                        new PlayerStat((Integer) statsMap.get("STR"), StatEnum.STR),
+                        new PlayerStat((Integer) statsMap.get("DEX"), StatEnum.DEX),
+                        new PlayerStat((Integer) statsMap.get("CRATE"), StatEnum.CRATE),
+                        new PlayerStat((Integer) statsMap.get("CDMG"), StatEnum.CDMG),
+                        new PlayerStat((Integer) statsMap.get("DEF"), StatEnum.DEF)
+                };
+                this.currentHealth = (Double) statsMap.get("current_health");
+                this.tier = (Integer) statsMap.get("Tier");
+                this.ascensionLevel = (Integer) statsMap.get("AscensionLevel");
+            }
+        });
     }
 
 

@@ -17,7 +17,7 @@ FLASK_COMMANDS = (["python3", "runner.py", "coreserver"],)
 def get_argv(argv, i):
     try:
         return argv[i]
-    except:
+    except:  # noqa: E722
         return None
 
 
