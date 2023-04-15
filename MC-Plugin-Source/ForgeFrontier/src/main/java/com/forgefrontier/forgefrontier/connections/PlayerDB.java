@@ -110,12 +110,15 @@ public class PlayerDB extends DBConnection {
     /**
      * Updates player stat information with new information.
      */
-    public void updatePlayerStats(UUID uniqueId, double currentHealth, PlayerStat[] stats) {
+    public void updatePlayerStats(UUID uniqueId, double currentHealth, PlayerStat[] stats, int ascLevel, int tier) {
         new Thread(() -> {
             try {
 
-                String sql = "INSERT INTO public.stats (player_uuid, current_health, \"HP\", \"ATK\", \"STR\", \"DEX\", \"CRATE\", \"CDMG\", \"DEF\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (player_uuid) DO UPDATE SET " +
-                        "current_health = ?, \"HP\" = ?, \"ATK\" = ?, \"STR\" = ?, \"DEX\" = ?, \"CRATE\" = ?, \"CDMG\" = ?, \"DEF\" = ?;";
+                String sql = "INSERT INTO public.stats (player_uuid, current_health, \"HP\", \"ATK\", \"STR\", \"DEX\", " +
+                        "\"CRATE\", \"CDMG\", \"DEF\", \"AscensionLevel\", \"Tier\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                        "ON CONFLICT (player_uuid) DO UPDATE SET " +
+                        "current_health = ?, \"HP\" = ?, \"ATK\" = ?, \"STR\" = ?, \"DEX\" = ?, \"CRATE\" = ?, \"CDMG\" " +
+                        "= ?, \"DEF\" = ?, \"AscensionLevel\" = ?, \"Tier\" = ?;";
 
                 /* OLD:
                 "UPDATE public.stats " +
@@ -128,10 +131,14 @@ public class PlayerDB extends DBConnection {
                 for (int i = 0; i < 7; i++) {
                     preparedStatement.setInt(3 + i, stats[i].getStatValue());
                 }
-                preparedStatement.setDouble(10, currentHealth);
+                preparedStatement.setInt(10, ascLevel);
+                preparedStatement.setInt(11, tier);
+                preparedStatement.setDouble(12, currentHealth);
                 for (int i = 0; i < 7; i++) {
-                    preparedStatement.setInt(11 + i, stats[i].getStatValue());
+                    preparedStatement.setInt(13 + i, stats[i].getStatValue());
                 }
+                preparedStatement.setInt(20, ascLevel);
+                preparedStatement.setInt(21, tier);
                 preparedStatement.executeUpdate();
             } catch (Exception e) {
                 ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "[QUERY UPDATE PLAYER STATS FAILURE]\n" + e.getMessage());
@@ -140,7 +147,8 @@ public class PlayerDB extends DBConnection {
     }
 
     public void updatePlayerStats(FFPlayer ffPlayer) {
-        updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(), ffPlayer.getStats());
+        updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(), ffPlayer.getStats(),
+                ffPlayer.getAscension(), ffPlayer.getTier());
     }
 
 
@@ -149,13 +157,13 @@ public class PlayerDB extends DBConnection {
      *
      * Upon completion, runs the consumer giving the map of values of existing link, if it exists.
      */
-    /*
     public void getExistingPlayerStats(UUID playerUuid, Consumer<Map<String, Object>> consumer) {
         new Thread(() -> {
             try {
                 PreparedStatement ps = this.dbConn.prepareStatement(("SELECT " +
-                        "player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\" from public.stats " +
-                        "WHERE player_uuid = ?"));
+                        "player_uuid, current_health, stats.\"HP\", stats.\"ATK\", stats.\"STR\", stats.\"DEX\", " +
+                        "stats.\"CRATE\", stats.\"CDMG\", stats.\"DEF\", stats.\"AscensionLevel\", stats.\"Tier\"" +
+                        "from public.stats WHERE player_uuid = ?"));
                 ps.setString(1, playerUuid.toString());
                 ResultSet rs = ps.executeQuery();
                 if (rs != null && rs.next()) {
@@ -168,6 +176,8 @@ public class PlayerDB extends DBConnection {
                     int crate = rs.getInt("CRATE");
                     int cdmg = rs.getInt("CDMG");
                     int def = rs.getInt("DEF");
+                    int asc = rs.getInt("AscensionLevel");
+                    int tier = rs.getInt("Tier");
                     resultMap.put("current_health", currHealth);
                     resultMap.put("HP", hp);
                     resultMap.put("ATK", atk);
@@ -176,6 +186,8 @@ public class PlayerDB extends DBConnection {
                     resultMap.put("CRATE", crate);
                     resultMap.put("CDMG", cdmg);
                     resultMap.put("DEF", def);
+                    resultMap.put("AscensionLevel", asc);
+                    resultMap.put("Tier", tier);
                     consumer.accept(resultMap);
                 } else {
                     consumer.accept(null);
@@ -189,7 +201,6 @@ public class PlayerDB extends DBConnection {
             }
         }).start();
     }
-     */
 
     public void updatePlayerIsland(UUID playerUUID, String islandId, final Consumer<Boolean> callback) {
         UpdateQueryWrapper wrapper = new UpdateQueryWrapper();
