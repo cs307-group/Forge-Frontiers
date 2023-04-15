@@ -1,22 +1,10 @@
 package com.forgefrontier.forgefrontier.particles.designs;
 
-
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-/**
- * Design is the base structure for a particle
- * Either a "feed-forward" design, or a static design
- * See: getNext()
- */
-public abstract class ParticleDesign {
-
-
-    public ParticleDesign() {
-
-    }
-
+public class StaticParticleDesign extends ParticleDesign {
     /**
      * GetNext() returns next particle-set to be displayed of design
      * Static Designs: Returns the same thing every time
@@ -24,5 +12,8 @@ public abstract class ParticleDesign {
      */
     public ArrayList<Vector> getNext() {
         return null;
+    }
+    public void createStaticPoints() {
+
     }
 }

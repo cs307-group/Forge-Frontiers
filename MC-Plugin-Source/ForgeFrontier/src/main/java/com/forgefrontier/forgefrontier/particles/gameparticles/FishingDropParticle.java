@@ -39,11 +39,12 @@ public class FishingDropParticle {
         } else if (rarity == 1) {
             Particle.DustOptions dustOptions = new Particle.DustOptions(
                     Color.fromRGB(1, 140, 17), 2.0F);
-            w.spawnParticle(Particle.REDSTONE, loc, 50, dustOptions);
+            w.spawnParticle(Particle.REDSTONE, loc, 30, 0.5,0.5,0.5, dustOptions);
         } else if (rarity == 2) {
             Particle.DustOptions dustOptions = new Particle.DustOptions(
                     Color.fromRGB(42, 166, 255), 2.0F);
-            w.spawnParticle(Particle.REDSTONE, loc, 50, dustOptions);
+            w.spawnParticle(Particle.REDSTONE, loc, 40, 1.0,1.0,1.0, dustOptions);
+            w.spawnParticle(Particle.SOUL_FIRE_FLAME,loc,10,3,3,3);
         } else if (rarity == 3) {
             w.spawnParticle(Particle.REVERSE_PORTAL,loc,100);
         } else if (rarity == 4) {
@@ -51,6 +52,7 @@ public class FishingDropParticle {
         } else {
             w.spawnParticle(Particle.EXPLOSION_LARGE,loc,5,0.5,0.5,0.5);
             w.spawnParticle(Particle.LAVA,loc,100,0.5,0.5,0.5);
+            w.spawnParticle(Particle.SOUL_FIRE_FLAME,loc,50,5,5,5);
         }
     }
 

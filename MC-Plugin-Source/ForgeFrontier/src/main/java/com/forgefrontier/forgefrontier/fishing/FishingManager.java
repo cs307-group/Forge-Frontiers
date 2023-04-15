@@ -86,7 +86,7 @@ public class FishingManager extends Manager implements Listener {
             Player p = event.getPlayer();
             int rarity = givePlayerFishingDrop(p, event);
             new FishingDropParticle(rarity, p.getWorld(),
-                    event.getHook().getLocation().add(0,2,0),0, 20).spawnParticle();
+                    event.getHook().getLocation().add(0,1,0),0, 20).spawnParticle();
         }
     }
 

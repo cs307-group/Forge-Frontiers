@@ -5,7 +5,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class ParticleDesignSphere extends ParticleDesign {
+public class ParticleDesignSphere extends StaticParticleDesign {
 
     int num_points = 20;
     ArrayList<Vector> staticPoints;
@@ -32,7 +32,6 @@ public class ParticleDesignSphere extends ParticleDesign {
             x *= distance;
             y *= distance;
             z *= distance;
-
             staticPoints.add(new Vector(x,y,z));
         }
     }
