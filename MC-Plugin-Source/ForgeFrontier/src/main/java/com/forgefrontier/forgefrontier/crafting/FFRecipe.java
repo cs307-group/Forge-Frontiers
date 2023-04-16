@@ -14,11 +14,14 @@ public class FFRecipe {
     ItemStack[] recipeItems;
     SLOT_META[] recipeMeta;
     ItemStack result;
+    int baseOutAmount;
+
     public FFRecipe(ItemStack[] recipeItems, ItemStack result) {
         this.recipeItems = recipeItems;
         this.recipeMeta = new SLOT_META[9];
         Arrays.fill(recipeMeta,SLOT_META.ANY);
         this.result = result;
+        this.baseOutAmount = result.getAmount();
     }
 
 
@@ -59,10 +62,29 @@ public class FFRecipe {
     }
 
     public ItemStack getResult() {
-        return result;
+        return result.clone();
     }
 
+    public int getCraftableAmount(ItemStack[] items) {
+        int baseAmount = result.getAmount();
+
+        int total = 64 / baseAmount;
+        for (int i = 0; i < 9; i++) {
+            if (recipeItems[i] == null || recipeItems[i].getType() == Material.AIR) continue;
+            total = Math.min((items[i].getAmount() / recipeItems[i].getAmount()), total);
+        }
+        return total;
+    }
+
+
+    public ItemStack getItemComponent(int i) { return recipeItems[i]; }
+
+
     public void setResult(ItemStack result) {
-        this.result = result;
+        this.result = result; this.baseOutAmount = result.getAmount();
+    }
+
+    public int getOutAmount() {
+        return baseOutAmount;
     }
 }

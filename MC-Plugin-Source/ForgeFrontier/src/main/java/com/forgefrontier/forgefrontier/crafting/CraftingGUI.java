@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.crafting;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,6 +34,9 @@ public class CraftingGUI extends BaseInventoryHolder {
 
     private boolean validRecipe = false;
     private ItemStack output = null;
+    private FFRecipe currentRecipe = null;
+    private int currAmount = 0;
+
 
     CraftingManager craftingManager;
     ForgeFrontier plugin;
@@ -59,25 +63,34 @@ public class CraftingGUI extends BaseInventoryHolder {
         this.addHandler(SBR, this::inputSlotHandler);
     }
     public void inputSlotHandler(InventoryClickEvent e) {
+        ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Checking Recipe...");
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this::checkRecipeTask, 5);
     }
     public void checkRecipeTask() {
-        boolean found = false;
+
         for (FFRecipe r : craftingManager.getRecipes()) {
-            ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Checking Recipe...");
-            if (!r.isMatch(getSlotItems())) continue;
-            ItemStack validOut = r.getResult();
-            this.setItem(SOUT, validOut);
-            output = validOut;
-            validRecipe = true;
-            found = true;
-            break;
+            ItemStack[] slotItems = getSlotItems();
+            if (updateToRecipe(r,slotItems)) return;
         }
-        if (!found) {
-            this.validRecipe = false;
-            this.output = null;
-            this.setItem(SOUT, new ItemStack(Material.BARRIER));
+        // Nothing found
+        this.validRecipe = false;
+        this.output = null;
+        this.setItem(SOUT, new ItemStack(Material.BARRIER));
+        currentRecipe = null;
+        currAmount = 0;
+    }
+
+    public boolean updateToRecipe(FFRecipe r, ItemStack[] slotItems) {
+        if (!r.isMatch(slotItems)) {
+            return false;
         }
+        ItemStack validOut = r.getResult();
+        currAmount = r.getCraftableAmount(slotItems);
+        this.setItem(SOUT, validOut);
+        output = validOut;
+        validRecipe = true;
+        currentRecipe = r;
+        return true;
     }
 
 
@@ -97,11 +110,105 @@ public class CraftingGUI extends BaseInventoryHolder {
     }
 
     public void SOUTHandler(InventoryClickEvent e) {
-        if (!validRecipe) {
+        if (!validRecipe || currentRecipe == null) {
             e.setCancelled(true);
             return;
         }
+        if (e.getCursor() != null && e.getCursor().getType() != Material.AIR &&
+                !e.getCursor().isSimilar(currentRecipe.getResult())) {
+            ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Bad Null");
+            e.setCancelled(true);
+            return;
+        }
+
+
+        // Calculate amounts
+        ItemStack[] itms = getSlotItems();
+        if (e.isLeftClick() || e.isRightClick()) {
+            // Validate amounts
+            int nAmt = 1;
+            for (int i = 0; i < 9; i++) {
+                ItemStack ritem = currentRecipe.getItemComponent(i);
+                if (ritem != null && ritem.getType() != Material.AIR) {
+                    if (itms[i].getAmount() / ritem.getAmount() < nAmt) { e.setCancelled(true); return; }
+                }
+            }
+            boolean more = true;
+            for (int i = 0; i < 9; i++) {
+                ItemStack ritem = currentRecipe.getItemComponent(i);
+                if (ritem != null && ritem.getType() != Material.AIR) {
+                    int rm = (itms[i].getAmount() - currentRecipe.getItemComponent(i).getAmount());
+                    if (rm == 0) {
+                        this.setItem(idxToSlot(i), new ItemStack(Material.AIR));
+                        more = false;
+                    } else {
+                        // Can still craft more
+                        ItemStack nItem = itms[i].clone();
+                        nItem.setAmount(rm);
+                        this.setItem(idxToSlot(i), nItem);
+                    }
+                }
+            }
+            if (more) {
+                this.setItem(SOUT,currentRecipe.getResult());
+            } else {
+                this.setItem(SOUT, new ItemStack(Material.AIR));
+            }
+            if (e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
+                ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Cursor Empty");
+                e.getWhoClicked().setItemOnCursor(currentRecipe.getResult());   // result should have correct out amt
+            } else {
+                ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Cursor Fill");
+                ItemStack curs = e.getCursor();
+                curs = curs.clone();
+                curs.setAmount(curs.getAmount() + currentRecipe.getOutAmount());
+                e.getWhoClicked().setItemOnCursor(curs);
+            }
+
+        } else if (e.isShiftClick()) {
+            // Validate amounts
+            for (int i = 0; i < 9; i++) {
+                ItemStack ritem = currentRecipe.getItemComponent(i);
+                if (ritem != null && ritem.getType() != Material.AIR) {
+                    if (itms[i].getAmount() / ritem.getAmount() < currAmount) { e.setCancelled(true); return; }
+                }
+            }
+            for (int i = 0; i < 9; i++) {
+                ItemStack ritem = currentRecipe.getItemComponent(i);
+                if (ritem != null && ritem.getType() != Material.AIR) {
+                    int rm = itms[i].getAmount() % ritem.getAmount();
+                    if (rm == 0) {
+                        this.setItem(idxToSlot(i), new ItemStack(Material.AIR));
+                    } else {
+                        ItemStack nitm = itms[i].clone();
+                        nitm.setAmount(rm);
+                        this.setItem(idxToSlot(i), nitm);
+                    }
+                }
+            }
+        }
+        e.setCancelled(true);
+
+
+
     }
+
+
+    public int idxToSlot(int idx) {
+        return switch (idx) {
+            case 0 -> STL;
+            case 1 -> STM;
+            case 2 -> STR;
+            case 3 -> SCL;
+            case 4 -> SCM;
+            case 5 -> SCR;
+            case 6 -> SBL;
+            case 7 -> SBM;
+            case 8 -> SBR;
+            default -> STL;
+        };
+    }
+
 
     public void onClose(InventoryClickEvent e) {
 
