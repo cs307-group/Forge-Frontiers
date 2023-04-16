@@ -3,9 +3,11 @@ package com.forgefrontier.forgefrontier.crafting;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -61,10 +63,16 @@ public class CraftingGUI extends BaseInventoryHolder {
         this.addHandler(SBL, this::inputSlotHandler);
         this.addHandler(SBM, this::inputSlotHandler);
         this.addHandler(SBR, this::inputSlotHandler);
+        this.registerPlayerInventoryHandler(this::inputSlotHandler);
     }
     public void inputSlotHandler(InventoryClickEvent e) {
-        ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Checking Recipe...");
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this::checkRecipeTask, 5);
+    }
+
+    public void playerShiftHandler(InventoryClickEvent e) {
+        if (e.isShiftClick()) {
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this::checkRecipeTask, 5);
+        }
     }
     public void checkRecipeTask() {
 
@@ -116,7 +124,6 @@ public class CraftingGUI extends BaseInventoryHolder {
         }
         if (e.getCursor() != null && e.getCursor().getType() != Material.AIR &&
                 !e.getCursor().isSimilar(currentRecipe.getResult())) {
-            ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Bad Null");
             e.setCancelled(true);
             return;
         }
@@ -124,13 +131,40 @@ public class CraftingGUI extends BaseInventoryHolder {
 
         // Calculate amounts
         ItemStack[] itms = getSlotItems();
-        if (e.isLeftClick() || e.isRightClick()) {
+         if (e.isShiftClick()) {
+            // Validate amounts
+            for (int i = 0; i < 9; i++) {
+                ItemStack ritem = currentRecipe.getItemComponent(i);
+                if (ritem != null && ritem.getType() != Material.AIR) {
+                    if (itms[i] == null || itms[i].getAmount() / ritem.getAmount() < currAmount)
+                    { e.setCancelled(true); return; }
+                }
+            }
+            for (int i = 0; i < 9; i++) {
+                ItemStack ritem = currentRecipe.getItemComponent(i);
+                if (ritem != null && ritem.getType() != Material.AIR) {
+                    int rm = itms[i].getAmount() % ritem.getAmount();
+                    if (rm == 0) {
+                        this.setItem(idxToSlot(i), new ItemStack(Material.AIR));
+                    } else {
+                        ItemStack nitm = itms[i].clone();
+                        nitm.setAmount(rm);
+                        this.setItem(idxToSlot(i), nitm);
+                    }
+                }
+            }
+            ItemStack outItm = currentRecipe.getResult();
+            outItm.setAmount(1);
+            ItemGiver.giveItem((Player) e.getWhoClicked(),outItm,currentRecipe.getOutAmount() * currAmount);
+            currAmount = 0;
+        } else if (e.isLeftClick() || e.isRightClick()) {
             // Validate amounts
             int nAmt = 1;
             for (int i = 0; i < 9; i++) {
                 ItemStack ritem = currentRecipe.getItemComponent(i);
                 if (ritem != null && ritem.getType() != Material.AIR) {
-                    if (itms[i].getAmount() / ritem.getAmount() < nAmt) { e.setCancelled(true); return; }
+                    if (itms[i] == null || itms[i].getAmount() / ritem.getAmount() < nAmt)
+                    { e.setCancelled(true); return; }
                 }
             }
             boolean more = true;
@@ -155,37 +189,14 @@ public class CraftingGUI extends BaseInventoryHolder {
                 this.setItem(SOUT, new ItemStack(Material.AIR));
             }
             if (e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
-                ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Cursor Empty");
                 e.getWhoClicked().setItemOnCursor(currentRecipe.getResult());   // result should have correct out amt
             } else {
-                ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Cursor Fill");
                 ItemStack curs = e.getCursor();
                 curs = curs.clone();
                 curs.setAmount(curs.getAmount() + currentRecipe.getOutAmount());
                 e.getWhoClicked().setItemOnCursor(curs);
             }
 
-        } else if (e.isShiftClick()) {
-            // Validate amounts
-            for (int i = 0; i < 9; i++) {
-                ItemStack ritem = currentRecipe.getItemComponent(i);
-                if (ritem != null && ritem.getType() != Material.AIR) {
-                    if (itms[i].getAmount() / ritem.getAmount() < currAmount) { e.setCancelled(true); return; }
-                }
-            }
-            for (int i = 0; i < 9; i++) {
-                ItemStack ritem = currentRecipe.getItemComponent(i);
-                if (ritem != null && ritem.getType() != Material.AIR) {
-                    int rm = itms[i].getAmount() % ritem.getAmount();
-                    if (rm == 0) {
-                        this.setItem(idxToSlot(i), new ItemStack(Material.AIR));
-                    } else {
-                        ItemStack nitm = itms[i].clone();
-                        nitm.setAmount(rm);
-                        this.setItem(idxToSlot(i), nitm);
-                    }
-                }
-            }
         }
         e.setCancelled(true);
 
@@ -208,6 +219,7 @@ public class CraftingGUI extends BaseInventoryHolder {
             default -> STL;
         };
     }
+
 
 
     public void onClose(InventoryClickEvent e) {
