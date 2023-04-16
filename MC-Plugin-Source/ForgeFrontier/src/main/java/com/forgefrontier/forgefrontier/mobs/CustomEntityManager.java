@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.mobs;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
@@ -109,7 +110,6 @@ public class CustomEntityManager extends Manager implements Listener {
                 if (entity.getHandle() instanceof HitBoxEntity hitBox) {
                     namePlate += (String) entity.getMetadata("name").get(0).value() +
                             ": " + currHealth + "/" + ((int) entity.getMaxHealth());
-                    System.out.println("Nameplate: " + namePlate);
                     entity.setCustomName(namePlate);
                 } else {
                     namePlate += entity.getMetadata("name").get(0).value() +
@@ -185,13 +185,16 @@ public class CustomEntityManager extends Manager implements Listener {
         }
 
         if (entity.hasMetadata("code")) {
-            // checks if the entity is a hitbox entity
+            // checks if the entity is a slime entity
             if (entity instanceof Slime slime) {
+                System.out.println("IS SLIME");
                 if (slime instanceof CraftEntity craftEntity) {
-                    HitBoxEntity hitBoxEntity = (HitBoxEntity) craftEntity.getHandle();
-                    if (hitBoxEntity != null) {
-                        hitBoxEntity.dropItems();
-                        hitBoxEntity.setLoc(null);
+                    System.out.println("IS CRAFT");
+                    CustomSlimeEntity customSlimeEntity = (CustomSlimeEntity) craftEntity.getHandle();
+                    if (customSlimeEntity != null) {
+                        System.out.println("IS SLIME ENTITY");
+                        customSlimeEntity.dropItems();
+                        customSlimeEntity.setLoc(null);
                     }
                 }
                 slime.setHealth(1);
