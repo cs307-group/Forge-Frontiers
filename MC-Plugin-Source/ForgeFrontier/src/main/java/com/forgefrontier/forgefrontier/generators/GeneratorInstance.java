@@ -40,7 +40,7 @@ public class GeneratorInstance implements Locatable {
         return new GeneratorInventoryHolder(this).getInventory();
     }
 
-    public void collect(Player player) {
+    public void collect(Player player, Runnable callback) {
         ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().updateGenerator(this, (status) -> {
             if(status == GeneratorDB.Status.ERROR) {
                 ForgeFrontier.getInstance().getLogger().severe("Unable to get information for a generator instance when updating.");
@@ -60,11 +60,16 @@ public class GeneratorInstance implements Locatable {
                 }
                 int amtLeft = this.generator.primaryMaterial.collect(player, collectAmt);
                 this.setAmountLeft(amtLeft, currentTime, nextTimeRemain);
+
                 ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().sendGeneratorUpdate(this, (success) -> {
                     if(!success) {
                         Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
                             ForgeFrontier.getInstance().getLogger().severe("Unable to send generator update to database. An unknown error occurred in doing so.");
                             player.sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to update your generator. Please try again later.");
+                        });
+                    } else {
+                        Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                            callback.run();
                         });
                     }
                 });

@@ -25,8 +25,9 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
         this.fillPanes();
         this.setCollectItem();
         this.addHandler(9+2, (e) -> {
-            generatorInstance.collect((Player) e.getWhoClicked());
-            setCollectItem();
+            generatorInstance.collect((Player) e.getWhoClicked(), () -> {
+                this.setCollectItem();
+            });
         });
 
         this.addHandler(9 + 4, (e) -> {

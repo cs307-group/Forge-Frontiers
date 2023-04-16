@@ -19,7 +19,7 @@ public class CreateIslandInventoryHolder extends BaseInventoryHolder {
                 .build());
 
         this.addHandler(9 + 4, (e) -> {
-            ((Player) e.getWhoClicked()).performCommand("skyblock create");
+            ((Player) e.getWhoClicked()).performCommand("bsb create");
             e.getWhoClicked().closeInventory();
         });
 

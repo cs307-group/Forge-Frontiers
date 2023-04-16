@@ -49,7 +49,7 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
                     .addLoreLine("&7Generation Rate: &f" + ((float) genLevel.generatorRate / 1000) + "&7 seconds per item")
                     .addLoreLine("&7Max Size: &f" + genLevel.maxSize)
                     .build());
-        if(generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts == null) {
+        if(generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts.size() == 0) {
             this.setItem(9 * 3 + 7, new ItemStackBuilder(Material.GREEN_WOOL)
                     .setDisplayName("&cYou have reached the max level.").build());
             return;
