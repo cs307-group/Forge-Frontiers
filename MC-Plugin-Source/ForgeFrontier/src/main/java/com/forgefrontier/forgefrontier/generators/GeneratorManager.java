@@ -45,13 +45,20 @@ public class GeneratorManager extends Manager implements Listener {
 
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem());
 
-        /*this.plugin.getDatabaseManager().getConfigDB().loadGenerators((generators) -> {
+        this.plugin.getDatabaseManager().getConfigDB().loadGenerators((generators) -> {
             for(Generator generator: generators) {
                 this.generators.put(generator.getId(), generator);
             }
-        });*/
 
+            int genIndex = 0;
+            String generatorId;
+            while((generatorId = this.plugin.getConfig("generators").getString("generator-shop." + genIndex)) != null) {
+                shopMenuList.add(this.generators.get(generatorId));
+                genIndex += 1;
+            }
+        });
 
+        /*
         int generatorInd = 0;
         ConfigurationSection configSection;
         while((configSection = this.plugin.getConfig("generators").getConfigurationSection("generators." + generatorInd)) != null) {
@@ -60,13 +67,7 @@ public class GeneratorManager extends Manager implements Listener {
             generatorInd += 1;
         }
 
-
-        int genIndex = 0;
-        String generatorId;
-        while((generatorId = this.plugin.getConfig("generators").getString("generator-shop." + genIndex)) != null) {
-            shopMenuList.add(this.generators.get(generatorId));
-            genIndex += 1;
-        }
+         */
 
     }
 
@@ -91,7 +92,7 @@ public class GeneratorManager extends Manager implements Listener {
 
     @Override
     public void disable() {
-
+        plugin.getDatabaseManager().getConfigDB().updateGenerators();
     }
 
     @EventHandler
@@ -145,6 +146,10 @@ public class GeneratorManager extends Manager implements Listener {
             Location corner = island.getCenter().subtract(512, 0, 512);
             tree = new QuadTree<>(corner.getBlockX(), -128, corner.getBlockZ(), 1024, 512, 1024);
             generatorInstanceTree.put(island.getUniqueId(), tree);
+        }
+        if(tree.get(location.getBlockX(), location.getBlockY(), location.getBlockZ()) != null) {
+            tree.remove(tree.get(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+            return true;
         }
         tree.insert(generatorInstance);
         return true;

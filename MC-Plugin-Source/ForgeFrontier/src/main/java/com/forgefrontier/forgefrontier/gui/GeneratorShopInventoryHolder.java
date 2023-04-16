@@ -1,10 +1,7 @@
 package com.forgefrontier.forgefrontier.gui;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.generators.Generator;
-import com.forgefrontier.forgefrontier.generators.MaterialCost;
-import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItem;
-import com.forgefrontier.forgefrontier.generators.PlaceGeneratorItemInstance;
+import com.forgefrontier.forgefrontier.generators.*;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.stashes.PlaceStashItemInstance;
@@ -40,9 +37,15 @@ public class GeneratorShopInventoryHolder extends BaseInventoryHolder {
         int i = 0;
         for(Generator generator: shopGenerators) {
             final int slotId = 9 + 1 + i + (i / 7) * 9;
+            GeneratorLevel level = generator.getGeneratorLevels().get(0);
             ItemStackBuilder builder =
-                    new ItemStackBuilder(generator.getMaterialRepresentation())
-                            .setDisplayName(generator.getFriendlyName());
+                new ItemStackBuilder(generator.getMaterialRepresentation())
+                    .setDisplayName(generator.getFriendlyName())
+                    .addLoreLine("&8Resource: " + generator.getPrimaryMaterial().getRepresentation().getItemMeta().getDisplayName())
+                    .addLoreLine("&8Generation Rate: &f&l" + (level.getGeneratorRate()/1000.0) + " &7seconds per item")
+                    .addLoreLine("&8Max Size: &f&l" + level.getMaxSize())
+                    .addLoreLine("&fCost: ");
+
             for(MaterialCost cost: generator.getShopCost()) {
                 builder.addLoreLine("&7>> &f" + cost.getAmount() + "&7x " + cost.getMaterial().getRepresentation().getItemMeta().getDisplayName());
             }

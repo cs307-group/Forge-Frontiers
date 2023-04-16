@@ -28,10 +28,6 @@ public class InsertQueryWrapper {
         }
     }
 
-    String query = "INSERT INTO bazaar_orders " +
-            "(order_id, order_type, lister_id, slot_id, amount, price, listdate) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
     String table;
     List<String> fields;
     Map<String, Object> values;

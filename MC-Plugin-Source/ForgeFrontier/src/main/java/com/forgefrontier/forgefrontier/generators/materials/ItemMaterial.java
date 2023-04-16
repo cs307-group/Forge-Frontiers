@@ -16,6 +16,10 @@ public class ItemMaterial extends CustomMaterial {
         this.item = item;
     }
 
+    public CustomItem getItem() {
+        return this.item;
+    }
+
     @Override
     public int collect(Player p, int amt) {
         ItemStack itemStack = item.asInstance(null).asItemStack();

@@ -94,6 +94,7 @@ public class StashInventoryHolder extends BaseInventoryHolder {
                 .setFullLore(lore)
                 .build()
             );
+            i += 1;
         }
 
         this.setItem(7 + 9 * 3, new ItemStackBuilder(Material.RED_WOOL)

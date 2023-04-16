@@ -34,5 +34,3 @@ commands:
     description: "Command used for spawning custom entities."
   mining:
     description: "Command used for creating and changing mining areas."
-  openshop:
-    description: "Open the normal shop."

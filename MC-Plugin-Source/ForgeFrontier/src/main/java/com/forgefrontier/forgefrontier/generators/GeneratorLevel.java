@@ -3,6 +3,8 @@ package com.forgefrontier.forgefrontier.generators;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.configuration.ConfigurationSection;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,5 +83,18 @@ public class GeneratorLevel {
 
     public void insertCost() {
         this.upgradeCosts.add(new MaterialCost("coin", "", 1000));
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        obj.put("generation_rate", this.generatorRate);
+        obj.put("max_size", this.maxSize);
+        obj.put("req_tier", this.requiredTier);
+        JSONArray upgradeArr = new JSONArray();
+        for(MaterialCost cost: this.upgradeCosts) {
+            upgradeArr.add(cost.toJSONObject());
+        }
+        obj.put("upgrade_costs", upgradeArr);
+        return obj;
     }
 }
