@@ -28,6 +28,8 @@ public class Generator {
         this.friendlyName = id;
         this.materialRepresentation = Material.BARRIER;
         this.primaryMaterial = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial("item", "Null");
+        this.generatorLevels = new ArrayList<>();
+        this.shopCost = new ArrayList<>();
     }
 
     public Generator(ConfigurationSection config) {

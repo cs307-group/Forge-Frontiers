@@ -2,11 +2,12 @@ package com.forgefrontier.forgefrontier.gui;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.Generator;
+import com.forgefrontier.forgefrontier.generators.GeneratorLevel;
+import com.forgefrontier.forgefrontier.generators.MaterialCost;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import net.wesjd.anvilgui.AnvilGUI;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 
 public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
 
-    Generator generator;
+    private Generator generator;
 
     public ModifyGeneratorInventoryHolder(Generator generator) {
         super(54, "Modify Generator");
@@ -37,7 +38,8 @@ public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
                     return Arrays.asList(AnvilGUI.ResponseAction.close());
                 }))
                 .itemLeft(new ItemStack(Material.PAPER))
-                .title("Enter Friendly Name").text(generator.getFriendlyName())
+                .title("Enter Friendly Name")
+                .text(generator.getFriendlyName())
                 .plugin(ForgeFrontier.getInstance())
                 .open((Player) e.getWhoClicked());
         });
@@ -47,7 +49,7 @@ public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
             if(!e.getCursor().getType().isBlock())
                 return;
             generator.setBlockMaterial(e.getCursor().getType());
-            e.getWhoClicked().openInventory(this.getInventory());
+            this.getInventory();
         });
         this.addHandler(9 + 6, (e) -> {
             if(e.getCursor() == null || e.getCursor().getType() == Material.AIR)
@@ -57,8 +59,19 @@ public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
             if(customItem == null)
                 return;
             generator.setPrimaryMaterial(customItem);
-            e.getWhoClicked().openInventory(this.getInventory());
+            this.getInventory();
         });
+        this.addHandler(9 * 4 + 7, (e) -> {
+            int index = this.generator.getGeneratorLevels().size();
+            this.generator.getGeneratorLevels().add(new GeneratorLevel(10000, 256));
+            e.getWhoClicked().openInventory(new ModifyGeneratorLevelInventoryHolder(generator, index).getInventory());
+        });
+        for(int i = 0; i < generator.getGeneratorLevels().size(); i++) {
+            final int index = i;
+            this.addHandler(9 * 3 + 1 + i, (e) -> {
+                e.getWhoClicked().openInventory(new ModifyGeneratorLevelInventoryHolder(generator, index).getInventory());
+            });
+        }
     }
 
     @Override
@@ -77,6 +90,27 @@ public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
         this.setItem(9 + 6, new ItemStackBuilder(generator.getPrimaryMaterial().getRepresentation().getType())
             .setDisplayName("&bResource Generated &f- " + generator.getPrimaryMaterial().getRepresentation().getItemMeta().getDisplayName())
             .addLoreLine("&7Click with a new item to change the resource.")
+            .build());
+
+        for(int i = 0; i < 7; i++){
+            this.setItem(9 * 3 + 1 + i, new ItemStack(Material.AIR));
+        }
+        int i = 0;
+        for(GeneratorLevel level: generator.getGeneratorLevels()) {
+            ItemStackBuilder builder = new ItemStackBuilder(generator.getMaterialRepresentation())
+                .setDisplayName("&7Level &f" + (i + 1))
+                    .addLoreLine("&7Generation Rate: &f" + level.getGeneratorRate())
+                    .addLoreLine("&7Max Size: &f" + level.getMaxSize())
+                    .addLoreLine("&8Costs: ");
+
+            for(MaterialCost cost: level.getUpgradeCosts()) {
+                builder.addLoreLine("&7>> &f" + cost.getAmount() + "&7x " + cost.getMaterial().getRepresentation().getItemMeta().getDisplayName());
+            }
+            this.setItem(9 * 3 + 1 + i, builder.build());
+            i += 1;
+        }
+        this.setItem(9 * 4 + 7, new ItemStackBuilder(Material.GREEN_STAINED_GLASS_PANE)
+            .setDisplayName("&aAdd new Generator Level")
             .build());
 
         return this.inventory;

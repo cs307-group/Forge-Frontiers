@@ -59,7 +59,7 @@ public class SkillGem extends UniqueCustomItem {
         }
 
         SkillGemInstance skillGemInstance = (SkillGemInstance) itemInstance;
-        ForgeFrontier.getInstance().getLogger().info(skillGemInstance.toString());
+
         gearInstance.setSkill(skillGemInstance.getSkill());
 
         e.setCancelled(true);

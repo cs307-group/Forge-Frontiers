@@ -24,8 +24,8 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
             this.setItem(9+1+i,
                 new ItemStackBuilder(generator.getMaterialRepresentation())
                     .setDisplayName(generator.getFriendlyName() + "&7 - Lvl &f" + (i + 1))
-                    .addLoreLine("&7Generation Rate: &f" + ((float) genLevel.generatorRate / 1000) + "&7 seconds per item")
-                    .addLoreLine("&7Max Size: &f" + genLevel.maxSize)
+                    .addLoreLine("&7Generation Rate: &f" + ((float) genLevel.getGeneratorRate() / 1000) + "&7 seconds per item")
+                    .addLoreLine("&7Max Size: &f" + genLevel.getMaxSize())
                     .build());
             i++;
         }
@@ -46,27 +46,27 @@ public class GeneratorUpgradeInventoryHolder extends BaseInventoryHolder {
         this.setItem(9 * 3 + 4,
                 new ItemStackBuilder(generator.getMaterialRepresentation())
                     .setDisplayName("&6Current Level: " + generator.getFriendlyName() + "&7 - Lvl &f" + (level+1))
-                    .addLoreLine("&7Generation Rate: &f" + ((float) genLevel.generatorRate / 1000) + "&7 seconds per item")
-                    .addLoreLine("&7Max Size: &f" + genLevel.maxSize)
+                    .addLoreLine("&7Generation Rate: &f" + ((float) genLevel.getGeneratorRate() / 1000) + "&7 seconds per item")
+                    .addLoreLine("&7Max Size: &f" + genLevel.getMaxSize())
                     .build());
-        if(generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts == null) {
+        if(generator.getGeneratorLevels().get(generatorInstance.level).getUpgradeCosts().size() == 0) {
             this.setItem(9 * 3 + 7, new ItemStackBuilder(Material.GREEN_WOOL)
                     .setDisplayName("&cYou have reached the max level.").build());
             return;
         }
         ItemStackBuilder buyItemBuilder = new ItemStackBuilder(Material.GREEN_WOOL)
             .setDisplayName("&aBuy Upgrade");
-        for(MaterialCost cost: generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts) {
+        for(MaterialCost cost: generator.getGeneratorLevels().get(generatorInstance.level).getUpgradeCosts()) {
             buyItemBuilder.addLoreLine("&7>> &f" + cost.getAmount() + "&7x " + cost.getMaterial().getRepresentation().getItemMeta().getDisplayName());
         }
         this.setItem(9 * 3 + 7, buyItemBuilder.build());
-        final List<MaterialCost> costs = generator.getGeneratorLevels().get(generatorInstance.level).upgradeCosts;
+        final List<MaterialCost> costs = generator.getGeneratorLevels().get(generatorInstance.level).getUpgradeCosts();
         this.addHandler(9 * 3 + 7, (e) -> {
             boolean works = true;
             boolean validTier = true;
 
             int playerTier = ForgeFrontier.getInstance().getPlayerManager().getFFPlayers().get((e.getWhoClicked()).getUniqueId()).getTier();
-            int requiredTier = generator.getGeneratorLevels().get(generatorInstance.level).requiredTier;
+            int requiredTier = generator.getGeneratorLevels().get(generatorInstance.level).getRequiredTier();
 
             for(MaterialCost cost: costs) {
                 if(!cost.hasBalance((Player) e.getWhoClicked())) {

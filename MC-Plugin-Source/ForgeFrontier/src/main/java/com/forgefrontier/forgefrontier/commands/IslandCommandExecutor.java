@@ -33,12 +33,11 @@ public class IslandCommandExecutor implements CommandExecutor {
             }
         } else if(args.length == 1) {
             if(args[0].equals("home")) {
-                p.performCommand("skyblock home");
+                p.performCommand("bsb home");
             } else {
                 p.sendMessage("Unknown subcommand: " + args[0]);
             }
         }
-
 
         return true;
     }

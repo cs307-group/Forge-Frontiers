@@ -76,4 +76,11 @@ public class JSONWrapper {
         return wrapperList;
     }
 
+    public void setString(String key, String value) {
+        this.object.put(key, value);
+    }
+
+    public String toJSONString() {
+        return this.object.toJSONString();
+    }
 }

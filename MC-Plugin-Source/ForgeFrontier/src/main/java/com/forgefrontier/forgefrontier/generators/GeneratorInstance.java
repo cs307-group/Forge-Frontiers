@@ -40,7 +40,7 @@ public class GeneratorInstance implements Locatable {
         return new GeneratorInventoryHolder(this).getInventory();
     }
 
-    public void collect(Player player) {
+    public void collect(Player player, Runnable callback) {
         ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().updateGenerator(this, (status) -> {
             if(status == GeneratorDB.Status.ERROR) {
                 ForgeFrontier.getInstance().getLogger().severe("Unable to get information for a generator instance when updating.");
@@ -52,19 +52,24 @@ public class GeneratorInstance implements Locatable {
 
                 GeneratorLevel currentLevel = getGeneratorLevel();
 
-                int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
-                int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.generatorRate;
-                if(collectAmt >= currentLevel.maxSize) {
-                    collectAmt = currentLevel.maxSize;
+                int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.getGeneratorRate();
+                int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.getGeneratorRate();
+                if(collectAmt >= currentLevel.getMaxSize()) {
+                    collectAmt = currentLevel.getMaxSize();
                     nextTimeRemain = 0;
                 }
                 int amtLeft = this.generator.primaryMaterial.collect(player, collectAmt);
                 this.setAmountLeft(amtLeft, currentTime, nextTimeRemain);
+
                 ForgeFrontier.getInstance().getDatabaseManager().getGeneratorDB().sendGeneratorUpdate(this, (success) -> {
                     if(!success) {
                         Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
                             ForgeFrontier.getInstance().getLogger().severe("Unable to send generator update to database. An unknown error occurred in doing so.");
                             player.sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry. An error occurred when attempting to update your generator. Please try again later.");
+                        });
+                    } else {
+                        Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                            callback.run();
                         });
                     }
                 });
@@ -75,7 +80,7 @@ public class GeneratorInstance implements Locatable {
     private void setAmountLeft(int amtLeft, long currentTime, int remainingTime) {
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        this.lastCollectTime = currentTime - remainingTime - amtLeft * currentLevel.generatorRate;
+        this.lastCollectTime = currentTime - remainingTime - amtLeft * currentLevel.getGeneratorRate();
 
     }
 
@@ -84,10 +89,9 @@ public class GeneratorInstance implements Locatable {
 
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        if(currentLevel.generatorRate == 0) currentLevel.generatorRate = 1;
-        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
-        if(collectAmt > currentLevel.maxSize) {
-            collectAmt = currentLevel.maxSize;
+        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.getGeneratorRate();
+        if(collectAmt > currentLevel.getMaxSize()) {
+            collectAmt = currentLevel.getMaxSize();
         }
 
         return collectAmt;
@@ -102,7 +106,7 @@ public class GeneratorInstance implements Locatable {
     }
 
     public int getMaxAmt() {
-        return this.generator.generatorLevels.get(level).maxSize;
+        return this.generator.generatorLevels.get(level).getMaxSize();
     }
 
     public GeneratorLevel getGeneratorLevel() {
@@ -126,8 +130,8 @@ public class GeneratorInstance implements Locatable {
 
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
-        int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.generatorRate;
+        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.getGeneratorRate();
+        int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.getGeneratorRate();
 
         this.level += 1;
 

@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.generators;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.generators.materials.CoinMaterial;
 import com.forgefrontier.forgefrontier.generators.materials.CustomMaterial;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
@@ -28,6 +29,16 @@ public class MaterialCost {
         this.amount = jsonWrapper.getInt("amount");
     }
 
+    public MaterialCost(String materialType, String itemId, int amount) {
+        this.material = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial(materialType, itemId);
+        this.amount = amount;
+    }
+
+    public MaterialCost(CustomMaterial material, int amount) {
+        this.material = material;
+        this.amount = amount;
+    }
+
     public CustomMaterial getMaterial() {
         return this.material;
     }
@@ -47,6 +58,10 @@ public class MaterialCost {
     @Override
     public String toString() {
         return "(material: " + material + ", amount: " + amount + ")";
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
 }

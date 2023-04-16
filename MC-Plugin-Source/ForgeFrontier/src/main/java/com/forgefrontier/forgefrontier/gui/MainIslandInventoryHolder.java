@@ -17,7 +17,7 @@ public class MainIslandInventoryHolder extends BaseInventoryHolder {
             .build());
         this.addHandler(9 + 2, (e) -> {
             Player p = (Player) e.getWhoClicked();
-            p.performCommand("island home");
+            p.performCommand("bsb home");
         });
 
         this.setItem(9 + 6, new ItemStackBuilder(Material.IRON_DOOR)
