@@ -6,6 +6,7 @@ import com.forgefrontier.forgefrontier.generators.Generator;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.GeneralCustomItem;
+import com.forgefrontier.forgefrontier.items.GeneralCustomSkullItem;
 import com.forgefrontier.forgefrontier.stashes.Stash;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ public class ConfigDB extends DBConnection {
     }
 
 
-    public void loadItems(Consumer<List<GeneralCustomItem>> consumer) {
+    public void loadItems(Consumer<List<CustomItem>> consumer) {
         SelectQueryWrapper wrapper = new SelectQueryWrapper();
         wrapper.setTable("public.items");
         wrapper.setFields(
@@ -34,15 +35,20 @@ public class ConfigDB extends DBConnection {
             "lore"
         );
         ResultSet resultSet = wrapper.executeSyncQuery(this.dbConn);
-        List<GeneralCustomItem> items = new ArrayList<>();
+        List<CustomItem> items = new ArrayList<>();
         try {
             while (resultSet.next()) {
                 String itemId = resultSet.getString(1);
                 String material = resultSet.getString(2);
                 String name = resultSet.getString(3);
                 String lore = resultSet.getString(4);
-                GeneralCustomItem item = new GeneralCustomItem(itemId, material, name, lore);
-                items.add(item);
+                if (material.equals("SKULL")) {
+                    GeneralCustomSkullItem item = new GeneralCustomSkullItem(itemId,name,lore);
+                    items.add(item);
+                } else {
+                    GeneralCustomItem item = new GeneralCustomItem(itemId, material, name, lore);
+                    items.add(item);
+                }
             }
         } catch(SQLException e) {
             ForgeFrontier.getInstance().getLogger().severe("Unable to import items from database.");

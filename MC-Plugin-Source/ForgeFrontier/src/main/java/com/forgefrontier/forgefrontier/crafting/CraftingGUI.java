@@ -143,7 +143,7 @@ public class CraftingGUI extends BaseInventoryHolder {
             for (int i = 0; i < 9; i++) {
                 ItemStack ritem = currentRecipe.getItemComponent(i);
                 if (ritem != null && ritem.getType() != Material.AIR) {
-                    int rm = itms[i].getAmount() % ritem.getAmount();
+                    int rm = itms[i].getAmount() - currAmount * ritem.getAmount();
                     if (rm == 0) {
                         this.setItem(idxToSlot(i), new ItemStack(Material.AIR));
                     } else {

@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.commands;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,6 +40,19 @@ public class CustomGiveCommand {
 
         Player player = (Player) sender;
         addItemToInv(item, player, sender);
+    }
+
+    @Command({"skullgive"})
+    public void skullGive(CommandSender sender, String item) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage("Unable to give items to a non-player");
+            throw new SenderNotPlayerException();
+        }
+        Player p = (Player) sender;
+        ItemStack skullItm = ForgeFrontier.getInstance().getCustomSkullManager().getSkullItem(item);
+        if (skullItm != null) {
+            ItemGiver.giveItem(p,skullItm);
+        }
     }
 
 

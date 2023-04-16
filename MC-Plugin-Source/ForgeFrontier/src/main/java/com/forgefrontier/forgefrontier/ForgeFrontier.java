@@ -12,6 +12,7 @@ import com.forgefrontier.forgefrontier.generators.GeneratorShopCommandExecutor;
 import com.forgefrontier.forgefrontier.gui.GuiListener;
 import com.forgefrontier.forgefrontier.commands.CustomGiveCommand;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.items.customskull.CustomSkullManager;
 import com.forgefrontier.forgefrontier.items.gear.GearItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.*;
@@ -76,6 +77,7 @@ public class ForgeFrontier extends JavaPlugin {
     private FishingManager fishingManager;
     private ParticleManager particleManager;
     private CraftingManager craftingManager;
+    private CustomSkullManager customSkullManager;
 
 
     private Shop itemShop;
@@ -121,8 +123,10 @@ public class ForgeFrontier extends JavaPlugin {
         this.fishingManager = new FishingManager(this);
         this.particleManager = new ParticleManager(this);
         this.craftingManager = new CraftingManager(this);
+        this.customSkullManager = new CustomSkullManager(this);
 
         this.databaseManager.init();
+        this.customSkullManager.init();
         this.customItemManager.init();
         this.generatorManager.init();
         this.stashManager.init();
@@ -134,6 +138,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.fishingManager.init();
         this.particleManager.init();
         this.craftingManager.init();
+
 
         // Player Shop
         this.setupPlayerShop();
@@ -313,6 +318,10 @@ public class ForgeFrontier extends JavaPlugin {
 
     public CraftingManager getCraftingManager() {
         return craftingManager;
+    }
+
+    public CustomSkullManager getCustomSkullManager() {
+        return customSkullManager;
     }
 
     // Singleton Pattern
