@@ -133,6 +133,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.miningManager.init();
         this.fishingManager.init();
         this.particleManager.init();
+        this.craftingManager.init();
 
         // Player Shop
         this.setupPlayerShop();

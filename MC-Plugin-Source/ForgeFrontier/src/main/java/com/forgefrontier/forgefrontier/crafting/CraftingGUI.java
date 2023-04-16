@@ -8,6 +8,9 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.logging.Level;
 
 public class CraftingGUI extends BaseInventoryHolder {
 
@@ -32,10 +35,11 @@ public class CraftingGUI extends BaseInventoryHolder {
     private ItemStack output = null;
 
     CraftingManager craftingManager;
-
+    ForgeFrontier plugin;
     public CraftingGUI() {
         super(54, "Crafting Table");
         fillPanes();
+        this.plugin = ForgeFrontier.getInstance();
         this.craftingManager = ForgeFrontier.getInstance().getCraftingManager();
         this.setDefaultCancelInteraction(false);
         // Exit item
@@ -43,10 +47,24 @@ public class CraftingGUI extends BaseInventoryHolder {
         this.setItem(SEX ,exitItem);
         this.addHandler(SEX, this::onClose);
         this.addHandler(SOUT ,this::SOUTHandler);
+
+        this.addHandler(STL, this::inputSlotHandler);
+        this.addHandler(STM, this::inputSlotHandler);
+        this.addHandler(STR, this::inputSlotHandler);
+        this.addHandler(SCL, this::inputSlotHandler);
+        this.addHandler(SCM, this::inputSlotHandler);
+        this.addHandler(SCR, this::inputSlotHandler);
+        this.addHandler(SBL, this::inputSlotHandler);
+        this.addHandler(SBM, this::inputSlotHandler);
+        this.addHandler(SBR, this::inputSlotHandler);
     }
     public void inputSlotHandler(InventoryClickEvent e) {
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this::checkRecipeTask, 5);
+    }
+    public void checkRecipeTask() {
         boolean found = false;
         for (FFRecipe r : craftingManager.getRecipes()) {
+            ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Checking Recipe...");
             if (!r.isMatch(getSlotItems())) continue;
             ItemStack validOut = r.getResult();
             this.setItem(SOUT, validOut);
@@ -58,8 +76,8 @@ public class CraftingGUI extends BaseInventoryHolder {
         if (!found) {
             this.validRecipe = false;
             this.output = null;
+            this.setItem(SOUT, new ItemStack(Material.BARRIER));
         }
-
     }
 
 
@@ -104,17 +122,17 @@ public class CraftingGUI extends BaseInventoryHolder {
         }
 
         // Crafting First Row
-        this.setItem(10,new ItemStack(Material.AIR)); this.addHandler(10,(e) -> {});
-        this.setItem(11,new ItemStack(Material.AIR)); this.addHandler(11,(e) -> {});
-        this.setItem(12,new ItemStack(Material.AIR)); this.addHandler(12,(e) -> {});
+        this.setItem(10,new ItemStack(Material.AIR)); this.addHandler(10, this::inputSlotHandler);
+        this.setItem(11,new ItemStack(Material.AIR)); this.addHandler(11, this::inputSlotHandler);
+        this.setItem(12,new ItemStack(Material.AIR)); this.addHandler(12, this::inputSlotHandler);
         // Crafting Second Row
-        this.setItem(19,new ItemStack(Material.AIR)); this.addHandler(19,(e) -> {});
-        this.setItem(20,new ItemStack(Material.AIR)); this.addHandler(20,(e) -> {});
-        this.setItem(21,new ItemStack(Material.AIR)); this.addHandler(21,(e) -> {});
+        this.setItem(19,new ItemStack(Material.AIR)); this.addHandler(19, this::inputSlotHandler);
+        this.setItem(20,new ItemStack(Material.AIR)); this.addHandler(20, this::inputSlotHandler);
+        this.setItem(21,new ItemStack(Material.AIR)); this.addHandler(21, this::inputSlotHandler);
         // Crafting Third Row
-        this.setItem(28,new ItemStack(Material.AIR)); this.addHandler(28,(e) -> {});
-        this.setItem(29,new ItemStack(Material.AIR)); this.addHandler(29,(e) -> {});
-        this.setItem(30,new ItemStack(Material.AIR)); this.addHandler(30,(e) -> {});
+        this.setItem(28,new ItemStack(Material.AIR)); this.addHandler(28, this::inputSlotHandler);
+        this.setItem(29,new ItemStack(Material.AIR)); this.addHandler(29, this::inputSlotHandler);
+        this.setItem(30,new ItemStack(Material.AIR)); this.addHandler(30, this::inputSlotHandler);
 
         // Crafting Result
         this.setItem(9 * 2 + 5, new ItemStack(Material.BARRIER));

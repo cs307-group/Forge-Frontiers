@@ -1,9 +1,11 @@
 package com.forgefrontier.forgefrontier.crafting;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 public class FFRecipe {
     public enum SLOT_META {
@@ -19,11 +21,7 @@ public class FFRecipe {
         this.result = result;
     }
 
-    public boolean isMatch(ItemStack TL, ItemStack TM, ItemStack TR, ItemStack CL, ItemStack CM,
-                         ItemStack CR, ItemStack BL, ItemStack BM, ItemStack BR) {
-        // Compare each slot, check if match
-        return false;
-    }
+
     public boolean isMatch(ItemStack[] input) {
         // Compare each slot, check if match
         for (int i = 0; i < 9; i++) {
@@ -37,6 +35,7 @@ public class FFRecipe {
     }
 
     public boolean matchAny(ItemStack a, ItemStack b) {
+        ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Matching: " + a + " - " + b);
         if (a == null && (b == null || b.getType() == Material.AIR)) return true;
         if (a != null && a.getType() == Material.AIR && (b == null || b.getType() == Material.AIR)) return true;
         if (a == null) return false;
