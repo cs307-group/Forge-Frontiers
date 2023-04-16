@@ -109,6 +109,7 @@ public class CustomEntityManager extends Manager implements Listener {
                 if (entity.getHandle() instanceof HitBoxEntity hitBox) {
                     namePlate += (String) entity.getMetadata("name").get(0).value() +
                             ": " + currHealth + "/" + ((int) entity.getMaxHealth());
+                    System.out.println("Nameplate: " + namePlate);
                     entity.setCustomName(namePlate);
                 } else {
                     namePlate += entity.getMetadata("name").get(0).value() +

@@ -39,6 +39,7 @@ public class EggBox extends HitBox {
         public CraftEggBox(CraftServer server, String name, int health, HitBoxEntity entity, int size) {
             super(server, name, health, entity, size);
             initHitBox(name, health, size);
+            this.updateNamePlate(name);
             saveMetaData();
         }
 
@@ -73,7 +74,6 @@ public class EggBox extends HitBox {
             // Sets the metadata for the mob
             this.setMetadata("code", new FixedMetadataValue(ForgeFrontier.getInstance(), "EggBox"));
             this.setMetadata("name", new FixedMetadataValue(ForgeFrontier.getInstance(), "Egg"));
-            // this.setMetadata("bossbar", new FixedMetadataValue(ForgeFrontier.getInstance(), bossBar));
         }
     }
 

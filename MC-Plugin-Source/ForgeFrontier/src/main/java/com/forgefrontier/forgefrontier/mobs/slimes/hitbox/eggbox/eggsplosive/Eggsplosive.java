@@ -17,8 +17,6 @@ public class Eggsplosive extends EggBox {
     /** class representing the custom CraftEntity for the TestChicken */
     public static class CraftEggsplosive extends CraftEggBox {
 
-        // public BossBar bossBar;
-
         /**
          * Constructor
          *
@@ -32,7 +30,7 @@ public class Eggsplosive extends EggBox {
 
         @Override
         public void updateNamePlate(String name) {
-            EggBoxEntity entity = (EggBoxEntity) handle;
+            EggBoxEntity entity = (EggsplosiveEntity) handle;
             if (entity != null) {
                 entity.setNamePlate(ChatColor.WHITE + name + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
             }
@@ -45,7 +43,6 @@ public class Eggsplosive extends EggBox {
             // Sets the metadata for the mob
             this.setMetadata("code", new FixedMetadataValue(ForgeFrontier.getInstance(), "Eggsplosive"));
             this.setMetadata("name", new FixedMetadataValue(ForgeFrontier.getInstance(), "Eggsplosive"));
-            // this.setMetadata("bossbar", new FixedMetadataValue(ForgeFrontier.getInstance(), bossBar));
         }
     }
 

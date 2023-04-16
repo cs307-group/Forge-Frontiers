@@ -36,6 +36,9 @@ public class EggsplosiveEntity extends EggBoxEntity {
     @Override
     public void whileAlive() {
         super.whileAlive();
+        if (this.getBukkitEntity().getCustomName() != null) {
+            this.name = this.getBukkitEntity().getCustomName();
+        }
 
         // initializes lastTimeStamp
         if (lastTimeStamp == 0) {

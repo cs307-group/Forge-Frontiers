@@ -49,10 +49,8 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
      */
     public void setDefaultHealth(int maxHealth) {
         // sets the health of the entity
-        // System.out.println("Setting Health: " + maxHealth);
         this.setMaxHealth(maxHealth);
         this.setHealth(maxHealth);
-        // System.out.println(this.getHealth());
     }
 
     /**
