@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class ParticleDesignSphere extends StaticParticleDesign {
 
     int num_points = 20;
+    float distance = 1;
     ArrayList<Vector> staticPoints;
     public ParticleDesignSphere() {
     }
@@ -18,7 +19,7 @@ public class ParticleDesignSphere extends StaticParticleDesign {
     }
 
 
-    public void createStaticPoints(int amount, float distance) {
+    public void createStaticPoints(int amount) {
         /* https://stackoverflow.com/questions/9600801/evenly-distributing-n-points-on-a-sphere */
         this.num_points = amount;
         staticPoints = new ArrayList<>();
@@ -38,9 +39,19 @@ public class ParticleDesignSphere extends StaticParticleDesign {
     public void createStaticPoints() {
         createStaticPoints(20);
     }
-    public void createStaticPoints(int amount) {
-        createStaticPoints(amount, 1);
+    public int getNum_points() {
+        return num_points;
     }
 
+    public void setNum_points(int num_points) {
+        this.num_points = num_points;
+    }
 
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
 }

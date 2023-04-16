@@ -12,6 +12,7 @@ import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 @Command({"ffparticle"})
 public class ParticleCommands {
@@ -35,16 +36,45 @@ public class ParticleCommands {
         }
         ParticleDesignSphere pds = new ParticleDesignSphere();
         if (amount != null) {
-            pds.createStaticPoints(amount, dist);
+            pds.setDistance(dist);
+            pds.createStaticPoints(amount);
         } else pds.createStaticPoints();
-        ArrayList<Vector> points = pds.getNext();
-        SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(()->{
-            for (Vector v : points) {
-                p.spawnParticle(Particle.PORTAL, p.getEyeLocation().add(v).add(0,3,0), 1, 0, 0, 0);
-            }
-        },10,1000);
+        FFParticle ffParticle = new FFParticle(pds);
+        ffParticle.setParticle(Particle.PORTAL);
+        SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
+                () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, 1000);
         sps.run();
     }
+
+    @Subcommand({"addrand"})
+    public void addRandomParticle(CommandSender cs, @Default("2") Integer distance) {
+        if (!(cs instanceof Player p)) {
+            cs.sendMessage("Only players can use this command!");
+            return;
+        }
+        Particle part = particleManager.getRandomParticle();
+        p.sendMessage("Playing particle: " + part.toString());
+        ParticleDesignSphere pds = new ParticleDesignSphere();
+        pds.setDistance(distance);
+        pds.createStaticPoints(100);
+        FFParticle ffParticle = new FFParticle(pds);
+        ffParticle.setParticle(part);
+        SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
+                () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, -1);
+        sps.run();
+        int task = sps.getTask();
+        Random r = new Random();
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(task, r.nextInt()));
+    }
+    @Subcommand({"clear"})
+    public void clearParticle(CommandSender cs) {
+        if (!(cs instanceof Player p)) {
+            cs.sendMessage("Only players can use this command!");
+            return;
+        }
+        particleManager.cancelAllPlayerParticles(p.getUniqueId());
+    }
+
 
 
 

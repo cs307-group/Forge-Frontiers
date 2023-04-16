@@ -6,6 +6,10 @@ import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
+/**
+ * Spawn particles with a fixed delay (in ticks)
+ * If duration == -1, will have to manually stop
+ */
 public class SimpleRepeatParticleSpawner {
 
     int delay;
@@ -25,6 +29,19 @@ public class SimpleRepeatParticleSpawner {
 
     public void run() {
         task = scheduler.scheduleSyncRepeatingTask(plugin,spawnfunc,0,delay);
-        scheduler.scheduleSyncDelayedTask(plugin,() -> scheduler.cancelTask(task), duration);
+        if (duration != -1)
+            scheduler.scheduleSyncDelayedTask(plugin,() -> scheduler.cancelTask(task), duration);
     }
+
+    public void stop() {
+        if (scheduler.isCurrentlyRunning(task)) {
+            scheduler.cancelTask(task);
+        }
+    }
+
+    public int getTask() {
+        return task;
+    }
+
+
 }

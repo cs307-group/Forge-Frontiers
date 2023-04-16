@@ -9,10 +9,10 @@ import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
+import com.forgefrontier.forgefrontier.particles.PlayerParticle;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -49,6 +49,9 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
 
     /** The skill of the item. Can be null. */
     Skill skill;
+
+    /** Particle effect that plays upon this item's equip */
+    PlayerParticle particleEffect;
 
     /** JSON data about this particular GearItemInstance */
     HashMap<String, String> gearData;

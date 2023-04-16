@@ -8,16 +8,14 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomAr
 import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.SkillGem;
+import com.forgefrontier.forgefrontier.particles.PlayerParticle;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Handles events related to GearItem classes
@@ -54,6 +52,7 @@ public class GearItemManager extends Manager implements Listener {
         this.skills.put(skill.getId(), skill);
     }
 
+    public PlayerParticle getPlayableParticle(String particleID) { return null; }
     public Skill getSkill(String skillId) {
         return this.skills.get(skillId);
     }
