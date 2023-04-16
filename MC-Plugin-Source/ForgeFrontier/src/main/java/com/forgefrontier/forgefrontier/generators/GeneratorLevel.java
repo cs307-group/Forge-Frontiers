@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.generators;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -8,11 +9,11 @@ import java.util.List;
 
 public class GeneratorLevel {
 
-    public int maxSize;
-    public int generatorRate;
+    private int maxSize;
+    private int generatorRate;
     /** the tier required of the player to upgrade the generator */
-    public int requiredTier;
-    public List<MaterialCost> upgradeCosts;
+    private int requiredTier;
+    private List<MaterialCost> upgradeCosts;
 
     public GeneratorLevel(int generatorRate, int maxSize) {
         this.generatorRate = generatorRate;
@@ -50,4 +51,35 @@ public class GeneratorLevel {
 
     }
 
+    public int getMaxSize() {
+        return maxSize;
+    }
+
+    public int getGeneratorRate() {
+        return generatorRate;
+    }
+
+    public int getRequiredTier() {
+        return requiredTier;
+    }
+
+    public List<MaterialCost> getUpgradeCosts() {
+        return upgradeCosts;
+    }
+
+    public void setGeneratorRate(int generatorRate) {
+        this.generatorRate = generatorRate;
+    }
+
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
+    }
+
+    public void setRequiredTier(int requiredTier) {
+        this.requiredTier = requiredTier;
+    }
+
+    public void insertCost() {
+        this.upgradeCosts.add(new MaterialCost("coin", "", 1000));
+    }
 }

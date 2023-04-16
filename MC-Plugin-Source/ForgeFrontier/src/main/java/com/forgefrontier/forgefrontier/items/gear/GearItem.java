@@ -211,6 +211,8 @@ public abstract class GearItem extends UniqueCustomItem {
         GearItemInstance gearItemInstance = (GearItemInstance) inst;
         if(gearItemInstance.getSkill() == null)
             return;
+        if(!(e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR))
+            return;
         FFPlayer ffPlayer = ForgeFrontier.getInstance().getPlayerManager().getFFPlayerFromID(e.getPlayer().getUniqueId());
         if(System.currentTimeMillis() < ffPlayer.getNextSkillTime()) {
             e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Cooldown: You must wait " + (int) ((ffPlayer.getNextSkillTime() - System.currentTimeMillis())/1000.0f + 1) + " second(s) before using a skill again.");

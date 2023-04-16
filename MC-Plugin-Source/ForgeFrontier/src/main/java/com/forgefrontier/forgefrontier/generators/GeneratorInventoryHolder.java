@@ -70,7 +70,7 @@ public class GeneratorInventoryHolder extends BaseInventoryHolder {
     public void onOpen(InventoryOpenEvent e) {
         int id = Bukkit.getScheduler().runTaskTimer(ForgeFrontier.getInstance(), () -> {
             setCollectItem();
-        }, 0, generatorInstance.getGeneratorLevel().generatorRate * 20L / 1000).getTaskId();
+        }, 0, generatorInstance.getGeneratorLevel().getGeneratorRate() * 20L / 1000).getTaskId();
         this.updateTaskId = id;
     }
 
