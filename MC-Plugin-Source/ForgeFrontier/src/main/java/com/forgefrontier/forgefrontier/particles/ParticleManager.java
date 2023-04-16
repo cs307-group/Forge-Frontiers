@@ -24,6 +24,7 @@ public class ParticleManager extends Manager {
         super(plugin);
         playerParticles = new HashMap<>();
         this.scheduler = plugin.getServer().getScheduler();
+        particleToID = new HashMap<>();
         for (int i = 0; i < allVanillaParticles.size(); i++) {
             particleToID.put(allVanillaParticles.get(i), i);
         }

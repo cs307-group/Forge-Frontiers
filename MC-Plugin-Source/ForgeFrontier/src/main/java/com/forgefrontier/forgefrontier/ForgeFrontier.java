@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.bazaarshop.BazaarCommand;
 import com.forgefrontier.forgefrontier.bazaarshop.BazaarManager;
 import com.forgefrontier.forgefrontier.commands.*;
 import com.forgefrontier.forgefrontier.connections.DatabaseManager;
+import com.forgefrontier.forgefrontier.crafting.CraftingManager;
 import com.forgefrontier.forgefrontier.fishing.FishingManager;
 //import com.forgefrontier.forgefrontier.generators.GeneratorCommandExecutor;
 import com.forgefrontier.forgefrontier.generators.GeneratorManager;
@@ -74,6 +75,8 @@ public class ForgeFrontier extends JavaPlugin {
     private MiningManager miningManager;
     private FishingManager fishingManager;
     private ParticleManager particleManager;
+    private CraftingManager craftingManager;
+
 
     private Shop itemShop;
     private BazaarManager bazaarManager;
@@ -117,6 +120,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.miningManager = new MiningManager(this);
         this.fishingManager = new FishingManager(this);
         this.particleManager = new ParticleManager(this);
+        this.craftingManager = new CraftingManager(this);
 
         this.databaseManager.init();
         this.customItemManager.init();
@@ -129,6 +133,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.miningManager.init();
         this.fishingManager.init();
         this.particleManager.init();
+
         // Player Shop
         this.setupPlayerShop();
 
@@ -157,6 +162,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.customEntityManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.miningManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.fishingManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.craftingManager, this);
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BentoBoxListener(this), this);
@@ -302,6 +308,10 @@ public class ForgeFrontier extends JavaPlugin {
 
     public Economy getEconomy() {
         return this.econ;
+    }
+
+    public CraftingManager getCraftingManager() {
+        return craftingManager;
     }
 
     // Singleton Pattern

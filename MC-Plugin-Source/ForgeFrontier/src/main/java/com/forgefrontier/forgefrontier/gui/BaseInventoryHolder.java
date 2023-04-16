@@ -34,9 +34,10 @@ public class BaseInventoryHolder implements InventoryHolder {
     protected int size;
     Inventory inventory;
 
-    InventoryClickHandler[] handlers;
+    protected InventoryClickHandler[] handlers;
 
-    InventoryClickHandler playerInventoryHandler;
+    protected InventoryClickHandler playerInventoryHandler;
+    protected boolean cancelInteractionDefault = true;
 
     public BaseInventoryHolder(int size) {
         this.size = size;
@@ -49,10 +50,12 @@ public class BaseInventoryHolder implements InventoryHolder {
         this.handlers = new InventoryClickHandler[size];
     }
 
+    public void setDefaultCancelInteraction(boolean cancel) {
+        cancelInteractionDefault = cancel;
+    }
 
     public BaseInventoryHolder addHandler(int slot, InventoryClickHandler handler) {
         this.handlers[slot] = handler;
-
         return this;
     }
     public BaseInventoryHolder removeHandler(int slot) {
@@ -94,12 +97,18 @@ public class BaseInventoryHolder implements InventoryHolder {
     }
 
     public void onClick(InventoryClickEvent e) {
+        // Handle player inventory
         if(e.getClickedInventory() != e.getInventory()) {
             if(playerInventoryHandler != null)
                 playerInventoryHandler.onClick(e);
             return;
         }
-        e.setCancelled(true);
+
+        // Handle default cancellation
+        if (cancelInteractionDefault)
+            e.setCancelled(true);
+
+        // Handler callback
         if (e.getSlot() < 0 || e.getSlot() > size) return;
         if(handlers[e.getSlot()] != null)
             handlers[e.getSlot()].onClick(e);
@@ -107,7 +116,6 @@ public class BaseInventoryHolder implements InventoryHolder {
 
     public BaseInventoryHolder registerPlayerInventoryHandler(InventoryClickHandler handler) {
         this.playerInventoryHandler = handler;
-
         return this;
     }
 
