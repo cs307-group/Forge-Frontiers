@@ -52,10 +52,10 @@ public class GeneratorInstance implements Locatable {
 
                 GeneratorLevel currentLevel = getGeneratorLevel();
 
-                int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
-                int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.generatorRate;
-                if(collectAmt >= currentLevel.maxSize) {
-                    collectAmt = currentLevel.maxSize;
+                int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.getGeneratorRate();
+                int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.getGeneratorRate();
+                if(collectAmt >= currentLevel.getMaxSize()) {
+                    collectAmt = currentLevel.getMaxSize();
                     nextTimeRemain = 0;
                 }
                 int amtLeft = this.generator.primaryMaterial.collect(player, collectAmt);
@@ -80,7 +80,7 @@ public class GeneratorInstance implements Locatable {
     private void setAmountLeft(int amtLeft, long currentTime, int remainingTime) {
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        this.lastCollectTime = currentTime - remainingTime - amtLeft * currentLevel.generatorRate;
+        this.lastCollectTime = currentTime - remainingTime - amtLeft * currentLevel.getGeneratorRate();
 
     }
 
@@ -89,10 +89,9 @@ public class GeneratorInstance implements Locatable {
 
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        if(currentLevel.generatorRate == 0) currentLevel.generatorRate = 1;
-        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
-        if(collectAmt > currentLevel.maxSize) {
-            collectAmt = currentLevel.maxSize;
+        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.getGeneratorRate();
+        if(collectAmt > currentLevel.getMaxSize()) {
+            collectAmt = currentLevel.getMaxSize();
         }
 
         return collectAmt;
@@ -107,7 +106,7 @@ public class GeneratorInstance implements Locatable {
     }
 
     public int getMaxAmt() {
-        return this.generator.generatorLevels.get(level).maxSize;
+        return this.generator.generatorLevels.get(level).getMaxSize();
     }
 
     public GeneratorLevel getGeneratorLevel() {
@@ -131,8 +130,8 @@ public class GeneratorInstance implements Locatable {
 
         GeneratorLevel currentLevel = getGeneratorLevel();
 
-        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.generatorRate;
-        int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.generatorRate;
+        int collectAmt = (int) (currentTime - this.lastCollectTime) / currentLevel.getGeneratorRate();
+        int nextTimeRemain = (int) (currentTime - this.lastCollectTime) % currentLevel.getGeneratorRate();
 
         this.level += 1;
 

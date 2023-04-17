@@ -94,6 +94,7 @@ public class StashInventoryHolder extends BaseInventoryHolder {
                 .setFullLore(lore)
                 .build()
             );
+            i += 1;
         }
 
         this.setItem(7 + 9 * 3, new ItemStackBuilder(Material.RED_WOOL)
@@ -104,9 +105,17 @@ public class StashInventoryHolder extends BaseInventoryHolder {
         this.addHandler(7 + 9 * 3, (e) -> {
             if(e.getWhoClicked().getInventory().firstEmpty() == -1) {
                 this.replaceItemTemporarily(7 + 9 * 3, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
-                        .setDisplayName("&cUnable to remove this generator. You do not have space in your inventory.")
+                        .setDisplayName("&cUnable to remove this stash. You do not have space in your inventory.")
                         .build());
                 return;
+            }
+            for(Integer amt: stashInstance.stashContents.values()) {
+                if(amt != 0) {
+                    this.replaceItemTemporarily(7 + 9 * 3, new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
+                            .setDisplayName("&cUnable to remove this stash. It is not empty.")
+                            .build());
+                    return;
+                }
             }
             ConfirmationHolder confirmHolder = new ConfirmationHolder("&cWould you like to pickup this stash?", this.getInventory(), () -> {
                 ForgeFrontier.getInstance().getStashManager().removeStashInstance(stashInstance);

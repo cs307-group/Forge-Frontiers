@@ -4,12 +4,14 @@ public class PlayerParticleTask {
 
     int task;
     int particleID;
+    String provider;
 
 
 
     public PlayerParticleTask(int task, int particleID) {
         this.task = task;
         this.particleID = particleID;
+        this.provider = "";
     }
 
     public int getTask() {
@@ -28,5 +30,11 @@ public class PlayerParticleTask {
         this.particleID = particleID;
     }
 
+    public String getProvider() {
+        return provider;
+    }
 
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 }

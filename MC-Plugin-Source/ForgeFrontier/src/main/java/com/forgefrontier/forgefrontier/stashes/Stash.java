@@ -45,6 +45,8 @@ public class Stash {
         this.friendlyName = friendlyName;
         this.materialRepresentation = blockMaterial;
         this.shopCosts = new ArrayList<>();
+        this.stashItems = new ArrayList<>();
+
         for(JSONWrapper cost: costs) {
             this.shopCosts.add(new MaterialCost(cost));
         }

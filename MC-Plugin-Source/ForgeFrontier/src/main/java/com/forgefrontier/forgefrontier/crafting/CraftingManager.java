@@ -1,7 +1,10 @@
 package com.forgefrontier.forgefrontier.crafting;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -31,6 +34,20 @@ public class CraftingManager extends Manager implements Listener {
         testRecipe[1] = itm2;
         ItemStack out = itm.clone(); out.setAmount(2);
         ffRecipes.add(new FFRecipe(testRecipe, out));
+
+        ItemStack feather = CustomItemManager.getCustomItem("MagicFeather").asInstance(null).asItemStack();
+        ItemStack skullOut = CustomItemManager.getCustomItem("AirOrb").asInstance(null).asItemStack();
+
+        ItemStack netherStar = new ItemStack(Material.NETHER_STAR);
+        netherStar.setAmount(5);
+        testRecipe = new ItemStack[] {feather, feather, feather, feather, netherStar, feather, feather, feather ,feather};
+        FFRecipe airOrbRecipe = new FFRecipe(testRecipe,skullOut);
+        airOrbRecipe.setRecipeMeta(new FFRecipe.SLOT_META[]
+                {FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM,
+                 FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.VANILLA, FFRecipe.SLOT_META.CUSTOM,
+                 FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM});
+        ffRecipes.add(airOrbRecipe);
+
     }
 
     @Override

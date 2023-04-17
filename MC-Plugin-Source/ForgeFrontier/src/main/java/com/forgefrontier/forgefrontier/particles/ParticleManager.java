@@ -1,6 +1,8 @@
 package com.forgefrontier.forgefrontier.particles;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.particles.gameparticles.GeneratorParticles;
+import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -17,6 +19,7 @@ public class ParticleManager extends Manager {
 
     HashMap<UUID, ArrayList<PlayerParticleTask>> playerParticles;
     HashMap<Particle, Integer> particleToID;
+    HashMap<String, FFParticle> preloadedParticle;
     BukkitScheduler scheduler;
 
 
@@ -28,12 +31,16 @@ public class ParticleManager extends Manager {
         for (int i = 0; i < allVanillaParticles.size(); i++) {
             particleToID.put(allVanillaParticles.get(i), i);
         }
+        preloadedParticle = new HashMap<>();
     }
 
     @Override
     public void init() {
-        // Load particles
-
+        // Pre-load particles
+        GeneratorParticles.initGenParticles();
+        preloadedParticle.put("SilverGenParticle", GeneratorParticles.SilverGenParticle);
+        preloadedParticle.put("CobaltGenParticle", GeneratorParticles.CobaltGenParticle);
+        MobParticles.init();
     }
 
     @Override
@@ -51,6 +58,24 @@ public class ParticleManager extends Manager {
     }
 
     public void reload() {
+    }
+
+    public void addPlayerGeneratorParticle(UUID p, int task, String generatorProvider) {
+        ArrayList<PlayerParticleTask> ppts = playerParticles.get(p);
+        if (ppts == null) {
+            playerParticles.put(p,new ArrayList<>());
+            return;
+        }
+        int genNum = 0;
+        for (PlayerParticleTask ppt : ppts) {
+            if (ppt.particleID >= 500 && ppt.particleID < 600) {
+                genNum = Math.max(genNum, ppt.particleID);
+            }
+        }
+        genNum++;
+        PlayerParticleTask nppt = new PlayerParticleTask(task,genNum);
+        nppt.setProvider(generatorProvider);
+        ppts.add(nppt);
     }
 
     public void addPlayerParticle(UUID p, PlayerParticleTask task) {
@@ -94,6 +119,10 @@ public class ParticleManager extends Manager {
     public int getParticleID(Particle p) {
         if (p == null) return -1;
         return particleToID.get(p);
+    }
+
+    public FFParticle getPreloadedParticle(String name) {
+        return preloadedParticle.get(name);
     }
 
 

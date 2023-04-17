@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
 
-    Generator generator;
+    private Generator generator;
 
     public ModifyGeneratorInventoryHolder(Generator generator) {
         super(54, "Modify Generator");
@@ -37,9 +37,9 @@ public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
                     generator.setFriendlyName(completion.getText());
                     return Arrays.asList(AnvilGUI.ResponseAction.close());
                 }))
-                .text(generator.getFriendlyName())
                 .itemLeft(new ItemStack(Material.PAPER))
-                .title("Enter Friendly Name").text(generator.getFriendlyName())
+                .title("Enter Friendly Name")
+                .text(generator.getFriendlyName())
                 .plugin(ForgeFrontier.getInstance())
                 .open((Player) e.getWhoClicked());
         });
@@ -68,7 +68,7 @@ public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
         });
         for(int i = 0; i < generator.getGeneratorLevels().size(); i++) {
             final int index = i;
-            this.addHandler(9 * 3 + i, (e) -> {
+            this.addHandler(9 * 3 + 1 + i, (e) -> {
                 e.getWhoClicked().openInventory(new ModifyGeneratorLevelInventoryHolder(generator, index).getInventory());
             });
         }
@@ -98,8 +98,12 @@ public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
         int i = 0;
         for(GeneratorLevel level: generator.getGeneratorLevels()) {
             ItemStackBuilder builder = new ItemStackBuilder(generator.getMaterialRepresentation())
-                .setDisplayName("&7Level &f" + (i + 1));
-            for(MaterialCost cost: level.upgradeCosts) {
+                .setDisplayName("&7Level &f" + (i + 1))
+                    .addLoreLine("&7Generation Rate: &f" + level.getGeneratorRate())
+                    .addLoreLine("&7Max Size: &f" + level.getMaxSize())
+                    .addLoreLine("&8Costs: ");
+
+            for(MaterialCost cost: level.getUpgradeCosts()) {
                 builder.addLoreLine("&7>> &f" + cost.getAmount() + "&7x " + cost.getMaterial().getRepresentation().getItemMeta().getDisplayName());
             }
             this.setItem(9 * 3 + 1 + i, builder.build());

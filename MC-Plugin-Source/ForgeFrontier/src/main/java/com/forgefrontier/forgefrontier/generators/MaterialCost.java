@@ -1,11 +1,14 @@
 package com.forgefrontier.forgefrontier.generators;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.generators.materials.CoinMaterial;
 import com.forgefrontier.forgefrontier.generators.materials.CustomMaterial;
+import com.forgefrontier.forgefrontier.generators.materials.ItemMaterial;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONObject;
 
 public class MaterialCost {
 
@@ -26,6 +29,16 @@ public class MaterialCost {
                 jsonWrapper.getString("item_id")
         );
         this.amount = jsonWrapper.getInt("amount");
+    }
+
+    public MaterialCost(String materialType, String itemId, int amount) {
+        this.material = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial(materialType, itemId);
+        this.amount = amount;
+    }
+
+    public MaterialCost(CustomMaterial material, int amount) {
+        this.material = material;
+        this.amount = amount;
     }
 
     public CustomMaterial getMaterial() {
@@ -49,4 +62,20 @@ public class MaterialCost {
         return "(material: " + material + ", amount: " + amount + ")";
     }
 
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        if(this.material instanceof ItemMaterial material) {
+            obj.put("material_type", "item");
+            obj.put("item_id", material.getItem().getCode());
+        } else {
+            obj.put("material_type", "coin");
+            obj.put("item_id", "");
+        }
+        obj.put("amount", this.amount);
+        return obj;
+    }
 }

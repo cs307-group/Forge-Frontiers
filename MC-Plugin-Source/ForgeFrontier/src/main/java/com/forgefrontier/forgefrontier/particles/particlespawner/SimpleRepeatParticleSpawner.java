@@ -27,10 +27,11 @@ public class SimpleRepeatParticleSpawner {
         this.scheduler = plugin.getServer().getScheduler();
     }
 
-    public void run() {
+    public int run() {
         task = scheduler.scheduleSyncRepeatingTask(plugin,spawnfunc,0,delay);
         if (duration != -1)
             scheduler.scheduleSyncDelayedTask(plugin,() -> scheduler.cancelTask(task), duration);
+        return task;
     }
 
     public void stop() {

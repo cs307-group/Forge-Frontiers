@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.eggsplosive;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.chickenboss.ChickBossEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.EggBoxEntity;
 import net.minecraft.world.entity.EntityType;
@@ -20,6 +21,7 @@ public class EggsplosiveEntity extends EggBoxEntity {
     long totalTimeAlive;
     String name;
     int timeToExplode = 15;
+    public int particleTask = -1;
 
     /**
      * For when not spawned by boss
@@ -86,6 +88,10 @@ public class EggsplosiveEntity extends EggBoxEntity {
             if (nearbyEntities.get(i) instanceof Player player) {
                 player.damage(damage);
             }
+        }
+        if (particleTask != -1) {
+            ForgeFrontier.getInstance().getServer().getScheduler().cancelTask(particleTask);
+            particleTask = -1;
         }
     }
 

@@ -39,7 +39,6 @@ public class IslandCommandExecutor implements CommandExecutor {
             }
         }
 
-
         return true;
     }
 }

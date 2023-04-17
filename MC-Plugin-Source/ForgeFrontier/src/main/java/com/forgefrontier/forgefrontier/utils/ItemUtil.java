@@ -5,15 +5,24 @@ import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 
@@ -28,6 +37,28 @@ public class ItemUtil {
         return customData;
     }
 
+    /** https://www.spigotmc.org/threads/wishing-to-share-my-method-for-custom-textured-player-head-itemstacks.445763/#post-3861173 */
+    private static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+    @SuppressWarnings("deprecation")
+    public static ItemStack getHead(String texture) {
+        UUID texUUID = UUID.nameUUIDFromBytes(texture.getBytes());
+        byte[] bytesA = longToBytes(texUUID.getMostSignificantBits());
+        byte[] bytesB = longToBytes(texUUID.getLeastSignificantBits());
+        int[] intList = new int[] {
+                new BigInteger(Arrays.copyOfRange(bytesA, 0, (bytesA.length/2))).intValue(),
+                new BigInteger(Arrays.copyOfRange(bytesA, (bytesA.length/2), bytesA.length)).intValue(),
+                new BigInteger(Arrays.copyOfRange(bytesB, 0, (bytesB.length/2))).intValue(),
+                new BigInteger(Arrays.copyOfRange(bytesB, (bytesB.length/2), bytesB.length)).intValue()
+        };
+        return Bukkit.getUnsafe().modifyItemStack(
+                new ItemStack(Material.PLAYER_HEAD),
+                "{SkullOwner:{" + MessageFormat.format("Id:[I;{0},{1},{2},{3}]", Long.toString(intList[0]), Long.toString(intList[1]), Long.toString(intList[2]), Long.toString(intList[3])) + ",Properties:{textures:[{Value:\"" + texture + "\"}]}}}"
+        );
+    }
     public static String getStringLore(ItemStack itm) {
         ItemMeta meta = itm.getItemMeta();
         if (meta == null) return "";

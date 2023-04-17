@@ -49,7 +49,8 @@ public class CustomItemManager extends Manager implements Listener {
         this.registerCustomItem(new GeneralCustomItem("SilverIngot", "IRON_INGOT", "&7Silver Ingot", "&8Ingots of silver from deep beneath the earth."));
 
         ForgeFrontier.getInstance().getDatabaseManager().getConfigDB().loadItems((items) -> {
-            for(GeneralCustomItem generalCustomItem: items) {
+            // GeneralCustomSkulls and GeneralCustomItems
+            for(CustomItem generalCustomItem: items) {
                 this.registerCustomItem(generalCustomItem);
             }
         });
