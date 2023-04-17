@@ -1,6 +1,8 @@
 package com.forgefrontier.forgefrontier.particles;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignChain;
 import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignSphere;
+import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleRepeatParticleSpawner;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
@@ -45,6 +47,30 @@ public class ParticleCommands {
                 () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, 1000);
         sps.run();
     }
+    @Subcommand({"chain"})
+    public void testChainParticle(CommandSender cs, @Default("20") Integer amount) {
+        if (!(cs instanceof Player p)) {
+            cs.sendMessage("Only players can use this command!");
+            return;
+        }
+        ParticleDesignChain pdc = new ParticleDesignChain(30);
+
+
+        if (amount != null) {
+            pdc.setNum_points(amount);
+        }
+        pdc.createStaticPoints();
+
+        FFParticle ffParticle = new FFParticle(pdc);
+        Particle part = particleManager.getRandomParticle();
+        p.sendMessage("Playing particle: " + part.toString());
+        ffParticle.setParticle(part);
+        SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
+                () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, -1);
+        sps.run();
+        Random r = new Random();
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), r.nextInt()));
+    }
 
     @Subcommand({"addrand"})
     public void addRandomParticle(CommandSender cs, @Default("2") Integer distance) {
@@ -75,7 +101,32 @@ public class ParticleCommands {
         particleManager.cancelAllPlayerParticles(p.getUniqueId());
     }
 
+    @Subcommand({"chickimmune"})
+    public void chickImmune(CommandSender cs) {
+        if (!(cs instanceof Player p)) {
+            cs.sendMessage("Only players can use this command!");
+            return;
+        }
+        SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
+                () -> MobParticles.CHICKBOSS_IMMUNE_PARTICLE.playParticleAtLocation(p.getWorld(), p.getLocation()),
+                10, 5000);
+        Random r = new Random();
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), r.nextInt()));
+    }
 
+
+    @Subcommand({"chickegg"})
+    public void chickEgg(CommandSender cs) {
+        if (!(cs instanceof Player p)) {
+            cs.sendMessage("Only players can use this command!");
+            return;
+        }
+        SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
+                () -> MobParticles.CHICKBOSS_EGG_PARTICLE.playParticleAtLocation(p.getWorld(), p.getLocation().add(0,1,0)),
+                10, 5000);
+        Random r = new Random();
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), r.nextInt()));
+    }
 
 
 }

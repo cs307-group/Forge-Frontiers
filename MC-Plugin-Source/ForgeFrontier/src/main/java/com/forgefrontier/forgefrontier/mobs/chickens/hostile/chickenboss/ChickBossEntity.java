@@ -4,6 +4,8 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.chickens.hostile.HostileChickenEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.eggsplosive.EggsplosiveEntity;
+import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
+import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleRepeatParticleSpawner;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.level.Level;
@@ -13,7 +15,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class ChickBossEntity extends HostileChickenEntity {
     int failCounter;
     long lastTickTime;
     ArrayList<EggsplosiveEntity> eggs;
+    int invulParticleTask = -1;
+
 
     public ChickBossEntity(EntityType<? extends Chicken> entityTypes, Level world) {
         super(entityTypes, world);
@@ -56,6 +59,10 @@ public class ChickBossEntity extends HostileChickenEntity {
             lastTickTime = System.currentTimeMillis();
         } else if (hasBeenInvuln && eggs.isEmpty()) { // increased attack
             this.setInvulnerable(false);
+            // Clear invulnerbility particles
+            if (invulParticleTask != -1) {
+                ForgeFrontier.getInstance().getServer().getScheduler().cancelTask(invulParticleTask);
+            }
             this.setAggroSpeed(1.1f);
             this.setDamage(15);
             doHostileBehavior();
@@ -67,6 +74,11 @@ public class ChickBossEntity extends HostileChickenEntity {
             doHostileBehavior();
         } else if (!hasBeenInvuln) { // Transition into Phase 2 (Destroy the Eggsplosives)
             this.setInvulnerable(true);
+            SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
+                    () -> MobParticles.CHICKBOSS_IMMUNE_PARTICLE.playParticleAtLocation(this.getLevel().getWorld(),
+                                    this.getBukkitEntity().getLocation().clone().add(0,1,0)),
+                    10, 5000);
+            invulParticleTask = srps.run();
             hasBeenInvuln = true;
             spawnEggs();
             lastTickTime = System.currentTimeMillis();
@@ -81,12 +93,20 @@ public class ChickBossEntity extends HostileChickenEntity {
             lastTickTime = 0;
             failCounter++;
             eggs.clear();
+//            // Clear invulnerbility particles
+            if (invulParticleTask != -1) {
+                ForgeFrontier.getInstance().getServer().getScheduler().cancelTask(invulParticleTask);
+            }
         }
     }
 
     public void removeEgg(EggsplosiveEntity egg) {
         this.eggs.remove(egg);
         eggsToBeDestroyed--;
+        if (egg.particleTask != -1) {
+            ForgeFrontier.getInstance().getServer().getScheduler().cancelTask(egg.particleTask);
+            egg.particleTask = -1;
+        }
     }
 
     public void spawnEggs() {
@@ -99,7 +119,16 @@ public class ChickBossEntity extends HostileChickenEntity {
             if (entity.getHandle() instanceof EggsplosiveEntity egg) {
                 this.eggs.add(egg);
                 egg.setOwner(this);
+
+                SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
+                        () -> MobParticles.CHICKBOSS_EGG_PARTICLE.playParticleAtLocation(entity.getWorld(), loc.clone().add(0,1,0)),
+                        10, 5000);
+                srps.run();
+                egg.particleTask = srps.getTask();
+
             }
+
+
         }
     }
 

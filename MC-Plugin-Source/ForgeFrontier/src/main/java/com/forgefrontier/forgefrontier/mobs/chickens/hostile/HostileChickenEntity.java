@@ -2,12 +2,16 @@ package com.forgefrontier.forgefrontier.mobs.chickens.hostile;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.chickens.CustomChickenEntity;
+import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -69,8 +73,13 @@ public class HostileChickenEntity extends CustomChickenEntity {
                 player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, this.damage);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
+            // ATTAK PARTICLE
+            Location l = this.getBukkitEntity().getLocation();
+            player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, l.clone().add(l.getDirection()), 2);
+            player.playSound(this.getBukkitEntity(), Sound.ENTITY_PLAYER_ATTACK_CRIT,0.7F,1);
             double eventDamage = event.getDamage();
             player.damage(eventDamage);
+
         }
         lastDamageTime = System.currentTimeMillis();
     }
