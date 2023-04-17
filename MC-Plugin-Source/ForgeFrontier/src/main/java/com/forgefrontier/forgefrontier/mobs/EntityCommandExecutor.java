@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.mobs;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,7 @@ public class EntityCommandExecutor implements CommandExecutor {
 
     /** executes the spawning of the mob specified by the command sender) */
     private void spawnMob(String mobName, Player player, CommandSender sender) {
-        if (CustomEntityManager.spawnEntity(mobName, player)) {
+        if (ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity(mobName, player)) {
             sender.sendMessage("Successfully spawned the " + mobName);
         } else {
             sender.sendMessage("Failed to spawn entity - likely " + mobName + " does not exist");

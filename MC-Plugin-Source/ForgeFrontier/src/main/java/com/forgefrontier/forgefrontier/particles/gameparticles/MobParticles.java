@@ -8,6 +8,7 @@ import org.bukkit.Particle;
 public class MobParticles {
     public static FFParticle CHICKBOSS_EGG_PARTICLE;
     public static FFParticle CHICKBOSS_IMMUNE_PARTICLE;
+    public static FFParticle GENERIC_CUSTOM_DEATH_PARTICLE;
     public static void init() {
         ParticleDesignChain pdc = new ParticleDesignChain();
         pdc.setNum_points(10);
@@ -22,6 +23,9 @@ public class MobParticles {
         CHICKBOSS_IMMUNE_PARTICLE = new FFParticle(pds);
         CHICKBOSS_IMMUNE_PARTICLE.setParticle(Particle.WAX_ON);
 
+        GENERIC_CUSTOM_DEATH_PARTICLE = new FFParticle(pds);
+        GENERIC_CUSTOM_DEATH_PARTICLE.setParticle(Particle.CRIMSON_SPORE);
+        GENERIC_CUSTOM_DEATH_PARTICLE.setDensity(2);
     }
 
 

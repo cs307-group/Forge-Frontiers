@@ -3,6 +3,8 @@ package com.forgefrontier.forgefrontier.mobs;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
+import com.forgefrontier.forgefrontier.particles.ParticleManager;
+import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,6 +23,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Handles Events for Custom Mobs and includes methods to spawn/de-spawn them
@@ -28,6 +31,7 @@ import java.util.*;
 public class CustomEntityManager extends Manager implements Listener {
 
     Map<String, CustomMob> entities;
+    private HashMap<UUID, String> instanceEntityMap;
 
     /**
      * Constructor for the manager
@@ -37,6 +41,8 @@ public class CustomEntityManager extends Manager implements Listener {
     public CustomEntityManager(ForgeFrontier plugin) {
         super(plugin);
         this.entities = new HashMap<>();
+        this.instanceEntityMap = new HashMap<>();
+
     }
 
     @Override
@@ -61,12 +67,16 @@ public class CustomEntityManager extends Manager implements Listener {
      * @param player the player spawning the mob
      * @return if the execution was successful
      */
-    public static boolean spawnEntity(String code, Player player) {
+    public boolean spawnEntity(String code, Player player) {
         CustomMob mob = ForgeFrontier.getInstance().getCustomEntityManager().getEntities().get(code);
         if (mob == null) {
             return false;
         }
-        mob.spawnCustomEntity(player.getLocation(), mob.createCustomEntity((CraftWorld)player.getWorld()));
+        CraftEntity ce = mob.createCustomEntity((CraftWorld)player.getWorld());
+
+        instanceEntityMap.put(ce.getUniqueId(), code);
+        plugin.getLogger().log(Level.INFO,"Spawned Entity: " + ce.getUniqueId());
+        mob.spawnCustomEntity(player.getLocation(), ce);
         return true;
     }
 
@@ -78,12 +88,16 @@ public class CustomEntityManager extends Manager implements Listener {
      * @param loc the location to be spawned at
      * @return if the execution was successful
      */
-    public static CraftEntity spawnEntity(String code, Location loc) {
+    public CraftEntity spawnEntity(String code, Location loc) {
         CustomMob mob = ForgeFrontier.getInstance().getCustomEntityManager().getEntities().get(code);
         if (mob == null) {
             return null;
         }
-        return mob.spawnCustomEntity(loc, mob.createCustomEntity((CraftWorld)loc.getWorld()));
+        CraftEntity ce = mob.createCustomEntity((CraftWorld)loc.getWorld());
+        instanceEntityMap.put(ce.getUniqueId(), code);
+        plugin.getLogger().log(Level.INFO,"Spawned Entity: " + ce.getUniqueId());
+
+        return mob.spawnCustomEntity(loc, ce);
     }
 
     @EventHandler
@@ -141,7 +155,13 @@ public class CustomEntityManager extends Manager implements Listener {
     @EventHandler
     public void onEntityDeath (EntityDeathEvent event) {
         LivingEntity entity = event.getEntity();
-
+        CustomMob cm = getMobFromID(entity.getUniqueId());
+        if (cm != null) {
+            plugin.getLogger().log(Level.INFO,"Entity Death: " + cm.getCode());
+            handleCustomDeath(entity, cm);
+        } else {
+            plugin.getLogger().log(Level.INFO,"Non Custom Death: " + entity.getUniqueId());
+        }
         // handles custom item drops
         if (entity.hasMetadata("custom-drop-keys") && entity.hasMetadata("custom-drop-table")) {
             event.getDrops().clear();
@@ -204,4 +224,19 @@ public class CustomEntityManager extends Manager implements Listener {
     public Map<String, CustomMob> getEntities() {
         return entities;
     }
+
+    public void insertEntityInstance(UUID entityID, String entityCode) {
+        this.instanceEntityMap.put(entityID, entityCode);
+    }
+
+    public CustomMob getMobFromID(UUID entityID) {
+        if (!instanceEntityMap.containsKey(entityID)) return null;
+        return entities.get(instanceEntityMap.get(entityID));
+    }
+
+    public void handleCustomDeath(LivingEntity e, CustomMob cm) {
+        MobParticles.GENERIC_CUSTOM_DEATH_PARTICLE.playParticleAtLocation(e.getWorld(),e.getLocation());
+    }
+
+
 }

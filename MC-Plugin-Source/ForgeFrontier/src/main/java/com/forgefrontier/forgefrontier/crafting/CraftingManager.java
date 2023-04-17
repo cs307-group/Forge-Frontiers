@@ -14,11 +14,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 public class CraftingManager extends Manager implements Listener {
 
     ArrayList<FFRecipe> ffRecipes;
+    HashMap<String, ArrayList<FFRecipe>> recipeFilters;
+
+
 
     public CraftingManager(ForgeFrontier plugin) {
         super(plugin);

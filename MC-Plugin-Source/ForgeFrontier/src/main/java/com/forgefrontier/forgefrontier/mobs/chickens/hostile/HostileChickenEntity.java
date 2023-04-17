@@ -107,4 +107,5 @@ public class HostileChickenEntity extends CustomChickenEntity {
     public void setDamage(int damage) {
         this.damage = damage;
     }
+
 }

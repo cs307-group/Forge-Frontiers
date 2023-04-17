@@ -57,6 +57,7 @@ import revxrsal.commands.bukkit.BukkitCommandHandler;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ForgeFrontier extends JavaPlugin {
 
@@ -229,10 +230,13 @@ public class ForgeFrontier extends JavaPlugin {
         // Auto-Completer Registrations
         AutoCompleter autoCompleter = commandHandler.getAutoCompleter();
         autoCompleter.registerSuggestion("cgive", customItemManager.getItemNames());
-
+        autoCompleter.registerSuggestion("cspawn", this.getCustomEntityManager().getEntities().keySet());
         commandHandler.register(new CustomGiveCommand(this));
         commandHandler.register(new ParticleCommands(this));
         commandHandler.register(new GeneratorCommand(this));
+        commandHandler.register(new CustomSpawnCommand(this));
+
+
 
     }
 

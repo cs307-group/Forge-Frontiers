@@ -9,6 +9,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.UUID;
+
 /**
  * Abstract class to represent all custom mobs
  */
@@ -22,6 +24,7 @@ public abstract class CustomMob {
 
     /** the String code that is representative of the entity */
     String code;
+
 
     /**
      * Basic constructor for a custom mob

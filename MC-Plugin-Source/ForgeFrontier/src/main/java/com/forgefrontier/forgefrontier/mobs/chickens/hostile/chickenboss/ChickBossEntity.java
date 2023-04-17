@@ -115,7 +115,7 @@ public class ChickBossEntity extends HostileChickenEntity {
             double zMod = getRandMod();
             Vec3 pos = this.getPosition(0f);
             Location loc = new Location(this.level.getWorld(), pos.x + xMod, pos.y, pos.z + zMod);
-            CraftEntity entity = CustomEntityManager.spawnEntity("Eggsplosive", loc);
+            CraftEntity entity = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("Eggsplosive", loc);
             if (entity.getHandle() instanceof EggsplosiveEntity egg) {
                 this.eggs.add(egg);
                 egg.setOwner(this);
