@@ -42,6 +42,9 @@ public class EggBoxEntity extends HitBoxEntity {
             eggEntity.setRotation(0, 0);
             setNamePlate(ChatColor.WHITE + "Egg" + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
         }
+        if (this.getCustomName() != null) {
+            eggEntity.setCustomName(this.getBukkitEntity().getCustomName());
+        }
     }
 
     @Override

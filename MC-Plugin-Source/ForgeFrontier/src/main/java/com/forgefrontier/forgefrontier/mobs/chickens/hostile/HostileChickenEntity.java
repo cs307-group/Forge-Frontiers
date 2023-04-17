@@ -27,7 +27,7 @@ public class HostileChickenEntity extends CustomChickenEntity {
         super(entityTypes, world);
         idleSpeed = 1.0f;
         aggroSpeed = 1.2f;
-        damage = 1;
+        damage = 10;
     }
 
     @Override

@@ -71,7 +71,6 @@ public class PlayerManager extends Manager implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        // System.out.println("PLAYER JOINED");
         Player player = event.getPlayer();
 
         players.put(player.getUniqueId(), player);
@@ -102,12 +101,9 @@ public class PlayerManager extends Manager implements Listener {
      */
     @EventHandler
     public void onEntityDamageByEntity (EntityDamageByEntityEvent event) {
-        System.out.println(event.getDamage());
         //ensures the entity with the incoming damages is a player
         if (event.getEntity() instanceof Player player) {
-            System.out.println("IS PLAYER");
             if (event.getDamager().hasMetadata("dynamic")) { // does not convert damage due to mob being dynamic
-                System.out.println("IS DYNAMIC");
                 HashMap<String, Double> dynamicValues = (HashMap<String, Double>) event.getDamager().getMetadata("dynamic").get(0).value();
                 double damage = dynamicValues.get("outgoing");
                 event.setDamage(damage);
@@ -128,7 +124,6 @@ public class PlayerManager extends Manager implements Listener {
                 event.setDamage(convertedDamage);
             }
         }
-        System.out.println(event.getDamage());
     }
 
     /**

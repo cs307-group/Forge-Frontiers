@@ -2,9 +2,11 @@ package com.forgefrontier.forgefrontier.mobs;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBossEntity;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -154,7 +156,8 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDeath (EntityDeathEvent event) {
-        LivingEntity entity = event.getEntity();
+
+        CraftLivingEntity entity = (CraftLivingEntity) event.getEntity();
         CustomMob cm = getMobFromID(entity.getUniqueId());
         if (cm != null) {
             plugin.getLogger().log(Level.INFO,"Entity Death: " + cm.getCode());
@@ -201,16 +204,20 @@ public class CustomEntityManager extends Manager implements Listener {
                     plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
                 }
             }
+            SlimeBossEntity slimeBossEntity = (SlimeBossEntity) entity.getHandle();
+            if (slimeBossEntity != null) {
+                slimeBossEntity.onDeath();
+            }
         }
 
         if (entity.hasMetadata("code")) {
-            // checks if the entity is a hitbox entity
+            // checks if the entity is a slime entity
             if (entity instanceof Slime slime) {
                 if (slime instanceof CraftEntity craftEntity) {
-                    HitBoxEntity hitBoxEntity = (HitBoxEntity) craftEntity.getHandle();
-                    if (hitBoxEntity != null) {
-                        hitBoxEntity.dropItems();
-                        hitBoxEntity.setLoc(null);
+                    CustomSlimeEntity customSlimeEntity = (CustomSlimeEntity) craftEntity.getHandle();
+                    if (customSlimeEntity != null) {
+                        customSlimeEntity.dropItems();
+                        customSlimeEntity.setLoc(null);
                     }
                 }
                 slime.setHealth(1);

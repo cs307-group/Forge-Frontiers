@@ -19,8 +19,6 @@ public class HostileChicken extends CustomChicken {
     /** class representing the custom CraftEntity for the TestChicken */
     public static class CraftHostileChicken extends CustomCraftChicken {
 
-        // public BossBar bossBar;
-
         /**
          * Constructor
          *
@@ -53,7 +51,6 @@ public class HostileChicken extends CustomChicken {
 
             this.setAI(true);
 
-            // bossBar = initBossBar("Chicken Boss");
             defineDropTable();
         }
 
