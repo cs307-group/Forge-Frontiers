@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.mobs.slimes.hostile;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
@@ -11,10 +12,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class HostileSlimeEntity extends CustomSlimeEntity {
+
+    // used to pause natural behavior in subclasses
+    boolean doBehavior;
 
     private float idleSpeed;
     private float aggroSpeed;
@@ -27,13 +32,17 @@ public class HostileSlimeEntity extends CustomSlimeEntity {
         super(entityTypes, world);
         idleSpeed = 1.0f;
         aggroSpeed = 1.0f;
-        damage = 20;
+        damage = 5;
+
+        doBehavior = true;
     }
 
     @Override
     public void customTick() {
         super.customTick();
-        doHostileBehavior();
+        if (doBehavior) {
+            doHostileBehavior();
+        }
     }
 
     /**
@@ -60,17 +69,45 @@ public class HostileSlimeEntity extends CustomSlimeEntity {
     }
 
     public void attack(org.bukkit.entity.Player player) {
-        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(this.getBukkitEntity(),
-                player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, this.damage);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            double eventDamage = event.getDamage();
-            player.damage(eventDamage);
+        if (player != null) {
+            EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(this.getBukkitEntity(),
+                    player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, this.damage);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (!event.isCancelled()) {
+                double eventDamage = event.getDamage();
+                player.damage(eventDamage, this.getBukkitEntity());
+            }
+            lastDamageTime = System.currentTimeMillis();
         }
-        lastDamageTime = System.currentTimeMillis();
+    }
+
+
+    public void attack(org.bukkit.entity.Player player, double damage) {
+        if (player != null) {
+            EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(this.getBukkitEntity(),
+                    player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (!event.isCancelled()) {
+                double eventDamage = event.getDamage();
+                player.damage(eventDamage, this.getBukkitEntity());
+            }
+            lastDamageTime = System.currentTimeMillis();
+        }
     }
 
     public void setScale(int scale) {
         this.scale = scale;
+    }
+
+    public void setDoBehavior(boolean value) {
+        doBehavior = value;
+    }
+
+    public boolean getDoBehavior() {
+        return doBehavior;
+    }
+
+    public boolean hasNearestPlayer() {
+        return nearestPlayer == null;
     }
 }

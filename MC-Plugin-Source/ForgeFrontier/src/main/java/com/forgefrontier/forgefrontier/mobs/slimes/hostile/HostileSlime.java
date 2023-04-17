@@ -17,7 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class HostileSlime extends CustomSlime {
 
-    static class CraftHostileSlime extends CustomCraftSlime {
+    public static class CraftHostileSlime extends CustomCraftSlime {
 
         /**
          * Constructor
@@ -27,7 +27,13 @@ public class HostileSlime extends CustomSlime {
          */
         public CraftHostileSlime(CraftServer server, CraftWorld world) {
             super(server, "HostileSlime", new HostileSlimeEntity(EntityType.SLIME, world.getHandle()));
-            initCraftSlime("HostileSlime", 20);
+            initCraftSlime("HostileSlime", 20, 5);
+            saveMetaData();
+        }
+
+        public CraftHostileSlime(CraftServer server, String name, int health, int scale, HostileSlimeEntity entity) {
+            super(server, name, entity);
+            initCraftSlime(name, health, scale);
             saveMetaData();
         }
 
@@ -37,15 +43,14 @@ public class HostileSlime extends CustomSlime {
          * @param name the name of the slime
          * @param health the max health of the slime
          */
-        public void initCraftSlime(String name, int health) {
-            this.setDefaultHealth(health);
+        public void initCraftSlime(String name, int health, int scale) {
 
             this.customCraftName = name;
             this.updateNamePlate(customCraftName);
-            this.setSize(10);
-            ((HostileSlimeEntity) this.getHandle()).setScale(5);
 
             this.setAI(true);
+            setScale(scale);                // Note: Must set health after the size
+            this.setDefaultHealth(health);  // Otherwise health will be = size^2
 
             AttributeInstance atk = this.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
             if (atk != null) {
@@ -63,7 +68,6 @@ public class HostileSlime extends CustomSlime {
             for (int i = 0; i < 5; i++) {
                 entity.registerDropItem(Material.SLIME_BALL, 50);
             }
-            System.out.println("DefineDropTable: " + dropKeys.size() + " | " + customDropKeys.size());
         }
 
         /** Stores the necessary data in metadata to be accessed later */

@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.mobs.slimes;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlimeEntity;
 import net.minecraft.world.entity.monster.Slime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,6 +52,16 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
         // sets the health of the entity
         this.setMaxHealth(maxHealth);
         this.setHealth(maxHealth);
+    }
+
+    /**
+     * Sets the scale of the slime
+     *
+     * @param scale the scale of the slime
+     */
+    public void setScale(int scale) {
+        this.setSize(scale);
+        ((HostileSlimeEntity) this.getHandle()).setScale(scale);
     }
 
     /**

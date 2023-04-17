@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBossEntity;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -141,7 +142,7 @@ public class CustomEntityManager extends Manager implements Listener {
 
     @EventHandler
     public void onEntityDeath (EntityDeathEvent event) {
-        LivingEntity entity = event.getEntity();
+        CraftLivingEntity entity = (CraftLivingEntity) event.getEntity();
 
         // handles custom item drops
         if (entity.hasMetadata("custom-drop-keys") && entity.hasMetadata("custom-drop-table")) {
@@ -182,17 +183,18 @@ public class CustomEntityManager extends Manager implements Listener {
                     plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
                 }
             }
+            SlimeBossEntity slimeBossEntity = (SlimeBossEntity) entity.getHandle();
+            if (slimeBossEntity != null) {
+                slimeBossEntity.onDeath();
+            }
         }
 
         if (entity.hasMetadata("code")) {
             // checks if the entity is a slime entity
             if (entity instanceof Slime slime) {
-                System.out.println("IS SLIME");
                 if (slime instanceof CraftEntity craftEntity) {
-                    System.out.println("IS CRAFT");
                     CustomSlimeEntity customSlimeEntity = (CustomSlimeEntity) craftEntity.getHandle();
                     if (customSlimeEntity != null) {
-                        System.out.println("IS SLIME ENTITY");
                         customSlimeEntity.dropItems();
                         customSlimeEntity.setLoc(null);
                     }
