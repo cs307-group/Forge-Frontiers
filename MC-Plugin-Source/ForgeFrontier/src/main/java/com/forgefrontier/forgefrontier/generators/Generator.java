@@ -9,6 +9,8 @@ import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,4 +109,19 @@ public class Generator {
         this.primaryMaterial = ForgeFrontier.getInstance().getGeneratorManager().getCustomMaterial("item", item.getCode());
     }
 
+    public String getCostsJSON() {
+        JSONArray array = new JSONArray();
+        for(MaterialCost cost: this.shopCost) {
+            array.add(cost.toJSONObject());
+        }
+        return array.toJSONString();
+    }
+
+    public String getLevelsJSON() {
+        JSONArray array = new JSONArray();
+        for(GeneratorLevel level: this.generatorLevels) {
+            array.add(level.toJSONObject());
+        }
+        return array.toJSONString();
+    }
 }

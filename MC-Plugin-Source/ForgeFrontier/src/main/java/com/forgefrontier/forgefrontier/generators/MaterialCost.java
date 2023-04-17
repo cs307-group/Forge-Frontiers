@@ -3,10 +3,12 @@ package com.forgefrontier.forgefrontier.generators;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.generators.materials.CoinMaterial;
 import com.forgefrontier.forgefrontier.generators.materials.CustomMaterial;
+import com.forgefrontier.forgefrontier.generators.materials.ItemMaterial;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONObject;
 
 public class MaterialCost {
 
@@ -64,4 +66,16 @@ public class MaterialCost {
         this.amount = amount;
     }
 
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        if(this.material instanceof ItemMaterial material) {
+            obj.put("material_type", "item");
+            obj.put("item_id", material.getItem().getCode());
+        } else {
+            obj.put("material_type", "coin");
+            obj.put("item_id", "");
+        }
+        obj.put("amount", this.amount);
+        return obj;
+    }
 }

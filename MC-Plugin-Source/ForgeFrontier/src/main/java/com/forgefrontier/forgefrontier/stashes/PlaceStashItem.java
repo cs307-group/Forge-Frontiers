@@ -65,8 +65,8 @@ public class PlaceStashItem extends UniqueCustomItem {
                     e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place stash here. You must place it on your island.");
                     return;
                 }
-                if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
-                    e.getItem().setAmount(e.getItem().getAmount() - 1);
+                //if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
+                e.getItem().setAmount(e.getItem().getAmount() - 1);
                 stashInstance.getLocation().getBlock().setType(stashInstance.stash.getMaterialRepresentation());
             });
         });

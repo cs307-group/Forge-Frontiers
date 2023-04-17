@@ -211,7 +211,6 @@ public class ForgeFrontier extends JavaPlugin {
      */
     private void registerCommands() {
         // Bukkit-Registered Commands
-        //registerCommand("gen"          , new GeneratorCommandExecutor());
         registerCommand("genshop"      , new GeneratorShopCommandExecutor());
         registerCommand("gearshop"     , new GearShopCommandExecutor());
         registerCommand("pshop"         , itemShop.getCommandExecutor());
@@ -222,7 +221,6 @@ public class ForgeFrontier extends JavaPlugin {
         registerCommand("forgefrontier", new ForgeFrontierCommandExecutor());
         registerCommand("customspawn"  , new EntityCommandExecutor());
         registerCommand("mining"       , new MiningCommandExecutor());
-        registerCommand("openshop"     , new OpenshopCommandExecutor());
 
         // Wrapper-Registered Commands
         BukkitCommandHandler commandHandler = BukkitCommandHandler.create(this);

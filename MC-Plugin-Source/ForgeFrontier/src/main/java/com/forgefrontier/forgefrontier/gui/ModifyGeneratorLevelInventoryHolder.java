@@ -75,22 +75,6 @@ public class ModifyGeneratorLevelInventoryHolder extends BaseInventoryHolder {
             this.getInventory();
         });
 
-        for(int i = 0; i < level.getUpgradeCosts().size(); i++) {
-            MaterialCost cost = level.getUpgradeCosts().get(i);
-            final int index = i;
-            this.addHandler(9 * 3 + 1 + i, (e) -> {
-                if(e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
-                    level.getUpgradeCosts().set(index, new MaterialCost("coin", "", cost.getAmount()));
-                    return;
-                }
-                CustomItem item = CustomItemManager.getCustomItem(e.getCursor());
-                if(item == null)
-                    return;
-                level.getUpgradeCosts().set(index, new MaterialCost("item", item.getCode(), cost.getAmount()));
-                this.getInventory();
-            });
-        }
-
         this.addHandler(9 * 5, (e -> {
             generator.getGeneratorLevels().remove(levelIndex);
             e.getWhoClicked().openInventory(new ModifyGeneratorInventoryHolder(this.generator).getInventory());
@@ -118,9 +102,22 @@ public class ModifyGeneratorLevelInventoryHolder extends BaseInventoryHolder {
 
         GeneratorLevel level = generator.getGeneratorLevels().get(levelIndex);
 
-        int index = 0;
-        for(MaterialCost cost: level.getUpgradeCosts()) {
-            this.addHandler(9 * 4 + 1 + index, (e) -> {
+        for(int i = 0; i < level.getUpgradeCosts().size(); i++) {
+            MaterialCost cost = level.getUpgradeCosts().get(i);
+            final int index = i;
+            this.addHandler(9 * 3 + 1 + i, (e) -> {
+                if(e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
+                    level.getUpgradeCosts().set(index, new MaterialCost("coin", "", cost.getAmount()));
+                    this.getInventory();
+                    return;
+                }
+                CustomItem item = CustomItemManager.getCustomItem(e.getCursor());
+                if(item == null)
+                    return;
+                level.getUpgradeCosts().set(index, new MaterialCost("item", item.getCode(), cost.getAmount()));
+                this.getInventory();
+            });
+            this.addHandler(9 * 4 + 1 + i, (e) -> {
                 new AnvilGUI.Builder()
                     .onClose((player) ->
                             new PreviousInventoryRunnable(player, this.getInventory())
@@ -139,7 +136,6 @@ public class ModifyGeneratorLevelInventoryHolder extends BaseInventoryHolder {
                     .plugin(ForgeFrontier.getInstance())
                     .open((Player) e.getWhoClicked());
             });
-            index += 1;
         }
 
         this.setItem(9 + 2, new ItemStackBuilder(Material.DIAMOND_PICKAXE)

@@ -22,6 +22,10 @@ public class JSONWrapper {
         this.object = JSONWrapper.parse(json);
     }
 
+    public JSONWrapper() {
+        this.object = new JSONObject();
+    }
+
     public static JSONObject parse(String json) {
         try {
             return (JSONObject) parser.parse(json);
@@ -59,6 +63,8 @@ public class JSONWrapper {
     public Integer getInt(String s) {
         if(!this.has(s))
             return null;
+        if(this.object.get(s) instanceof Long)
+            return ((Long) this.object.get(s)).intValue();
         return (Integer) this.object.get(s);
     }
 
@@ -69,8 +75,9 @@ public class JSONWrapper {
     public List<JSONWrapper> getList(String s) {
         if(!this.has(s))
             return null;
+        List<Object> arr = (List<Object>) this.object.get(s);
         List<JSONWrapper> wrapperList = new ArrayList<>();
-        for(Object object: (List<Object>) this.object.get(s)) {
+        for(Object object: arr) {
             wrapperList.add(new JSONWrapper((JSONObject) object));
         }
         return wrapperList;

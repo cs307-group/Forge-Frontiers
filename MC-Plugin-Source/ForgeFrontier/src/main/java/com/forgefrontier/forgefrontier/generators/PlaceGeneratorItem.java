@@ -24,10 +24,16 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
             itemInstance.getData().put("generator-id", placeGeneratorItemInstance.generatorId);
             itemInstance.getData().put("level", placeGeneratorItemInstance.level);
 
+            GeneratorLevel level = generator.getGeneratorLevels().get(placeGeneratorItemInstance.level);
+
             return new ItemStackBuilder(generator.getMaterialRepresentation())
-                    .setDisplayName(generator.getFriendlyName() + "&7 - Lvl &f" + (placeGeneratorItemInstance.level + 1))
-                    .addLoreLine("&7Place this generator down into the world to start generating materials.")
-                    .build();
+                .setDisplayName(generator.getFriendlyName() + "&7 - Lvl &f" + (placeGeneratorItemInstance.level + 1))
+                .addLoreLine("&8Resource: " + generator.getPrimaryMaterial().getRepresentation().getItemMeta().getDisplayName())
+                .addLoreLine("&8Generation Rate: &f&l" + (level.getGeneratorRate()/1000.0) + " &7seconds per item")
+                .addLoreLine("&8Max Size: &f&l" + level.getMaxSize())
+                .addLoreLine("&7Place this generator down into")
+                .addLoreLine("&7the world to start generating materials.")
+                .build();
         });
 
         this.registerInstanceAccumulator((__, itemStack) -> {
@@ -65,8 +71,8 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
                     e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place generator here. You must place it on your island.");
                     return;
                 }
-                if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
-                    e.getItem().setAmount(e.getItem().getAmount() - 1);
+                //if(e.getPlayer().getGameMode() != GameMode.CREATIVE)
+                e.getItem().setAmount(e.getItem().getAmount() - 1);
                 generatorInstance.getLocation().getBlock().setType(generatorInstance.generator.getMaterialRepresentation());
             });
         });

@@ -91,7 +91,7 @@ public class UpdateQueryWrapper {
             int index;
             for(index = 1; index <= fields.size(); index++) {
                 Object value = values.get(fields.get(index - 1));
-                if(value == null) throw new RuntimeException("Unable to insert null value into database for field \"" + fields.get(index) + "\".");
+                if(value == null) throw new RuntimeException("Unable to insert null value into database for field \"" + fields.get(index - 1) + "\".");
                 if(value instanceof String)
                     preparedStatement.setString(index, (String) value);
                 else if(value instanceof Long)
