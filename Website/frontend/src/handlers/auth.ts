@@ -12,7 +12,7 @@ import {hasToken} from "@/util/const-has-token";
 
 import {getAuthenticationHeaders, jsonRequest, routes} from "./_util";
 import {isErrorResponse} from "./fetch-util";
-import {Tokens} from "./types";
+import {Tokens, UserDataSecure} from "./types";
 import {fetchUserData} from "./user-data";
 
 export interface ServerSidePropsWrapper {
@@ -23,22 +23,37 @@ const LOGIN_REDIRECT = {
   redirect: {destination: "/login", statusCode: 302},
 } satisfies GetServerSidePropsResult<any>;
 
+type GSSPAuthCTX<
+  Q extends ParsedUrlQuery = ParsedUrlQuery,
+  D extends PreviewData = PreviewData
+> = GetServerSidePropsContext<Q, D> & {
+  req: IncomingMessage & {
+    cookies: {
+      tokens: string;
+    };
+  };
+};
 export type GSSPWithAuth<
   P extends {[key: string]: any} = {[key: string]: any},
   Q extends ParsedUrlQuery = ParsedUrlQuery,
   D extends PreviewData = PreviewData
+> = (context: GSSPAuthCTX<Q, D>) => Promise<GetServerSidePropsResult<P>>;
+
+export type GSSPWithAuthAdminData<
+  P extends {[key: string]: any} = {[key: string]: any},
+  Q extends ParsedUrlQuery = ParsedUrlQuery,
+  D extends PreviewData = PreviewData
 > = (
-  context: GetServerSidePropsContext<Q, D> & {
-    req: IncomingMessage & {
-      cookies: {
-        tokens: string;
-      };
-    };
-  }
+  context: GSSPAuthCTX<Q, D>,
+  user: UserDataSecure,
+  cookie: object
 ) => Promise<GetServerSidePropsResult<P>>;
 
 export interface RequiredAuthentication {
   (fn: GSSPWithAuth): GetServerSideProps;
+}
+export interface RequiredAdminAuthentication {
+  (fn: GSSPWithAuthAdminData): GetServerSideProps;
 }
 
 export const requireAuthenticatedPageView: RequiredAuthentication = (fn) => {
@@ -52,7 +67,7 @@ export const requireAuthenticatedPageView: RequiredAuthentication = (fn) => {
   };
 };
 
-export const requireAdminPageView: RequiredAuthentication = (fn) => {
+export const requireAdminPageView: RequiredAdminAuthentication = (fn) => {
   return async (c) => {
     const {req} = c;
     if (!hasToken(req.cookies)) {
@@ -66,7 +81,7 @@ export const requireAdminPageView: RequiredAuthentication = (fn) => {
     if (!userData.resp.is_admin) {
       return {props: {error: "Access Denied"}};
     }
-    return fn(c as any);
+    return fn(c as any, userData.resp, userData.extractCookie());
   };
 };
 
