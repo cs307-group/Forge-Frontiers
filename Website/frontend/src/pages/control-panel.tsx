@@ -5,12 +5,12 @@ export default function ControlPanel({error}: {error?: string}) {
   if (error)
     return (
       <AppLayout active="control-panel">
-        <div>Error: {error}</div>
+        <div>You are not an Admin {error}</div>
       </AppLayout>
     );
   return (
     <AppLayout active="control-panel">
-      <div>Error: {error}</div>
+      <div>You are an admin{error}</div>
     </AppLayout>
   );
 }
