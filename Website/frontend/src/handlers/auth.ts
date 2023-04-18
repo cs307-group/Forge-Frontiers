@@ -11,11 +11,17 @@ import type {
 import {hasToken} from "@/util/const-has-token";
 
 import {getAuthenticationHeaders, jsonRequest, routes} from "./_util";
+import {isErrorResponse} from "./fetch-util";
 import {Tokens} from "./types";
+import {fetchUserData} from "./user-data";
 
 export interface ServerSidePropsWrapper {
   (fn: GetServerSideProps): GetServerSideProps;
 }
+
+const LOGIN_REDIRECT = {
+  redirect: {destination: "/login", statusCode: 302},
+} satisfies GetServerSidePropsResult<any>;
 
 export type GSSPWithAuth<
   P extends {[key: string]: any} = {[key: string]: any},
@@ -39,9 +45,27 @@ export const requireAuthenticatedPageView: RequiredAuthentication = (fn) => {
   return async (c) => {
     const {req} = c;
     if (!hasToken(req.cookies)) {
-      return {redirect: {destination: "/login", statusCode: 302}};
+      return LOGIN_REDIRECT;
     }
     // @todo maybe use better type here
+    return fn(c as any);
+  };
+};
+
+export const requireAdminPageView: RequiredAuthentication = (fn) => {
+  return async (c) => {
+    const {req} = c;
+    if (!hasToken(req.cookies)) {
+      return LOGIN_REDIRECT;
+    }
+    // @todo maybe use better type here
+    const userData = await fetchUserData(c as any);
+    if (isErrorResponse(userData)) {
+      return LOGIN_REDIRECT;
+    }
+    if (!userData.resp.is_admin) {
+      return {props: {error: "Access Denied"}};
+    }
     return fn(c as any);
   };
 };

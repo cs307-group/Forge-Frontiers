@@ -13,9 +13,11 @@ const NAV_ITEMS = {
   "market-viewer": "Market Viewer",
 } as const;
 
+type LiteralUnion<T extends U, U = string> = T | (U & {______?: never});
+
 export interface LayoutProps {
   children?: any;
-  active: keyof typeof NAV_ITEMS | null;
+  active: LiteralUnion<keyof typeof NAV_ITEMS> | null;
   title?: string;
   extraNavItems?: Record<string, string>;
 }
