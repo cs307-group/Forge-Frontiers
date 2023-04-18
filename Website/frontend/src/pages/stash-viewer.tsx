@@ -14,7 +14,7 @@ export default function Profile({
 }) {
   useCookieSync(cookie);
 
-  return <AppLayout active="leaderboard" title="Leaderboard">ok</AppLayout>;
+  return <AppLayout active="stash-viewer" title="Stash Viewer">ok</AppLayout>;
 }
 
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {

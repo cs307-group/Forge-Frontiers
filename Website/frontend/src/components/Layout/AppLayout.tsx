@@ -12,6 +12,8 @@ const NAV_ITEMS = {
   leaderboard: "Leaderboard",
   search: "Player Lookup",
   "market-viewer": "Market Viewer",
+  faq: "FAQ",
+  "stash-viewer": "Stash Viewer",
 } as const;
 
 export interface LayoutProps {
