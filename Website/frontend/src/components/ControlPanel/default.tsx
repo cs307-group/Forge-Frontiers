@@ -20,7 +20,7 @@ export default function ControlPanel({
   useRefresh(5000);
   useCookieSync(cookie);
   return (
-    <ControlPanelRenderer error={error}>
+    <ControlPanelRenderer error={error} active="/in-game-transactions">
       <Spacer y={30} />
       <InGameTransactionsViewer shop={shop} />
     </ControlPanelRenderer>

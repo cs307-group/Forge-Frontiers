@@ -14,7 +14,7 @@ export default function Profile({
 }) {
   useCookieSync(cookie);
 
-  return <AppLayout active="FAQ" title="FAQ">ok</AppLayout>;
+  return <AppLayout active="faq" title="FAQ">ok</AppLayout>;
 }
 
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {

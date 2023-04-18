@@ -15,7 +15,7 @@ export default function ControlPanel({
 }) {
   useCookieSync(cookie);
   return (
-    <ControlPanelRenderer error={error}>
+    <ControlPanelRenderer error={error} active="/stripe">
       <StripeViewer />
     </ControlPanelRenderer>
   );

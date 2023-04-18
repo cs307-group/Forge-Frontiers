@@ -59,13 +59,12 @@ export function TabLinks({active}: {active: string}) {
 export function ControlPanelRenderer({
   error,
   children,
+  active,
 }: {
   error?: string;
+  active: string;
   children?: any;
 }) {
-  const {pathname} = useRouter();
-  const active =
-    pathname.replace("/control-panel", "") || "/in-game-transactions";
   if (error)
     return (
       <>
