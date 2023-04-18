@@ -2,9 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 
 import {jsonRequest, routes} from "../../handlers/_util";
 
-export const config = {
-  runtime: "edge",
-};
+export const config = {runtime: "edge"};
 
 export default async function (req: NextRequest) {
   let {method} = req;

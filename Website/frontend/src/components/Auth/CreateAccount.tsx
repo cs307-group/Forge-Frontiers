@@ -38,6 +38,7 @@ export function CreateAccount() {
       <Toaster />
       <form onSubmit={handleSubmit}>
         <NameInput
+          name="name"
           placeholder="Name"
           required
           value={name}
@@ -46,6 +47,7 @@ export function CreateAccount() {
         />
         <Spacer y={50} />
         <EmailInput
+          name="email"
           placeholder="you@example.com"
           required
           type="email"
@@ -54,6 +56,7 @@ export function CreateAccount() {
         />
         <Spacer y={50} />
         <PasswordInput
+          name="password"
           type="password"
           placeholder="hunter2"
           value={password}

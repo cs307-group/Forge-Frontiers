@@ -36,6 +36,7 @@ export function LoginToAccount() {
       <Toaster />
       <form onSubmit={handleSubmit}>
         <EmailInput
+          name="email"
           placeholder="you@example.com"
           value={email}
           onChange={(e) => {
@@ -44,6 +45,7 @@ export function LoginToAccount() {
         />
         <Spacer y={50} />
         <PasswordInput
+          name="password"
           placeholder="hunter2"
           value={password}
           onChange={(e) => {

@@ -24,12 +24,12 @@ export interface LayoutProps {
   extraNavItems?: Record<string, string>;
 }
 function Menu({active, extraNavItems}: LayoutProps) {
-  const isWide = useMedia.useMinWidth(640);
-  if (isWide)
-    return (
+  return (
+    <>
       <DesktopSideBar active={active} extraNavItems={extraNavItems || {}} />
-    );
-  return <MobileHeader active={active} extraNavItems={extraNavItems || {}} />;
+      <MobileHeader active={active} extraNavItems={extraNavItems || {}} />
+    </>
+  );
 }
 
 export function AppLayout({
@@ -41,11 +41,7 @@ export function AppLayout({
   return (
     <div className="forge_background flex h-full w-full flex-col border-[1px] border-black text-black dark:border-transparent dark:text-white sm:block ">
       <div className="sm:flex sm:h-fit sm:min-h-full sm:w-full sm:flex-grow sm:flex-row sm:flex-nowrap">
-        <Client
-          fallback={<div data-ssr-skeleton className="h-12 sm:w-[200px]"></div>}
-        >
-          <Menu active={active} extraNavItems={extraNavItems} />
-        </Client>
+        <Menu active={active} extraNavItems={extraNavItems} />
         <main
           role="main"
           className="flex-1 border-2 border-black dark:border-0 dark:border-transparent sm:m-4 sm:w-full sm:flex-grow sm:rounded-2xl sm:px-8 sm:pt-1 dark:sm:bg-[#262C2C]"
@@ -71,7 +67,7 @@ function MobileHeader({
 }) {
   const [open, setOpen] = useState(false);
   return (
-    <header className="relative flex h-12">
+    <header className="mobile__only relative h-12">
       <MobileNav
         extraNavItems={extraNavItems}
         open={open}
@@ -98,7 +94,7 @@ function DesktopSideBar({
   extraNavItems: Record<string, string>;
 }) {
   return (
-    <div className="m-4 flex min-w-[200px] flex-shrink flex-grow-0 flex-col items-center rounded-2xl border-2 border-black px-4 dark:border-transparent dark:bg-[#262C2C]">
+    <div className="wide__only m-4 min-w-[200px] flex-shrink flex-grow-0 flex-col items-center rounded-2xl border-2 border-black px-4 dark:border-transparent dark:bg-[#262C2C]">
       <Link href="/" className="ff_shadow my-6 text-xl text-ff-theme">
         Forge Frontier
       </Link>
@@ -152,7 +148,7 @@ function MobileNav({
         }
       }}
       className={
-        "fixed z-[1000] m-auto flex h-screen w-screen flex-col items-center justify-end bg-[#3030307a] transition " +
+        "flex fixed z-[1000] m-auto h-screen w-screen flex-col items-center justify-end bg-[#3030307a] transition " +
         (open ? "" : "user-select-none pointer-events-none opacity-0")
       }
     >
