@@ -16,9 +16,6 @@ export interface ReqWithCookies extends IncomingMessage {
 export interface AuthReqContext extends GetServerSidePropsContext<any, any> {
   req: ReqWithCookies;
 }
-export class ErrorResponse {
-  constructor(public resp: GetServerSidePropsResult<any>) {}
-}
 
 export class EdgeFunctionResponse<T extends Record<any, any>> {
   private customData: Record<any, any> = {};
@@ -41,6 +38,9 @@ export class EdgeFunctionResponse<T extends Record<any, any>> {
     }
     return null;
   }
+}
+export class ErrorResponse {
+  constructor(public resp: GetServerSidePropsResult<any>) {}
 }
 
 export function isErrorResponse(x: unknown): x is ErrorResponse {

@@ -39,7 +39,6 @@ async function collectGenerators(t: Tokens, island_id: string, abs: string) {
       );
     }
   }
-  await new Promise((resolve) => setTimeout(resolve, 800));
   return NextResponse.redirect(new URL("/generators", abs), 302);
 }
 

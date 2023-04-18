@@ -13,9 +13,13 @@ import {isErrorResponse} from "@/handlers/fetch-util";
 import {fetchUserData} from "@/handlers/user-data";
 import {hasToken} from "@/util/const-has-token";
 
-export default function Document({lightMode}: any) {
+export default function Document({lightMode, autoSync}: any) {
   return (
-    <Html lang="en" className={clsx(lightMode ? "light" : "dark")}>
+    <Html
+      lang="en"
+      className={clsx(lightMode ? "light" : "dark")}
+      data-config={JSON.stringify({autoSync})}
+    >
       <Head />
       <body>
         <Main />
@@ -38,9 +42,11 @@ Document.getInitialProps = async function (ctx: DocumentContext) {
   }
   const cfg = uData.resp?.secure?.config || {};
   const darkMode = cfg["dark-mode"] ?? true;
+  const disableAutoSync = cfg["disable-autosync"] ?? false;
   const res = await result;
   return {
     ...res,
     lightMode: !darkMode,
+    autoSync: !disableAutoSync,
   };
 };

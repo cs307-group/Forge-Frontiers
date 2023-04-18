@@ -2,7 +2,7 @@ import Head from "next/head";
 
 import {Button} from "@/components/Button";
 import {GenBlock} from "@/components/Gens/GenBlock";
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {Spacer} from "@/components/Spacer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
@@ -41,7 +41,11 @@ export default function Generators({
       <Head>
         <title>{`Generators | Forge Frontiers`}</title>
       </Head>
-      <AppLayout active="generators" title={`${userData.name}'s Generators`}>
+      <AppLayout
+        active="generators"
+        title={`${userData.name}'s Generators`}
+        extraNavItems={userData?.is_admin ? CONTROL_PANEL : {}}
+      >
         <div>
           <Spacer y={60} />
           <div className="grid grid-cols-3 gap-4">

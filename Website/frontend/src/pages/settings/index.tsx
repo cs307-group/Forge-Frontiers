@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {Spacer} from "@/components/Spacer";
 import {Switch} from "@/components/Switch";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
@@ -40,7 +40,11 @@ export default function Settings({
       <Head>
         <title>{`${data.name}'s Settings | Forge Frontiers`}</title>
       </Head>
-      <AppLayout active="profile" title={`${data.name}'s Settings`}>
+      <AppLayout
+        active="profile"
+        title={`${data.name}'s Settings`}
+        extraNavItems={data.is_admin ? CONTROL_PANEL : {}}
+      >
         <Spacer y={30} />
         <form
           action="/api/settings-update"
