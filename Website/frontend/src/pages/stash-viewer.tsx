@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-export default function () {
-  return <>Deprecated?</>;
-=======
 import {AppLayout} from "@/components/Layout/AppLayout";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
@@ -18,6 +14,13 @@ export default function Profile({
 }) {
   useCookieSync(cookie);
 
-  return <AppLayout active="leaderboard" title="Leaderboard">ok</AppLayout>;
->>>>>>> gen2
+  return <AppLayout active="stash-viewer" title="Stash Viewer">ok</AppLayout>;
 }
+
+export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
+  const userData = await fetchUserData(c);
+  if (isErrorResponse(userData)) {
+    return userData.resp;
+  }
+  return userData.toSSPropsResult;
+});

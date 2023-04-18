@@ -11,6 +11,8 @@ const NAV_ITEMS = {
   generators: "Generators",
   search: "Player Lookup",
   "market-viewer": "Market Viewer",
+  faq: "FAQ",
+  "stash-viewer": "Stash Viewer",
 } as const;
 
 type LiteralUnion<T extends U, U = string> = T | (U & {______?: never});
