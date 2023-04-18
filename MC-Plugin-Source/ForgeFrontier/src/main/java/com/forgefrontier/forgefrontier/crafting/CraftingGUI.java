@@ -50,7 +50,7 @@ public class CraftingGUI extends BaseInventoryHolder {
         this.setDefaultCancelInteraction(false);
         // Exit item
         ItemStack exitItem = new ItemStackBuilder(Material.BARRIER).setDisplayName(ChatColor.RED + "Close").build();
-        this.setItem(SEX ,exitItem);
+        this.setItem(SEX, exitItem);
         this.addHandler(SEX, this::onClose);
         this.addHandler(SOUT ,this::SOUTHandler);
 
@@ -127,8 +127,6 @@ public class CraftingGUI extends BaseInventoryHolder {
             e.setCancelled(true);
             return;
         }
-
-
         // Calculate amounts
         ItemStack[] itms = getSlotItems();
          if (e.isShiftClick()) {
@@ -140,6 +138,7 @@ public class CraftingGUI extends BaseInventoryHolder {
                     { e.setCancelled(true); return; }
                 }
             }
+            // Update crafting slots
             for (int i = 0; i < 9; i++) {
                 ItemStack ritem = currentRecipe.getItemComponent(i);
                 if (ritem != null && ritem.getType() != Material.AIR) {
@@ -167,8 +166,9 @@ public class CraftingGUI extends BaseInventoryHolder {
                     { e.setCancelled(true); return; }
                 }
             }
-            boolean more = true;
-            for (int i = 0; i < 9; i++) {
+            boolean more = true;    // more = can make more after doing 1 craft
+             // Update crafting slots
+             for (int i = 0; i < 9; i++) {
                 ItemStack ritem = currentRecipe.getItemComponent(i);
                 if (ritem != null && ritem.getType() != Material.AIR) {
                     int rm = (itms[i].getAmount() - currentRecipe.getItemComponent(i).getAmount());
@@ -186,7 +186,9 @@ public class CraftingGUI extends BaseInventoryHolder {
             if (more) {
                 this.setItem(SOUT,currentRecipe.getResult());
             } else {
-                this.setItem(SOUT, new ItemStack(Material.AIR));
+                this.setItem(SOUT, new ItemStack(Material.BARRIER));
+                validRecipe = false;
+                output = null;
             }
             if (e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
                 e.getWhoClicked().setItemOnCursor(currentRecipe.getResult());   // result should have correct out amt

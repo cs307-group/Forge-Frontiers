@@ -142,6 +142,8 @@ world:
   flags:
     OBSIDIAN_SCOOPING: true
     ENTER_EXIT_MESSAGES: true
+    ISLAND_RESPAWN: true
+    VISITOR_KEEP_INVENTORY: false
     OFFLINE_GROWTH: true
     REMOVE_MOBS: true
     CLEAN_SUPER_FLAT: false

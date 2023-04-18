@@ -94,6 +94,6 @@ public class SlimeBossEntity extends HostileSlimeEntity {
     }
 
     public void onDeath() {
-        CustomEntityManager.spawnEntity("SlimeBoss", loc);
+        ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBoss", loc);
     }
 }
