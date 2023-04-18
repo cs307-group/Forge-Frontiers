@@ -14,6 +14,7 @@ import {BazaarLookup, MarketState, UserDataSecure} from "@/handlers/types";
 import {fetchUserData} from "@/handlers/user-data";
 import {useRefresh} from "@/hooks/use-refresh";
 import {ChevronIcon} from "@/icons/ChevronIcon";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 import {_collectors, arrayIter} from "@hydrophobefireman/lazy";
 
 const {ARRAY_COLLECTOR} = _collectors;
@@ -257,12 +258,6 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
     getOrdersForSlotId(c),
     fetchUserData(c),
   ]);
-
-  if (isErrorResponse(user)) {
-    resp.addCustomData({user: null});
-  } else {
-    resp.addCustomData({user: user.resp});
-  }
-
+  resp.addCustomData(userResponseToCustomData(user));
   return resp.toSSPropsResult;
 });

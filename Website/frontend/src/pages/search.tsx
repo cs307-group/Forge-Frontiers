@@ -13,6 +13,7 @@ import {UserData, UserDataSecure} from "@/handlers/types";
 import {fetchUserData, searchUserData} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import avatarImage from "@/images/avatar.png";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 
 const DUP_RES = 0;
 export default function Search({
@@ -119,20 +120,14 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
 
   if (isErrorResponse(searchResults)) {
     // hacky but our api kinda sucks
-    if (!isErrorResponse(userData)) {
-      return {
-        props: {
-          ...searchResults.resp,
-          user: userData.resp,
-        },
-      };
-    }
-    return searchResults.resp;
+    return {
+      props: {
+        ...searchResults.resp,
+        ...userResponseToCustomData(userData),
+      },
+    };
   }
-  if (isErrorResponse(userData)) {
-    searchResults.addCustomData({user: null});
-  } else {
-    searchResults.addCustomData({user: userData.resp});
-  }
+  searchResults.addCustomData(userResponseToCustomData(userData));
+
   return searchResults.toSSPropsResult;
 });

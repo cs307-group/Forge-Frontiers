@@ -12,6 +12,7 @@ import {getOrdersForSlotId} from "@/handlers/market";
 import {BazaarLookup, MarketState, UserDataSecure} from "@/handlers/types";
 import {fetchUserData} from "@/handlers/user-data";
 import {useRefresh} from "@/hooks/use-refresh";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 import {faker} from "@faker-js/faker";
 
 const FAKE = false;
@@ -260,10 +261,6 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
     fetchUserData(c),
   ]);
 
-  if (isErrorResponse(user)) {
-    resp.addCustomData({user: null});
-  } else {
-    resp.addCustomData({user: user.resp});
-  }
+  resp.addCustomData(userResponseToCustomData(user));
   return resp.toSSPropsResult;
 });

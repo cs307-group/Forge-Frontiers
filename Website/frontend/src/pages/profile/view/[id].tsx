@@ -101,7 +101,10 @@ export const getServerSideProps: GetServerSideProps = (async (c) => {
   }
   const selfResp = await selfData;
   if (selfResp && !isErrorResponse(selfResp)) {
-    userResponse.addCustomData({__selfData: selfResp.resp});
+    userResponse.addCustomData({
+      __selfData: selfResp.resp,
+      cookie: selfResp.extractCookie(),
+    });
   } else {
     userResponse.addCustomData({__selfData: null});
   }

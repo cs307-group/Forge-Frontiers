@@ -14,6 +14,7 @@ import {MarketStateFetch, UserDataSecure} from "@/handlers/types";
 import {fetchUserData} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import {useRefresh} from "@/hooks/use-refresh";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 
 export default function Market({
   data,
@@ -74,7 +75,7 @@ export default function Market({
           </div>
         </form>
         <div className="grid grid-cols-2 gap-4 p-8">
-          {data.lookup.map((b) => (
+          {data?.lookup.map((b) => (
             <div
               key={b.slot_id}
               className="flex h-40 flex-col rounded-md border-2 p-4 dark:bg-[#171717]"
@@ -126,10 +127,7 @@ export default function Market({
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   if (Array.isArray(c.query.q)) return {props: {error: 1}};
   const [resp, user] = await Promise.all([getMarketState(c), fetchUserData(c)]);
-  if (isErrorResponse(user)) {
-    resp.addCustomData({user: null});
-  } else {
-    resp.addCustomData({user: user.resp});
-  }
+  resp.addCustomData(userResponseToCustomData(user));
+
   return resp.toSSPropsResult;
 });
