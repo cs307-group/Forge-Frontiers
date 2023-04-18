@@ -6,21 +6,26 @@ import {FormEvent, useState} from "react";
 
 import {Button} from "@/components/Button";
 import {BaseInput} from "@/components/Input/BaseInput";
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
+import {isErrorResponse} from "@/handlers/fetch-util";
 import {getMarketState} from "@/handlers/market";
-import {MarketStateFetch} from "@/handlers/types";
+import {MarketStateFetch, UserDataSecure} from "@/handlers/types";
+import {fetchUserData} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import {useRefresh} from "@/hooks/use-refresh";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 
 export default function Market({
   data,
   cookie,
   error,
+  user,
 }: {
   data: MarketStateFetch;
   cookie?: object;
   error: string;
+  user?: UserDataSecure;
 }) {
   useCookieSync(cookie);
   const {push, query} = useRouter();
@@ -48,9 +53,12 @@ export default function Market({
         <title>{`${
           search ? `${search} - Search | ` : ""
         }Market | Forge Frontiers`}</title>
-
       </Head>
-      <AppLayout active="market-viewer" title="Market Viewer">
+      <AppLayout
+        active="market-viewer"
+        title="Market Viewer"
+        extraNavItems={user?.is_admin ? CONTROL_PANEL : {}}
+      >
         <form onSubmit={handleSubmit}>
           <div className="mx-auto w-[95%] max-w-[400px]">
             <BaseInput
@@ -67,10 +75,10 @@ export default function Market({
           </div>
         </form>
         <div className="grid grid-cols-2 gap-4 p-8">
-          {data.lookup.map((b) => (
+          {data?.lookup.map((b) => (
             <div
               key={b.slot_id}
-              className="flex h-40 flex-col rounded-md bg-[#171717] p-4"
+              className="flex h-40 flex-col rounded-md border-2 p-4 dark:bg-[#171717]"
             >
               <div className="mx-auto text-center"> {b.item_name} </div>
               <div className="flex flex-1 items-center justify-between">
@@ -118,6 +126,8 @@ export default function Market({
 
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   if (Array.isArray(c.query.q)) return {props: {error: 1}};
-  const resp = await getMarketState(c);
+  const [resp, user] = await Promise.all([getMarketState(c), fetchUserData(c)]);
+  resp.addCustomData(userResponseToCustomData(user));
+
   return resp.toSSPropsResult;
 });

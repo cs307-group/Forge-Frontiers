@@ -28,7 +28,7 @@ export function BaseInput({label, hideLabel, icon, ...rest}: BaseInputProps) {
       <input
         id={id}
         className={clsx(
-          "h-10 rounded-sm border-2 border-white bg-[#262C2C] outline-none",
+          "h-10 rounded-sm border-2 outline-none dark:border-white dark:bg-[#262C2C]",
           icon ? "pl-8" : "pl-4"
         )}
         {...rest}

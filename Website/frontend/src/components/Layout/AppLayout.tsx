@@ -9,34 +9,44 @@ import {MenuIcon} from "../icons/menu";
 const NAV_ITEMS = {
   profile: "My Profile",
   generators: "Generators",
-  leaderboard: "Leaderboard",
   search: "Player Lookup",
   "market-viewer": "Market Viewer",
 } as const;
 
+type LiteralUnion<T extends U, U = string> = T | (U & {______?: never});
+
 export interface LayoutProps {
   children?: any;
-  active: keyof typeof NAV_ITEMS | null;
+  active: LiteralUnion<keyof typeof NAV_ITEMS> | null;
   title?: string;
+  extraNavItems?: Record<string, string>;
 }
-function Menu({active}: LayoutProps) {
+function Menu({active, extraNavItems}: LayoutProps) {
   const isWide = useMedia.useMinWidth(640);
-  if (isWide) return <DesktopSideBar active={active} />;
-  return <MobileHeader active={active} />;
+  if (isWide)
+    return (
+      <DesktopSideBar active={active} extraNavItems={extraNavItems || {}} />
+    );
+  return <MobileHeader active={active} extraNavItems={extraNavItems || {}} />;
 }
 
-export function AppLayout({children, active, title}: LayoutProps) {
+export function AppLayout({
+  children,
+  active,
+  title,
+  extraNavItems = {},
+}: LayoutProps) {
   return (
-    <div className="forge_background flex h-full w-full flex-col border-[1px] border-transparent text-white sm:block">
+    <div className="forge_background flex h-full w-full flex-col border-[1px] border-black text-black dark:border-transparent dark:text-white sm:block ">
       <div className="sm:flex sm:h-fit sm:min-h-full sm:w-full sm:flex-grow sm:flex-row sm:flex-nowrap">
         <Client
           fallback={<div data-ssr-skeleton className="h-12 sm:w-[200px]"></div>}
         >
-          <Menu active={active} />
+          <Menu active={active} extraNavItems={extraNavItems} />
         </Client>
         <main
           role="main"
-          className="flex-1 sm:m-4 sm:w-full sm:flex-grow sm:rounded-2xl sm:bg-[#262C2C] sm:px-8 sm:pt-1"
+          className="flex-1 border-2 border-black dark:border-0 dark:border-transparent sm:m-4 sm:w-full sm:flex-grow sm:rounded-2xl sm:px-8 sm:pt-1 dark:sm:bg-[#262C2C]"
         >
           {title && (
             <div className="mt-4 text-center text-2xl sm:text-left">
@@ -50,11 +60,22 @@ export function AppLayout({children, active, title}: LayoutProps) {
   );
 }
 
-function MobileHeader({active}: {active: string | null}) {
+function MobileHeader({
+  active,
+  extraNavItems,
+}: {
+  active: string | null;
+  extraNavItems: Record<string, string>;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <header className="relative flex h-12">
-      <MobileNav open={open} setOpen={setOpen} active={active} />
+      <MobileNav
+        extraNavItems={extraNavItems}
+        open={open}
+        setOpen={setOpen}
+        active={active}
+      />
       <div className="flex flex-1 items-center justify-center text-xl text-ff-theme">
         Forge Frontier
       </div>
@@ -67,14 +88,29 @@ function MobileHeader({active}: {active: string | null}) {
     </header>
   );
 }
-function DesktopSideBar({active}: {active: string | null}) {
+function DesktopSideBar({
+  active,
+  extraNavItems,
+}: {
+  active: string | null;
+  extraNavItems: Record<string, string>;
+}) {
   return (
-    <div className="m-4 flex min-w-[200px] flex-shrink flex-grow-0 flex-col items-center rounded-2xl bg-[#262C2C] px-4">
+    <div className="m-4 flex min-w-[200px] flex-shrink flex-grow-0 flex-col items-center rounded-2xl border-2 border-black px-4 dark:border-transparent dark:bg-[#262C2C]">
       <Link href="/" className="ff_shadow my-6 text-xl text-ff-theme">
         Forge Frontier
       </Link>
       <nav className="flex flex-col items-center gap-6 text-lg">
         {Object.entries(NAV_ITEMS).map(([k, v]) => (
+          <Link
+            key={k}
+            href={`/${k}`}
+            className={active === k ? "border-b-2 border-[#f6cd47]" : ""}
+          >
+            {v}
+          </Link>
+        ))}
+        {Object.entries(extraNavItems).map(([k, v]) => (
           <Link
             key={k}
             href={`/${k}`}
@@ -95,10 +131,12 @@ function MobileNav({
   open,
   setOpen,
   active,
+  extraNavItems,
 }: {
   active: string | null;
   open: any;
   setOpen: any;
+  extraNavItems: Record<string, string>;
 }) {
   return (
     <div
@@ -132,7 +170,18 @@ function MobileNav({
             {v}
           </Link>
         ))}
+        {Object.entries(extraNavItems).map(([k, v]) => (
+          <Link
+            key={k}
+            href={`/${k}`}
+            className={active === k ? "border-b-2 border-[#f6cd47]" : ""}
+          >
+            {v}
+          </Link>
+        ))}
       </nav>
     </div>
   );
 }
+
+export const CONTROL_PANEL = {"control-panel": "Control Panel"};

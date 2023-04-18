@@ -4,12 +4,15 @@ import Head from "next/head";
 import Image from "next/image";
 import {useMemo, useState} from "react";
 
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {Spacer} from "@/components/Spacer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
+import {isErrorResponse} from "@/handlers/fetch-util";
 import {getOrdersForSlotId} from "@/handlers/market";
-import {BazaarLookup, MarketState} from "@/handlers/types";
+import {BazaarLookup, MarketState, UserDataSecure} from "@/handlers/types";
+import {fetchUserData} from "@/handlers/user-data";
 import {useRefresh} from "@/hooks/use-refresh";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 import {faker} from "@faker-js/faker";
 
 const FAKE = false;
@@ -152,12 +155,14 @@ const dateFmt = (date: Date) => {
 };
 export default function ViewBySlotIdGraph({
   data,
+  user,
 }: {
   data: {
     buy: MarketState[];
     sell: MarketState[];
     lookup: BazaarLookup;
   };
+  user?: UserDataSecure;
 }) {
   let _buyData = useParsedData(data.buy);
   let _sellData = useParsedData(data.sell);
@@ -193,9 +198,12 @@ export default function ViewBySlotIdGraph({
     <>
       <Head>
         <title>{`Market | Forge Frontiers`}</title>
-
       </Head>
-      <AppLayout active="market-viewer" title="Market Viewer">
+      <AppLayout
+        active="market-viewer"
+        title="Market Viewer"
+        extraNavItems={user?.is_admin ? CONTROL_PANEL : {}}
+      >
         <Spacer y={20} />
         <div className="flex items-center justify-center">
           <div
@@ -248,7 +256,11 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   if (!c.query.slot_id || Array.isArray(c.query.slot_id)) {
     return {props: {error: "Invalid"}};
   }
-  const resp = await getOrdersForSlotId(c);
+  const [resp, user] = await Promise.all([
+    getOrdersForSlotId(c),
+    fetchUserData(c),
+  ]);
 
+  resp.addCustomData(userResponseToCustomData(user));
   return resp.toSSPropsResult;
 });

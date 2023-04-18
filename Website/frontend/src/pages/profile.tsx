@@ -1,12 +1,10 @@
 import Head from "next/head";
-import {useState} from "react";
 
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {ProfileViewer} from "@/components/Profile/Viewer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
-import {PlayerStats, UserDataSecure} from "@/handlers/types";
-import {ShopData} from "@/handlers/types";
+import {PlayerStats, ShopData, UserDataSecure} from "@/handlers/types";
 import {
   fetchUserData,
   getPlayerShop,
@@ -33,9 +31,12 @@ export default function Profile({
     <>
       <Head>
         <title>{`${data.name} | Forge Frontiers`}</title>
-
       </Head>
-      <AppLayout active="profile" title={`${data.name}'s Profile`}>
+      <AppLayout
+        active="profile"
+        title={`${data.name}'s Profile`}
+        extraNavItems={data.is_admin ? CONTROL_PANEL : {}}
+      >
         <ProfileViewer
           data={data}
           shop={shop}

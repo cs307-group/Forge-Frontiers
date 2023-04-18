@@ -27,6 +27,7 @@ export const routes = {
     getApiURL(`/generators/${island_id}`),
   generatorConfig: getApiURL("/generators/config"),
   collectGenerator: (x: string) => getApiURL(`/generators/update/${x}`),
+  updateUser: getApiURL("/users/-/update"),
 };
 
 /**
