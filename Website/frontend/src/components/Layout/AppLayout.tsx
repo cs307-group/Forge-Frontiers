@@ -9,7 +9,6 @@ import {MenuIcon} from "../icons/menu";
 const NAV_ITEMS = {
   profile: "My Profile",
   generators: "Generators",
-  leaderboard: "Leaderboard",
   search: "Player Lookup",
   "market-viewer": "Market Viewer",
 } as const;
@@ -27,7 +26,7 @@ function Menu({active}: LayoutProps) {
 
 export function AppLayout({children, active, title}: LayoutProps) {
   return (
-    <div className="forge_background flex h-full w-full flex-col border-[1px] border-transparent text-white sm:block">
+    <div className="forge_background flex h-full w-full flex-col border-[1px] border-black text-black dark:border-transparent dark:text-white sm:block ">
       <div className="sm:flex sm:h-fit sm:min-h-full sm:w-full sm:flex-grow sm:flex-row sm:flex-nowrap">
         <Client
           fallback={<div data-ssr-skeleton className="h-12 sm:w-[200px]"></div>}
@@ -36,7 +35,7 @@ export function AppLayout({children, active, title}: LayoutProps) {
         </Client>
         <main
           role="main"
-          className="flex-1 sm:m-4 sm:w-full sm:flex-grow sm:rounded-2xl sm:bg-[#262C2C] sm:px-8 sm:pt-1"
+          className="flex-1 border-2 border-black dark:border-0 dark:border-transparent sm:m-4 sm:w-full sm:flex-grow sm:rounded-2xl sm:px-8 sm:pt-1 dark:sm:bg-[#262C2C]"
         >
           {title && (
             <div className="mt-4 text-center text-2xl sm:text-left">
@@ -69,7 +68,7 @@ function MobileHeader({active}: {active: string | null}) {
 }
 function DesktopSideBar({active}: {active: string | null}) {
   return (
-    <div className="m-4 flex min-w-[200px] flex-shrink flex-grow-0 flex-col items-center rounded-2xl bg-[#262C2C] px-4">
+    <div className="m-4 flex min-w-[200px] flex-shrink flex-grow-0 flex-col items-center rounded-2xl px-4 dark:bg-[#262C2C] dark:border-transparent border-black border-2">
       <Link href="/" className="ff_shadow my-6 text-xl text-ff-theme">
         Forge Frontier
       </Link>

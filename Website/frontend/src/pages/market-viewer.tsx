@@ -70,7 +70,7 @@ export default function Market({
           {data.lookup.map((b) => (
             <div
               key={b.slot_id}
-              className="flex h-40 flex-col rounded-md bg-[#171717] p-4"
+              className="flex h-40 flex-col rounded-md dark:bg-[#171717] p-4 border-2"
             >
               <div className="mx-auto text-center"> {b.item_name} </div>
               <div className="flex flex-1 items-center justify-between">

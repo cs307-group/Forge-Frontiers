@@ -1,6 +1,4 @@
 import Head from "next/head";
-import {useRouter} from "next/router";
-import {FormEvent} from "react";
 
 import {Button} from "@/components/Button";
 import {GenBlock} from "@/components/Gens/GenBlock";
@@ -32,27 +30,21 @@ export default function Generators({
   error: string;
 }) {
   useCookieSync(cookie);
-  const {push} = useRouter();
+
   if (error)
     return <div className="flex items-center justify-center">{error}</div>;
-  const updateActionURL = `/generators/collect?island_id=${encodeURIComponent(
-    userData.island_id
-  )}`;
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    push(updateActionURL);
-  }
+  const updateActionURL = "/api/generator-collect";
+
   useRefresh(5000);
   return (
     <>
       <Head>
         <title>{`Generators | Forge Frontiers`}</title>
-
       </Head>
       <AppLayout active="generators" title={`${userData.name}'s Generators`}>
         <div>
           <Spacer y={60} />
-          <div className="grid grid-cols-3">
+          <div className="grid grid-cols-3 gap-4">
             {gens.generators.map((x) => (
               <GenBlock
                 key={x.id_}
@@ -62,7 +54,8 @@ export default function Generators({
             ))}
           </div>
           <Spacer y={60} />
-          <form action={updateActionURL} onSubmit={handleSubmit}>
+          <form action={updateActionURL}>
+            <input type="hidden" name="island_id" value={userData.island_id} />
             <div className="flex items-center justify-center">
               <Button className="mt-4 w-36 p-2">Collect</Button>
             </div>

@@ -2,11 +2,18 @@ import {useId} from "react";
 
 import * as $Switch from "@radix-ui/react-switch";
 
-export function Switch() {
+export function Switch({
+  defaultValue,
+  name,
+}: {
+  defaultValue: boolean;
+  name: string;
+}) {
   const sId = useId();
   return (
     <$Switch.Root
-      onCheckedChange={(e) => {}}
+      defaultChecked={defaultValue}
+      name={name}
       id={sId}
       className="g-switch-root relative h-[25px] w-[42px] rounded-full bg-[color:rgba(0,0,0,0.44)]
      shadow-[0_2px_10px_rgba(0,_0,_0,_0.14)] focus:shadow-[0_0_0_2px_black]"

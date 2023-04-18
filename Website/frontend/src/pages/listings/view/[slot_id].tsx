@@ -41,7 +41,7 @@ export default function ViewBySlotId({
         <div className="flex items-center justify-center">
           <div
             key={data.lookup.slot_id}
-            className="flex flex-col items-center justify-center rounded-md bg-[#171717] p-4"
+            className="flex flex-col items-center justify-center rounded-md dark:bg-[#171717] p-4"
           >
             <div className="mx-auto text-center"> {data.lookup.item_name} </div>
             <Image

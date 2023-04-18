@@ -66,7 +66,7 @@ function __GenBlock({level, config, last_collection_time}: GenProps) {
     count >= config.levels[level].max_size ? null : 100
   );
   return (
-    <div className="h-30 rounded-md bg-[#171717] p-2">
+    <div className="h-30 rounded-md border-2 p-2  dark:border-transparent dark:bg-[#171717]">
       <Spacer y={10} />
       <p>
         Generator Type: {config.resource} level {level}

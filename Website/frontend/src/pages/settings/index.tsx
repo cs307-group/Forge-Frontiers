@@ -1,7 +1,6 @@
 import Head from "next/head";
 
 import {AppLayout} from "@/components/Layout/AppLayout";
-import {ProfileViewer} from "@/components/Profile/Viewer";
 import {Spacer} from "@/components/Spacer";
 import {Switch} from "@/components/Switch";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
@@ -14,6 +13,7 @@ import {
 } from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import {DEFAULT_STATS} from "@/util/default-stats";
+import {Button} from "@/components/Button";
 
 export default function Settings({
   data,
@@ -28,6 +28,12 @@ export default function Settings({
 }) {
   useCookieSync(cookie);
   if (!data) return <div>User not found!</div>;
+  const config = data.secure?.config || {};
+
+  const currentSettings = {
+    "disable-autosync": config["disable-autosync"] ?? false,
+    "dark-mode": config["dark-mode"] || false,
+  } satisfies UserDataSecure["secure"]["config"];
 
   return (
     <>
@@ -36,7 +42,35 @@ export default function Settings({
       </Head>
       <AppLayout active="profile" title={`${data.name}'s Settings`}>
         <Spacer y={30} />
-        <Switch />
+        <form
+          action="/api/settings-update"
+          method="post"
+          onSubmit={(e) => {
+            // e.preventDefault();
+            const fd = new FormData(e.currentTarget);
+            console.log(Object.fromEntries(Array.from(fd.entries())));
+          }}
+        >
+          <div className="mx-auto flex max-w-[80%] flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div>Enable Dark Mode</div>
+              <Switch
+                name="dark-mode"
+                defaultValue={currentSettings["dark-mode"]}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>Disable autosync (advanced)</div>
+              <Switch
+                name="disable-autosync"
+                defaultValue={currentSettings["disable-autosync"]}
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-center">
+            <Button className="mt-6 w-36 p-2">Save</Button>
+          </div>
+        </form>
       </AppLayout>
     </>
   );
