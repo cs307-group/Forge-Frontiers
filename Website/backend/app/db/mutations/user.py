@@ -27,5 +27,5 @@ def add_purchased_items(user_id: str, items: list[str]):
     u = get_user_by_id(user_id)
     p = json.loads(u.purchased_ranks) if u.purchased_ranks else []
     p.extend(items)
-    u.purchased_ranks = json.dumps(p)
+    u.purchased_ranks = json.dumps(sorted(set(p)))
     commit()

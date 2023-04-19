@@ -12,7 +12,12 @@ export default function ControlPanel({
   cookie,
   data,
 }: {
-  data: Stripe.Checkout.Session[];
+  data: (Stripe.Checkout.Session & {
+    metadata: {
+      userId: string;
+      items: (Stripe.Price & {product: Stripe.Product})[];
+    };
+  })[];
   error?: string;
   user: UserDataSecure;
   cookie: any;
@@ -24,6 +29,8 @@ export default function ControlPanel({
     </ControlPanelRenderer>
   );
 }
+
+const cache: Record<string, Stripe.Price> = {};
 
 export const getServerSideProps = requireAdminPageView(
   async (c, user, cookie) => {
@@ -44,11 +51,29 @@ export const getServerSideProps = requireAdminPageView(
       });
       data = data.concat(products.data);
     }
+
     return {
       props: {
         cookie,
         user,
-        data: data.filter((x) => x.metadata && "items" in x.metadata),
+        data: await Promise.all(
+          data
+            .filter((x) => x.metadata && "items" in x.metadata)
+            .map(async (item) => {
+              if (!item.metadata) item.metadata = {};
+              const items: string[] = JSON.parse(item.metadata!.items);
+              item.metadata.items = (await Promise.all(
+                items.map(
+                  async (i) =>
+                    cache[i] ||
+                    stripe.prices
+                      .retrieve(i, {expand: ["product"]})
+                      .then((price) => (cache[i] = price))
+                )
+              )) as any;
+              return item;
+            })
+        ),
       },
     };
   }
