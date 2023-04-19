@@ -3,8 +3,8 @@ import {requireAuthenticatedPageView} from "@/handlers/auth";
 
 export default function Success({}: {}) {
   return (
-    <AppLayout active="faq" title="FAQ">
-      Your payment succeeded!
+    <AppLayout active="marketplace" title="Rank Purchase">
+      Your payment succeeded! Thank you for using Forge
     </AppLayout>
   );
 }

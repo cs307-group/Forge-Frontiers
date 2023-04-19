@@ -44,3 +44,7 @@ export default function Faq() {
     </AppLayout>
   );
 }
+
+export const getServerSideProps = () => {
+  return {props: {}};
+};

@@ -192,3 +192,10 @@ def update_user__prefs():
     res = user.as_json
     commit()
     return res
+
+
+@router.get("/-/decode-token")
+@api.strict
+def get_user_token():
+    req = Context()
+    return {"userId": req.auth.user_id}

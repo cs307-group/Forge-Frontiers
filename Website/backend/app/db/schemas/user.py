@@ -1,6 +1,6 @@
 from secrets import token_urlsafe
 from time import time
-
+import json
 from sqlalchemy.dialects.postgresql import TEXT, JSONB
 
 from ..base import db
@@ -19,6 +19,7 @@ class User(db.Model):
     is_admin: bool = db.Column(db.Boolean, default=False)
     island_id: str = db.Column(db.TEXT)
     config: dict = db.Column(JSONB, default={})
+    purchased_ranks = db.Column(db.TEXT)
     # pylint: enable=E1101
 
     def __init__(
@@ -38,6 +39,7 @@ class User(db.Model):
         self.created_at = time()
         self.island_id = island_id
         self.config = config
+        self.purchased_ranks = None
 
     @property
     def as_json(self):
@@ -49,4 +51,7 @@ class User(db.Model):
             "mc_user": self.mc_user,
             "island_id": self.island_id,
             "_secure_": {"user": self.user, "config": self.config or {}},
+            "purchased_ranks": json.loads(self.purchased_ranks)
+            if self.purchased_ranks
+            else [],
         }

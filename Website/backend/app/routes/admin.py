@@ -1,9 +1,12 @@
+import json
+
 import stripe
 from flask import Blueprint, request
 
 from app.db.queries.shop import get_all_shops
+from app.db.mutations.user import add_purchased_items
 from app.decorators.api_response import api
-from app.internal.constants import STRIPE_API_KEY, STRIPE_API_ENDPOINT_SECRET
+from app.internal.constants import STRIPE_API_ENDPOINT_SECRET, STRIPE_API_KEY
 
 stripe.api_key = STRIPE_API_KEY
 
@@ -31,10 +34,24 @@ def webhook():
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return "Invalid signature", 400
-    print(event)
+
     # Handle the event
-    if event["type"] == "charge.succeeded":
-        ...
+    if event["type"] == "checkout.session.completed":
+        try:
+            print(event)
+            obj = event["data"]["object"]
+            m = obj["metadata"]
+            print(m)
+            u = m["userId"]
+            items = json.loads(m["items"])
+            prices = [
+                stripe.Price.retrieve(x, stripe.api_key, expand=["product"])
+                for x in items
+            ]
+            purchased_ranks = [p["product"]["name"] for p in prices]
+            add_purchased_items(u, purchased_ranks)
+        except KeyError:
+            pass
     elif event["type"] == "charge.failed":
         ...
 

@@ -1,27 +1,25 @@
-import {NextRequest, NextResponse} from "next/server";
+import {NextApiRequest, NextApiResponse} from "next";
 import Stripe from "stripe";
 
 import {getAuthenticationHeaders, jsonRequest, routes} from "@/handlers/_util";
+import {handleTokenRefresh, isRefreshSuccess} from "@/handlers/auth";
 import {Tokens} from "@/handlers/types";
 
-export const config = {runtime: "edge"};
-
-const stripe = new Stripe(process.env.STRIPE_API_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-11-15",
   httpClient: Stripe.createFetchHttpClient(),
 });
-const LOGIN_AGAIN = new NextResponse(JSON.stringify({error: "Login again.."}), {
-  status: 401,
-});
-export default async function (req: NextRequest) {
+
+export default async function (req: NextApiRequest, res: NextApiResponse) {
+  const LOGIN_AGAIN = () => res.status(401).send({error: "Login Again..."});
   let {method} = req;
-  method = method.toLowerCase();
+  method = method!.toLowerCase();
   let tokens: Tokens;
   try {
-    tokens = JSON.parse(req.cookies.get("tokens")?.value!);
+    tokens = JSON.parse(req.cookies.tokens!);
   } catch (e) {
     console.warn(e);
-    return LOGIN_AGAIN;
+    return LOGIN_AGAIN();
   }
   const getResponse = ($tokens: Tokens) =>
     jsonRequest(routes.decodeToken, {
@@ -32,27 +30,40 @@ export default async function (req: NextRequest) {
   if (method !== "post")
     return new Response("Invalid request to payment gateway", {status: 400});
   try {
-    const json = await (await getResponse(tokens)).json();
+    let resp = await getResponse(tokens);
+    if (!resp.ok) {
+      const h = await handleTokenRefresh(resp, tokens);
+      if (!isRefreshSuccess(h)) {
+        return LOGIN_AGAIN();
+      }
+      resp = await getResponse(h.tokens);
+      if (!resp.ok) return LOGIN_AGAIN();
+    }
+    const json = await resp.json();
     // {console.log(json)}
-    const userId = json.userId;
-    if (!userId) return LOGIN_AGAIN;
-    const fd = await req.formData();
+    const userId = json.data.userId;
+    if (!userId) return LOGIN_AGAIN();
+    const fd = Object.keys(req.body);
+    console.log("[stripe] Purchasing:", fd);
     const session = await stripe.checkout.sessions.create({
-      line_items: JSON.parse((fd.get("items") as string) || "[]"),
+      line_items: fd.map((x: string) => ({
+        price: x,
+        quantity: 1,
+      })),
       mode: "payment",
-      success_url: `${req.headers.get("origin")}/payments/success`,
-      cancel_url: `${req.headers.get("origin")}/payments/cancel`,
-      metadata: {},
+      success_url: `${req.headers.origin}/payments/success`,
+      cancel_url: `${req.headers.origin}/payments/cancel`,
+      metadata: {VERSION: 1, userId, items: JSON.stringify(fd)},
     });
     if (!session.url)
-      return new Response("Could not create a checkout request!", {
-        status: 501,
-      });
-    return NextResponse.redirect(session.url, 303);
+      return res
+        .status(501)
+        .send({error: "Could not create a checkout request!"});
+    return res.redirect(303, session.url);
   } catch (e) {
     console.warn(e);
-    return new Response("An error occured while processing your payment", {
-      status: 500,
-    });
+    return res
+      .status(500)
+      .send({error: "An error occured while processing your payment"});
   }
 }

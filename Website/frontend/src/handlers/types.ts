@@ -1,3 +1,5 @@
+import Stripe from "stripe";
+
 export interface UserData {
   id_: string;
   name: string;
@@ -5,6 +7,7 @@ export interface UserData {
   is_admin: boolean;
   mc_user: string;
   island_id: string;
+  purchased_ranks: string[];
 }
 
 export interface UserDataSecure extends UserData {
@@ -109,3 +112,7 @@ export interface ShopData {
   date_sold: number;
   custom_data: string;
 }
+
+export type StripeProductResponse = (Stripe.Product & {
+  default_price: Stripe.Price;
+})[];
