@@ -162,6 +162,7 @@ public class CustomEntityManager extends Manager implements Listener {
 
         CraftLivingEntity entity = (CraftLivingEntity) event.getEntity();
         CustomMob cm = getMobFromID(entity.getUniqueId());
+
         if (cm != null) {
             plugin.getLogger().log(Level.INFO,"Entity Death: " + cm.getCode());
             handleCustomDeath(entity, cm);
@@ -197,7 +198,6 @@ public class CustomEntityManager extends Manager implements Listener {
         if (entity.hasMetadata("bossbar")) {
             Object o = entity.getMetadata("bossbar").get(0).value();
             if (o instanceof BossBar bossBar) {
-                System.out.println("REMOVE BOSS BAR ====================");
                 bossBar.setProgress(0);
                 bossBar.removeAll();
             }
