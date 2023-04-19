@@ -20,7 +20,7 @@ export function Switch({
     >
       <$Switch.Thumb
         className="g-switch-thumb block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-[white] 
-      shadow-[0_2px_10px_rgba(0,_0,_0,_0.14)] transition-transform duration-100 will-change-transform"
+      shadow-[0_2px_10px_rgba(1,_0,_0,_0.14)] transition-transform duration-100 will-change-transform"
       ></$Switch.Thumb>
     </$Switch.Root>
   );
