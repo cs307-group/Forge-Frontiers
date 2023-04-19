@@ -7,7 +7,7 @@ from .generator_config import GeneratorConfig as GeneratorConfig
 from .generator_instances import GeneratorInstances as GeneratorInstances
 from .items import Item as Item
 from .links import Links as Links
-from .recipes import Recipe as Recipe 
+from .recipes import Recipe as Recipe
 from .shop import Shop as Shop
 from .stash_config import StashConfig as StashConfig
 from .stash_instances import StashInstance as StashInstance
