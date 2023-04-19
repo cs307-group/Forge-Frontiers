@@ -54,11 +54,11 @@ export default function Marketplace({
               ))}
             </ul>
           </div>
-          <div>
+          <div className="gap-4 sm:grid sm:grid-cols-3">
             {data.map((product) => (
               <div
                 key={product.id}
-                className="mx-4 my-4 flex max-w-sm items-center overflow-hidden rounded-lg p-2 shadow-lg"
+                className="flex max-w-sm items-center overflow-hidden rounded-lg p-2 shadow-lg"
               >
                 <div className="px-6 py-4">
                   <div className="mb-2 text-xl font-bold">{product.name}</div>
@@ -101,7 +101,11 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   });
 
   let [products, user] = await Promise.all([
-    stripe.products.list({expand: ["data.default_price"], limit: 100}),
+    stripe.products.list({
+      expand: ["data.default_price"],
+      limit: 100,
+      active: true,
+    }),
 
     fetchUserData(c),
   ]);
@@ -113,6 +117,7 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   while (products.has_more) {
     console.log("fetching again");
     products = await stripe.products.list({
+      active: true,
       expand: ["data.default_price"],
       starting_after: data.at(-1)?.id,
       limit: 100,

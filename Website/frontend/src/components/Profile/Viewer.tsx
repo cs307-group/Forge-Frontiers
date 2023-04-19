@@ -6,6 +6,10 @@ import avatarImage from "@/images/avatar.png";
 
 import {Spacer} from "../Spacer";
 
+const formatter = new Intl.DateTimeFormat(["en"], {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
 const keyToTableMap: Record<keyof PlayerStats, string> = {
   ATK: "ATK",
   current_health: "Health",
@@ -114,7 +118,9 @@ export function ProfileViewer({
                 <td className="whitespace-nowrap px-6 py-4">{x.price}</td>
                 <td className="whitespace-nowrap px-6 py-4">{x.amount}</td>
                 <td className="whitespace-nowrap px-6 py-4">
-                  {x.date_sold == -1 ? "Not Sold Yet" : ""}
+                  {x.date_sold == -1
+                    ? "Not Sold Yet"
+                    : formatter.format(x.date_sold)}
                 </td>
               </tr>
             ))}
