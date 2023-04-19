@@ -151,3 +151,7 @@ h6 {
     display: var(--display, block);
   }
 }
+
+html.light {
+  background-color: #e3e3e3;
+}

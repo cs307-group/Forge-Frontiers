@@ -1,9 +1,6 @@
 import Link from "next/link";
 import {useState} from "react";
 
-import {useMedia} from "@/hooks/use-media";
-
-import {Client} from "../Client";
 import {MenuIcon} from "../icons/menu";
 
 const NAV_ITEMS = {
@@ -13,6 +10,7 @@ const NAV_ITEMS = {
   "market-viewer": "Market Viewer",
   faq: "FAQ",
   "stash-viewer": "Stash Viewer",
+  marketplace: "Buy Ranks",
 } as const;
 
 type LiteralUnion<T extends U, U = string> = T | (U & {______?: never});
@@ -148,7 +146,7 @@ function MobileNav({
         }
       }}
       className={
-        "flex fixed z-[1000] m-auto h-screen w-screen flex-col items-center justify-end bg-[#3030307a] transition " +
+        "fixed z-[1000] m-auto flex h-screen w-screen flex-col items-center justify-end bg-[#3030307a] transition " +
         (open ? "" : "user-select-none pointer-events-none opacity-0")
       }
     >
@@ -177,6 +175,8 @@ function MobileNav({
             {v}
           </Link>
         ))}
+
+        <Link href="/settings">Account Settings</Link>
       </nav>
     </div>
   );

@@ -1,26 +1,46 @@
+import {useState} from "react";
+
+import {Button} from "@/components/Button";
+import {BaseInput} from "@/components/Input/BaseInput";
 import {AppLayout} from "@/components/Layout/AppLayout";
-import {requireAuthenticatedPageView} from "@/handlers/auth";
-import {isErrorResponse} from "@/handlers/fetch-util";
-import {UserDataSecure} from "@/handlers/types";
-import {fetchUserData} from "@/handlers/user-data";
-import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {Spacer} from "@/components/Spacer";
+import {QBlock} from "@/components/faq-questions/QBlock";
+import faqData from "@/components/faq-questions/questions.json";
 
-export default function Profile({
-  userData,
-  cookie,
-}: {
-  userData: UserDataSecure;
-  cookie?: object;
-}) {
-  useCookieSync(cookie);
+export default function Faq() {
+  const [q, setQ] = useState("");
 
-  return <AppLayout active="faq" title="FAQ">ok</AppLayout>;
+  const filteredData = Object.fromEntries(
+    Object.entries(faqData).filter(
+      ([key, _]) => typeof key === "string" && key.includes(q)
+    )
+  );
+
+  const qBlocks = Object.entries(filteredData).map(([question, answer]) => (
+    <div key={question}>
+      <Spacer y={20} />
+      <QBlock question={question} answer={answer} />
+    </div>
+  ));
+
+  return (
+    <AppLayout active="faq" title="FAQ">
+      <Spacer y={30} />
+      <div className="mx-auto w-[95%] max-w-[400px]">
+        <BaseInput
+          label="Question"
+          name="q"
+          value={q}
+          onChange={(e) => {
+            setQ(e.currentTarget.value);
+          }}
+        />
+        <div className="flex items-center justify-end">
+          <Button className="my-2 p-2">Search</Button>
+        </div>
+      </div>
+
+      {qBlocks}
+    </AppLayout>
+  );
 }
-
-export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
-  const userData = await fetchUserData(c);
-  if (isErrorResponse(userData)) {
-    return userData.resp;
-  }
-  return userData.toSSPropsResult;
-});
