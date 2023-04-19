@@ -61,7 +61,9 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
      */
     public void setScale(int scale) {
         this.setSize(scale);
-        ((HostileSlimeEntity) this.getHandle()).setScale(scale);
+        if (this.getHandle() instanceof  HostileSlimeEntity hostileSlime) {
+            hostileSlime.setScale(scale);
+        }
     }
 
     /**

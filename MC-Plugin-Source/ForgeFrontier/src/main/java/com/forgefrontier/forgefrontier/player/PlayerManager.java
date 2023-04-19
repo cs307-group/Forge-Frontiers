@@ -111,6 +111,9 @@ public class PlayerManager extends Manager implements Listener {
             } else { // converts damage based on stats
                 double damage = event.getDamage();
                 FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
+                if (ffPlayer == null) {
+                    return;
+                }
                 AttributeInstance maxHealthAttr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
                 double maxHealth = 20;
                 if (maxHealthAttr != null) {

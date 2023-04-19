@@ -54,7 +54,7 @@ public class SlimeBoss extends HostileSlime {
             super.saveMetaData();
             this.setMetadata("bossbar", new FixedMetadataValue(ForgeFrontier.getInstance(), bossBar));
             this.setMetadata("name", new FixedMetadataValue(ForgeFrontier.getInstance(), "King Slime"));
-            this.setMetadata("tier", new FixedMetadataValue(ForgeFrontier.getInstance(), 2));
+            // this.setMetadata("tier", new FixedMetadataValue(ForgeFrontier.getInstance(), 2));
         }
     }
 
