@@ -9,6 +9,7 @@ import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.ParticleGem;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.SkillGem;
+import com.forgefrontier.forgefrontier.particles.FFCosmeticParticle;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.PlayerParticle;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
@@ -56,7 +57,9 @@ public class GearItemManager extends Manager implements Listener {
         this.skills.put(skill.getId(), skill);
     }
 
-    public PlayerParticle getPlayableParticle(String particleID) { return null; }
+    public FFCosmeticParticle getPlayableParticle(String particleID) {
+        return particleManager.getCosmeticParticle(particleID);
+    }
     public Skill getSkill(String skillId) {
         return this.skills.get(skillId);
     }
@@ -68,7 +71,7 @@ public class GearItemManager extends Manager implements Listener {
      */
     @EventHandler
     public void onPlayerArmorChange(PlayerArmorChangeEvent e) {
-        Player p = (Player) e.getPlayer();
+        Player p = e.getPlayer();
 
         FFPlayer ffPlayer = plugin.getPlayerManager().getFFPlayerFromID(p.getUniqueId());
         CustomItemInstance newItemInstance = CustomItemManager.asCustomItemInstance(e.getNewItem());

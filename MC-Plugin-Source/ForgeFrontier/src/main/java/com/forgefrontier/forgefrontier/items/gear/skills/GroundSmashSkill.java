@@ -1,6 +1,8 @@
 package com.forgefrontier.forgefrontier.items.gear.skills;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.particles.gameparticles.SkillParticles;
+import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleRepeatParticleSpawner;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
@@ -27,6 +29,10 @@ public class GroundSmashSkill extends Skill {
 
         Bukkit.getScheduler().runTaskLater(ForgeFrontier.getInstance(), () -> {
             Collection<Entity> entityList = p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 10, 2.5, 10);
+            SkillParticles.GROUNDSMASHPARTICLE.playParticleAtLocation
+                    (p.getWorld(), p.getLocation().clone().add(0, 0.2, 0));
+            new SimpleRepeatParticleSpawner(
+                    () -> SkillParticles.DUSTSETTLE.playAtPlayer(p),5,15).run();
 
             for(Entity e: entityList) {
                 if(e == p)

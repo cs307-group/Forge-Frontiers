@@ -38,7 +38,7 @@ public class CosmeticParticles {
         pdc.createStaticPoints();
         HEARTHALO = new FFCosmeticParticle(pdc);
         HEARTHALO.setParticle(Particle.HEART);
-        HEARTHALO.id = 1200;
+        HEARTHALO.id = "CSMHeartHalo";
         HEARTHALO.name = ChatColor.RED + "Heart Halo";
         HEARTHALO.prefixColor = ChatColor.RED.toString();
         HEARTHALO.cosmeticItem = Material.RED_CANDLE;
@@ -47,7 +47,7 @@ public class CosmeticParticles {
 
         MISTHALO = new FFCosmeticParticle(pdc);
         MISTHALO.setParticle(Particle.WHITE_ASH);
-        MISTHALO.id = 1201;
+        MISTHALO.id = "CSMMistHalo";
         MISTHALO.name = ChatColor.GRAY + "Mist Halo";
         MISTHALO.prefixColor = ChatColor.GRAY.toString();
         MISTHALO.cosmeticItem = Material.GRAY_CANDLE;
@@ -55,7 +55,7 @@ public class CosmeticParticles {
 
         CRIMSONHALO = new FFCosmeticParticle(pdc);
         CRIMSONHALO.setParticle(Particle.CRIMSON_SPORE);
-        CRIMSONHALO.id = 1202;
+        CRIMSONHALO.id = "CSMCrimHalo";
         mngr.registerCosmeticParticle(CRIMSONHALO);
         CRIMSONHALO.cosmeticItem = Material.BLACK_CANDLE;
         CRIMSONHALO.prefixColor = ChatColor.DARK_RED.toString();

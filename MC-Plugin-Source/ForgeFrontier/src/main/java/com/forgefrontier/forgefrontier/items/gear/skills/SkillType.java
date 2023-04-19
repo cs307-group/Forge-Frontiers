@@ -7,7 +7,7 @@ public enum SkillType {
 
     private final String friendlyName;
 
-    private SkillType(String friendlyName) {
+    SkillType(String friendlyName) {
         this.friendlyName = friendlyName;
     }
 

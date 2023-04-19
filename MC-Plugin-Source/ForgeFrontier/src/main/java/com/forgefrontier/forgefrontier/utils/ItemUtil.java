@@ -106,7 +106,7 @@ public class ItemUtil {
                     StringBuilder sbName = new StringBuilder();
                     for (String subName : name.split("_"))
                         sbName.append(subName.substring(0, 1).toUpperCase() + subName.substring(1).toLowerCase()).append(" ");
-                    return sbName.toString().substring(0, sbName.length() - 1);
+                    return sbName.substring(0, sbName.length() - 1);
                 } else {
                     return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
                 }

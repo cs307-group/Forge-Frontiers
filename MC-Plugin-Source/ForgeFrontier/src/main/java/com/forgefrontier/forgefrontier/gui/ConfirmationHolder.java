@@ -14,7 +14,7 @@ public class ConfirmationHolder extends BaseInventoryHolder {
 
     private String acceptName;
     private String cancelName;
-    private boolean openPrevInvOnConfirm;
+    private final boolean openPrevInvOnConfirm;
 
     /**
      * Simple Confirmation GUI

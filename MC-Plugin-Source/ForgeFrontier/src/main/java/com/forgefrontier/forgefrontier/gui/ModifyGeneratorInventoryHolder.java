@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 public class ModifyGeneratorInventoryHolder extends BaseInventoryHolder {
 
-    private Generator generator;
+    private final Generator generator;
 
     public ModifyGeneratorInventoryHolder(Generator generator) {
         super(54, "Modify Generator");

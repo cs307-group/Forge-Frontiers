@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 public class SlimeBossEntity extends HostileSlimeEntity {
 
+
+    public static String CODE = "SlimeBoss";
     int UNTIL_JUMP_TIMER_MAX = 100;
     int CHARGE_TIMER_MAX = 20;
     int JUMP_TIMER_MAX = 30;

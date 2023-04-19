@@ -31,6 +31,32 @@ public class ParticleCommands {
         cs.sendMessage("Particle Commands");
     }
 
+    @Subcommand({"play"})
+    @AutoComplete("@idparticle")
+    public void playByID(CommandSender cs, String id) {
+        if (!(cs instanceof Player p)) {
+            cs.sendMessage("Only players can use this command!");
+            return;
+        }
+        FFParticle fp = particleManager.getParticleFromID(id);
+        if (fp == null) {
+            p.sendMessage("Cannot find specified particle!");
+            return;
+        }
+        SimpleRepeatParticleSpawner sps;
+        if (fp instanceof FFCosmeticParticle ffcp) {
+             sps = new SimpleRepeatParticleSpawner(
+                    () -> ffcp.playParticleAtLocation(p), ffcp.delay, 200);
+        } else {
+            sps = new SimpleRepeatParticleSpawner(() -> fp.playAtPlayer(p), 5, 100);
+        }
+        sps.run();
+        particleManager.addPlayerParticle(p.getUniqueId(),
+                new PlayerParticleTask(sps.getTask(), -1, "GENERIC"));
+
+    }
+
+
     @Subcommand({"simple"})
     public void test1Particle(CommandSender cs, @Default("20") Integer amount, @Default("1") Float dist) {
         if (!(cs instanceof Player p)) {
@@ -47,8 +73,7 @@ public class ParticleCommands {
         SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
                 () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, 1000);
         sps.run();
-        Random r = new Random();
-        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, r.nextInt()));
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, "GENERIC"));
     }
     @Subcommand({"chain"})
     public void testChainParticle(CommandSender cs, @Default("20") Integer amount) {
@@ -71,8 +96,7 @@ public class ParticleCommands {
         SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
                 () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, -1);
         sps.run();
-        Random r = new Random();
-        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, r.nextInt()));
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, "GENERIC"));
     }
 
     @Subcommand({"halo"})
@@ -90,8 +114,7 @@ public class ParticleCommands {
         SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
                 () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, -1);
         sps.run();
-        Random r = new Random();
-        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, r.nextInt()));
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, "GENERIC"));
     }
 
     @Subcommand({"addrand"})
@@ -111,8 +134,7 @@ public class ParticleCommands {
                 () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, -1);
         sps.run();
         int task = sps.getTask();
-        Random r = new Random();
-        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(task, -1, r.nextInt()));
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(task, -1, "GENERIC"));
     }
     @Subcommand({"clear"})
     public void clearParticle(CommandSender cs) {
@@ -132,8 +154,7 @@ public class ParticleCommands {
         SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
                 () -> randParticle.playParticleAtLocation(p),
                 10, 3000);
-        Random r = new Random();
-        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), -1, r.nextInt()));
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), -1, "GENERIC"));
 
     }
     @Subcommand({"chickimmune"})
@@ -145,10 +166,8 @@ public class ParticleCommands {
         SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
                 () -> MobParticles.CHICKBOSS_IMMUNE_PARTICLE.playParticleAtLocation(p.getWorld(), p.getLocation()),
                 10, 5000);
-        Random r = new Random();
-        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), -1, r.nextInt()));
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), -1, "GENERIC"));
     }
-
 
     @Subcommand({"chickegg"})
     public void chickEgg(CommandSender cs) {
@@ -159,8 +178,7 @@ public class ParticleCommands {
         SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
                 () -> MobParticles.CHICKBOSS_EGG_PARTICLE.playParticleAtLocation(p.getWorld(), p.getLocation().add(0,1,0)),
                 10, 5000);
-        Random r = new Random();
-        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), -1, r.nextInt()));
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(srps.run(), -1, "GENERIC"));
     }
 
 

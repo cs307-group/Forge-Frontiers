@@ -25,18 +25,18 @@ public class OrderCreationGUI extends BaseInventoryHolder {
     private final boolean type;
     private ItemStack amountAnvil;
     private ItemStack priceItem;
-    private ItemStack confirmItem;
-    private int itemIdx;
+    private final ItemStack confirmItem;
+    private final int itemIdx;
     private int amount;
     private double price;
-    private BazaarManager bazaarManager;
-    private ItemStack itm;
-    private BaseInventoryHolder prevInv;
-    private String name;
+    private final BazaarManager bazaarManager;
+    private final ItemStack itm;
+    private final BaseInventoryHolder prevInv;
+    private final String name;
 
-    private int amtSlot = 9 + 2;
-    private int priceSlot = 9 + 4;
-    private int confirmSlot = 9 + 6;
+    private final int amtSlot = 9 + 2;
+    private final int priceSlot = 9 + 4;
+    private final int confirmSlot = 9 + 6;
 
 
 

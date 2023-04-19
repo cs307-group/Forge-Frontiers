@@ -13,7 +13,7 @@ public class PageableGUI extends BaseInventoryHolder{
     ItemStack prev;
     ItemStack next;
 
-    private int pageno = 0;
+    private final int pageno = 0;
     public PageableGUI(Enumeration<ItemStack> itms) {
         super(54);
         this.items = itms;

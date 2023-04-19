@@ -16,6 +16,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class SlimeBoss extends HostileSlime {
 
+    public static String CODE = "SlimeBoss";
     public static class CraftSlimeBoss extends HostileSlime.CraftHostileSlime {
 
         BossBar bossBar;

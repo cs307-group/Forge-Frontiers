@@ -107,7 +107,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         if(skill != null)
             gearData.put("skill", skill.getId());
         if (particleEffect != null)
-            gearData.put("particle",Integer.toString(particleEffect.id));
+            gearData.put("particle", particleEffect.id);
     }
 
     /**
@@ -214,7 +214,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
             ForgeFrontier.getInstance().getLogger().severe("Unable to set gear particle: " + cosmeticParticle);
             return;
         }
-        gearData.put("particle", Integer.toString(cosmeticParticle.id));
+        gearData.put("particle", cosmeticParticle.id);
         this.particleEffect = cosmeticParticle;
     }
 

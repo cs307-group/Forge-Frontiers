@@ -21,10 +21,10 @@ public class HostileSlimeEntity extends CustomSlimeEntity {
     // used to pause natural behavior in subclasses
     boolean doBehavior;
 
-    private float idleSpeed;
-    private float aggroSpeed;
+    private final float idleSpeed;
+    private final float aggroSpeed;
     public long lastDamageTime = 0;
-    private double damage;
+    private final double damage;
     private Player nearestPlayer;
     private int scale;
 

@@ -3,7 +3,7 @@ package com.forgefrontier.forgefrontier.particles;
 public class PlayerParticleTask {
 
     int task;
-    int particleID;
+    String particleID;
     int slotID;
     String provider;
 
@@ -14,7 +14,7 @@ public class PlayerParticleTask {
         this.slotID = slotID;
     }
 
-    public PlayerParticleTask(int task, int slotID, int particleID) {
+    public PlayerParticleTask(int task, int slotID, String particleID) {
         this.task = task;
         this.particleID = particleID;
         this.provider = "";
@@ -28,11 +28,11 @@ public class PlayerParticleTask {
         this.task = task;
     }
 
-    public int getParticleID() {
+    public String getParticleID() {
         return particleID;
     }
 
-    public void setParticleID(int particleID) {
+    public void setParticleID(String particleID) {
         this.particleID = particleID;
     }
 

@@ -16,12 +16,12 @@ import java.util.PriorityQueue;
 import java.util.UUID;
 
 public class BazaarTests {
-    private ForgeFrontier plugin;
-    private BazaarManager bm;
-    private Player player;
+    private final ForgeFrontier plugin;
+    private final BazaarManager bm;
+    private final Player player;
     private final int TEST_ITEM_IDX = 27;
-    private Economy econ;
-    private BazaarDB db;
+    private final Economy econ;
+    private final BazaarDB db;
     private boolean testsPassed = true;
 
     public class EntryPair {

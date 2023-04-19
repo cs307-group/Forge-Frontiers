@@ -118,8 +118,6 @@ public class MiningArea {
             return false;
         if(pos2.getBlockY() < v.getBlockY())
             return false;
-        if(pos2.getBlockZ() < v.getBlockZ())
-            return false;
-        return true;
+        return pos2.getBlockZ() >= v.getBlockZ();
     }
 }

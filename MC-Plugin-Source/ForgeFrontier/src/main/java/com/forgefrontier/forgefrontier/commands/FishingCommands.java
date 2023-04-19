@@ -15,8 +15,8 @@ import revxrsal.commands.bukkit.exception.SenderNotPlayerException;
 
 @Command({"fish"})
 public class FishingCommands {
-    private ForgeFrontier plugin;
-    private FishingManager fishingManager;
+    private final ForgeFrontier plugin;
+    private final FishingManager fishingManager;
     public FishingCommands(ForgeFrontier plugin) {
         this.plugin = plugin;
         this.fishingManager = plugin.getFishingManager();

@@ -22,8 +22,8 @@ import java.util.logging.Level;
 @Command({"bazaar"})
 public class BazaarCommand {
 
-    private ForgeFrontier plugin;
-    private BazaarManager bazaarManager;
+    private final ForgeFrontier plugin;
+    private final BazaarManager bazaarManager;
     public BazaarCommand(ForgeFrontier plugin) {
         this.plugin = plugin;
         this.bazaarManager = plugin.getBazaarManager();

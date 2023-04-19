@@ -32,8 +32,8 @@ public class Shop {
     private static final String GEN_SHOP_ERR = ChatColor.RED +
             "[SHOP] An error occurred with the shop. Please try again.";
 
-    private ConcurrentHashMap<UUID, ShopListing> listings;
-    private TreeMap<UUID, ShopListing> listingsSorted;
+    private final ConcurrentHashMap<UUID, ShopListing> listings;
+    private final TreeMap<UUID, ShopListing> listingsSorted;
 
     ShopHolder shopGUI;
     ShopCommandExecutor shopCommands;

@@ -36,7 +36,7 @@ public class ParticleGem extends UniqueCustomItem {
             if(inst == null)
                 return builder.addLoreLine("&7Cosmetic&8: &fUnknown").build();
             builder.addLoreLine("&7Particle&8: " + gemInst.pp.name);
-            gemInst.getData().put("particle-id", Integer.toString(gemInst.pp.id));
+            gemInst.getData().put("particle-id", gemInst.pp.id);
             return builder.build();
         });
 

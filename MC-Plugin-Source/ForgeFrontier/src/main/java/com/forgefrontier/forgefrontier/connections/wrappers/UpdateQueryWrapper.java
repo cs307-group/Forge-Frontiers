@@ -62,7 +62,7 @@ public class UpdateQueryWrapper {
 
     public void executeAsyncQuery(Connection databaseConnection, Consumer<Boolean> callback) {
         new Thread(() -> {
-            callback.accept(this.executeSyncQuery(databaseConnection));;
+            callback.accept(this.executeSyncQuery(databaseConnection));
         }).start();
     }
 

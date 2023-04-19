@@ -22,7 +22,7 @@ public class FishConfigUtil {
 
     public void loadRarities() {
         FileConfiguration config = plugin.getConfig("fishing");
-        List<String> r = (List<String>) config.getStringList("fishing-rarities");
+        List<String> r = config.getStringList("fishing-rarities");
         fm.rarities = new ArrayList<>(r);
         fm.rarities.forEach((ra) -> {
             plugin.getLogger().log(Level.INFO,"Loaded Rarity: " + ra);

@@ -19,10 +19,10 @@ public class FulfillOrderGUI extends BaseInventoryHolder{
     BazaarManager bazaarManager;
     int amount;
     private ItemStack amountAnvil;
-    private ItemStack confirmItem;
+    private final ItemStack confirmItem;
 
-    private ItemStack itm;
-    private int itmIdx;
+    private final ItemStack itm;
+    private final int itmIdx;
     private final int DISPLAY_SLOT = 4;
     private final int AMOUNT_SELECT_SLOT = 9 + 3;
     private final int CONFIRM_SLOT = 9 + 5;

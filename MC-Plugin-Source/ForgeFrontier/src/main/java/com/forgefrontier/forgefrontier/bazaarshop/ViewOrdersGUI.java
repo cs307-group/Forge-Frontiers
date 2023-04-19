@@ -16,8 +16,8 @@ import java.util.UUID;
 
 public class ViewOrdersGUI extends BaseInventoryHolder {
 
-    private UUID playerID;
-    private BazaarManager bazaarManager;
+    private final UUID playerID;
+    private final BazaarManager bazaarManager;
 
     public ViewOrdersGUI(int size, String name, UUID player) {
         super(size, name);

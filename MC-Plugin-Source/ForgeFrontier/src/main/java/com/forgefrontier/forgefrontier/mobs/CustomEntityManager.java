@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBoss;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBossEntity;
@@ -33,7 +34,7 @@ import java.util.logging.Level;
 public class CustomEntityManager extends Manager implements Listener {
 
     Map<String, CustomMob> entities;
-    private HashMap<UUID, String> instanceEntityMap;
+    private final HashMap<UUID, String> instanceEntityMap;
 
     /**
      * Constructor for the manager
@@ -123,7 +124,7 @@ public class CustomEntityManager extends Manager implements Listener {
                     currHealth = 0;
                 }
                 if (entity.getHandle() instanceof HitBoxEntity hitBox) {
-                    namePlate += (String) entity.getMetadata("name").get(0).value() +
+                    namePlate += entity.getMetadata("name").get(0).value() +
                             ": " + currHealth + "/" + ((int) entity.getMaxHealth());
                     entity.setCustomName(namePlate);
                 } else {
@@ -204,10 +205,13 @@ public class CustomEntityManager extends Manager implements Listener {
                     plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
                 }
             }
-            SlimeBossEntity slimeBossEntity = (SlimeBossEntity) entity.getHandle();
-            if (slimeBossEntity != null) {
-                slimeBossEntity.onDeath();
+            if (cm != null && cm.getCode().equals(SlimeBoss.CODE)) {
+                SlimeBossEntity slimeBossEntity = (SlimeBossEntity) entity.getHandle();
+                if (slimeBossEntity != null) {
+                    slimeBossEntity.onDeath();
+                }
             }
+
         }
 
         if (entity.hasMetadata("code")) {

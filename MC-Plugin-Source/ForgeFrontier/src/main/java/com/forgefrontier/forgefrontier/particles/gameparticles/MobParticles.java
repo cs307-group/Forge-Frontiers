@@ -23,7 +23,7 @@ public class MobParticles {
         pdc.createStaticPoints();
         CHICKBOSS_EGG_PARTICLE = new FFParticle(pdc);
         CHICKBOSS_EGG_PARTICLE.setParticle(Particle.WAX_OFF);
-        CHICKBOSS_EGG_PARTICLE.id = 7000;
+        CHICKBOSS_EGG_PARTICLE.id = "MBChickEgg";
         mngr.registerParticle(CHICKBOSS_EGG_PARTICLE);
 
         ParticleDesignSphere pds = new ParticleDesignSphere();
@@ -32,19 +32,19 @@ public class MobParticles {
         pds.createStaticPoints();
         CHICKBOSS_IMMUNE_PARTICLE = new FFParticle(pds);
         CHICKBOSS_IMMUNE_PARTICLE.setParticle(Particle.WAX_ON);
-        CHICKBOSS_IMMUNE_PARTICLE.id = 7001;
+        CHICKBOSS_IMMUNE_PARTICLE.id = "MBChickImmune";
         mngr.registerParticle(CHICKBOSS_IMMUNE_PARTICLE);
 
         GENERIC_CUSTOM_DEATH_PARTICLE = new FFParticle(pds);
         GENERIC_CUSTOM_DEATH_PARTICLE.setParticle(Particle.CRIMSON_SPORE);
         GENERIC_CUSTOM_DEATH_PARTICLE.setDensity(2);
-        GENERIC_CUSTOM_DEATH_PARTICLE.id = 7002;
+        GENERIC_CUSTOM_DEATH_PARTICLE.id = "MBDeath";
         mngr.registerParticle(GENERIC_CUSTOM_DEATH_PARTICLE);
 
         POISON_CHICKEN_DEATH_PARTICLE = new FFParticle(pds);
         POISON_CHICKEN_DEATH_PARTICLE.setParticle(Particle.FALLING_SPORE_BLOSSOM);
         POISON_CHICKEN_DEATH_PARTICLE.setDensity(2);
-        POISON_CHICKEN_DEATH_PARTICLE.id = 7003;
+        POISON_CHICKEN_DEATH_PARTICLE.id = "MBPChickDeath";
         mngr.registerParticle(POISON_CHICKEN_DEATH_PARTICLE);
 
     }

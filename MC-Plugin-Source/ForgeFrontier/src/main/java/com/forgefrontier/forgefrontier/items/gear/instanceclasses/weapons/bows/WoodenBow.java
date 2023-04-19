@@ -24,7 +24,7 @@ public class WoodenBow extends CustomWeapon {
         public WoodenBowInstance(ItemStack itemStack) {
             super(itemStack);
         }
-    };
+    }
 
     /**
      * Default constructor for the wooden bow weapon

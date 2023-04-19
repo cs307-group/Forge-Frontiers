@@ -17,7 +17,7 @@ import revxrsal.commands.bukkit.exception.SenderNotPlayerException;
 @Command({"cspawn"})
 @Description("Command for spawning custom items.")
 public class CustomSpawnCommand {
-    private ForgeFrontier plugin;
+    private final ForgeFrontier plugin;
 
     public CustomSpawnCommand(ForgeFrontier plugin) {
         this.plugin = plugin;

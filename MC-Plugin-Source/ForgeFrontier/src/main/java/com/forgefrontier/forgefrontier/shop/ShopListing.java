@@ -17,7 +17,7 @@ public class ShopListing {
 
     /** Original Item **/
     private ItemStack item;
-    private ItemStack displayItem;
+    private final ItemStack displayItem;
     private double price;
     private int amt;
     private ShopPlayer lister;

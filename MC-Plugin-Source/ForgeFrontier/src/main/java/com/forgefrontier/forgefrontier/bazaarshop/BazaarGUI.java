@@ -15,10 +15,10 @@ import java.util.ArrayList;
 
 
 public class BazaarGUI extends BaseInventoryHolder {
-    private BazaarManager bazaarMgr;
-    private int HELP_BOOK = 9 * 5 + 3;
-    private int VIEW_PERSONAL_SLOT = 9 * 5 + 4;
-    private int VIEW_STASH = 9 * 5 + 5;
+    private final BazaarManager bazaarMgr;
+    private final int HELP_BOOK = 9 * 5 + 3;
+    private final int VIEW_PERSONAL_SLOT = 9 * 5 + 4;
+    private final int VIEW_STASH = 9 * 5 + 5;
 
     private ItemStack helpBookItem;
     private ItemStack personalItem;

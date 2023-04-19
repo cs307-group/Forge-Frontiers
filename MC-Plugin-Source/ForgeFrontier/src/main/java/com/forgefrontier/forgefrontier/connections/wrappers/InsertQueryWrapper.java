@@ -10,8 +10,8 @@ public class InsertQueryWrapper {
 
     public static class InsertResult {
         public static final InsertResult FAILURE = new InsertResult(false, null);
-        private boolean success;
-        private String id;
+        private final boolean success;
+        private final String id;
         public InsertResult(String id) {
             this.success = true;
             this.id = id;
@@ -66,7 +66,7 @@ public class InsertQueryWrapper {
 
     public void executeAsyncQuery(Connection databaseConnection, Consumer<InsertResult> callback) {
         new Thread(() -> {
-            callback.accept(this.executeSyncQuery(databaseConnection));;
+            callback.accept(this.executeSyncQuery(databaseConnection));
         }).start();
     }
 

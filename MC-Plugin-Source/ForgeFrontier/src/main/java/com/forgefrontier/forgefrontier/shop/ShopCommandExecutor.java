@@ -12,9 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ShopCommandExecutor implements CommandExecutor {
-    private Shop shop;
-    private static String helpMessage = "Valid Shop Commands: help, view";
-    private static String invalidPrice = "Valid Shop Commands: help, view";
+    private final Shop shop;
+    private static final String helpMessage = "Valid Shop Commands: help, view";
+    private static final String invalidPrice = "Valid Shop Commands: help, view";
 
     public ShopCommandExecutor(Shop shop) {
         this.shop = shop;

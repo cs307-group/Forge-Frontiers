@@ -16,7 +16,7 @@ import revxrsal.commands.bukkit.exception.SenderNotPlayerException;
 @Command({"cgive", "customgive"})
 @Description("Command for spawning custom items.")
 public class CustomGiveCommand {
-    private ForgeFrontier plugin;
+    private final ForgeFrontier plugin;
 
     public CustomGiveCommand(ForgeFrontier plugin) {
         this.plugin = plugin;

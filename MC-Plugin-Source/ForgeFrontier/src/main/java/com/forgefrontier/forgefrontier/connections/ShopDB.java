@@ -23,7 +23,7 @@ public class ShopDB extends DBConnection {
             preparedStatement.setLong(2, time_bought);
             preparedStatement.setString(3, listing.toString());
             ForgeFrontier.getInstance().getLogger().log(Level.INFO,
-                    "Updated Listing " + listing.toString() + " as sold.");
+                    "Updated Listing " + listing + " as sold.");
             preparedStatement.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class ShopDB extends DBConnection {
             preparedStatement.setString(1, listing.toString());
 
             ForgeFrontier.getInstance().getLogger().log(Level.INFO,
-                    "Deleting listing: " + listing.toString());
+                    "Deleting listing: " + listing);
             preparedStatement.executeUpdate();
             return true;
         } catch (Exception e) {

@@ -5,8 +5,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PreviousInventoryRunnable extends BukkitRunnable {
-    private Player p;
-    private Inventory inv;
+    private final Player p;
+    private final Inventory inv;
     public PreviousInventoryRunnable(Player p, Inventory i) {
         this.p = p;
         this.inv = i;

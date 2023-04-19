@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 
 class ConnectionSet {
-    private ResultSet result;
-    private Statement statement;
+    private final ResultSet result;
+    private final Statement statement;
 
     public ConnectionSet(Statement s, ResultSet r) {
         this.statement = s;

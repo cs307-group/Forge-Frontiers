@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class FFParticle {
     protected float offY = 0;
     protected float offZ = 0;
     protected int density = 1;
-    public int id = -1;
+    public String id = "NA";
     public int delay = 10;
     public int duration = 20;
     public String name;
@@ -42,6 +43,16 @@ public class FFParticle {
         spawnType = SpawnParticleType.NORMAL;
     }
 
+
+
+    public void playAtPlayer(Player p) {
+        if (!(this.pd instanceof StaticParticleDesign)) {
+            staticParticles = pd.getNext();
+        }
+        for (Vector v : staticParticles) {
+            spawnOneParticle(p.getWorld(), p.getLocation().clone().add(v));
+        }
+    }
     public void playParticleAtLocation(World w, Location loc) {
 
         if (!(this.pd instanceof StaticParticleDesign)) {

@@ -235,6 +235,7 @@ public class ForgeFrontier extends JavaPlugin {
         AutoCompleter autoCompleter = commandHandler.getAutoCompleter();
         autoCompleter.registerSuggestion("cgive", customItemManager.getItemNames());
         autoCompleter.registerSuggestion("cspawn", this.getCustomEntityManager().getEntities().keySet());
+        autoCompleter.registerSuggestion("idparticle", this.getParticleManager().getParticleMap().keySet());
         commandHandler.register(new CustomGiveCommand(this));
         commandHandler.register(new ParticleCommands(this));
         commandHandler.register(new GeneratorCommand(this));

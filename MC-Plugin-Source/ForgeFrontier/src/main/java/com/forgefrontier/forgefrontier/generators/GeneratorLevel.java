@@ -15,7 +15,7 @@ public class GeneratorLevel {
     private int generatorRate;
     /** the tier required of the player to upgrade the generator */
     private int requiredTier;
-    private List<MaterialCost> upgradeCosts;
+    private final List<MaterialCost> upgradeCosts;
 
     public GeneratorLevel(int generatorRate, int maxSize) {
         this.generatorRate = generatorRate;
