@@ -1,12 +1,7 @@
 import {motion} from "framer-motion";
 import Head from "next/head";
 import Link from "next/link";
-import {useRouter} from "next/router";
 
-import {UserDataSecure} from "@/handlers/types";
-import {useCookieSync} from "@/hooks/use-cookie-sync";
-
-import {Client} from "../Client";
 import {AppLayout, CONTROL_PANEL} from "../Layout/AppLayout";
 import {Spacer} from "../Spacer";
 
@@ -52,17 +47,17 @@ export function TabLinks({active}: {active: string}) {
         )}
         Stripe Logs
       </Link>
-      
+
       <Link
-        href="/control-panel/featureToggle"
+        href="/control-panel/feature"
         className={`${
-          active === "/featureToggle" ? "" : "hover:text-white/60"
+          active === "/feature" ? "" : "hover:text-white/60"
         } relative rounded-full px-3 py-1.5 text-sm font-medium text-white outline-sky-400 transition focus-visible:outline-2`}
         style={{
           WebkitTapHighlightColor: "transparent",
         }}
       >
-        {active === "/featureToggle" && (
+        {active === "/feature" && (
           <motion.span
             layoutId="bubble"
             className="absolute inset-0 z-10 bg-white mix-blend-difference"
