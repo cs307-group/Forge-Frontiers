@@ -91,6 +91,7 @@ public class PlayerManager extends Manager implements Listener {
         playersByName.remove(player.getName(), player);
         ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(ffPlayers.get(player.getUniqueId()));
         ffPlayers.remove(player.getUniqueId());
+        ForgeFrontier.getInstance().getParticleManager().cancelAllPlayerParticles(player.getUniqueId());
     }
 
     /**

@@ -148,6 +148,11 @@ public abstract class GearItem extends UniqueCustomItem {
                     .addLoreLine(gearItemInstance.skill.getDescrption())
                     .addLoreLine("");
             }
+            if (gearItemInstance.particleEffect != null) {
+                builder.addLoreLine(gearItemInstance.particleEffect.getLoreLine())
+                        .addLoreLine("");
+            }
+
 
             builder
                 .addLoreLine("&fBase Stats")

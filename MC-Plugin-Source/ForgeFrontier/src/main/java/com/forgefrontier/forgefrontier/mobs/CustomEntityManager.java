@@ -242,6 +242,10 @@ public class CustomEntityManager extends Manager implements Listener {
     }
 
     public void handleCustomDeath(LivingEntity e, CustomMob cm) {
+        if (cm.getCode().equals("PoisonChicken")) {
+            MobParticles.POISON_CHICKEN_DEATH_PARTICLE.playParticleAtLocation(e.getWorld(),e.getLocation());
+            return;
+        }
         MobParticles.GENERIC_CUSTOM_DEATH_PARTICLE.playParticleAtLocation(e.getWorld(),e.getLocation());
     }
 

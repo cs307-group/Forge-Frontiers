@@ -9,6 +9,7 @@ import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
+import com.forgefrontier.forgefrontier.particles.FFCosmeticParticle;
 import com.forgefrontier.forgefrontier.particles.PlayerParticle;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -51,7 +52,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
     Skill skill;
 
     /** Particle effect that plays upon this item's equip */
-    PlayerParticle particleEffect;
+    FFCosmeticParticle particleEffect;
 
     /** JSON data about this particular GearItemInstance */
     HashMap<String, String> gearData;
@@ -105,6 +106,8 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         gearData.put("lore", lore);
         if(skill != null)
             gearData.put("skill", skill.getId());
+        if (particleEffect != null)
+            gearData.put("particle",Integer.toString(particleEffect.id));
     }
 
     /**
@@ -152,6 +155,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         durability = Integer.parseInt(gearData.get("durability"));
         lore = gearData.get("lore");
         skill = ForgeFrontier.getInstance().getGearItemManager().getSkill(gearData.get("skill"));
+        particleEffect = ForgeFrontier.getInstance().getParticleManager().getCosmeticParticle(gearData.get("particle"));
     }
 
     /** returns the value of this.baseStats */
@@ -204,6 +208,17 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         gearData.put("skill", skill.getId());
         this.skill = skill;
     }
+
+    public void setParticleEffect(FFCosmeticParticle cosmeticParticle) {
+        if (cosmeticParticle == null) {
+            ForgeFrontier.getInstance().getLogger().severe("Unable to set gear particle: " + cosmeticParticle);
+            return;
+        }
+        gearData.put("particle", Integer.toString(cosmeticParticle.id));
+        this.particleEffect = cosmeticParticle;
+    }
+
+    public FFCosmeticParticle getParticleEffect() { return this.particleEffect; }
 
     public Skill getSkill() {
         return this.skill;

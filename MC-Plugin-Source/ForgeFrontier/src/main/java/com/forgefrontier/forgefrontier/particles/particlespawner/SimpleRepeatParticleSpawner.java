@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.particles.particlespawner;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.particles.FFParticle;
 import com.forgefrontier.forgefrontier.particles.designs.ParticleDesign;
 import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,6 +19,15 @@ public class SimpleRepeatParticleSpawner {
     ForgeFrontier plugin;
     BukkitScheduler scheduler;
     private int task;
+
+    public SimpleRepeatParticleSpawner(Runnable spawnfunc, FFParticle particle) {
+        this.spawnfunc = spawnfunc;
+        this.delay = particle.delay;
+        this.duration = particle.duration;
+        this.plugin = ForgeFrontier.getInstance();
+        this.scheduler = plugin.getServer().getScheduler();
+    }
+
 
     public SimpleRepeatParticleSpawner(Runnable spawnfunc, int delay, int duration) {
         this.spawnfunc = spawnfunc;

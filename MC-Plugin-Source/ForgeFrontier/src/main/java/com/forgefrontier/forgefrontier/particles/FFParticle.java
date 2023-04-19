@@ -15,17 +15,21 @@ public class FFParticle {
     public enum SpawnParticleType {
         NORMAL, DUST, TRANSITION, BLOCK
     }
-    private ParticleDesign pd;
-    private ArrayList<Vector> staticParticles;
-    private Particle particle = Particle.REDSTONE;
-    private Particle.DustOptions dustOptions = null;
-    private Particle.DustTransition dustTransition = null;
-    private BlockData blockType = null;
-    private SpawnParticleType spawnType = null;
-    private float offX = 0;
-    private float offY = 0;
-    private float offZ = 0;
-    private int density = 1;
+    protected final ParticleDesign pd;
+    protected ArrayList<Vector> staticParticles;
+    protected Particle particle = Particle.REDSTONE;
+    protected Particle.DustOptions dustOptions = null;
+    protected Particle.DustTransition dustTransition = null;
+    protected BlockData blockType = null;
+    protected SpawnParticleType spawnType = null;
+    protected float offX = 0;
+    protected float offY = 0;
+    protected float offZ = 0;
+    protected int density = 1;
+    public int id = -1;
+    public int delay = 10;
+    public int duration = 20;
+    public String name;
 
 
 

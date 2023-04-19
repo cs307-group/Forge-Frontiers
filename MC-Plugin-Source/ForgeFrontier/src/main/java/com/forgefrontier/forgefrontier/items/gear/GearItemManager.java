@@ -7,7 +7,9 @@ import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
 import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.ParticleGem;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.SkillGem;
+import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.PlayerParticle;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.utils.Manager;
@@ -16,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Handles events related to GearItem classes
@@ -23,7 +26,7 @@ import java.util.*;
 public class GearItemManager extends Manager implements Listener {
 
     Map<String, Skill> skills;
-
+    ParticleManager particleManager;
     /**
      * Constructor for initializing fields
      *
@@ -36,8 +39,9 @@ public class GearItemManager extends Manager implements Listener {
     @Override
     public void init() {
         this.skills = new HashMap<>();
-
+        particleManager = ForgeFrontier.getInstance().getParticleManager();
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new SkillGem());
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new ParticleGem());
 
         this.registerSkill(new GroundSmashSkill());
 
@@ -81,11 +85,20 @@ public class GearItemManager extends Manager implements Listener {
         // updates player stats values if the armor is a custom armor
         if (newItemInstance instanceof CustomArmor.CustomArmorInstance newArmorInstance) {
             ffPlayer.updateStatsOnArmorEquip(newArmorInstance);
+            plugin.getLogger().log(Level.INFO, "Adding new cosmetic on slot: " + e.getSlotType().ordinal());
+            particleManager.addPlayerCosmetic(p, newArmorInstance.getParticleEffect(), e.getSlotType().ordinal());
+        } else {
+            plugin.getLogger().log(Level.INFO, "Armor change into nothing: " + e.getSlotType().ordinal());
+            particleManager.addPlayerCosmetic(p, null, e.getSlotType().ordinal());
         }
 
         // Updates player stats in database
+        // TODO: Make task instead
         ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(),
                 ffPlayer.getStats(), ffPlayer.getAscension(), ffPlayer.getTier());
+
+
+
     }
 
     public Skill getRandomSkill() {
