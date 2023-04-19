@@ -6,21 +6,24 @@ import {FormEvent, useState} from "react";
 
 import {Button} from "@/components/Button";
 import {BaseInput} from "@/components/Input/BaseInput";
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
-import {UserData} from "@/handlers/types";
-import {searchUserData} from "@/handlers/user-data";
+import {UserData, UserDataSecure} from "@/handlers/types";
+import {fetchUserData, searchUserData} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import avatarImage from "@/images/avatar.png";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 
 const DUP_RES = 0;
 export default function Search({
   data,
   cookie,
+  user,
 }: {
   data: UserData[];
   cookie: object;
+  user?: UserDataSecure;
 }) {
   useCookieSync(cookie);
   const {push, query} = useRouter();
@@ -39,9 +42,12 @@ export default function Search({
     <>
       <Head>
         <title>{`${q ? `${q} - ` : ""}Search | Forge Frontiers`}</title>
-
       </Head>
-      <AppLayout active="search" title="Search">
+      <AppLayout
+        active="search"
+        title="Search"
+        extraNavItems={user?.is_admin ? CONTROL_PANEL : {}}
+      >
         <form onSubmit={handleSubmit}>
           <div className="mx-auto w-[95%] max-w-[400px]">
             <BaseInput
@@ -107,9 +113,21 @@ export default function Search({
 }
 
 export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
-  const searchResults = await searchUserData(c);
+  const [searchResults, userData] = await Promise.all([
+    searchUserData(c),
+    fetchUserData(c),
+  ]);
+
   if (isErrorResponse(searchResults)) {
-    return searchResults.resp;
+    // hacky but our api kinda sucks
+    return {
+      props: {
+        ...searchResults.resp,
+        ...userResponseToCustomData(userData),
+      },
+    };
   }
+  searchResults.addCustomData(userResponseToCustomData(userData));
+
   return searchResults.toSSPropsResult;
 });

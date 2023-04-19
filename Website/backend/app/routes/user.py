@@ -178,3 +178,17 @@ def get_mc_stats(idx: str):
         stats = get_stats_by_player_uuid(mc_user)
         return stats.as_json
     raise AppException("Stats not found", 404)
+
+
+@router.post("/-/update/")
+@api.strict
+def update_user__prefs():
+    req = Context()
+    user = get_user_by_id(req.auth.user_id)
+    user.config = user.config or {}
+    print("config before:", user.config)
+    print("body:", req.json)
+    user.config = {**user.config, **req.json}
+    res = user.as_json
+    commit()
+    return res

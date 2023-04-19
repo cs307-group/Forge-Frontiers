@@ -68,8 +68,12 @@ h6 {
   height: 100%;
 }
 
-.forge_background {
+:is(.dark .forge_background) {
   background: linear-gradient(296.82deg, #141414 0%, #4b4b4b 100%);
+  overflow: auto;
+}
+:is(.light .forge_background) {
+  
   overflow: auto;
 }
 .ff_shadow {

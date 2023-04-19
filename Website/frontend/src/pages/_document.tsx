@@ -1,13 +1,26 @@
-import {Head, Html, Main, NextScript} from "next/document";
+import clsx from "clsx";
+import {parse} from "cookie";
+import {
+  default as Doc,
+  DocumentContext,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from "next/document";
 
-export default function Document() {
+import {isErrorResponse} from "@/handlers/fetch-util";
+import {fetchUserData} from "@/handlers/user-data";
+import {hasToken} from "@/util/const-has-token";
+
+export default function Document({lightMode, autoSync}: any) {
   return (
-    <Html lang="en">
-      <Head>
-        <meta name="description" content="Forge Frontier Web Client" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Html
+      lang="en"
+      className={clsx(lightMode ? "light" : "dark")}
+      data-config={JSON.stringify({autoSync})}
+    >
+      <Head />
       <body>
         <Main />
         <NextScript />
@@ -15,3 +28,25 @@ export default function Document() {
     </Html>
   );
 }
+
+Document.getInitialProps = async function (ctx: DocumentContext) {
+  let result = Doc.getInitialProps(ctx);
+  const {req} = ctx;
+  const {headers} = req || {};
+  const {cookie = ""} = headers || {};
+  const cookies = parse(cookie);
+  if (!hasToken(cookies)) return result;
+  const uData = await fetchUserData({req: {cookies}} as any);
+  if (isErrorResponse(uData)) {
+    return result;
+  }
+  const cfg = uData.resp?.secure?.config || {};
+  const darkMode = cfg["dark-mode"] ?? true;
+  const disableAutoSync = cfg["disable-autosync"] ?? false;
+  const res = await result;
+  return {
+    ...res,
+    lightMode: !darkMode,
+    autoSync: !disableAutoSync,
+  };
+};

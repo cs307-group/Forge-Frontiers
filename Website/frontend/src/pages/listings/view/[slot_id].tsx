@@ -2,16 +2,19 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {useMemo, useState} from "react";
+import {useMemo} from "react";
 
 import {Client} from "@/components/Client";
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {Spacer} from "@/components/Spacer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
+import {isErrorResponse} from "@/handlers/fetch-util";
 import {getOrdersForSlotId} from "@/handlers/market";
-import {BazaarLookup, MarketState} from "@/handlers/types";
+import {BazaarLookup, MarketState, UserDataSecure} from "@/handlers/types";
+import {fetchUserData} from "@/handlers/user-data";
 import {useRefresh} from "@/hooks/use-refresh";
 import {ChevronIcon} from "@/icons/ChevronIcon";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 import {_collectors, arrayIter} from "@hydrophobefireman/lazy";
 
 const {ARRAY_COLLECTOR} = _collectors;
@@ -22,26 +25,31 @@ const intl = new Intl.DateTimeFormat("en", {
 
 export default function ViewBySlotId({
   data,
+  user,
 }: {
   data: {
     buy: MarketState[];
     sell: MarketState[];
     lookup: BazaarLookup;
   };
+  user?: UserDataSecure;
 }) {
   useRefresh();
   return (
     <>
       <Head>
         <title>{`Market | Forge Frontiers`}</title>
-
       </Head>
-      <AppLayout active="market-viewer" title="Market Viewer">
+      <AppLayout
+        active="market-viewer"
+        title="Market Viewer"
+        extraNavItems={user?.is_admin ? CONTROL_PANEL : {}}
+      >
         <Spacer y={20} />
         <div className="flex items-center justify-center">
           <div
             key={data.lookup.slot_id}
-            className="flex flex-col items-center justify-center rounded-md bg-[#171717] p-4"
+            className="flex flex-col items-center justify-center rounded-md p-4 dark:bg-[#171717]"
           >
             <div className="mx-auto text-center"> {data.lookup.item_name} </div>
             <Image
@@ -246,7 +254,10 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
   if (!c.query.slot_id || Array.isArray(c.query.slot_id)) {
     return {props: {error: "Invalid"}};
   }
-  const resp = await getOrdersForSlotId(c);
-
+  const [resp, user] = await Promise.all([
+    getOrdersForSlotId(c),
+    fetchUserData(c),
+  ]);
+  resp.addCustomData(userResponseToCustomData(user));
   return resp.toSSPropsResult;
 });

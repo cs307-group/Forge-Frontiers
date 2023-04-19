@@ -14,13 +14,5 @@ export default function Profile({
 }) {
   useCookieSync(cookie);
 
-  return <AppLayout active="leaderboard">ok</AppLayout>;
+  return <AppLayout active="leaderboard" title="Leaderboard">ok</AppLayout>;
 }
-
-export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
-  const userData = await fetchUserData(c);
-  if (isErrorResponse(userData)) {
-    return userData.resp;
-  }
-  return userData.toSSPropsResult;
-});

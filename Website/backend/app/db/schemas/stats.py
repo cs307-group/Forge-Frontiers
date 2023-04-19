@@ -18,6 +18,8 @@ class Stats(db.Model):
     CRATE: int = db.Column(db.Integer)
     CDMG: int = db.Column(db.Integer)
     DEF: int = db.Column(db.Integer)
+    AscensionLevel: int = db.Column(db.Integer, default=0)
+    Tier: int = db.Column(db.Integer, default=0)
 
     # pylint: enable=E1101
 
@@ -32,6 +34,8 @@ class Stats(db.Model):
         CRATE: int = None,
         CDMG: int = None,
         DEF: int = None,
+        Tier: int = None,
+        AscensionLevel: int = None,
     ):
         self.player_uuid = player_uuid
         self.current_health = current_health
@@ -42,6 +46,8 @@ class Stats(db.Model):
         self.CRATE = CRATE
         self.CDMG = CDMG
         self.DEF = DEF
+        self.Tier = Tier
+        self.AscensionLevel = AscensionLevel
 
     @property
     def as_json(self):
@@ -55,4 +61,6 @@ class Stats(db.Model):
             "CRATE": self.CRATE,
             "CDMG": self.CDMG,
             "DEF": self.DEF,
+            "Tier": self.Tier,
+            "AscensionLevel": self.AscensionLevel,
         }

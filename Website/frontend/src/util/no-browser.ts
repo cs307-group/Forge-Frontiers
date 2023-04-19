@@ -5,7 +5,7 @@
  * we do not want the frontend to do that so we make sure this code throws on a browser
  */
 
-const IS_BROWSER =
+export const IS_BROWSER =
   typeof document !== "undefined" &&
   typeof HTMLSpanElement !== "undefined" &&
   document.createElement("span") instanceof HTMLSpanElement;

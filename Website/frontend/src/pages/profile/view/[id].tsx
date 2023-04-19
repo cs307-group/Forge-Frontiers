@@ -1,17 +1,24 @@
 import {GetServerSideProps} from "next";
 
 import {isErrorResponse} from "@/handlers/fetch-util";
-import {PlayerStats, ShopData, UserData} from "@/handlers/types";
 import {
+  PlayerStats,
+  ShopData,
+  UserData,
+  UserDataSecure,
+} from "@/handlers/types";
+import {
+  fetchUserData,
   getPlayerById,
   getPlayerShop,
   getPlayerStats,
 } from "@/handlers/user-data";
 import {DEFAULT_STATS} from "@/util/default-stats";
 import Head from "next/head";
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {ProfileViewer} from "@/components/Profile/Viewer";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {hasToken} from "@/util/const-has-token";
 
 export default function ViewProfile({
   error,
@@ -19,23 +26,25 @@ export default function ViewProfile({
   stats,
   cookie,
   shop,
+  __selfData,
 }: {
   error: string;
   data: UserData;
   stats: PlayerStats;
   shop: ShopData[];
   cookie: object;
+  __selfData: UserDataSecure;
 }) {
   useCookieSync(cookie);
   return (
     <>
       <Head>
         <title>{`${error ? "Not Found" : data.name} | Forge Frontiers`}</title>
-
       </Head>
       <AppLayout
         active={null}
         title={data ? `${data.name}'s Profile` : "Not found"}
+        extraNavItems={__selfData?.is_admin ? CONTROL_PANEL : {}}
       >
         {error ? (
           <>
@@ -63,6 +72,10 @@ export const getServerSideProps: GetServerSideProps = (async (c) => {
     return {props: {error: "Invalid"}};
   }
 
+  const selfData = hasToken(c.req.cookies)
+    ? fetchUserData(c as any)
+    : Promise.resolve(null);
+
   const resp = getPlayerById(c.query.id);
   const [stats, shop] = await Promise.all([
     getPlayerStats(c.query.id),
@@ -86,6 +99,14 @@ export const getServerSideProps: GetServerSideProps = (async (c) => {
   if (isErrorResponse(userResponse)) {
     return userResponse.resp;
   }
-
+  const selfResp = await selfData;
+  if (selfResp && !isErrorResponse(selfResp)) {
+    userResponse.addCustomData({
+      __selfData: selfResp.resp,
+      cookie: selfResp.extractCookie(),
+    });
+  } else {
+    userResponse.addCustomData({__selfData: null});
+  }
   return userResponse.addCustomData({stats: json, shop}).toSSPropsResult;
 }) satisfies GetServerSideProps;

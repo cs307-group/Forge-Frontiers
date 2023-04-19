@@ -10,6 +10,10 @@ export interface UserData {
 export interface UserDataSecure extends UserData {
   secure: {
     user: string;
+    config: {
+      "dark-mode"?: boolean;
+      "disable-autosync"?: boolean;
+    };
   };
 }
 

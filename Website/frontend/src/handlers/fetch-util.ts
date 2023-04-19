@@ -16,9 +16,6 @@ export interface ReqWithCookies extends IncomingMessage {
 export interface AuthReqContext extends GetServerSidePropsContext<any, any> {
   req: ReqWithCookies;
 }
-export class ErrorResponse {
-  constructor(public resp: GetServerSidePropsResult<any>) {}
-}
 
 export class EdgeFunctionResponse<T extends Record<any, any>> {
   private customData: Record<any, any> = {};
@@ -31,16 +28,20 @@ export class EdgeFunctionResponse<T extends Record<any, any>> {
     this.customData = {...this.customData, ...obj};
     return this;
   }
-  public extractTokens(): Tokens | null {
-    if ("cookie" in this.customData) {
-      try {
-        return JSON.parse(this.customData.cookie?.tokens) as Tokens;
-      } catch (_) {
-        return null;
-      }
-    }
-    return null;
+
+  public extractCookie() {
+    return this.customData?.cookie ?? null;
   }
+  public extractTokens(): Tokens | null {
+    try {
+      return JSON.parse(this.extractCookie()?.tokens) as Tokens;
+    } catch (_) {
+      return null;
+    }
+  }
+}
+export class ErrorResponse {
+  constructor(public resp: GetServerSidePropsResult<any>) {}
 }
 
 export function isErrorResponse(x: unknown): x is ErrorResponse {
@@ -53,7 +54,6 @@ export async function handleAuthRefresh(
 ): Promise<[Response, Tokens | null] | ErrorResponse> {
   const tokens: Tokens = JSON.parse(req.cookies.tokens);
   let resp = await __getResponse(tokens);
-
   if (!resp.ok) {
     const refresh = await handleTokenRefresh(resp, tokens);
     console.log("refreshed:", isRefreshSuccess(refresh));

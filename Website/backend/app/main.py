@@ -6,7 +6,7 @@ import app.db.schemas
 from app.internal.constants import DATABASE_URL
 from app.internal.helpers import ip_resolver
 from app.internal.helpers.client_errors import method_not_allowed, not_found
-from app.routes import common, user, market, gens
+from app.routes import common, user, market, gens, admin
 from flask_migrate import Migrate
 
 app = Flask(__name__)  # noqa: F811
@@ -30,6 +30,7 @@ app.register_blueprint(common.router)
 app.register_blueprint(user.router)
 app.register_blueprint(market.router)
 app.register_blueprint(gens.router)
+app.register_blueprint(admin.router)
 
 app.register_error_handler(404, not_found)
 app.register_error_handler(405, method_not_allowed)
