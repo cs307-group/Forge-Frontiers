@@ -8,66 +8,54 @@ import {Spacer} from "../Spacer";
 export function TabLinks({active}: {active: string}) {
   return (
     <div className="flex items-center gap-8">
-      <Link
-        href="/control-panel/in-game-transactions"
-        className={`${
-          active === "/in-game-transactions" ? "" : "hover:text-white/60"
-        } relative rounded-full px-3 py-1.5 text-sm font-medium text-white outline-sky-400 transition focus-visible:outline-2`}
-        style={{
-          WebkitTapHighlightColor: "transparent",
-        }}
-      >
-        {active === "/in-game-transactions" && (
-          <motion.span
-            layoutId="bubble"
-            className="absolute inset-0 z-10 bg-white mix-blend-difference"
-            style={{borderRadius: 9999}}
-            transition={{type: "spring", bounce: 0.2, duration: 0.6}}
-          />
-        )}
+      <Tab id="/in-game-transactions" active={active}>
         inGame Transactions
-      </Link>
-
-      <Link
-        href="/control-panel/stripe"
-        className={`${
-          active === "/stripe" ? "" : "hover:text-white/60"
-        } relative rounded-full px-3 py-1.5 text-sm font-medium text-white outline-sky-400 transition focus-visible:outline-2`}
-        style={{
-          WebkitTapHighlightColor: "transparent",
-        }}
-      >
-        {active === "/stripe" && (
-          <motion.span
-            layoutId="bubble"
-            className="absolute inset-0 z-10 bg-white mix-blend-difference"
-            style={{borderRadius: 9999}}
-            transition={{type: "spring", bounce: 0.2, duration: 0.6}}
-          />
-        )}
+      </Tab>
+      <Tab id="/stripe" active={active}>
         Stripe Logs
-      </Link>
-
-      <Link
-        href="/control-panel/feature"
-        className={`${
-          active === "/feature" ? "" : "hover:text-white/60"
-        } relative rounded-full px-3 py-1.5 text-sm font-medium text-white outline-sky-400 transition focus-visible:outline-2`}
-        style={{
-          WebkitTapHighlightColor: "transparent",
-        }}
-      >
-        {active === "/feature" && (
-          <motion.span
-            layoutId="bubble"
-            className="absolute inset-0 z-10 bg-white mix-blend-difference"
-            style={{borderRadius: 9999}}
-            transition={{type: "spring", bounce: 0.2, duration: 0.6}}
-          />
-        )}
+      </Tab>
+      <Tab id="/feature" active={active}>
         Feature Toggle
-      </Link>
+      </Tab>
+      <Tab id="/rank-editor" active={active}>
+        Rank Editor
+      </Tab>
     </div>
+  );
+}
+
+function Tab({
+  id,
+  active,
+  children,
+  href,
+}: {
+  active: string;
+  id: string;
+  children?: any;
+  href?: string;
+}) {
+  href = href || `/control-panel${id}`;
+  return (
+    <Link
+      href={href}
+      className={`${
+        active === id ? "" : "hover:text-white/60"
+      } relative rounded-full px-3 py-1.5 text-sm font-medium text-white outline-sky-400 transition focus-visible:outline-2`}
+      style={{
+        WebkitTapHighlightColor: "transparent",
+      }}
+    >
+      {active === id && (
+        <motion.span
+          layoutId="bubble"
+          className="absolute inset-0 z-10 bg-white mix-blend-difference"
+          style={{borderRadius: 9999}}
+          transition={{type: "spring", bounce: 0.2, duration: 0.6}}
+        />
+      )}
+      {children}
+    </Link>
   );
 }
 

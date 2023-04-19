@@ -60,14 +60,14 @@ export default function Settings({
               <div>Enable Dark Mode</div>
               <Switch
                 name="dark-mode"
-                defaultValue={currentSettings["dark-mode"]}
+                defaultChecked={currentSettings["dark-mode"]}
               />
             </div>
             <div className="flex items-center justify-between">
               <div>Disable autosync (advanced)</div>
               <Switch
                 name="disable-autosync"
-                defaultValue={currentSettings["disable-autosync"]}
+                defaultChecked={currentSettings["disable-autosync"]}
               />
             </div>
           </div>

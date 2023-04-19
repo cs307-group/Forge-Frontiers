@@ -55,6 +55,7 @@ export async function handleAuthRefresh(
   const tokens: Tokens = JSON.parse(req.cookies.tokens);
   let resp = await __getResponse(tokens);
   if (!resp.ok) {
+    console.log(await resp.clone().text());
     const refresh = await handleTokenRefresh(resp, tokens);
     console.log("refreshed:", isRefreshSuccess(refresh));
     if (isRefreshSuccess(refresh)) {
