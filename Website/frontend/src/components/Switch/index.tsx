@@ -2,12 +2,15 @@ import {useId} from "react";
 
 import * as $Switch from "@radix-ui/react-switch";
 
+
 export function Switch({
   defaultValue,
   name,
+  handler,
 }: {
   defaultValue: boolean;
   name: string;
+  handler: (name: string, event: React.FormEvent<HTMLButtonElement>) => void | null;
 }) {
   const sId = useId();
   return (
@@ -15,6 +18,7 @@ export function Switch({
       defaultChecked={defaultValue}
       name={name}
       id={sId}
+      onClick={(event) => handler(name, event)}
       className="g-switch-root relative h-[25px] w-[42px] rounded-full bg-[color:rgba(0,0,0,0.44)]
      shadow-[0_2px_10px_rgba(0,_0,_0,_0.14)] focus:shadow-[0_0_0_2px_black]"
     >
