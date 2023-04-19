@@ -44,7 +44,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           unit_amount: price,
         },
       });
-      return res.redirect("/control-panel/rank-editor");
+      return res.redirect(302, "/control-panel/rank-editor");
     }
     const currentProduct = await stripe.products.retrieve(product_id, {
       expand: ["default_price"],
@@ -65,7 +65,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     }
     if (Object.keys(params).length) {
       await stripe.products.update(product_id, params);
-      return res.redirect("/control-panel/rank-editor");
+      return res.redirect(302, "/control-panel/rank-editor");
     }
     return res.send({user: user.resp, body: req.body});
   } catch (e) {
