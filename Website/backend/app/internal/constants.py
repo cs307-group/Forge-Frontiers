@@ -26,6 +26,8 @@ CACHE_DIR = str(CACHE_DIR)
 print(f"[Cache] dir: {CACHE_DIR}")
 
 STATIC_DIR = str(Path(path.dirname(path.realpath(__file__)), "..", "static").resolve())
+STRIPE_API_KEY = environ["STRIPE_API_KEY"]
+STRIPE_API_ENDPOINT_SECRET = environ["STRIPE_API_ENDPOINT_SECRET"]
 
 del environ
 del Path

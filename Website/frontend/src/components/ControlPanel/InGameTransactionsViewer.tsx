@@ -7,6 +7,8 @@ import {ShopData} from "@/handlers/types";
 import {Button} from "../Button";
 import {Spacer} from "../Spacer";
 
+const AP: any = AnimatePresence;
+
 export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
   const {query, push} = useRouter();
   function closeModal() {
@@ -15,45 +17,61 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
   const selectedTransaction = shop.find((tx) => tx.id_ === query.id);
   return (
     <>
-      <table className="mx-auto w-full max-w-[1000px] table-auto border-separate rounded-lg border border-gray-200 bg-white shadow-lg">
-        <thead>
-          <tr className="bg-gray-100 text-xs uppercase leading-normal text-gray-600">
-            <th className="px-4 py-3 text-left">Date</th>
-            <th className="px-4 py-3 text-left">Item Price</th>
-            <th className="px-4 py-3 text-left">Seller ID</th>
-            <th className="px-4 py-3 text-left">Buyer ID</th>
-          </tr>
-        </thead>
-        <tbody className="text-sm text-gray-600">
-          {shop.map((sale) => (
-            <tr
-              key={sale.id_}
-              className="border-b border-gray-200 hover:bg-gray-50"
-            >
-              <td className="px-4 py-3">
-                <Link href={`/control-panel/in-game-transactions/${sale.id_}`}>
-                  {sale.date_sold == -1 ? "Not Sold Yet" : sale.date_sold}
-                </Link>
-              </td>
-              <td className="px-4 py-3">
-                <Link href={`/control-panel/in-game-transactions/${sale.id_}`}>
-                  {sale.item_name} x1 - {sale.price}
-                </Link>
-              </td>
-              <td className="px-4 py-3">
-                <Link href={`/control-panel/in-game-transactions/${sale.id_}`}>
-                  {sale.lister_player_id}
-                </Link>{" "}
-              </td>
-              <td className="px-4 py-3">
-                <Link href={`/control-panel/in-game-transactions/${sale.id_}`}>
-                  {sale.buyer_id || ""}{" "}
-                </Link>{" "}
-              </td>
+      <div className="mx-auto w-[90%] overflow-auto">
+        <table className="mx-auto w-full max-w-[1000px] table-auto border-separate rounded-lg border border-gray-200 bg-white shadow-lg">
+          <thead>
+            <tr className="bg-gray-100 text-xs uppercase leading-normal text-gray-600">
+              <th className="px-4 py-3 text-left">Date</th>
+              <th className="px-4 py-3 text-left">Item Price</th>
+              <th className="px-4 py-3 text-left">Seller ID</th>
+              <th className="px-4 py-3 text-left">Buyer ID</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="text-sm text-gray-600">
+            {shop.map((sale) => (
+              <tr
+                key={sale.id_}
+                className="border-b border-gray-200 hover:bg-gray-50"
+              >
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/control-panel/in-game-transactions/${sale.id_}`}
+                  >
+                    {sale.date_sold == -1 ? "Not Sold Yet" : sale.date_sold}
+                  </Link>
+                </td>
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/control-panel/in-game-transactions/${sale.id_}`}
+                  >
+                    {sale.item_name} x{sale.amount} - {sale.price}
+                  </Link>
+                </td>
+                <td className="px-4 py-3">
+                  <Link
+                    href={"/search?q=" + sale.lister_player_id}
+                    className="underline"
+                  >
+                    {sale.lister_player_id}
+                  </Link>
+                </td>
+                <td className="px-4 py-3">
+                  {sale.buyer_id ? (
+                    <Link
+                      href={"/search?q=" + sale.buyer_id}
+                      className="underline"
+                    >
+                      {sale.buyer_id}
+                    </Link>
+                  ) : (
+                    "-"
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <Spacer y={24} />
       {/* progressive enhancement, this will work even without js */}
       <form
@@ -80,34 +98,35 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
         </noscript>
         <Button className="p-2">Export</Button>
       </form>
-      <AnimatePresence>
-        {query.id && (
-          <motion.div
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0}}
-            className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black bg-opacity-50"
-            onClick={closeModal}
-          >
-            {selectedTransaction ? (
-              <motion.div
-                initial={{scale: 0}}
-                animate={{scale: 1}}
-                exit={{scale: 0}}
-                className="rounded-xl bg-white p-5 text-black shadow-lg"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <h2 className="mb-2 text-lg font-bold">
-                  Transaction ID: {selectedTransaction.id_}
-                </h2>
-                <DetailedSaleInfo shop={selectedTransaction} />
-              </motion.div>
-            ) : (
-              <div>Transaction not found</div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <AP>
+        {Boolean(query.id) &&
+          ((
+            <motion.div
+              initial={{opacity: 0}}
+              animate={{opacity: 1}}
+              exit={{opacity: 0}}
+              className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black bg-opacity-50"
+              onClick={closeModal}
+            >
+              {selectedTransaction ? (
+                <motion.div
+                  initial={{scale: 0}}
+                  animate={{scale: 1}}
+                  exit={{scale: 0}}
+                  className="rounded-xl bg-white p-5 text-black shadow-lg"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h2 className="mb-2 text-lg font-bold">
+                    Transaction ID: {selectedTransaction.id_}
+                  </h2>
+                  <DetailedSaleInfo shop={selectedTransaction} />
+                </motion.div>
+              ) : (
+                <div>Transaction not found</div>
+              )}
+            </motion.div>
+          ) as any)}
+      </AP>
     </>
   );
 }

@@ -73,7 +73,6 @@ h6 {
   overflow: auto;
 }
 :is(.light .forge_background) {
-  
   overflow: auto;
 }
 .ff_shadow {
@@ -133,4 +132,26 @@ h6 {
 
 .g-switch-thumb[data-state="checked"] {
   transform: translateX(19px);
+}
+
+@media screen and (min-width: 640px) {
+  .wide__only {
+    display: flex;
+  }
+  .mobile__only {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 639.999999999px) {
+  .wide__only {
+    display: none;
+  }
+  .mobile__only {
+    display: var(--display, block);
+  }
+}
+
+html.light {
+  background-color: #e3e3e3;
 }

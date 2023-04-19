@@ -54,6 +54,7 @@ class UserOut(CustomBase):
     created_at: int
     is_admin: bool
     island_id: Optional[str]
+    purchased_ranks: list[str]
 
 
 class UserOutSecure(UserOut):

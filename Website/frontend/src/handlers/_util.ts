@@ -29,6 +29,7 @@ export const routes = {
   collectGenerator: (x: string) => getApiURL(`/generators/update/${x}`),
   updateUser: getApiURL("/users/-/update"),
   adminViewShops: getApiURL("/admin/shops"),
+  decodeToken: getApiURL("/users/-/decode-token"),
 };
 
 /**
