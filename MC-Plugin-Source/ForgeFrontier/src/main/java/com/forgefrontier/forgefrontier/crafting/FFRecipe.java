@@ -42,25 +42,26 @@ public class FFRecipe {
         return true;
     }
 
-    public boolean matchAny(ItemStack input, ItemStack rItem) {
+    private boolean matchAny(ItemStack input, ItemStack rItem) {
         //ForgeFrontier.getInstance().getLogger().log(Level.INFO,"Matching: " + a + " - " + b);
-        if (input == null && (rItem == null || rItem.getType() == Material.AIR)) return true;
-        // Check Air/Null Match
-        if (input != null && input.getType() == Material.AIR &&
-                (rItem == null || rItem.getType() == Material.AIR)) return true;
-        if (input == null) return false;
+        if (input == null || input.getType() == Material.AIR) {
+            return (rItem == null || rItem.getType() == Material.AIR);
+        }
+        if (rItem == null || rItem.getType() == Material.AIR) return false;
+
         return (input.getType() == rItem.getType() && input.getAmount() >= rItem.getAmount());  // just compare types
     }
-    public boolean matchVanilla(ItemStack input, ItemStack recipeItem) {
-        if (input == null && (recipeItem == null || recipeItem.getType() == Material.AIR)) return true;
-        if (input != null && input.getType() == Material.AIR && (recipeItem == null || recipeItem.getType() == Material.AIR)) return true;
-        if (input == null) return false;
+    private boolean matchVanilla(ItemStack input, ItemStack recipeItem) {
+        if (input == null || input.getType() == Material.AIR) {
+            return (recipeItem == null || recipeItem.getType() == Material.AIR);
+        }
+        if (recipeItem == null || recipeItem.getType() == Material.AIR) return false;
         CustomItemInstance ci = CustomItemManager.asCustomItemInstance(input);
         if (ci != null) return false;   // dont accept custom items
         return (input.getType() == recipeItem.getType() && input.getAmount() >= recipeItem.getAmount());  // just compare types
     }
 
-    public boolean matchMetaVanilla(ItemStack input, ItemStack recipeItem) {
+    private boolean matchMetaVanilla(ItemStack input, ItemStack recipeItem) {
         if (input == null && (recipeItem == null || recipeItem.getType() == Material.AIR)) return true;
         if (input != null && input.getType() == Material.AIR && (recipeItem == null || recipeItem.getType() == Material.AIR)) return true;
         if (input == null) return false;
@@ -79,7 +80,7 @@ public class FFRecipe {
         return (input.getAmount() >= recipeItem.getAmount());
     }
 
-    public boolean matchCustom(ItemStack input, ItemStack recipeItem) {
+    private boolean matchCustom(ItemStack input, ItemStack recipeItem) {
         CustomItemInstance ci = CustomItemManager.asCustomItemInstance(input);
         CustomItemInstance cr = CustomItemManager.asCustomItemInstance(recipeItem);
         if (ci == null || cr == null) return ci == cr;
@@ -122,10 +123,16 @@ public class FFRecipe {
 
     public ItemStack getItemComponent(int i) { return recipeItems[i]; }
 
-
+    public ItemStack[] getComponents() { return this.recipeItems; }
     public void setResult(ItemStack result) {
         this.result = result; this.baseOutAmount = result.getAmount();
     }
+
+    public static boolean isSame(FFRecipe a, FFRecipe b) {
+        ItemStack[] acomp = a.getComponents();
+        return b.isMatch(acomp);
+    }
+
 
     public int getOutAmount() {
         return baseOutAmount;

@@ -15,11 +15,14 @@ import java.util.ArrayList;
 public class SlimeBossTimerEntity extends CustomSlimeEntity {
 
     String name;
-    int timeToExplode = 15;
+    int timeToExplode = 30;
     long lastTimeStamp;
     long totalTimeAlive;
 
     boolean existed;
+
+    SlimeBossSmallEntity bounceA;
+    SlimeBossSmallEntity bounceB;
 
     public SlimeBossTimerEntity(EntityType<? extends Slime> entityTypes, Level world) {
         super(entityTypes, world);
@@ -33,6 +36,15 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
     @Override
     public void customTick() {
         super.customTick();
+
+        if (bounceA == null && bounceB == null) {
+            this.setInvulnerable(false);
+            System.out.println("INVULNERABLE FALSE: " + this.isInvulnerable());
+        } else {
+            this.setInvulnerable(true);
+            System.out.println("INVULNERABLE TRUE: " + this.isInvulnerable());
+        }
+
         if (this.getBukkitEntity().getCustomName() != null) {
             if (this.getBukkitEntity().getCustomName().contains("|")) {
                 name = this.getBukkitEntity().getCustomName().substring(0, this.getBukkitEntity().getCustomName().indexOf('|') -1);
@@ -69,11 +81,45 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
     public void respawnKing() {
         if (existed) {
             ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBoss", loc);
+            if (bounceA != null) {
+                EntityDeathEvent event = new EntityDeathEvent((LivingEntity) bounceA.getBukkitEntity(), new ArrayList<ItemStack>(), 0);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                this.getBukkitEntity().remove();
+            }
+            if (bounceB != null) {
+                EntityDeathEvent event = new EntityDeathEvent((LivingEntity) bounceB.getBukkitEntity(), new ArrayList<ItemStack>(), 0);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                this.getBukkitEntity().remove();
+            }
+            //this.setInvulnerable(false);
             existed = false;
         }
     }
 
     public void onDeath() {
+        this.getBukkitEntity().setCustomNameVisible(false);
         existed = false;
+    }
+
+    public void setBounceA(SlimeBossSmallEntity entity) {
+        this.bounceA = entity;
+        bounceA.setOwner(this);
+    }
+
+    public void setBounceB(SlimeBossSmallEntity entity) {
+        this.bounceB = entity;
+        bounceB.setOwner(this);
+    }
+
+    public void removeSubEntity(CustomSlimeEntity entity) {
+        if (entity instanceof SlimeBossSmallEntity smallEntity) {
+            if (smallEntity == bounceA) {
+                bounceA = null;
+                System.out.println("REMOVE A");
+            } else if (smallEntity == bounceB) {
+                bounceB = null;
+                System.out.println("REMOVE B");
+            }
+        }
     }
 }

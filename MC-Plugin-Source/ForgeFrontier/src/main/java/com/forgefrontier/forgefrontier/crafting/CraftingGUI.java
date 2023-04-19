@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -34,6 +35,10 @@ public class CraftingGUI extends BaseInventoryHolder {
     // Slot Exit
     private static final int SEX = 9 * 5 + 4;
 
+    // Slot Help
+    private static final int SHELP = 9 * 2 + 7;
+
+
     private boolean validRecipe = false;
     private ItemStack output = null;
     private FFRecipe currentRecipe = null;
@@ -51,9 +56,14 @@ public class CraftingGUI extends BaseInventoryHolder {
         // Exit item
         ItemStack exitItem = new ItemStackBuilder(Material.BARRIER).setDisplayName(ChatColor.RED + "Close").build();
         this.setItem(SEX, exitItem);
-        this.addHandler(SEX, this::onClose);
-        this.addHandler(SOUT ,this::SOUTHandler);
+        this.addHandler(SEX, this::exitHandler);
 
+        ItemStack helpItem = new ItemStackBuilder(Material.BOOKSHELF)
+                .setDisplayName("" + ChatColor.RESET + ChatColor.GOLD + "Recipe List")
+                .build();
+        this.setItem(SHELP,helpItem);
+        this.addHandler(SHELP,this::recipeListHandler);
+        this.addHandler(SOUT ,this::SOUTHandler);
         this.addHandler(STL, this::inputSlotHandler);
         this.addHandler(STM, this::inputSlotHandler);
         this.addHandler(STR, this::inputSlotHandler);
@@ -101,6 +111,16 @@ public class CraftingGUI extends BaseInventoryHolder {
         return true;
     }
 
+    public void recipeListHandler(InventoryClickEvent e) {
+        returnGridItems((Player) e.getWhoClicked());
+        ForgeFrontier.getInstance().getServer()
+                .getScheduler()
+                .runTaskLater(ForgeFrontier.getInstance(),
+                        () -> e.getWhoClicked()
+                                .openInventory(new RecipeListGUI(true)
+                                .getInventory()), 5);
+        e.setCancelled(true);
+    }
 
     public ItemStack[] getSlotItems() {
         Inventory inv = this.getInventory();
@@ -115,6 +135,14 @@ public class CraftingGUI extends BaseInventoryHolder {
         itms[7] = inv.getItem(SBM);
         itms[8] = inv.getItem(SBR);
         return itms;
+    }
+
+    public void returnGridItems(Player p) {
+        ItemStack[] slotItems = getSlotItems();
+        for (ItemStack i : slotItems) {
+            if (i == null || i.getType() == Material.AIR) continue;
+            ItemGiver.giveItem(p, i);
+        }
     }
 
     public void SOUTHandler(InventoryClickEvent e) {
@@ -207,7 +235,7 @@ public class CraftingGUI extends BaseInventoryHolder {
     }
 
 
-    public int idxToSlot(int idx) {
+    public static int idxToSlot(int idx) {
         return switch (idx) {
             case 0 -> STL;
             case 1 -> STM;
@@ -224,9 +252,13 @@ public class CraftingGUI extends BaseInventoryHolder {
 
 
 
-    public void onClose(InventoryClickEvent e) {
-
+    public void exitHandler(InventoryClickEvent e) {
         e.getWhoClicked().closeInventory();
+    }
+
+    @Override
+    public void onClose(InventoryCloseEvent e) {
+        returnGridItems((Player) e.getPlayer());
     }
 
     /**

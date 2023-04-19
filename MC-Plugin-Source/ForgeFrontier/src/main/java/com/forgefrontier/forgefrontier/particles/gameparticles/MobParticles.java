@@ -8,7 +8,7 @@ import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignSphere;
 import org.bukkit.Particle;
 
 /**
- * Mob Particles ID Prefix: 7000 - 8000
+ * Prefix: MB
  */
 public class MobParticles {
     public static FFParticle CHICKBOSS_EGG_PARTICLE;

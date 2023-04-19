@@ -3,11 +3,14 @@ package com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlimeEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossSmallEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimerEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -99,8 +102,22 @@ public class SlimeBossEntity extends HostileSlimeEntity {
 
     public void onDeath() {
         if (existed) {
-            ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossTimer", loc);
+            CraftEntity craftEntityTimer = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossTimer", loc);
+            CraftEntity craftEntityA = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
+            CraftEntity craftEntityB = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
+            if (craftEntityA.getHandle() instanceof SlimeBossSmallEntity smallEntityA &&
+                    craftEntityB.getHandle() instanceof SlimeBossSmallEntity smallEntityB) {
+                smallEntityB.offsetUntilJump();
+                if (craftEntityTimer.getHandle() instanceof SlimeBossTimerEntity timerEntity) {
+                    timerEntity.setBounceA(smallEntityA);
+                    timerEntity.setBounceB(smallEntityB);
+                }
+            }
             existed = false;
         }
+    }
+
+    public void offsetUntilJump() {
+        this.untilJumpTimer += UNTIL_JUMP_TIMER_MAX / 2;
     }
 }
