@@ -8,6 +8,7 @@ import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class LeatherChestplate extends CustomArmor {
@@ -17,7 +18,7 @@ public class LeatherChestplate extends CustomArmor {
      */
     public static class LeatherChestplateInstance extends CustomArmorInstance {
         public LeatherChestplateInstance(ItemStack itemStack) {
-            super(itemStack);
+            super(itemStack, EquipmentSlot.CHEST);
         }
     }
 

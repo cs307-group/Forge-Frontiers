@@ -8,6 +8,7 @@ import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -20,7 +21,7 @@ public class LeatherHelmet extends CustomArmor {
      */
     public static class LeatherHelmetInstance extends CustomArmorInstance {
         public LeatherHelmetInstance(ItemStack itemStack) {
-            super(itemStack);
+            super(itemStack, EquipmentSlot.HEAD);
         }
     }
 
@@ -29,6 +30,7 @@ public class LeatherHelmet extends CustomArmor {
         super ("LeatherHelmet", QualityEnum.UNASSIGNED.getQuality(), 2, 1,
                 GemEnum.ARMOR, Material.LEATHER_HELMET, Material.LEATHER_HELMET.getMaxDurability(),
                 "A scrappy leather helm");
+
 
         this.registerInstanceAccumulator((__, itemStack) -> {
             return new LeatherHelmetInstance(itemStack);

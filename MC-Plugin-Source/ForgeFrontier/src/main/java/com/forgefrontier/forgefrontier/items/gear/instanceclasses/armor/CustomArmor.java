@@ -26,10 +26,9 @@ public abstract class CustomArmor extends GearItem {
         EquipmentSlot equipmentSlot;
 
         /** calls the super constructor and sets the item slot of the item */
-        public CustomArmorInstance(ItemStack itemStack) {
+        public CustomArmorInstance(ItemStack itemStack, EquipmentSlot slot) {
             super(itemStack);
-
-            equipmentSlot = EquipmentSlot.CHEST;
+            this.equipmentSlot = slot;
         }
 
         /** returns the equipment slot of the armor */

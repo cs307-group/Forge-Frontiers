@@ -107,13 +107,6 @@ public class GearItemManager extends Manager implements Listener {
             particleManager.addPlayerCosmetic(p, null, e.getSlotType().ordinal());
         }
 
-        // Updates player stats in database
-        // TODO: Make task instead
-        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(),
-                ffPlayer.getStats(), ffPlayer.getAscension(), ffPlayer.getTier());
-
-
-
     }
 
     public Skill getRandomSkill() {

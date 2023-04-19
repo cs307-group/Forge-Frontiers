@@ -8,6 +8,7 @@ import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -23,6 +24,12 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
 
             itemInstance.getData().put("generator-id", placeGeneratorItemInstance.generatorId);
             itemInstance.getData().put("level", placeGeneratorItemInstance.level);
+
+            if(generator == null) {
+                return new ItemStackBuilder(Material.RAW_IRON_BLOCK)
+                    .setDisplayName("&dUnknown Generator &7 - Lvl &f" + (placeGeneratorItemInstance.level + 1))
+                    .build();
+            }
 
             GeneratorLevel level = generator.getGeneratorLevels().get(placeGeneratorItemInstance.level);
 
@@ -63,6 +70,11 @@ public class PlaceGeneratorItem extends UniqueCustomItem {
         e.setCancelled(true);
         PlaceGeneratorItemInstance placeGeneratorItemInstance = (PlaceGeneratorItemInstance) instance;
         Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(placeGeneratorItemInstance.generatorId);
+        if(generator == null) {
+            e.getPlayer().getInventory().setItem(e.getHand(), instance.asItemStack());
+            e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place down this generator. It doesn't seem to exist.");
+            return;
+        }
         GeneratorInstance generatorInstance = new GeneratorInstance(generator, newLocation);
         generatorInstance.level = placeGeneratorItemInstance.level;
         ForgeFrontier.getInstance().getGeneratorManager().initializeGeneratorInstance(generatorInstance, (success) -> {

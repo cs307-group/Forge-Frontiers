@@ -11,6 +11,7 @@ import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -25,6 +26,12 @@ public class PlaceStashItem extends UniqueCustomItem {
             Stash stash = ForgeFrontier.getInstance().getStashManager().getStash(instance.stashId);
 
             itemInstance.getData().put("stash-id", instance.stashId);
+
+            if(stash == null) {
+                return new ItemStackBuilder(Material.CHEST)
+                    .setDisplayName("&dUnknown Stash")
+                    .build();
+            }
 
             return new ItemStackBuilder(stash.getMaterialRepresentation())
                     .setDisplayName(stash.getFriendlyName())

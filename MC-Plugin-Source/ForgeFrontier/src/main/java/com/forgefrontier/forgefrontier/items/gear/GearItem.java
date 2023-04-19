@@ -157,12 +157,12 @@ public abstract class GearItem extends UniqueCustomItem {
             builder
                 .addLoreLine("&fBase Stats")
                 .addLoreLine(Arrays.stream(gearItemInstance.baseStats)
-                    .map(stat -> qualityColor + stat.toString())
+                    .map(stat -> qualityColor + stat.getStatType().getFriendlyName() + ": +" + stat.getStatValue() + stat.getStatType().getSuffix())
                     .collect(Collectors.joining("\n")))
                 .addLoreLine("")
                 .addLoreLine("&fReforge Stats")
                 .addLoreLine(Arrays.stream(gearItemInstance.reforgeStats)
-                    .map(stat -> qualityColor + stat.toString())
+                        .map(stat -> qualityColor + stat.getFriendlyName())
                     .collect(Collectors.joining("\n")))
                 .addLoreLine("")
                 .addLoreLine(Arrays.stream(gearItemInstance.gems)
@@ -170,7 +170,7 @@ public abstract class GearItem extends UniqueCustomItem {
                         gem == null ?
                             "&7Empty Gem Slot"
                         :
-                            (gem.getQuality().getColor() + gem.toString())
+                            (gem.getQuality().getColor() + gem.getStat().getFriendlyName())
                     ))
                     .collect(Collectors.joining("\n")));
 
