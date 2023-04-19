@@ -1,8 +1,11 @@
 from flask import Blueprint
 from app.decorators.api_response import api
-from app.db.queries.generators import get_generators_for_island, get_stash_for_island
+from app.db.queries.generators import (
+    get_generators_for_island,
+    get_stash_for_island,
+    get_generator_config,
+)
 from app.db.mutations.generators import (
-    generator_data__keep_updated,
     update_generator_collect_time,
     update_stash_stats,
 )
@@ -24,8 +27,8 @@ def api_get_gens(island_id: str):
 
 @router.get("/config")
 @api.none
-def get_generator_config():
-    return generator_data__keep_updated
+def api_get_generator_config():
+    return get_generator_config()
 
 
 @router.get("/update/<island_id>")

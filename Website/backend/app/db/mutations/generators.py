@@ -4,23 +4,7 @@ from app.db.schemas.generator_instances import GeneratorInstances
 from app.db.schemas.stash_instances import StashInstance
 from time import time
 from sqlalchemy import and_
-
-generator_data__keep_updated = {
-    "silver-gen": {
-        "resource": "SilverIngot",
-        "levels": {
-            "0": {"generation_rate": 10000, "max_size": 256},
-            "1": {"generation_rate": 9000, "max_size": 512},
-        },
-    },
-    "coin-gen": {
-        "resource": "coin",
-        "levels": {
-            "0": {"generation_rate": 3000, "max_size": 10000},
-            "1": {"generation_rate": 2000, "max_size": 10000},
-        },
-    },
-}
+from app.db.queries.generators import get_generator_config
 
 
 def update_generator_collect_time(island_id: str):
@@ -28,7 +12,7 @@ def update_generator_collect_time(island_id: str):
         island_id=island_id
     ).all()
     resource_collected = {}
-
+    cfg = get_generator_config()
     for i in res:
         _time = int(time() * 1000)
         prev = i.last_collection_time
@@ -36,13 +20,8 @@ def update_generator_collect_time(island_id: str):
         if i.generator_id not in resource_collected:
             resource_collected[i.generator_id] = 0
         resource_collected[i.generator_id] += min(
-            (_time - prev)
-            / generator_data__keep_updated[i.generator_id]["levels"][f"{i.level}"][
-                "generation_rate"
-            ],
-            generator_data__keep_updated[i.generator_id]["levels"][f"{i.level}"][
-                "max_size"
-            ],
+            (_time - prev) / cfg[i.generator_id]["levels"][i.level]["generation_rate"],
+            cfg[i.generator_id]["levels"][i.level]["max_size"],
         )
     for k, v in resource_collected.items():
         resource_collected[k] = floor(v)
@@ -53,8 +32,9 @@ def update_stash_stats(island_id: str, vals: dict[str, int]):
     stashes: list[StashInstance] = StashInstance.query.filter(
         and_(StashInstance.island_id == island_id)
     ).all()
+    cfg = get_generator_config()
     for _k, v in vals.items():
-        k = generator_data__keep_updated[_k]["resource"]
+        k = cfg[_k]["resource"]
         for s in stashes:
             cjs = loads(s.contents_json)
             if k not in cjs:
