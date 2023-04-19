@@ -23,6 +23,7 @@ public class SlimeBossEntity extends HostileSlimeEntity {
     int UNTIL_JUMP_TIMER_MAX = 100;
     int CHARGE_TIMER_MAX = 20;
     int JUMP_TIMER_MAX = 30;
+    boolean existed;
 
     int untilJumpTimer;
     int chargeTimer;
@@ -37,6 +38,7 @@ public class SlimeBossEntity extends HostileSlimeEntity {
         jumpTimer = JUMP_TIMER_MAX;
         chargeTimer = 0;
         charged = false;
+        existed = true;
     }
 
     @Override
@@ -88,14 +90,17 @@ public class SlimeBossEntity extends HostileSlimeEntity {
                 }
             }
 
-            /*
+/*
             System.out.println("ChargeTimer: " + chargeTimer + " | UntilJumpTimer: " + untilJumpTimer +
                     " | Charged: " + charged + " | JumpTimer: " + jumpTimer);
-            */
+*/
         }
     }
 
     public void onDeath() {
-        ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBoss", loc);
+        if (existed) {
+            ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossTimer", loc);
+            existed = false;
+        }
     }
 }

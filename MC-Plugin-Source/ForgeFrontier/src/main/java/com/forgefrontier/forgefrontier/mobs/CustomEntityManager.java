@@ -5,6 +5,8 @@ import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBoss;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimer;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimerEntity;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBossEntity;
@@ -117,12 +119,12 @@ public class CustomEntityManager extends Manager implements Listener {
 
         if (entity.hasMetadata("code")) {
             // checks if the entity is a hitbox entity
+            int currHealth = (((int) (entity.getHealth() - event.getDamage())));
+            if (currHealth < 0) {
+                currHealth = 0;
+            }
             if (!(((String) entity.getMetadata("code").get(0).value()).contains("HitBox"))) {
                 // sets the nameplate of the entity
-                int currHealth = (((int) (entity.getHealth() - event.getDamage())));
-                if (currHealth < 0) {
-                    currHealth = 0;
-                }
                 if (entity.getHandle() instanceof HitBoxEntity hitBox) {
                     namePlate += entity.getMetadata("name").get(0).value() +
                             ": " + currHealth + "/" + ((int) entity.getMaxHealth());
@@ -195,6 +197,7 @@ public class CustomEntityManager extends Manager implements Listener {
         if (entity.hasMetadata("bossbar")) {
             Object o = entity.getMetadata("bossbar").get(0).value();
             if (o instanceof BossBar bossBar) {
+                System.out.println("REMOVE BOSS BAR ====================");
                 bossBar.setProgress(0);
                 bossBar.removeAll();
             }
@@ -202,7 +205,7 @@ public class CustomEntityManager extends Manager implements Listener {
                 // upgrades the player's tier when killed
                 if (entity.hasMetadata("tier")) {
                     int tier = (int) entity.getMetadata("tier").get(0).value();
-                    plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(1);
+                    plugin.getPlayerManager().getFFPlayerFromID(entity.getKiller().getUniqueId()).setTier(tier);
                 }
             }
             if (cm != null && cm.getCode().equals(SlimeBoss.CODE)) {
@@ -210,10 +213,14 @@ public class CustomEntityManager extends Manager implements Listener {
                 if (slimeBossEntity != null) {
                     slimeBossEntity.onDeath();
                 }
+            } else if (cm != null && cm.getCode().equals(SlimeBossTimer.CODE)) {
+                SlimeBossTimerEntity slimeBossTimerEntity = (SlimeBossTimerEntity) entity.getHandle();
+                if (slimeBossTimerEntity != null) {
+                    slimeBossTimerEntity.onDeath();
+                }
             }
 
         }
-
         if (entity.hasMetadata("code")) {
             // checks if the entity is a slime entity
             if (entity instanceof Slime slime) {

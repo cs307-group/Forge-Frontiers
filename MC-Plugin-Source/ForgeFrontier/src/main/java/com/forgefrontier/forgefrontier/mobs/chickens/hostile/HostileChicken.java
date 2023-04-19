@@ -5,7 +5,6 @@ import com.forgefrontier.forgefrontier.mobs.chickens.CustomChicken;
 import com.forgefrontier.forgefrontier.mobs.chickens.CustomCraftChicken;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.*;
-import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
