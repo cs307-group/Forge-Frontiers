@@ -3,6 +3,7 @@ import Link from "next/link";
 import {useState} from "react";
 import Stripe from "stripe";
 
+import {ExportJSON} from "../ExportJSON";
 import {Spacer} from "../Spacer";
 
 const columns = ["Amount", "Ranks Purchased", "User", "Date"];
@@ -72,6 +73,9 @@ export function StripeViewer({data}: {data: TxData[]}) {
           ))}
         </tbody>
       </table>
+      <div className="item-center mt-4 flex justify-end sm:mr-8">
+        <ExportJSON data={data} name="stripe-purchases.json" />
+      </div>
       <AP>
         {Boolean(selectedItem) &&
           ((

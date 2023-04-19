@@ -2,12 +2,8 @@ package com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlime;
-import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlimeEntity;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
@@ -19,7 +15,7 @@ public class SlimeBoss extends HostileSlime {
     public static String CODE = "SlimeBoss";
     public static class CraftSlimeBoss extends HostileSlime.CraftHostileSlime {
 
-        BossBar bossBar;
+        public BossBar bossBar;
 
         /**
          * Constructor
@@ -29,6 +25,10 @@ public class SlimeBoss extends HostileSlime {
          */
         public CraftSlimeBoss(CraftServer server, CraftWorld world) {
             super(server, "SlimeBoss", 400, 7, new SlimeBossEntity(EntityType.SLIME, world.getHandle()));
+            saveMetaData();
+        }
+        public CraftSlimeBoss(CraftServer server, String name, int health, int scale, SlimeBossEntity entity) {
+            super(server, name, health, scale, entity);
             saveMetaData();
         }
 
@@ -54,7 +54,8 @@ public class SlimeBoss extends HostileSlime {
             super.saveMetaData();
             this.setMetadata("bossbar", new FixedMetadataValue(ForgeFrontier.getInstance(), bossBar));
             this.setMetadata("name", new FixedMetadataValue(ForgeFrontier.getInstance(), "King Slime"));
-            this.setMetadata("tier", new FixedMetadataValue(ForgeFrontier.getInstance(), 2));
+            this.setMetadata("code", new FixedMetadataValue(ForgeFrontier.getInstance(), "SlimeBoss"));
+            // this.setMetadata("tier", new FixedMetadataValue(ForgeFrontier.getInstance(), 2));
         }
     }
 

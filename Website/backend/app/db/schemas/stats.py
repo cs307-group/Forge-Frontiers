@@ -20,6 +20,8 @@ class Stats(db.Model):
     DEF: int = db.Column(db.Integer)
     AscensionLevel: int = db.Column(db.Integer, default=0)
     Tier: int = db.Column(db.Integer, default=0)
+    base_stats: str = db.Column(db.Text)
+    tutorial_state: str = db.Column(db.Text)
 
     # pylint: enable=E1101
 
@@ -48,6 +50,8 @@ class Stats(db.Model):
         self.DEF = DEF
         self.Tier = Tier
         self.AscensionLevel = AscensionLevel
+        self.base_stats = None
+        self.tutorial_state = None
 
     @property
     def as_json(self):
@@ -63,4 +67,6 @@ class Stats(db.Model):
             "DEF": self.DEF,
             "Tier": self.Tier,
             "AscensionLevel": self.AscensionLevel,
+            "base_stats": self.base_stats,
+            "tutorial_state": self.tutorial_state,
         }

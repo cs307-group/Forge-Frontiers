@@ -1,19 +1,14 @@
-import {useId} from "react";
+import {RefAttributes, useId} from "react";
 
 import * as $Switch from "@radix-ui/react-switch";
 
-export function Switch({
-  defaultValue,
-  name,
-}: {
-  defaultValue: boolean;
-  name: string;
-}) {
+export function Switch(
+  props: $Switch.SwitchProps & RefAttributes<HTMLButtonElement>
+) {
   const sId = useId();
   return (
     <$Switch.Root
-      defaultChecked={defaultValue}
-      name={name}
+      {...props}
       id={sId}
       className="g-switch-root relative h-[25px] w-[42px] rounded-full bg-[color:rgba(0,0,0,0.44)]
      shadow-[0_2px_10px_rgba(0,_0,_0,_0.14)] focus:shadow-[0_0_0_2px_black]"
