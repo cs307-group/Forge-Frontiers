@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -51,7 +52,7 @@ public class CraftingGUI extends BaseInventoryHolder {
         // Exit item
         ItemStack exitItem = new ItemStackBuilder(Material.BARRIER).setDisplayName(ChatColor.RED + "Close").build();
         this.setItem(SEX, exitItem);
-        this.addHandler(SEX, this::onClose);
+        this.addHandler(SEX, this::exitHandler);
         this.addHandler(SOUT ,this::SOUTHandler);
 
         this.addHandler(STL, this::inputSlotHandler);
@@ -207,7 +208,7 @@ public class CraftingGUI extends BaseInventoryHolder {
     }
 
 
-    public int idxToSlot(int idx) {
+    public static int idxToSlot(int idx) {
         return switch (idx) {
             case 0 -> STL;
             case 1 -> STM;
@@ -224,9 +225,24 @@ public class CraftingGUI extends BaseInventoryHolder {
 
 
 
-    public void onClose(InventoryClickEvent e) {
-
+    public void exitHandler(InventoryClickEvent e) {
+//        ForgeFrontier.getInstance().getLogger().log(Level.INFO, "Close Crafting Table, returning items");
+//        ItemStack[] slotItems = getSlotItems();
+//        for (ItemStack i : slotItems) {
+//            ItemGiver.giveItem((Player)e.getWhoClicked(), i);
+//        }
         e.getWhoClicked().closeInventory();
+    }
+
+    @Override
+    public void onClose(InventoryCloseEvent e) {
+        ForgeFrontier.getInstance().getLogger().log(Level.INFO, "Close Crafting Table, returning items");
+        ItemStack[] slotItems = getSlotItems();
+        Player p = (Player) e.getPlayer();
+        for (ItemStack i : slotItems) {
+            if (i == null || i.getType() == Material.AIR) continue;
+            ItemGiver.giveItem(p, i);
+        }
     }
 
     /**

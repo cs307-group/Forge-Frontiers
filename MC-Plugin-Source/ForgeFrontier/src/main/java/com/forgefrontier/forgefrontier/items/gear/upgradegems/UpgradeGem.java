@@ -1,5 +1,6 @@
 package com.forgefrontier.forgefrontier.items.gear.upgradegems;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem;
 import com.forgefrontier.forgefrontier.items.gear.quality.InvalidMaxQualityException;
@@ -28,7 +29,6 @@ public class UpgradeGem extends UniqueCustomItem {
      */
     public UpgradeGem() {
         super("UpgradeGem");
-
         // Register accumulator to set the base attributes of the CustomItemInstance
         // itemStack could be null, or could be an existing UpgradeGem you wish to get the instance of.
         this.registerInstanceAccumulator((__, itemStack) -> {
