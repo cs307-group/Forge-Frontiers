@@ -1,29 +1,21 @@
-import {AnimatePresence, motion} from "framer-motion";
-import Link from "next/link";
 import {useState} from "react";
-import jsonData from "./status.json"
 
 import {Spacer} from "../Spacer";
 import {Switch} from "../Switch";
+import jsonData from "./status.json";
 
 type FeaturesData = {
   features: string;
 };
 
-//export function FeatureToggleViewer({jsonString}: {jsonString: FeaturesData}) {
 export function FeatureToggleViewer() {
-
   const jsonString = JSON.stringify(jsonData);
   const [sws, setSwitches] = useState(() => JSON.parse(jsonString));
 
-  // const handleSwitchChange = (name: string) => {
-  //   setSwitches((prevSwitches: any) => ({ ...prevSwitches, [name]: event.target.checked }));
-  // };
-  const handleSwitchChange = (name: string, event:  React.FormEvent<HTMLButtonElement>) => {
-    const val = event.currentTarget.dataset.state == "checked" ? false : true
-    setSwitches((prevSwitches: any) => ({ ...prevSwitches, [name]: val}));
+  const handleSwitchChange = (name: string, val: boolean) => {
+    setSwitches((prevSwitches: any) => ({...prevSwitches, [name]: val}));
   };
-  
+
   const handleSaveClick = () => {
     console.log(sws);
   };
@@ -31,11 +23,13 @@ export function FeatureToggleViewer() {
     <div key={feature}>
       <Spacer y={20} />
       <div className="flex items-center justify-between">
-      <div>{feature} is Currently {status ? "Enabled"  : "Disabled"}</div>
+        <div>
+          {feature} is Currently {status ? "Enabled" : "Disabled"}
+        </div>
         <Switch
           name={feature}
-          defaultValue={status ? true  : false}
-          handler = {handleSwitchChange}
+          checked={status as any}
+          onCheckedChange={(e) => handleSwitchChange(feature, e)}
         />
       </div>
     </div>

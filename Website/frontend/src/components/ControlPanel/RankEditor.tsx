@@ -116,7 +116,7 @@ function EditProduct({product}: {product?: StripeProduct}) {
         />
         {product && (
           <span className="flex items-center mt-2 gap-4">
-            Active: <Switch defaultValue={product.active} name="active" />
+            Active: <Switch defaultChecked={product.active} name="active" />
           </span>
         )}
         <div className="flex items-center justify-end">
