@@ -3,6 +3,6 @@ from ..schemas.FeatureFlags import FeatureFlags
 from sqlalchemy import or_
 
 def get_features() -> FeatureFlags:
-    x = guard(FeatureFlags.query.filter_by(id_="root_config").first())
+    x = guard(FeatureFlags.query.filter_by(_id="root_config"))
 		print(x)
 		return x
