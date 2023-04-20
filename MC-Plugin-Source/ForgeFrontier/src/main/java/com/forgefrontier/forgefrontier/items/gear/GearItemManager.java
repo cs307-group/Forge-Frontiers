@@ -9,6 +9,7 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpie
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.LeatherHelmet;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.WoodenBow;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.WoodenSword;
+import com.forgefrontier.forgefrontier.items.gear.skills.DashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.ParticleGem;
@@ -57,6 +58,7 @@ public class GearItemManager extends Manager implements Listener {
 
 
         this.registerSkill(new GroundSmashSkill());
+        this.registerSkill(new DashSkill());
 
     }
 

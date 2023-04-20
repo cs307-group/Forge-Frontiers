@@ -71,7 +71,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>net.wesjd.anvilgui</pattern>
-                                    <shadedPattern>com.forgefrontier.forgefrontier.anvilgui</shadedPattern> <!-- Replace [YOUR_PLUGIN_PACKAGE] with your namespace -->
+                                    <shadedPattern>com.forgefrontier.forgefrontier.anvilgui</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -175,7 +175,7 @@
             <artifactId>anvilgui</artifactId>
             <version>1.6.3-SNAPSHOT</version>
         </dependency>
-        <!-- COMMAND FRAMEWORK (remove if no worky) -->
+        <!-- COMMAND FRAMEWORK -->
         <dependency>
             <groupId>com.github.Revxrsal.Lamp</groupId>
             <artifactId>common</artifactId>

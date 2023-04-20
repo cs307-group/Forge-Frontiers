@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
@@ -157,8 +158,11 @@ public class PlayerManager extends Manager implements Listener {
             CustomWeapon.CustomWeaponInstance cWeapon = (CustomWeapon.CustomWeaponInstance) itemInstance;
 
             // Play particle on hit
-            if (rand.nextInt(100) < 10 && cWeapon.getParticleEffect() != null)
+            if (rand.nextInt(100) < 10 && cWeapon.getParticleEffect() != null) {
                 cWeapon.getParticleEffect().playAtPlayer(player);
+                cWeapon.getParticleEffect().playParticleAtLocation(
+                        event.getEntity().getWorld(), event.getEntity().getLocation());
+            }
             event.setDamage(ffPlayer.getOutgoingDamageOnAttack(cWeapon));
         }
     }
