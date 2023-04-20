@@ -1,10 +1,10 @@
 import {ControlPanelRenderer} from "@/components/ControlPanel";
 import {FeatureToggleViewer} from "@/components/ControlPanel/FeatureToggleViewer";
-import {UserDataSecure, FeatureList} from "@/handlers/types";
-import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {requireAdminPageView} from "@/handlers/auth";
 import {fetchFeatures} from "@/handlers/features";
 import {isErrorResponse} from "@/handlers/fetch-util";
-import {requireAdminPageView} from "@/handlers/auth";
+import {FeatureList, UserDataSecure} from "@/handlers/types";
+import {useCookieSync} from "@/hooks/use-cookie-sync";
 
 export default function ControlPanel({
   data,
@@ -27,11 +27,10 @@ export default function ControlPanel({
 }
 
 export const getServerSideProps = requireAdminPageView(async (c) => {
-  const data = await fetchFeatures();
+  const data = await fetchFeatures(c.req);
   if (isErrorResponse(data)) {
     return data.resp;
   }
   console.log(data.resp);
-  return data;
+  return data.toSSPropsResult;
 });
-

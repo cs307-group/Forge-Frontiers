@@ -12,6 +12,8 @@ class FeatureFlags(db.Model):
 
     @property
     def as_json(self):
+        print(self.value)
+        print(json.loads(self.value))
         return {
             "_id": self._id,
             "value": json.loads(self.value),
