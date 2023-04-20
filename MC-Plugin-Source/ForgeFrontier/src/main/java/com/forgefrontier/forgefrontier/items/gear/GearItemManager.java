@@ -5,10 +5,15 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.LeatherHelmet;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.WoodenBow;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.WoodenSword;
 import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.ParticleGem;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.SkillGem;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGem;
 import com.forgefrontier.forgefrontier.particles.FFCosmeticParticle;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.PlayerParticle;
@@ -43,6 +48,13 @@ public class GearItemManager extends Manager implements Listener {
         particleManager = ForgeFrontier.getInstance().getParticleManager();
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new SkillGem());
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new ParticleGem());
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new UpgradeGem());
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new WoodenSword());
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new WoodenBow());
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherHelmet());
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherChestplate());
+
+
 
         this.registerSkill(new GroundSmashSkill());
 
@@ -94,13 +106,6 @@ public class GearItemManager extends Manager implements Listener {
             plugin.getLogger().log(Level.INFO, "Armor change into nothing: " + e.getSlotType().ordinal());
             particleManager.addPlayerCosmetic(p, null, e.getSlotType().ordinal());
         }
-
-        // Updates player stats in database
-        // TODO: Make task instead
-        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(ffPlayer.playerID, ffPlayer.getCurrentHealth(),
-                ffPlayer.getStats(), ffPlayer.getAscension(), ffPlayer.getTier());
-
-
 
     }
 

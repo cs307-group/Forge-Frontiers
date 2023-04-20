@@ -38,15 +38,4 @@ public class WoodenBow extends CustomWeapon {
         });
     }
 
-    /**
-     * Calculates outgoing damage
-     *
-     * @param e event holding infomration regarding it
-     * @param itemInstance the item instance that called this event
-     */
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
-        //TODO: calculate outgoing damage
-    }
-
 }

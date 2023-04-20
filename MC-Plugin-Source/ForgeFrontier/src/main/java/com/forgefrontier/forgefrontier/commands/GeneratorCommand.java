@@ -85,8 +85,9 @@ public class GeneratorCommand {
         Generator generator = plugin.getGeneratorManager().getGenerator(generatorId);
         if(generator == null) {
             sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to delete the generator. It doesn't exist.");
-            return;
         }
+        // TODO Delete Generator
+        sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to delete the generator.");
     }
 
     @Subcommand({"give"})
@@ -101,6 +102,10 @@ public class GeneratorCommand {
         }
         Player p = (Player) sender;
         Generator generator = plugin.getGeneratorManager().getGenerator(generatorId);
+        if(generator == null) {
+            sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to find generator \"" + generatorId + "\".");
+            return;
+        }
         PlaceGeneratorItemInstance placeGeneratorItemInstance = (PlaceGeneratorItemInstance) CustomItemManager.getCustomItem("PlaceGeneratorBlock").asInstance(null);
         placeGeneratorItemInstance.setGeneratorData(generator.getId(), 0);
         ItemStack generatorItem = placeGeneratorItemInstance.asItemStack();

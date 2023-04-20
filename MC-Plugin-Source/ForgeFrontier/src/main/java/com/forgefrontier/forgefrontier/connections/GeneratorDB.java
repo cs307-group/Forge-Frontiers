@@ -55,6 +55,10 @@ public class GeneratorDB extends DBConnection {
                     String world = rs.getString("location_world");
                     Location location = new Location(Bukkit.getWorld(world), x, y, z);
                     Generator generator = ForgeFrontier.getInstance().getGeneratorManager().getGenerator(generatorId);
+                    if(generator == null) {
+                        ForgeFrontier.getInstance().getLogger().severe("Unable to find generator \"" + generatorId + "\" when importing an instance.");
+                        return;
+                    }
                     GeneratorInstance instance = new GeneratorInstance(generator, location, level, lastCollectionTime, databaseId);
                     boolean success = ForgeFrontier.getInstance().getGeneratorManager().addGeneratorInstance(instance);
                     //System.out.println("Adding generator " + instance.getLocation() + ": success: " + success);

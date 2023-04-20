@@ -1,19 +1,22 @@
 package com.forgefrontier.forgefrontier.player;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.CustomWeapon;
-import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
-import com.forgefrontier.forgefrontier.items.gear.statistics.ReforgeStatistic;
-import com.forgefrontier.forgefrontier.items.gear.statistics.StatCalc;
-import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
+import com.forgefrontier.forgefrontier.items.gear.statistics.*;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
+import com.forgefrontier.forgefrontier.utils.JSONWrapper;
+import net.minecraft.stats.Stat;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+
+import static com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum.ORDERED_STAT_ENUMS;
 
 /**
  * FFPlayer
@@ -22,8 +25,32 @@ import java.util.function.Consumer;
  */
 public class FFPlayer {
 
-    /** an array of PlayerStat objects which represent the stats of the player */
-    private PlayerStat[] stats;
+    private Map<StatEnum, Integer> stats;
+
+    public enum StatEquipmentType {
+        BASE(null),
+        ASCEND(null),
+        LEVEL(null),
+        HELMET(EquipmentSlot.HEAD),
+        CHESTPLATE(EquipmentSlot.CHEST),
+        LEGGINGS(EquipmentSlot.LEGS),
+        BOOTS(EquipmentSlot.FEET);
+
+        EquipmentSlot equipmentSlot;
+
+        StatEquipmentType(EquipmentSlot equipmentSlot) {
+            this.equipmentSlot = equipmentSlot;
+        }
+        public static StatEquipmentType getInstance(EquipmentSlot slot) {
+            for(StatEquipmentType type: StatEquipmentType.values()) {
+                if(type.equipmentSlot == slot)
+                    return type;
+            }
+            return null;
+        }
+    }
+
+    private Map<StatEquipmentType, StatHolder> equipmentStats;
 
     /** the unique ID of the Player this FFPlayer represents */
     public UUID playerID;
@@ -79,60 +106,50 @@ public class FFPlayer {
      */
     public FFPlayer(Player player) {
 
-        playerID = player.getUniqueId();
-
-        stats = new PlayerStat[] {
-                new PlayerStat(20, StatEnum.HP),
-                new PlayerStat(1, StatEnum.ATK),
-                new PlayerStat(0, StatEnum.STR),
-                new PlayerStat(0, StatEnum.DEX),
-                new PlayerStat(0, StatEnum.CRATE),
-                new PlayerStat(0, StatEnum.CDMG),
-                new PlayerStat(0, StatEnum.DEF)
-        };
-
-        this.currentHealth = getHP();
-
-        this.tier = 0;
-        this.ascensionLevel = 0;
-    }
-
-
-    /**
-     * Constructs the FFPlayer class given a player object (sets the stats to a level 1 character if the character
-     * does not exist in the database)
-     *
-     * @param playerID the playerID that this instance of FFPlayer will represent
-     */
-    public FFPlayer(UUID playerID) {
-
+        UUID playerID = player.getUniqueId();
         this.playerID = playerID;
 
-        stats = new PlayerStat[] {
-                new PlayerStat(20, StatEnum.HP),
-                new PlayerStat(1, StatEnum.ATK),
-                new PlayerStat(0, StatEnum.STR),
-                new PlayerStat(0, StatEnum.DEX),
-                new PlayerStat(0, StatEnum.CRATE),
-                new PlayerStat(0, StatEnum.CDMG),
-                new PlayerStat(0, StatEnum.DEF)
-        };
+        this.stats = new HashMap<>();
 
-        this.currentHealth = getHP();
+        StatHolder baseStatHolder = new StatHolder();
+        baseStatHolder.addStat(new BaseStatistic(20, StatEnum.HP));
+        baseStatHolder.addStat(new BaseStatistic(1, StatEnum.ATK));
+        baseStatHolder.addStat(new BaseStatistic(0, StatEnum.STR));
+        baseStatHolder.addStat(new BaseStatistic(0, StatEnum.DEX));
+        baseStatHolder.addStat(new BaseStatistic(0, StatEnum.CRATE));
+        baseStatHolder.addStat(new BaseStatistic(0, StatEnum.CDMG));
+        baseStatHolder.addStat(new BaseStatistic(0, StatEnum.DEF));
+
+        this.equipmentStats = new HashMap<>();
+        for(StatEquipmentType type: StatEquipmentType.values()) {
+            this.equipmentStats.put(type, new StatHolder());
+        }
+
+        this.equipmentStats.put(StatEquipmentType.BASE, baseStatHolder);
+
+        this.recalculateStats();
+
         this.tier = 0;
         this.ascensionLevel = 0;
 
         ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().getExistingPlayerStats(playerID, (statsMap) -> {
             if (statsMap != null) {
-                stats = new PlayerStat[] {
-                        new PlayerStat((Integer) statsMap.get("HP"), StatEnum.HP),
-                        new PlayerStat((Integer) statsMap.get("ATK"), StatEnum.ATK),
-                        new PlayerStat((Integer) statsMap.get("STR"), StatEnum.STR),
-                        new PlayerStat((Integer) statsMap.get("DEX"), StatEnum.DEX),
-                        new PlayerStat((Integer) statsMap.get("CRATE"), StatEnum.CRATE),
-                        new PlayerStat((Integer) statsMap.get("CDMG"), StatEnum.CDMG),
-                        new PlayerStat((Integer) statsMap.get("DEF"), StatEnum.DEF)
-                };
+
+                if(statsMap.get("base_stats") != null) {
+                    baseStatHolder.clear();
+                    JSONWrapper wrapper = new JSONWrapper((String) statsMap.get("base_stats"));
+                    baseStatHolder.addStat(new BaseStatistic(wrapper.getInt("HP"), StatEnum.HP));
+                    baseStatHolder.addStat(new BaseStatistic(wrapper.getInt("ATK"), StatEnum.ATK));
+                    baseStatHolder.addStat(new BaseStatistic(wrapper.getInt("STR"), StatEnum.STR));
+                    baseStatHolder.addStat(new BaseStatistic(wrapper.getInt("DEX"), StatEnum.DEX));
+                    baseStatHolder.addStat(new BaseStatistic(wrapper.getInt("CRATE"), StatEnum.CRATE));
+                    baseStatHolder.addStat(new BaseStatistic(wrapper.getInt("CDMG"), StatEnum.CDMG));
+                    baseStatHolder.addStat(new BaseStatistic(wrapper.getInt("DEF"), StatEnum.DEF));
+                }
+
+                this.equipmentStats.put(StatEquipmentType.BASE, baseStatHolder);
+                this.recalculateStats();
+
                 this.currentHealth = (Double) statsMap.get("current_health");
                 this.tier = (Integer) statsMap.get("Tier");
                 this.ascensionLevel = (Integer) statsMap.get("AscensionLevel");
@@ -140,59 +157,28 @@ public class FFPlayer {
         });
     }
 
+    public Map<StatEnum, Integer> getStats() {
+        return this.stats;
+    }
 
-    /**
-     * Constructs the FFPlayer class given a player object (sets the stats to a level 1 character if the character
-     * does not exist in the database)
-     *
-     * @param playerID the player that this instance of FFPlayer will represent
-     * @param currentHealth the current health of the player
-     * @param stats the player stats
-     */
-    public FFPlayer(UUID playerID, double currentHealth, PlayerStat[] stats) {
-
-        this.playerID = playerID;
-
-        this.stats = stats;
-
-        this.currentHealth = currentHealth;
-
-        this.tier = 0;
-        this.ascensionLevel = 0;
+    public StatHolder getStats(StatEquipmentType type) {
+        return this.equipmentStats.get(type);
     }
 
     /**
      * Updates the ForgeFrontier current health value when the player respawns
      */
     public void respawn() {
-        currentHealth = getHP();
+        currentHealth = this.get(StatEnum.HP);
     }
 
-    /**
-     * Increases all player stats by one on level up
-     */
-    public void levelUp() {
-        for (PlayerStat stat : stats) {
-            if (stat.getStatType() == StatEnum.CDMG || stat.getStatType() == StatEnum.CRATE) {
-                stat.addStat(new BaseStatistic(1, stat.getStatType()));
-            } else {
-                stat.addStat(new BaseStatistic(1, stat.getStatType()));
-            }
+    public void setLevelStats(int value) {
+        StatHolder holder = new StatHolder();
+        for(StatEnum statEnum: StatEnum.values()) {
+            holder.addStat(new BaseStatistic(value, statEnum));
         }
-    }
-
-
-    /**
-     * Decreases all player stats by one on level down
-     */
-    public void levelDown() {
-        for (PlayerStat stat : stats) {
-            if (stat.getStatType() == StatEnum.CDMG || stat.getStatType() == StatEnum.CRATE) {
-                stat.removeStat(new BaseStatistic(1, stat.getStatType()));
-            } else {
-                stat.removeStat(new BaseStatistic(1, stat.getStatType()));
-            }
-        }
+        this.equipmentStats.put(StatEquipmentType.LEVEL, holder);
+        this.recalculateStats();
     }
 
     /**
@@ -201,20 +187,30 @@ public class FFPlayer {
      * @param armorInstance the instance of the custom armor being equipped
      */
     public void updateStatsOnArmorEquip(CustomArmor.CustomArmorInstance armorInstance) {
+
+        StatEquipmentType type = StatEquipmentType.getInstance(armorInstance.getEquipmentSlot());
+        StatHolder statHolder = new StatHolder();
+
         BaseStatistic[] baseStatistics = armorInstance.getBaseStats();
         ReforgeStatistic[] reforgeStatistics = armorInstance.getReforgeStats();
         GemValues[] gemValues = armorInstance.getGems();
+
         for (BaseStatistic baseStatistic : baseStatistics) {
-            stats[StatEnum.getIntFromEnum(baseStatistic.getStatType())].addStat(baseStatistic);
+            statHolder.addStat(baseStatistic);
         }
         for (ReforgeStatistic reforgeStatistic : reforgeStatistics) {
-            stats[StatEnum.getIntFromEnum(reforgeStatistic.getStatType())].addStat(reforgeStatistic);
+            statHolder.addStat(reforgeStatistic);
         }
         for (GemValues gemValue : gemValues) {
             if (gemValue != null) {
-                stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].addStat(gemValue.getStat());
+                statHolder.addStat(gemValue.getStat());
             }
         }
+
+        this.equipmentStats.put(type, statHolder);
+        this.recalculateStats();
+
+        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
     }
 
     /**
@@ -223,20 +219,13 @@ public class FFPlayer {
      * @param armorInstance the instance of the custom armor being dequipped
      */
     public void updateStatsOnArmorDequip(CustomArmor.CustomArmorInstance armorInstance) {
-        BaseStatistic[] baseStatistics = armorInstance.getBaseStats();
-        ReforgeStatistic[] reforgeStatistics = armorInstance.getReforgeStats();
-        GemValues[] gemValues = armorInstance.getGems();
-        for (BaseStatistic baseStatistic : baseStatistics) {
-            stats[StatEnum.getIntFromEnum(baseStatistic.getStatType())].removeStat(baseStatistic);
-        }
-        for (ReforgeStatistic reforgeStatistic : reforgeStatistics) {
-            stats[StatEnum.getIntFromEnum(reforgeStatistic.getStatType())].removeStat(reforgeStatistic);
-        }
-        for (GemValues gemValue : gemValues) {
-            if (gemValue != null) {
-                stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].removeStat(gemValue.getStat());
-            }
-        }
+
+        StatEquipmentType type = StatEquipmentType.getInstance(armorInstance.getEquipmentSlot());
+
+        StatHolder statHolder = new StatHolder();
+        this.equipmentStats.put(type, statHolder);
+        this.recalculateStats();
+
         ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
     }
 
@@ -247,39 +236,29 @@ public class FFPlayer {
      * @return the calculated outgoing damage
      */
     public double getOutgoingDamageOnAttack(CustomWeapon.CustomWeaponInstance weaponInstance) {
-        double damage = 0;
+        StatHolder weaponStatHolder = new StatHolder();
+
+        if(weaponInstance == null) {
+            return StatCalc.calcOutgoingDamage(this, weaponStatHolder, StatEnum.STR);
+        }
 
         BaseStatistic[] baseStatistics = weaponInstance.getBaseStats();
         ReforgeStatistic[] reforgeStatistics = weaponInstance.getReforgeStats();
         GemValues[] gemValues = weaponInstance.getGems();
+
         for (BaseStatistic baseStatistic : baseStatistics) {
-            stats[StatEnum.getIntFromEnum(baseStatistic.getStatType())].addStat(baseStatistic);
+            weaponStatHolder.addStat(baseStatistic);
         }
         for (ReforgeStatistic reforgeStatistic : reforgeStatistics) {
-            stats[StatEnum.getIntFromEnum(reforgeStatistic.getStatType())].addStat(reforgeStatistic);
+            weaponStatHolder.addStat(reforgeStatistic);
         }
         for (GemValues gemValue : gemValues) {
             if (gemValue != null) {
-                stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].addStat(gemValue.getStat());
+                weaponStatHolder.addStat(gemValue.getStat());
             }
         }
 
-        damage = StatCalc.calcOutgoingDamage(this, weaponInstance.getMainStat()) ;
-
-        for (BaseStatistic baseStatistic : baseStatistics) {
-            stats[StatEnum.getIntFromEnum(baseStatistic.getStatType())].removeStat(baseStatistic);
-        }
-        for (ReforgeStatistic reforgeStatistic : reforgeStatistics) {
-            stats[StatEnum.getIntFromEnum(reforgeStatistic.getStatType())].removeStat(reforgeStatistic);
-        }
-        for (GemValues gemValue : gemValues) {
-            if (gemValue != null) {
-                stats[StatEnum.getIntFromEnum(gemValue.getStat().getStatType())].removeStat(gemValue.getStat());
-            }
-        }
-        //ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
-
-        return damage;
+        return StatCalc.calcOutgoingDamage(this, weaponStatHolder, weaponInstance.getMainStat());
     }
 
     /**
@@ -290,58 +269,36 @@ public class FFPlayer {
 
         Player player = ForgeFrontier.getInstance().getPlayerManager().getPlayersByUUID().get(playerID);
         int level = player.getLevel();
+        int tier = getTier();
+
+        StatHolder holder = this.equipmentStats.get(StatEquipmentType.BASE);
+        for(StatEnum statEnum: ORDERED_STAT_ENUMS) {
+            holder.addStat(new BaseStatistic(level / 10 + tier, statEnum));
+        }
+        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerBaseStats(this);
+
         player.setLevel(0);
         player.setExp(0);
-        int tier = getTier();
         setTier(0);
 
-        for (int i = 0; i < level - (level / 10); i++) {
-            levelDown();
+        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
+    }
+
+    private void recalculateStats() {
+        for(StatEnum statEnum: ORDERED_STAT_ENUMS) {
+            this.stats.put(statEnum, 0);
         }
-
-        for (int i = 0; i < tier; i++) {
-            levelUp();
+        for(StatEquipmentType type: StatEquipmentType.values()) {
+            StatHolder holder = this.equipmentStats.get(type);
+            //ForgeFrontier.getInstance().getLogger().info(type + ": " + holder.toString());
+            for(StatEnum statEnum: ORDERED_STAT_ENUMS) {
+                this.stats.put(statEnum, this.stats.get(statEnum) + holder.get(statEnum));
+            }
         }
     }
 
-    /** @return the HP stat value of the FFPlayer */
-    public int getHP() {
-        return stats[0].getStatValue();
-    }
-
-    /** @return the ATK stat value of the FFPlayer */
-    public int getATK() {
-        return stats[1].getStatValue();
-    }
-
-    /** @return the STR stat value of the FFPlayer */
-    public int getSTR() {
-        return stats[2].getStatValue();
-    }
-
-    /** @return the DEX stat value of the FFPlayer */
-    public int getDEX() {
-        return stats[3].getStatValue();
-    }
-
-    /** @return the CRATE stat value of the FFPlayer */
-    public int getCRATE() {
-        return stats[4].getStatValue();
-    }
-
-    /** @return the CDMG stat value of the FFPlayer */
-    public int getCDMG() {
-        return stats[5].getStatValue();
-    }
-
-    /** @return the DEF stat value of the FFPlayer */
-    public int getDEF() {
-        return stats[6].getStatValue();
-    }
-
-    /** @return the stats array of PlayerStats */
-    public PlayerStat[] getStats() {
-        return stats;
+    public int get(StatEnum statEnum) {
+        return stats.get(statEnum);
     }
 
     /** @return the tier of the ffplayer */
@@ -382,11 +339,11 @@ public class FFPlayer {
      * @return the string representation of player stats
      */
     public String getStatsString() {
-        String output = "";
-        for (int i = 0; i < stats.length; i++) {
-            output += stats[i].toString() + "\n";
+        List<String> stringList = new ArrayList<>();
+        for (StatEnum statEnum: ORDERED_STAT_ENUMS) {
+            stringList.add(statEnum.getFriendlyName() + ": " + stats.get(statEnum) + statEnum.getSuffix());
         }
-        return output;
+        return String.join("\n", stringList);
     }
 
     public long getNextSkillTime() {

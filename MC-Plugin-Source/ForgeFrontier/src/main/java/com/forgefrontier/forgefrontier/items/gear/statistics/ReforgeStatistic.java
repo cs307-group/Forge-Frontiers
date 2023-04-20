@@ -66,8 +66,7 @@ public class ReforgeStatistic extends CustomStat {
             String withoutQuality = data.substring(data.indexOf(":") + 1);
             statType = StatEnum.getEnumFromString(withoutQuality.substring(0, withoutQuality.indexOf((":"))));
             statValue = Integer.parseInt(withoutQuality.substring(withoutQuality.indexOf(":") + 1, withoutQuality.indexOf("%")));
-        }
-        else {
+        } else {
             isPercent = false;
             quality = QualityEnum.getQualityEnumFromString(data.substring(0, data.indexOf(":"))).getQuality();
             String withoutQuality = data.substring(data.indexOf(":") + 1);
@@ -111,4 +110,5 @@ public class ReforgeStatistic extends CustomStat {
         else
             return "{" + quality.toString() + ":" + statType.toString() + ":" + statValue + "}";
     }
+
 }

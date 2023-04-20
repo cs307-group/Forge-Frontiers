@@ -149,12 +149,13 @@ public class ForgeFrontier extends JavaPlugin {
         this.setupPlayerShop();
 
         // Custom Items
+        /*
         this.getCustomItemManager().registerCustomItem(new UpgradeGem());
         this.getCustomItemManager().registerCustomItem(new WoodenSword());
         this.getCustomItemManager().registerCustomItem(new WoodenBow());
         this.getCustomItemManager().registerCustomItem(new LeatherHelmet());
         this.getCustomItemManager().registerCustomItem(new LeatherChestplate());
-
+        */
         // Custom Mobs
         this.getCustomEntityManager().registerCustomEntity(new HostileChicken());
         this.getCustomEntityManager().registerCustomEntity(new PoisonChicken());
@@ -178,6 +179,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.miningManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.fishingManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.craftingManager, this);
+
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BentoBoxListener(this), this);
@@ -244,6 +246,7 @@ public class ForgeFrontier extends JavaPlugin {
         commandHandler.register(new ParticleCommands(this));
         commandHandler.register(new GeneratorCommand(this));
         commandHandler.register(new CustomSpawnCommand(this));
+        commandHandler.register(new CraftingCommands(this));
 
 
 

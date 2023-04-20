@@ -34,3 +34,5 @@ commands:
     description: "Command used for spawning custom entities."
   mining:
     description: "Command used for creating and changing mining areas."
+  tutorial:
+    description: "Command to open the tutorial GUI for a list of tasks to complete."

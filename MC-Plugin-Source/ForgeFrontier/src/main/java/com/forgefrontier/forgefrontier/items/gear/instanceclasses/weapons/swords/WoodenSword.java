@@ -37,14 +37,4 @@ public class WoodenSword extends CustomWeapon {
         });
     }
 
-    /**
-     * What occurs when the player attacks with the weapon
-     *
-     * @param e the event details
-     * @param itemInstance the instance used
-     */
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
-        super.onAttack(e, itemInstance, ffPlayer);
-    }
 }

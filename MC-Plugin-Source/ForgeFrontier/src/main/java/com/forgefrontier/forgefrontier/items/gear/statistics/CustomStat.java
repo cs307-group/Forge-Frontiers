@@ -95,4 +95,9 @@ public abstract class CustomStat {
     public String toString() {
         return "{" + statType.toString() + ":" + statValue + "}";
     }
+
+    public String getFriendlyName() {
+        return this.getStatType().getFriendlyName() + ": +" + this.getStatValue() + this.getStatType().getSuffix();
+    }
+
 }
