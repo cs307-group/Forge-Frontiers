@@ -67,6 +67,6 @@ export default async function (req: NextRequest) {
   return settingsUpdate(
     tokens,
     Object.fromEntries((await req.formData()).entries()),
-    req.url
+    new URL(process.env.BASE_URL!).href
   );
 }

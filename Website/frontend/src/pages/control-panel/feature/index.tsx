@@ -18,7 +18,7 @@ export default function ControlPanel({
   cookie: any;
 }) {
   useCookieSync(cookie);
-  console.log(data);
+
   return (
     <ControlPanelRenderer error={error} active="/feature">
       <FeatureToggleViewer />
