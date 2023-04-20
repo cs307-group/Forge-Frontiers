@@ -5,8 +5,7 @@ import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.HitBoxEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBoss;
-import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimer;
-import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimerEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.*;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBossEntity;
@@ -218,9 +217,21 @@ public class CustomEntityManager extends Manager implements Listener {
                 if (slimeBossTimerEntity != null) {
                     slimeBossTimerEntity.onDeath();
                 }
+            } else if (cm != null && cm.getCode().equals(SlimeBossSmall.CODE)) {
+                SlimeBossSmallEntity smallEntity = (SlimeBossSmallEntity) entity.getHandle();
+                if ( smallEntity != null) {
+                    smallEntity.onDeath();
+                }
             }
-
         }
+
+        if (cm != null && cm.getCode().equals(SlimeBossSwift.CODE)) {
+            SlimeBossSwiftEntity swiftEntity = (SlimeBossSwiftEntity) entity.getHandle();
+            if (swiftEntity != null) {
+                swiftEntity.onDeath();
+            }
+        }
+
         if (entity.hasMetadata("code")) {
             // checks if the entity is a slime entity
             if (entity instanceof Slime slime) {

@@ -15,9 +15,9 @@ public class HostileSlimeEntity extends CustomSlimeEntity {
     boolean doBehavior;
 
     private final float idleSpeed;
-    private final float aggroSpeed;
+    private float aggroSpeed;
     public long lastDamageTime = 0;
-    private final double damage;
+    private double damage;
     private Player nearestPlayer;
     private int scale;
 
@@ -102,5 +102,13 @@ public class HostileSlimeEntity extends CustomSlimeEntity {
 
     public boolean hasNearestPlayer() {
         return nearestPlayer != null;
+    }
+
+    public void setDamageValue(double damage) {
+        this.damage = damage;
+    }
+
+    public void setAggroSpeed(float speed) {
+        this.aggroSpeed = speed;
     }
 }

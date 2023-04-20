@@ -34,6 +34,7 @@ import com.forgefrontier.forgefrontier.mobs.slimes.hitbox.eggbox.eggsplosive.Egg
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlime;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBoss;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossSmall;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossSwift;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimer;
 import com.forgefrontier.forgefrontier.particles.ParticleCommands;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
@@ -168,6 +169,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.getCustomEntityManager().registerCustomEntity(new SlimeBoss());
         this.getCustomEntityManager().registerCustomEntity(new SlimeBossTimer());
         this.getCustomEntityManager().registerCustomEntity(new SlimeBossSmall());
+        this.getCustomEntityManager().registerCustomEntity(new SlimeBossSwift());
 
         // Manager Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.generatorManager, this);

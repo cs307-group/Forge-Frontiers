@@ -23,6 +23,7 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
 
     SlimeBossSmallEntity bounceA;
     SlimeBossSmallEntity bounceB;
+    SlimeBossSwiftEntity swift;
 
     public SlimeBossTimerEntity(EntityType<? extends Slime> entityTypes, Level world) {
         super(entityTypes, world);
@@ -37,12 +38,10 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
     public void customTick() {
         super.customTick();
 
-        if (bounceA == null && bounceB == null) {
+        if (bounceA == null && bounceB == null && swift == null) {
             this.setInvulnerable(false);
-            System.out.println("INVULNERABLE FALSE: " + this.isInvulnerable());
         } else {
             this.setInvulnerable(true);
-            System.out.println("INVULNERABLE TRUE: " + this.isInvulnerable());
         }
 
         if (this.getBukkitEntity().getCustomName() != null) {
@@ -91,7 +90,6 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 this.getBukkitEntity().remove();
             }
-            //this.setInvulnerable(false);
             existed = false;
         }
     }
@@ -111,14 +109,21 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
         bounceB.setOwner(this);
     }
 
+    public void setSwift(SlimeBossSwiftEntity entity) {
+        this.swift = entity;
+        swift.setOwner(this);
+    }
+
     public void removeSubEntity(CustomSlimeEntity entity) {
         if (entity instanceof SlimeBossSmallEntity smallEntity) {
             if (smallEntity == bounceA) {
                 bounceA = null;
-                System.out.println("REMOVE A");
             } else if (smallEntity == bounceB) {
                 bounceB = null;
-                System.out.println("REMOVE B");
+            }
+        } else if (entity instanceof SlimeBossSwiftEntity swiftEntity) {
+            if (swiftEntity == swift) {
+                swift = null;
             }
         }
     }

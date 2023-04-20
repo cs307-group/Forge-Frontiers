@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlimeEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossSmallEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossSwiftEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimerEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
@@ -105,12 +106,15 @@ public class SlimeBossEntity extends HostileSlimeEntity {
             CraftEntity craftEntityTimer = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossTimer", loc);
             CraftEntity craftEntityA = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
             CraftEntity craftEntityB = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
+            CraftEntity craftEntitySwift = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSwift", loc);
             if (craftEntityA.getHandle() instanceof SlimeBossSmallEntity smallEntityA &&
-                    craftEntityB.getHandle() instanceof SlimeBossSmallEntity smallEntityB) {
+                    craftEntityB.getHandle() instanceof SlimeBossSmallEntity smallEntityB &&
+                    craftEntitySwift.getHandle() instanceof SlimeBossSwiftEntity swiftEntity) {
                 smallEntityB.offsetUntilJump();
                 if (craftEntityTimer.getHandle() instanceof SlimeBossTimerEntity timerEntity) {
                     timerEntity.setBounceA(smallEntityA);
                     timerEntity.setBounceB(smallEntityB);
+                    timerEntity.setSwift(swiftEntity);
                 }
             }
             existed = false;
