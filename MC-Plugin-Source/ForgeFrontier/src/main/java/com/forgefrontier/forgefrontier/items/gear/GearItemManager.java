@@ -20,10 +20,13 @@ import com.forgefrontier.forgefrontier.particles.FFCosmeticParticle;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.PlayerParticle;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
+import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.utils.Manager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -43,7 +46,8 @@ public class GearItemManager extends Manager implements Listener {
     public GearItemManager(ForgeFrontier plugin) {
         super(plugin);
     }
-
+    int statUpdateJob = -1;
+    PlayerManager playerManager;
     @Override
     public void init() {
         this.skills = new HashMap<>();
@@ -56,7 +60,9 @@ public class GearItemManager extends Manager implements Listener {
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherHelmet());
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherChestplate());
 
-
+        playerManager = plugin.getPlayerManager();
+        statUpdateJob = plugin.getServer().getScheduler()
+                .scheduleSyncRepeatingTask(plugin, this::updateAllPlayerStats,200,400);
 
         this.registerSkill(new GroundSmashSkill());
         this.registerSkill(new DashSkill());
@@ -65,7 +71,22 @@ public class GearItemManager extends Manager implements Listener {
 
     @Override
     public void disable() {
+        if (statUpdateJob != -1) {
+            plugin.getServer().getScheduler().cancelTask(statUpdateJob);
+        }
+    }
 
+    public void updateAllPlayerStats() {
+        java.util.Collection<? extends org.bukkit.entity.Player> onlinePlayers = Bukkit.getOnlinePlayers();
+        Collection<FFPlayer> ffPlayers = playerManager.getFFPlayers().values();
+        ArrayList<FFPlayer> notOnline = new ArrayList<>();
+        for (FFPlayer fp : ffPlayers) {
+            boolean online = false;
+            for (Player p : onlinePlayers) { if (p.getUniqueId() == fp.playerID)  {online = true; break;} }
+            if (!online) { notOnline.add(fp); }
+            ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(fp);
+        }
+        for (FFPlayer off : notOnline) playerManager.getFFPlayers().remove(off.getPlayerID());
     }
 
     public void registerSkill(Skill skill) {

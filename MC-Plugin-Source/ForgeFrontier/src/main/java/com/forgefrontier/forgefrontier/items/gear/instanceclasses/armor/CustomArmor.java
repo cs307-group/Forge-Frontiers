@@ -58,7 +58,6 @@ public abstract class CustomArmor extends GearItem {
 
             if (itemStack == null) {
                 BaseStatistic[] baseStats = new BaseStatistic[numBaseStats];
-                baseStats[0] = new BaseStatistic(4, StatEnum.DEF);
                 armorInstance.setBaseStats(baseStats);
             }
 
