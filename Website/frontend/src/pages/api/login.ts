@@ -13,7 +13,6 @@ export default async function (req: NextRequest) {
   if (method === "post") {
     const body: {password: string; email: string} = await req.json();
     const resp = await jsonRequest(routes.login, {
-      method: "POST",
       body: {
         password: body.password,
         user: body.email,

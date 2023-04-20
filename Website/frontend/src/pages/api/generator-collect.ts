@@ -59,6 +59,6 @@ export default async function (req: NextRequest) {
   return collectGenerators(
     tokens,
     new URL(req.url).searchParams.get("island_id")!,
-    new URL(process.env.BASE_URL!).href
+    req.url
   );
 }
