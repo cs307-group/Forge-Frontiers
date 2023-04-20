@@ -124,7 +124,6 @@ public class FishingManager extends Manager implements Listener {
         if (roll == 1000) {
             out = chances.size() - 1;
         }
-        plugin.getLogger().log(Level.INFO,"ROLL: " + roll + " GOT: " + out);
         return out;
     }
 

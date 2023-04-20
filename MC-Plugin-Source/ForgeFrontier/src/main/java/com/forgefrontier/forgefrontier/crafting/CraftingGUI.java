@@ -55,7 +55,11 @@ public class CraftingGUI extends BaseInventoryHolder {
         this.setDefaultCancelInteraction(false);
         // Exit item
         ItemStack exitItem = new ItemStackBuilder(Material.BARRIER).setDisplayName(ChatColor.RED + "Close").build();
+        ItemStack recipeListItem = new ItemStackBuilder(Material.BOOKSHELF)
+                                    .setDisplayName("" + ChatColor.RESET + ChatColor.GOLD + "Recipe List").build();
         this.setItem(SEX, exitItem);
+        this.setItem(SHELP, recipeListItem);
+        this.addHandler(SHELP,this::recipeListHandler);
         this.addHandler(SEX, this::exitHandler);
 
         ItemStack helpItem = new ItemStackBuilder(Material.BOOKSHELF)
@@ -113,12 +117,7 @@ public class CraftingGUI extends BaseInventoryHolder {
 
     public void recipeListHandler(InventoryClickEvent e) {
         returnGridItems((Player) e.getWhoClicked());
-        ForgeFrontier.getInstance().getServer()
-                .getScheduler()
-                .runTaskLater(ForgeFrontier.getInstance(),
-                        () -> e.getWhoClicked()
-                                .openInventory(new RecipeListGUI(true)
-                                .getInventory()), 5);
+        e.getWhoClicked().openInventory(new RecipeListGUI(true).getInventory());
         e.setCancelled(true);
     }
 
