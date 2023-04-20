@@ -30,6 +30,7 @@ export const routes = {
   updateUser: getApiURL("/users/-/update"),
   adminViewShops: getApiURL("/admin/shops"),
   decodeToken: getApiURL("/users/-/decode-token"),
+  getFeatures: getApiURL("/control-panel/feature"),
 };
 
 /**
