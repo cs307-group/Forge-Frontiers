@@ -29,20 +29,19 @@ public class GeneratorDB extends DBConnection {
     }
 
     public void importGenerators() {
-        new Thread(() -> {
-            SelectQueryWrapper wrapper = new SelectQueryWrapper();
-            wrapper.setTable("public.generator_instances");
-            wrapper.setFields(
-                "id_",
-                "level",
-                "generator_id",
-                "last_collection_time",
-                "location_x",
-                "location_y",
-                "location_z",
-                "location_world"
-            );
-            ResultSet rs = wrapper.executeSyncQuery(dbConn);
+        SelectQueryWrapper wrapper = new SelectQueryWrapper();
+        wrapper.setTable("public.generator_instances");
+        wrapper.setFields(
+            "id_",
+            "level",
+            "generator_id",
+            "last_collection_time",
+            "location_x",
+            "location_y",
+            "location_z",
+            "location_world"
+        );
+        wrapper.executeAsyncQuery(dbConn, (rs) -> {
             try {
                 while(rs != null && rs.next()) {
                     String databaseId = rs.getString("id_");
@@ -66,7 +65,7 @@ public class GeneratorDB extends DBConnection {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     public void insertGenerator(GeneratorInstance instance, Consumer<InsertQueryWrapper.InsertResult> callback) {

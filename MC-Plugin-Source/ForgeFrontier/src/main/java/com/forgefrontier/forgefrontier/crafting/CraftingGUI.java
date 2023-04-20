@@ -1,10 +1,13 @@
 package com.forgefrontier.forgefrontier.crafting;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.events.CustomCraftEvent;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -181,6 +184,8 @@ public class CraftingGUI extends BaseInventoryHolder {
             }
             ItemStack outItm = currentRecipe.getResult();
             outItm.setAmount(1);
+            CustomCraftEvent event = new CustomCraftEvent((Player) e.getWhoClicked(), CustomItemManager.getCustomItem(outItm));
+            Bukkit.getPluginManager().callEvent(event);
             ItemGiver.giveItem((Player) e.getWhoClicked(),outItm,currentRecipe.getOutAmount() * currAmount);
             currAmount = 0;
         } else if (e.isLeftClick() || e.isRightClick()) {
@@ -217,6 +222,8 @@ public class CraftingGUI extends BaseInventoryHolder {
                 validRecipe = false;
                 output = null;
             }
+            CustomCraftEvent event = new CustomCraftEvent((Player) e.getWhoClicked(), CustomItemManager.getCustomItem(currentRecipe.getResult()));
+            Bukkit.getPluginManager().callEvent(event);
             if (e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
                 e.getWhoClicked().setItemOnCursor(currentRecipe.getResult());   // result should have correct out amt
             } else {

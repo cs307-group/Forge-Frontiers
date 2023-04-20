@@ -17,6 +17,10 @@ public class FishEvent extends PlayerEvent {
         this.drop = drop;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     @Override
     public HandlerList getHandlers() {

@@ -2,6 +2,9 @@ package com.forgefrontier.forgefrontier.fishing;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.connections.FishDB;
+import com.forgefrontier.forgefrontier.events.CustomCraftEvent;
+import com.forgefrontier.forgefrontier.events.FishEvent;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.particles.gameparticles.FishingDropParticle;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
@@ -160,6 +163,10 @@ public class FishingManager extends Manager implements Listener {
         double levelMulti = rollModifier.getLevelModifier(pfs.getLevel());
 
         FishingDrop fd = rollFish(rodMulti, levelMulti);
+
+        FishEvent event = new FishEvent(p, fd);
+        Bukkit.getPluginManager().callEvent(event);
+
         if (fd.getItem().getType() == Material.YELLOW_STAINED_GLASS) {
             int amount = 100 * fd.rollNumber(rand);
             plugin.getEconomy().depositPlayer(p,100 * fd.rollNumber(rand));

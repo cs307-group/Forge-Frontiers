@@ -16,6 +16,7 @@ MC-Server/plugins/AsyncWorldEdit/*
 MC-Server/server.properties
 MC-Server/usercache.json
 MC-Server/plugins/spark/tmp
+MC-Server/.console_history
 
 MC-Plugin-Source/ForgeFrontier/.idea
 MC-Plugin-Source/ForgeFrontier/out

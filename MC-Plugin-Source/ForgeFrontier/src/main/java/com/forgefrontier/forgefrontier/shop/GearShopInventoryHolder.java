@@ -1,9 +1,11 @@
 package com.forgefrontier.forgefrontier.shop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.events.PurchaseEvent;
 import com.forgefrontier.forgefrontier.generators.MaterialCost;
 import com.forgefrontier.forgefrontier.gui.BaseInventoryHolder;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -65,6 +67,10 @@ public class GearShopInventoryHolder extends BaseInventoryHolder {
                 e.getWhoClicked().getInventory().addItem(item);
                 e.getWhoClicked().closeInventory();
                 e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully bought the " + entry.getBaseInstance().getName() + ".");
+
+                PurchaseEvent event = new PurchaseEvent((Player) e.getWhoClicked(), PurchaseEvent.PurchaseType.GEAR, item);
+                Bukkit.getPluginManager().callEvent(event);
+
             });
 
             shopInd += 1;

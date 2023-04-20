@@ -36,6 +36,7 @@ public class InspectCommandExecutor implements CommandExecutor {
             }  else if (args.length == 1 && args[0].equals("ascend")) {
                 FFPlayer ffPlayer = playerManager.getFFPlayerFromID(player.getUniqueId());
                 ffPlayer.ascend();
+                sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "You have successfully ascended. Your new stats are the following:");
                 sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Ascension: " + ffPlayer.getAscension() + "\n"
                         + "Tier: " + ffPlayer.getTier() + "\n" +  ffPlayer.getStatsString());
             } else if (args.length == 1) {

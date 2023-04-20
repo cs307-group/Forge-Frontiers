@@ -1,6 +1,8 @@
 package com.forgefrontier.forgefrontier.mining;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.events.FishEvent;
+import com.forgefrontier.forgefrontier.events.MiningAreaMineEvent;
 import com.forgefrontier.forgefrontier.stashes.Stash;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Bukkit;
@@ -82,6 +84,9 @@ public class MiningManager extends Manager implements Listener {
                         e.setCancelled(true);
                         e.setDropItems(false);
                         e.getBlock().setType(area.getReplacementMaterial());
+
+                        MiningAreaMineEvent event = new MiningAreaMineEvent(e.getPlayer(), area, resource.getItem());
+                        Bukkit.getPluginManager().callEvent(event);
                         return;
                     }
                 }
