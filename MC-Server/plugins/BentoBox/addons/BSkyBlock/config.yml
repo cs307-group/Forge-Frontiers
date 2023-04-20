@@ -141,15 +141,18 @@ world:
   # World flags. These are boolean settings for various flags for this world
   flags:
     OBSIDIAN_SCOOPING: true
-    ENTER_EXIT_MESSAGES: true
+    CREEPER_DAMAGE: true
     ISLAND_RESPAWN: true
+    CREEPER_GRIEFING: false
     VISITOR_KEEP_INVENTORY: false
-    OFFLINE_GROWTH: true
-    REMOVE_MOBS: true
     CLEAN_SUPER_FLAT: false
-    TREES_GROWING_OUTSIDE_RANGE: false
+    CHEST_DAMAGE: false
     PREVENT_TELEPORT_WHEN_FALLING: false
     NATURAL_SPAWNING_OUTSIDE_RANGE: true
+    ENTER_EXIT_MESSAGES: true
+    OFFLINE_GROWTH: true
+    REMOVE_MOBS: true
+    TREES_GROWING_OUTSIDE_RANGE: false
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
   # Ranks are the following:
