@@ -271,7 +271,7 @@ public class CustomEntityManager extends Manager implements Listener {
         } else if (cm.getCode().equals("SlimeBossTimer")) {
             ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.INFO, "Playing Core Slime Particle");
             new SimpleRepeatParticleSpawner(
-                    ()->MobParticles.CHICKBOSS_EGG_PARTICLE.playParticleAtLocation(e.getWorld(), e.getLocation().clone().add(0,2,0))
+                    ()->MobParticles.SLIME_JUMP_CHARGE2.playParticleAtLocation(e.getWorld(), e.getLocation().clone())
                     , 3, 60).run();
         }
         MobParticles.GENERIC_CUSTOM_DEATH_PARTICLE.playParticleAtLocation(e.getWorld(),e.getLocation());

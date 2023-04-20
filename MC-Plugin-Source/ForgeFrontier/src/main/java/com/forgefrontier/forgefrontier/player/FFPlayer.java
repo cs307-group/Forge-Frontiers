@@ -210,7 +210,7 @@ public class FFPlayer {
         this.equipmentStats.put(type, statHolder);
         this.recalculateStats();
 
-        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
+        //ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
     }
 
     /**
@@ -226,7 +226,7 @@ public class FFPlayer {
         this.equipmentStats.put(type, statHolder);
         this.recalculateStats();
 
-        ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
+        //ForgeFrontier.getInstance().getDatabaseManager().getPlayerDB().updatePlayerStats(this);
     }
 
     /**
