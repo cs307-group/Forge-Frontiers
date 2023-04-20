@@ -4,12 +4,8 @@ import {Spacer} from "../Spacer";
 import {Switch} from "../Switch";
 import jsonData from "./status.json";
 
-type FeaturesData = {
-  features: string;
-};
-
-export function FeatureToggleViewer() {
-  const jsonString = JSON.stringify(jsonData);
+export function FeatureToggleViewer({data}: {data: string}) {
+  const jsonString = JSON.stringify(data);
   const [sws, setSwitches] = useState(() => JSON.parse(jsonString));
 
   const handleSwitchChange = (name: string, val: boolean) => {
@@ -21,7 +17,7 @@ export function FeatureToggleViewer() {
   };
   const switches = Object.entries(sws).map(([feature, status]) => (
     <div key={feature}>
-      <Spacer y={20} />
+      <Spacer y={30} />
       <div className="flex items-center justify-between">
         <div>
           {feature} is Currently {status ? "Enabled" : "Disabled"}
@@ -39,6 +35,7 @@ export function FeatureToggleViewer() {
     <div className="mx-auto max-w-[90%] overflow-auto">
       <Spacer y={30} />
       {switches}
+      <Spacer y={50} />
       <button onClick={handleSaveClick}>Save</button>
     </div>
   );

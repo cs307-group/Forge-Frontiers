@@ -21,7 +21,7 @@ export default function ControlPanel({
 
   return (
     <ControlPanelRenderer error={error} active="/feature">
-      <FeatureToggleViewer />
+      <FeatureToggleViewer data={data.value}/>
     </ControlPanelRenderer>
   );
 }
@@ -31,6 +31,5 @@ export const getServerSideProps = requireAdminPageView(async (c) => {
   if (isErrorResponse(data)) {
     return data.resp;
   }
-  console.log(data.resp);
   return data.toSSPropsResult;
 });
