@@ -2,6 +2,8 @@ package com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
+import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
+import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleRepeatParticleSpawner;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
@@ -18,7 +20,8 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
     int timeToExplode = 30;
     long lastTimeStamp;
     long totalTimeAlive;
-
+    boolean invul = false;
+    int invulTask = 0;
     boolean existed;
 
     SlimeBossSmallEntity bounceA;
@@ -38,10 +41,16 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
     public void customTick() {
         super.customTick();
 
-        if (bounceA == null && bounceB == null && swift == null) {
+        if (bounceA == null && bounceB == null && swift == null && invulTask != 0) {
             this.setInvulnerable(false);
-        } else {
+            ForgeFrontier.getInstance().getServer().getScheduler().cancelTask(invulTask);
+            invulTask = 0;
+        } else if (!invul){
             this.setInvulnerable(true);
+            invul = true;
+            SimpleRepeatParticleSpawner srps = new SimpleRepeatParticleSpawner(
+                    ()->MobParticles.SLIME_JUMP_CHARGE2.playParticleMob(this), 5, 600);
+            invulTask = srps.run();
         }
 
         if (this.getBukkitEntity().getCustomName() != null) {
@@ -96,6 +105,7 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
 
     public void onDeath() {
         this.getBukkitEntity().setCustomNameVisible(false);
+        MobParticles.SLIME_DEATH_PARTICLE.playParticleMob(this);
         existed = false;
     }
 

@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.particles;
 
 import com.forgefrontier.forgefrontier.particles.designs.ParticleDesign;
 import com.forgefrontier.forgefrontier.particles.designs.StaticParticleDesign;
+import net.minecraft.world.entity.Mob;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -52,6 +53,9 @@ public class FFParticle {
         for (Vector v : staticParticles) {
             spawnOneParticle(p.getWorld(), p.getLocation().clone().add(v));
         }
+    }
+    public void playParticleMob(Mob m) {
+        this.playParticleAtLocation(m.getBukkitEntity().getWorld(), m.getBukkitEntity().getLocation());
     }
     public void playParticleAtLocation(World w, Location loc) {
 
