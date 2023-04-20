@@ -42,7 +42,7 @@ public class EggBoxEntity extends HitBoxEntity {
             eggEntity.setRotation(0, 0);
             setNamePlate(ChatColor.WHITE + "Egg" + ": " + ((int) this.getHealth()) + "/" + ((int) this.getMaxHealth()));
         }
-        if (this.getCustomName() != null) {
+        if (this.getCustomName() != null && eggEntity != null) {
             eggEntity.setCustomName(this.getBukkitEntity().getCustomName());
         }
     }
@@ -55,11 +55,12 @@ public class EggBoxEntity extends HitBoxEntity {
         eggEntity.setPickupDelay(1);
         eggEntity.setGravity(true);
         eggEntity.setInvulnerable(false);
+        eggEntity = null;
     }
 
     @Override
     public void setNamePlate(String name) {
-        if (existed) {
+        if (existed && eggEntity != null) {
             eggEntity.setCustomName(name);
             eggEntity.setCustomNameVisible(true);
         }
