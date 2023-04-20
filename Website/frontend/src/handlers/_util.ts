@@ -57,17 +57,16 @@ export function jsonRequest(
     body: null as any,
   }
 ) {
-  method = method || "post";
   console.log("[fetch] ", method, url);
   const reqHeaders = new Headers(headers);
   reqHeaders.set("content-type", "application/json");
   reqHeaders.set("x-debug-from", "serverless-functions"); // maybe make it a secret?)
   return fetch(url, {
     credentials: "include",
+    method: method || "post",
     body: body ? JSON.stringify(body) : undefined,
     headers: reqHeaders,
     ...rest,
-    method,
   });
 }
 
