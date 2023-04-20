@@ -1,5 +1,6 @@
 from sqlalchemy.dialects.postgresql import TEXT
 from ..base import db
+from math import isnan
 
 
 class Stats(db.Model):
@@ -57,7 +58,9 @@ class Stats(db.Model):
     def as_json(self):
         return {
             "player_uuid": self.player_uuid,
-            "current_health": self.current_health,
+            "current_health": self.current_health
+            if not isnan(self.current_health)
+            else 0,
             "HP": self.HP,
             "ATK": self.ATK,
             "STR": self.STR,
