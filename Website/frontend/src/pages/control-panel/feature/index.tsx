@@ -1,10 +1,10 @@
 import {ControlPanelRenderer} from "@/components/ControlPanel";
 import {FeatureToggleViewer} from "@/components/ControlPanel/FeatureToggleViewer";
-import {UserDataSecure} from "@/handlers/types";
-import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {fetchFeatures} from "@/handlers/features";
 import {isErrorResponse} from "@/handlers/fetch-util";
-import {requireAuthenticatedPageView} from "@/handlers/auth";
+import {UserDataSecure} from "@/handlers/types";
+import {useCookieSync} from "@/hooks/use-cookie-sync";
 
 export default function ControlPanel({
   data: featData,
@@ -18,7 +18,7 @@ export default function ControlPanel({
   cookie: any;
 }) {
   useCookieSync(cookie);
-  console.log(data);
+
   return (
     <ControlPanelRenderer error={error} active="/feature">
       <FeatureToggleViewer />
