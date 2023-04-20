@@ -1,12 +1,16 @@
 package com.forgefrontier.forgefrontier.connections;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.connections.wrappers.SelectQueryWrapper;
 import com.forgefrontier.forgefrontier.connections.wrappers.UpdateQueryWrapper;
 import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerStat;
 import com.forgefrontier.forgefrontier.player.StatHolder;
+import com.forgefrontier.forgefrontier.tutorial.TaskStatus;
+import com.forgefrontier.forgefrontier.utils.JSONSerializable;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
+import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -217,4 +221,46 @@ public class PlayerDB extends DBConnection {
                 ForgeFrontier.getInstance().getLogger().log(Level.SEVERE, "An error occurred in updating base stats.");
         });
     }
+
+    public void updateTutorialStatus(UUID playerId, Map<String, TaskStatus> statuses, Consumer<Boolean> callback) {
+        new Thread(() -> {
+            try {
+
+                String sql = "INSERT INTO public.stats (player_uuid, tutorial_state) VALUES (?, ?) ON CONFLICT (player_uuid) DO UPDATE SET tutorial_state = ?;";
+
+                PreparedStatement preparedStatement = dbConn.prepareStatement(sql);
+                preparedStatement.setString(1, playerId.toString());
+                String jsonString = JSONWrapper.parseMap(statuses).toJSONString();
+                preparedStatement.setString(2, jsonString);
+                preparedStatement.setString(3, jsonString);
+                preparedStatement.executeUpdate();
+
+                callback.accept(true);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                callback.accept(false);
+            }
+        }).start();
+    }
+
+    public void importTutorialStatus(UUID playerId, Consumer<JSONWrapper> callback) {
+        SelectQueryWrapper wrapper = new SelectQueryWrapper();
+        wrapper.setTable("public.stats");
+        wrapper.addCondition("player_uuid = %uuid%", "uuid");
+        wrapper.addValue("uuid", playerId.toString());
+        wrapper.setFields("tutorial_state");
+        wrapper.executeAsyncQuery(dbConn, (resultSet) -> {
+            try {
+                while (resultSet.next()) {
+                    String json = resultSet.getString("tutorial_state");
+                    callback.accept(new JSONWrapper(json));
+                }
+            } catch(SQLException e) {
+                e.printStackTrace();
+                callback.accept(null);
+            }
+        });
+    }
+
 }

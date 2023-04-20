@@ -1,12 +1,16 @@
 package com.forgefrontier.forgefrontier.utils;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.tutorial.TaskStatus;
+import org.checkerframework.checker.units.qual.A;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class JSONWrapper {
 
@@ -26,6 +30,10 @@ public class JSONWrapper {
         this.object = new JSONObject();
     }
 
+    public JSONWrapper(JSONObject object) {
+        this.object = object;
+    }
+
     public static JSONObject parse(String json) {
         try {
             return (JSONObject) parser.parse(json);
@@ -33,10 +41,6 @@ public class JSONWrapper {
             ForgeFrontier.getInstance().getLogger().severe("Unable to parse json string: " + json);
             return null;
         }
-    }
-
-    public JSONWrapper(JSONObject object) {
-        this.object = object;
     }
 
     public static List<JSONWrapper> parseList(String json) {
@@ -52,6 +56,14 @@ public class JSONWrapper {
             wrapperList.add(new JSONWrapper(object));
         }
         return wrapperList;
+    }
+
+    public static JSONWrapper parseMap(Map<?, ? extends JSONSerializable> map) {
+        JSONWrapper wrapper = new JSONWrapper();
+        for(Object key: map.keySet()) {
+            wrapper.object.put(key, map.get(key).toJSON().object);
+        }
+        return wrapper;
     }
 
     public String getString(String s) {
@@ -93,6 +105,18 @@ public class JSONWrapper {
 
     public String toJSONString() {
         return this.object.toJSONString();
+    }
+
+    public List<String> getStringKeys() {
+        List<String> keyList = new ArrayList<>();
+        for(Object key: this.object.keySet()) {
+            keyList.add((String) key);
+        }
+        return keyList;
+    }
+
+    public JSONWrapper getJson(String key) {
+        return new JSONWrapper((JSONObject) this.object.get(key));
     }
 
 }

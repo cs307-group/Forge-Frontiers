@@ -354,4 +354,8 @@ public class FFPlayer {
         this.nextSkillTime = nextSkillTime;
     }
 
+    public UUID getPlayerID() {
+        return this.playerID;
+    }
+
 }

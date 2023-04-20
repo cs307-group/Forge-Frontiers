@@ -63,17 +63,6 @@ public class GeneratorManager extends Manager implements Listener {
             }
         });
 
-        /*
-        int generatorInd = 0;
-        ConfigurationSection configSection;
-        while((configSection = this.plugin.getConfig("generators").getConfigurationSection("generators." + generatorInd)) != null) {
-            Generator generator = new Generator(configSection);
-            this.generators.put(generator.getId(), generator);
-            generatorInd += 1;
-        }
-
-         */
-
     }
 
     @EventHandler

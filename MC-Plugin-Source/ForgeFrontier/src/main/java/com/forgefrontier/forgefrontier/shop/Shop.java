@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.shop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.events.PurchaseEvent;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
@@ -125,12 +126,15 @@ public class Shop {
 
         OfflinePlayer offlinePlayer = Bukkit.getPlayer(l.getLister().getUniqueId());
         if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(l.getLister().getUniqueId());
-
         removeListing(l.getID());
         ItemStack origItem = l.getItem();
         ItemGiver.giveItem(p, origItem);
         setSoldDB(l.getID(),p.getUniqueId());
         econ.depositPlayer(offlinePlayer, l.getPrice());
+
+        PurchaseEvent event = new PurchaseEvent(p, PurchaseEvent.PurchaseType.MARKET, origItem);
+        Bukkit.getPluginManager().callEvent(event);
+
         return l.getPrice();
     }
     public double executeBuy(Player p, UUID l) {

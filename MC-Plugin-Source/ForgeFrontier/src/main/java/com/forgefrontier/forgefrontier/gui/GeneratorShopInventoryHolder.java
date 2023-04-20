@@ -1,11 +1,13 @@
 package com.forgefrontier.forgefrontier.gui;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.events.PurchaseEvent;
 import com.forgefrontier.forgefrontier.generators.*;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.stashes.PlaceStashItemInstance;
 import com.forgefrontier.forgefrontier.stashes.Stash;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -78,6 +80,10 @@ public class GeneratorShopInventoryHolder extends BaseInventoryHolder {
                 e.getWhoClicked().getInventory().addItem(generatorItem);
                 e.getWhoClicked().closeInventory();
                 e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully bought the " + generatorItem.getItemMeta().getDisplayName() + ".");
+
+                PurchaseEvent event = new PurchaseEvent((Player) e.getWhoClicked(), PurchaseEvent.PurchaseType.GENERATOR, generatorItem);
+                Bukkit.getPluginManager().callEvent(event);
+
             });
             i++;
         }
@@ -124,6 +130,10 @@ public class GeneratorShopInventoryHolder extends BaseInventoryHolder {
                 e.getWhoClicked().getInventory().addItem(stashItem);
                 e.getWhoClicked().closeInventory();
                 e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully bought the " + stashItem.getItemMeta().getDisplayName() + ".");
+
+                PurchaseEvent event = new PurchaseEvent((Player) e.getWhoClicked(), PurchaseEvent.PurchaseType.STASH, stashItem);
+                Bukkit.getPluginManager().callEvent(event);
+
             });
             i++;
         }

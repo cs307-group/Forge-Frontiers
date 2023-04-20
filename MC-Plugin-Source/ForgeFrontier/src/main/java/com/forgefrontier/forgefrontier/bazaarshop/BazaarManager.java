@@ -2,11 +2,13 @@ package com.forgefrontier.forgefrontier.bazaarshop;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.connections.BazaarDB;
+import com.forgefrontier.forgefrontier.events.PurchaseEvent;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -367,6 +369,10 @@ public class BazaarManager {
             }
         }
         ItemStack realItem = getRealItem(item);
+
+        PurchaseEvent event = new PurchaseEvent(p, PurchaseEvent.PurchaseType.BAZAAR_DIRECT, realItem);
+        Bukkit.getPluginManager().callEvent(event);
+
         ItemGiver.giveItem(p,realItem, amount);
         refreshListingDisplay();
         return true;
@@ -554,6 +560,10 @@ public class BazaarManager {
             bazaarManager.getBazaarStash(bs.getPlayerID()).removeIf(
                     (stsh) -> stsh.getOrderID().toString().equals(bs.getOrderID().toString()));
             ItemStack itm = getRealItem(bs.getItemID());
+
+            PurchaseEvent event = new PurchaseEvent(p, PurchaseEvent.PurchaseType.BAZAAR_ORDER, itm);
+            Bukkit.getPluginManager().callEvent(event);
+
             ItemGiver.giveItem(p, itm,bs.getAmount());
             bs.setRedeemed();
             p.sendMessage(BazaarManager.bazaarPrefix + "Stash redeemed!");

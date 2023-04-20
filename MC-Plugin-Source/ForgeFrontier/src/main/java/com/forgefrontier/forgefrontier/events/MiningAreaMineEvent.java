@@ -28,6 +28,10 @@ public class MiningAreaMineEvent extends PlayerEvent {
         return resource;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     @Override
     public HandlerList getHandlers() {

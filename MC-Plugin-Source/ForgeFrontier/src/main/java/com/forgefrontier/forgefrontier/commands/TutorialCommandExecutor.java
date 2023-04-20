@@ -1,7 +1,7 @@
 package com.forgefrontier.forgefrontier.commands;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.gui.TutorialInventoryHolder;
+import com.forgefrontier.forgefrontier.tutorial.TutorialInventoryHolder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ public class TutorialCommandExecutor implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
-        p.openInventory(new TutorialInventoryHolder().getInventory());
+        p.openInventory(new TutorialInventoryHolder(p).getInventory());
         sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Opening the Tutorial GUI.");
         return true;
     }

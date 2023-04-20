@@ -17,6 +17,10 @@ public class CustomCraftEvent extends PlayerEvent {
         this.result = result;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     @Override
     public HandlerList getHandlers() {

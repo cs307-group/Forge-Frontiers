@@ -1,0 +1,28 @@
+tasks:
+  0:
+    id: "craft-helmet"
+    material: "LEATHER_HELMET"
+    name: "&eCraft a &6&lLeather Helmet"
+    description: "&7Learn basic crafting mechanics\n&7by crafting a leather helmet"
+    steps:
+      0:
+        type: "CRAFT"
+        quick-description: "&eCraft a &6&lCrafting Table"
+        full-description: "&7Using your 2x2 crafting grid in your\ninventory, make a crafting table."
+        completion-message: "&eYou have successfully crafted a &6&lCrafting Table&e!"
+        data:
+          material: "CRAFTING_TABLE"
+      1:
+        type: "PLACE"
+        quick-description: "&ePlace your crafting table down on your island"
+        full-description: "&7Run /is to create and go to your island.\nOnce you're on your island, place down the crafting table.\nThen click on it to craft an item"
+        completion-message: "&eYou have completed the task to place down your crafting table."
+        data:
+          block_material: "CRAFTING_TABLE"
+      2:
+        type: "CUSTOM_CRAFT"
+        quick-description: "&eCraft a &6&lLeather Helmet&e using the crafting table"
+        full-description: "&7Forge Frontier uses a special crafting system to make items.\n&7Craft a custom &6&lLeather Helmet&7 using the crafting table you have made.\n&7You can find the recipe through the recipe book"
+        completion-message: "&eYou have completed the basics of the crafting system by crafting a &6&lLeather Helmet&e. Congratulations!"
+        data:
+          item_type: "LeatherHelmet"
