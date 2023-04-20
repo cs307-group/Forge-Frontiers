@@ -9,8 +9,8 @@ router = Blueprint("feature", __name__, url_prefix="/feature")
 
 
 @router.get("/list")
-@api.admin
+@api.none
 def view_all_features():
-		temp = get_features()
-		print(temp)
-		return temp
+    temp = get_features()
+    print(temp)
+    return temp
