@@ -118,7 +118,7 @@ public class CraftingRecipeDB extends DBConnection {
                 outItem.setAmount(outAmt);
                 FFRecipe nRec = new FFRecipe(recipeComponents,outItem);
                 nRec.setRecipeMeta(recipeMeta);
-                ForgeFrontier.getInstance().getCraftingManager().addNewRecipeDB(nRec);
+                ForgeFrontier.getInstance().getCraftingManager().addRecipe(nRec);
                 nRecipes++;
             }
             ForgeFrontier.getInstance().getLogger().log(Level.INFO,
