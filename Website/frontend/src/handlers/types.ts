@@ -116,3 +116,8 @@ export interface ShopData {
 export type StripeProductResponse = (Stripe.Product & {
   default_price: Stripe.Price;
 })[];
+
+export interface FeatureList {
+  _id: string;
+  value: string;
+}
