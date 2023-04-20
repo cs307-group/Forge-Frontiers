@@ -26,6 +26,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -43,7 +44,7 @@ public class PlayerManager extends Manager implements Listener {
     /** a map for the Players which store data native to minecraft Players */
     Map<UUID, Player> players;
     Map<String, Player> playersByName;
-
+    Random rand;
     /**
      * A Constructor for the player manager class, which sets the plugin and initializes the HashMaps
      *
@@ -54,6 +55,7 @@ public class PlayerManager extends Manager implements Listener {
         ffPlayers = new HashMap<>();
         players = new HashMap<>();
         playersByName = new HashMap<>();
+        rand = new Random();
     }
 
     @Override
@@ -152,7 +154,12 @@ public class PlayerManager extends Manager implements Listener {
         if(itemInstance == null) {
             event.setDamage(ffPlayer.getOutgoingDamageOnAttack(null));
         } else {
-            event.setDamage(ffPlayer.getOutgoingDamageOnAttack((CustomWeapon.CustomWeaponInstance) itemInstance));
+            CustomWeapon.CustomWeaponInstance cWeapon = (CustomWeapon.CustomWeaponInstance) itemInstance;
+
+            // Play particle on hit
+            if (rand.nextInt(100) < 10 && cWeapon.getParticleEffect() != null)
+                cWeapon.getParticleEffect().playAtPlayer(player);
+            event.setDamage(ffPlayer.getOutgoingDamageOnAttack(cWeapon));
         }
     }
 

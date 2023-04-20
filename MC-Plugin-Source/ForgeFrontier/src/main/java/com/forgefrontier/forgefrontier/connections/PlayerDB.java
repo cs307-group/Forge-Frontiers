@@ -254,7 +254,8 @@ public class PlayerDB extends DBConnection {
             try {
                 while (resultSet.next()) {
                     String json = resultSet.getString("tutorial_state");
-                    callback.accept(new JSONWrapper(json));
+                    if (json == null) { callback.accept(null); }
+                    else { callback.accept(new JSONWrapper(json)); }
                 }
             } catch(SQLException e) {
                 e.printStackTrace();

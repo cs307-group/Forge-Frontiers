@@ -105,7 +105,6 @@ public class SlimeBossTimerEntity extends CustomSlimeEntity {
 
     public void onDeath() {
         this.getBukkitEntity().setCustomNameVisible(false);
-        MobParticles.SLIME_DEATH_PARTICLE.playParticleMob(this);
         existed = false;
     }
 

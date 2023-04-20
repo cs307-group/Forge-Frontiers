@@ -9,6 +9,7 @@ import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.*;
 import com.forgefrontier.forgefrontier.particles.ParticleManager;
 import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.SlimeBossEntity;
+import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleRepeatParticleSpawner;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -267,6 +268,11 @@ public class CustomEntityManager extends Manager implements Listener {
         if (cm.getCode().equals("PoisonChicken")) {
             MobParticles.POISON_CHICKEN_DEATH_PARTICLE.playParticleAtLocation(e.getWorld(),e.getLocation());
             return;
+        } else if (cm.getCode().equals("SlimeBossTimer")) {
+            ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.INFO, "Playing Core Slime Particle");
+            new SimpleRepeatParticleSpawner(
+                    ()->MobParticles.CHICKBOSS_EGG_PARTICLE.playParticleAtLocation(e.getWorld(), e.getLocation().clone().add(0,2,0))
+                    , 3, 60).run();
         }
         MobParticles.GENERIC_CUSTOM_DEATH_PARTICLE.playParticleAtLocation(e.getWorld(),e.getLocation());
     }

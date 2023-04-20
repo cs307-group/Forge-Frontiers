@@ -146,6 +146,7 @@ public class SlimeBossEntity extends HostileSlimeEntity {
 
     public void onDeath() {
         if (existed) {
+            MobParticles.SLIME_DEATH_PARTICLE.playParticleMob(this);
             CraftEntity craftEntityTimer = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossTimer", loc);
             CraftEntity craftEntityA = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
             CraftEntity craftEntityB = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
@@ -162,6 +163,7 @@ public class SlimeBossEntity extends HostileSlimeEntity {
             }
             existed = false;
         }
+
     }
 
     public void offsetUntilJump() {
