@@ -9,6 +9,10 @@ import {Spacer} from "../Spacer";
 
 const AP: any = AnimatePresence;
 
+const formatter = new Intl.DateTimeFormat(["en"], {
+  dateStyle: "short",
+  timeStyle: "medium",
+});
 export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
   const {query, push} = useRouter();
   function closeModal() {
@@ -37,7 +41,9 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
                   <Link
                     href={`/control-panel/in-game-transactions/${sale.id_}`}
                   >
-                    {sale.date_sold == -1 ? "Not Sold Yet" : sale.date_sold}
+                    {sale.date_sold == -1
+                      ? "Not Sold Yet"
+                      : formatter.format(sale.date_sold)}
                   </Link>
                 </td>
                 <td className="px-4 py-3">

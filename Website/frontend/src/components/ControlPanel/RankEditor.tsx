@@ -8,7 +8,7 @@ import {Switch} from "../Switch";
 
 type StripeProduct = Stripe.Product & {default_price: Stripe.Price};
 
-const AP: any = AnimatePresence;
+
 
 export function RankEditor({
   products,
