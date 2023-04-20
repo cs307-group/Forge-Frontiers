@@ -24,18 +24,11 @@ public class FishConfigUtil {
         FileConfiguration config = plugin.getConfig("fishing");
         List<String> r = config.getStringList("fishing-rarities");
         fm.rarities = new ArrayList<>(r);
-        fm.rarities.forEach((ra) -> {
-            plugin.getLogger().log(Level.INFO,"Loaded Rarity: " + ra);
-        });
         List<Integer> chance = config.getIntegerList("base-rate");
-        for (int i : chance) {
-            plugin.getLogger().log(Level.INFO,"Rarity Bound: " + i);
-        }
         fm.chances = new ArrayList<>(chance);
     }
 
     public void loadFishingDrops() {
-        plugin.getLogger().log(Level.INFO,"LOAD FISH DROPS");
         FileConfiguration config = plugin.getConfig("fishing");
         ConfigurationSection csec;
         int rarityInd = 0;
@@ -49,8 +42,8 @@ public class FishConfigUtil {
                 String material = isec.getString("material");
                 String customData = isec.getString("custom_data");
                 String name = isec.getString("name");
-                plugin.getLogger().log(Level.INFO,"[" + rarity + "] - " +
-                        "(" + min + ", " + max +")" + " - " + material);
+                //plugin.getLogger().log(Level.INFO,"[" + rarity + "] - " +
+                //        "(" + min + ", " + max +")" + " - " + material);
                 FishingDrop drop = new FishingDrop(material, "", name, rarity, min, max);
                 fm.drops.computeIfAbsent(rarity, k -> new ArrayList<>());
                 fm.drops.get(rarity).add(drop);

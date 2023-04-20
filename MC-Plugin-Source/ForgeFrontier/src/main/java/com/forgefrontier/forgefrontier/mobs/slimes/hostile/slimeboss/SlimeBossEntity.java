@@ -3,11 +3,14 @@ package com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlimeEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossSmallEntity;
+import com.forgefrontier.forgefrontier.mobs.slimes.hostile.slimeboss.phasetwo.SlimeBossTimerEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -23,6 +26,7 @@ public class SlimeBossEntity extends HostileSlimeEntity {
     int UNTIL_JUMP_TIMER_MAX = 100;
     int CHARGE_TIMER_MAX = 20;
     int JUMP_TIMER_MAX = 30;
+    boolean existed;
 
     int untilJumpTimer;
     int chargeTimer;
@@ -37,6 +41,7 @@ public class SlimeBossEntity extends HostileSlimeEntity {
         jumpTimer = JUMP_TIMER_MAX;
         chargeTimer = 0;
         charged = false;
+        existed = true;
     }
 
     @Override
@@ -88,14 +93,31 @@ public class SlimeBossEntity extends HostileSlimeEntity {
                 }
             }
 
-            /*
+/*
             System.out.println("ChargeTimer: " + chargeTimer + " | UntilJumpTimer: " + untilJumpTimer +
                     " | Charged: " + charged + " | JumpTimer: " + jumpTimer);
-            */
+*/
         }
     }
 
     public void onDeath() {
-        ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBoss", loc);
+        if (existed) {
+            CraftEntity craftEntityTimer = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossTimer", loc);
+            CraftEntity craftEntityA = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
+            CraftEntity craftEntityB = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity("SlimeBossSmall", loc);
+            if (craftEntityA.getHandle() instanceof SlimeBossSmallEntity smallEntityA &&
+                    craftEntityB.getHandle() instanceof SlimeBossSmallEntity smallEntityB) {
+                smallEntityB.offsetUntilJump();
+                if (craftEntityTimer.getHandle() instanceof SlimeBossTimerEntity timerEntity) {
+                    timerEntity.setBounceA(smallEntityA);
+                    timerEntity.setBounceB(smallEntityB);
+                }
+            }
+            existed = false;
+        }
+    }
+
+    public void offsetUntilJump() {
+        this.untilJumpTimer += UNTIL_JUMP_TIMER_MAX / 2;
     }
 }

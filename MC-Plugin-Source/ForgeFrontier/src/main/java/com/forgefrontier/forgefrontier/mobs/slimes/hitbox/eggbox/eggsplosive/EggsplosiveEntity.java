@@ -47,7 +47,7 @@ public class EggsplosiveEntity extends EggBoxEntity {
             lastTimeStamp = System.currentTimeMillis();
         }
 
-        if (totalTimeAlive >= (timeToExplode * 1000)) { // explode on failure
+        if (totalTimeAlive >= (timeToExplode * 1000) && eggEntity != null) { // explode on failure
             explode(40);
             eggEntity.setCustomName("");
             eggEntity.setCustomNameVisible(false);
@@ -71,7 +71,7 @@ public class EggsplosiveEntity extends EggBoxEntity {
 
     @Override
     public void setNamePlate(String name) {
-        if (existed) {
+        if (existed && eggEntity != null) {
             this.name = name;
             eggEntity.setCustomName(name + " | " + (timeToExplode - (totalTimeAlive / 1000)));
             eggEntity.setCustomNameVisible(true);

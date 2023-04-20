@@ -1,18 +1,11 @@
 package com.forgefrontier.forgefrontier.mobs.slimes.hostile;
 
-import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.slimes.CustomSlimeEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -108,6 +101,6 @@ public class HostileSlimeEntity extends CustomSlimeEntity {
     }
 
     public boolean hasNearestPlayer() {
-        return nearestPlayer == null;
+        return nearestPlayer != null;
     }
 }

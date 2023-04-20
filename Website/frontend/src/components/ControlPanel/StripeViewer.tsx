@@ -3,9 +3,10 @@ import Link from "next/link";
 import {useState} from "react";
 import Stripe from "stripe";
 
+import {ExportJSON} from "../ExportJSON";
 import {Spacer} from "../Spacer";
 
-const columns = ["Amount", "Ranks Purchased", "User", "Date"];
+const columns = ["Amount", "Ranks Purchased", "Status", "User", "Date"];
 
 const formatter = new Intl.DateTimeFormat(["en"], {
   dateStyle: "short",
@@ -57,6 +58,7 @@ export function StripeViewer({data}: {data: TxData[]}) {
                   ? JSON.stringify(item.metadata.items.length)
                   : "Unknown"}
               </td>
+              <td className="px-4 py-3">{item.status}</td>
               <td>
                 <Link
                   className="underline"
@@ -72,6 +74,9 @@ export function StripeViewer({data}: {data: TxData[]}) {
           ))}
         </tbody>
       </table>
+      <div className="item-center mt-4 flex justify-end sm:mr-8">
+        <ExportJSON data={data} name="stripe-purchases.json" />
+      </div>
       <AP>
         {Boolean(selectedItem) &&
           ((

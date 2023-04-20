@@ -59,7 +59,7 @@ public class StashAddInventoryHolder extends BaseInventoryHolder {
         }
         int total = stashInstance.getAmount(stashItem) + inventoryTotal;
         if(total > stashItem.getMaxAmount()) {
-            stashInstance.setAmount(stashItem, total);
+            stashInstance.setAmount(stashItem, stashItem.getMaxAmount());
             total -= stashItem.getMaxAmount();
             CustomItemInstance inst = this.stashItem.getItem().asInstance(null);
             while(e.getPlayer().getInventory().firstEmpty() != -1 && total > 0) {

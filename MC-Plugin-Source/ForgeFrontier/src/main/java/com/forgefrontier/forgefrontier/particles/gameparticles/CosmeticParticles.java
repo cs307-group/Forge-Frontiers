@@ -15,7 +15,7 @@ import org.bukkit.Particle;
 /**
  *
  * ADDING COSMETIC PARTICLES:
- *  - ID Allocated range: 12-{0-99} (1200 - 1299)
+ *  - ID: Prefix CSM
  *  - Name
  *  - Prefix Color: Gem will take on this color
  *  - Cosmetic Item: Item of gem (usually colored candle)

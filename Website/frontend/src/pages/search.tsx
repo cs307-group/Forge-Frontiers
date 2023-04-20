@@ -122,7 +122,7 @@ export const getServerSideProps = requireAuthenticatedPageView(async (c) => {
     // hacky but our api kinda sucks
     return {
       props: {
-        ...searchResults.resp,
+        ...(searchResults.resp as any).props,
         ...userResponseToCustomData(userData),
       },
     };

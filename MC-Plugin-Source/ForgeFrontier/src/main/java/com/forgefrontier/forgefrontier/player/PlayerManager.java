@@ -1,11 +1,16 @@
 package com.forgefrontier.forgefrontier.player;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.items.CustomItemInstance;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.CustomWeapon;
 import com.forgefrontier.forgefrontier.items.gear.statistics.StatCalc;
+import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +22,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +61,7 @@ public class PlayerManager extends Manager implements Listener {
         for(Player player: Bukkit.getOnlinePlayers()) {
             players.put(player.getUniqueId(), player);
             playersByName.put(player.getName(), player);
-            ffPlayers.put(player.getUniqueId(), new FFPlayer(player.getUniqueId()));
+            ffPlayers.put(player.getUniqueId(), new FFPlayer(player));
         }
     }
 
@@ -75,7 +81,7 @@ public class PlayerManager extends Manager implements Listener {
 
         players.put(player.getUniqueId(), player);
         playersByName.put(player.getName(), player);
-        ffPlayers.put(player.getUniqueId(), new FFPlayer(player.getUniqueId()));
+        ffPlayers.put(player.getUniqueId(), new FFPlayer(player));
     }
 
     /**
@@ -111,6 +117,9 @@ public class PlayerManager extends Manager implements Listener {
             } else { // converts damage based on stats
                 double damage = event.getDamage();
                 FFPlayer ffPlayer = ffPlayers.get(player.getUniqueId());
+                if (ffPlayer == null) {
+                    return;
+                }
                 AttributeInstance maxHealthAttr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
                 double maxHealth = 20;
                 if (maxHealthAttr != null) {
@@ -118,12 +127,32 @@ public class PlayerManager extends Manager implements Listener {
                 }
 
                 // Modifies incoming damage based on defense stat
-                damage = StatCalc.modifyIncomingDamage(damage, ffPlayer.getDEF());
+                damage = StatCalc.modifyIncomingDamage(damage, ffPlayer.get(StatEnum.DEF));
 
                 // Modifies incoming damage based on health stat
                 double convertedDamage = StatCalc.convertDamage(damage, maxHealth, ffPlayer);
                 event.setDamage(convertedDamage);
             }
+        }
+        if(!(event.getDamager() instanceof Player || event.getDamager() instanceof Arrow)) {
+            return;
+        }
+        Player player;
+        if(event.getDamager() instanceof Player)
+            player = (Player) event.getDamager();
+        else {
+            Arrow arrow = (Arrow) event.getDamager();
+            if(!(arrow.getShooter() instanceof Player)) {
+                return;
+            }
+            player = (Player) arrow.getShooter();
+        }
+        CustomItemInstance itemInstance = CustomItemManager.asCustomItemInstance(((Player) event.getDamager()).getInventory().getItem(EquipmentSlot.HAND));
+        FFPlayer ffPlayer = this.getFFPlayerFromID(player.getUniqueId());
+        if(itemInstance == null) {
+            event.setDamage(ffPlayer.getOutgoingDamageOnAttack(null));
+        } else {
+            event.setDamage(ffPlayer.getOutgoingDamageOnAttack((CustomWeapon.CustomWeaponInstance) itemInstance));
         }
     }
 
@@ -147,18 +176,9 @@ public class PlayerManager extends Manager implements Listener {
     @EventHandler
     public void onPlayerLevelChange(PlayerLevelChangeEvent event) {
        int newLevel = event.getNewLevel();
-       int oldLevel = event.getOldLevel();
        Player player = event.getPlayer();
        FFPlayer ffPlayer = getFFPlayerFromID(player.getUniqueId());
-       if (oldLevel < newLevel) {
-           for (int i = 0; i < newLevel - oldLevel; i++) {
-               ffPlayer.levelUp();
-           }
-       } else if (oldLevel > newLevel) {
-           for (int i = 0; i < oldLevel - newLevel; i++) {
-               ffPlayer.levelDown();
-           }
-       }
+       ffPlayer.setLevelStats(newLevel);
     }
 
     /** Getter */

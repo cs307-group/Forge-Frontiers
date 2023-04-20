@@ -3,7 +3,6 @@ package com.forgefrontier.forgefrontier.items.gear.upgradegems;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.*;
 import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

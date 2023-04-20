@@ -8,7 +8,7 @@ import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignSphere;
 import org.bukkit.Particle;
 
 /**
- * RANGE: 5000-6000
+ * Prefix: SKL
  */
 public class SkillParticles {
     public static FFParticle GROUNDSMASHPARTICLE;

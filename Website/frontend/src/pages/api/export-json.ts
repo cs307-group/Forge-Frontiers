@@ -1,7 +1,5 @@
 import {NextRequest} from "next/server";
 
-import {Tokens} from "@/handlers/types";
-
 export const config = {
   runtime: "edge",
 };
@@ -9,10 +7,11 @@ export const config = {
 export default async function (req: NextRequest) {
   const body = await req.formData();
   const data = body.get("data");
+  const filename = body.get("file-name");
   if (!data) return new Response("Invalid form!", {status: 400});
   return new Response(data, {
     headers: {
-      "content-disposition": "attachment;filename=export.json",
+      "content-disposition": `attachment;filename=${filename || "export.json"}`,
       "content-type": "application/json",
     },
   });

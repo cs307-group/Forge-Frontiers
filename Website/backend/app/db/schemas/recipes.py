@@ -30,6 +30,9 @@ class Recipe(db.Model):
     amt7 = db.Column(db.Integer)
     amt8 = db.Column(db.Integer)
     amt9 = db.Column(db.Integer)
+    output = db.Column(db.Text)
+    out_type = db.Column(db.String(2))
+    output_amount = db.Column(db.Integer)
 
     def __init__(self) -> None:
         self.mat1 = None

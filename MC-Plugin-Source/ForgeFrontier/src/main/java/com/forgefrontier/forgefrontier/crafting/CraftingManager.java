@@ -1,6 +1,7 @@
 package com.forgefrontier.forgefrontier.crafting;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.connections.DatabaseManager;
 import com.forgefrontier.forgefrontier.items.CustomItem;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
@@ -29,6 +30,9 @@ public class CraftingManager extends Manager implements Listener {
         ffRecipes = new ArrayList<>();
     }
 
+    /**
+     * WARNING: Load database items LAST, and assure nothing gets added to recipeList until database task is done
+     */
     @Override
     public void init() {
         ItemStack itm = new ItemStack(Material.IRON_INGOT);
@@ -52,6 +56,7 @@ public class CraftingManager extends Manager implements Listener {
                  FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM});
         ffRecipes.add(airOrbRecipe);
 
+        plugin.getDatabaseManager().getRecipeDB().loadRecipes();
     }
 
     @Override
@@ -72,6 +77,22 @@ public class CraftingManager extends Manager implements Listener {
             }
         }
     }
+
+    public boolean addNewRecipeDB(FFRecipe r) {
+        for (FFRecipe recipe : ffRecipes) {
+            if (FFRecipe.isSame(r, recipe)) {
+                return false;
+            }
+        }
+        plugin.getDatabaseManager().getRecipeDB().addRecipeDBAsync(r);
+        ffRecipes.add(r);
+        return true;
+    }
+
+    public void addRecipe(FFRecipe r) {
+        ffRecipes.add(r);
+    }
+
 
     public ArrayList<FFRecipe> getRecipes() {
         return ffRecipes;

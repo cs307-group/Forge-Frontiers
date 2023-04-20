@@ -4,11 +4,15 @@ import {useRouter} from "next/router";
 
 import {ShopData} from "@/handlers/types";
 
-import {Button} from "../Button";
+import {ExportJSON} from "../ExportJSON";
 import {Spacer} from "../Spacer";
 
 const AP: any = AnimatePresence;
 
+const formatter = new Intl.DateTimeFormat(["en"], {
+  dateStyle: "short",
+  timeStyle: "medium",
+});
 export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
   const {query, push} = useRouter();
   function closeModal() {
@@ -37,7 +41,9 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
                   <Link
                     href={`/control-panel/in-game-transactions/${sale.id_}`}
                   >
-                    {sale.date_sold == -1 ? "Not Sold Yet" : sale.date_sold}
+                    {sale.date_sold == -1
+                      ? "Not Sold Yet"
+                      : formatter.format(sale.date_sold)}
                   </Link>
                 </td>
                 <td className="px-4 py-3">
@@ -49,7 +55,7 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
                 </td>
                 <td className="px-4 py-3">
                   <Link
-                    href={"/search?q=" + sale.lister_player_id}
+                    href={"/profile/mc?q=" + sale.lister_player_id}
                     className="underline"
                   >
                     {sale.lister_player_id}
@@ -58,7 +64,7 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
                 <td className="px-4 py-3">
                   {sale.buyer_id ? (
                     <Link
-                      href={"/search?q=" + sale.buyer_id}
+                      href={"/profile/mc?q=" + sale.buyer_id}
                       className="underline"
                     >
                       {sale.buyer_id}
@@ -74,37 +80,14 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
       </div>
       <Spacer y={24} />
       {/* progressive enhancement, this will work even without js */}
-      <form
-        action="/api/export-csv"
-        method="post"
-        onSubmit={(e) => {
-          // do this on the frontend
-          e.preventDefault();
-          const blob = new Blob([JSON.stringify(shop)], {
-            type: "application/json",
-          });
-          const u = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = u;
-          a.download = "export.json";
-          a.click();
-          setTimeout(() => {
-            URL.revokeObjectURL(u);
-          }, 3000);
-        }}
-      >
-        <noscript>
-          <input type="hidden" name="data" value={JSON.stringify(shop)} />
-        </noscript>
-        <Button className="p-2">Export</Button>
-      </form>
+      <ExportJSON data={shop} name="ingame-transactions.json" />
       <AP>
         {Boolean(query.id) &&
           ((
             <motion.div
               initial={{opacity: 0}}
               animate={{opacity: 1}}
-              exit={{opacity: 0}}
+              exit={{opacity: 0, pointerEvents: "none"}}
               className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black bg-opacity-50"
               onClick={closeModal}
             >

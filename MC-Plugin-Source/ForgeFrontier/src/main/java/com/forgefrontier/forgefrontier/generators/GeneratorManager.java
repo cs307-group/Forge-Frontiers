@@ -53,6 +53,11 @@ public class GeneratorManager extends Manager implements Listener {
             int genIndex = 0;
             String generatorId;
             while((generatorId = this.plugin.getConfig("generators").getString("generator-shop." + genIndex)) != null) {
+                if(!this.generators.containsKey(generatorId)) {
+                    ForgeFrontier.getInstance().getLogger().severe("Unable to find generator \"" + generatorId + "\" to put in the shop...");
+                    genIndex += 1;
+                    continue;
+                }
                 shopMenuList.add(this.generators.get(generatorId));
                 genIndex += 1;
             }

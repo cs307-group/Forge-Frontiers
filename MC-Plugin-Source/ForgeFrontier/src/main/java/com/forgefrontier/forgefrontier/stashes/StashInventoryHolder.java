@@ -36,7 +36,11 @@ public class StashInventoryHolder extends BaseInventoryHolder {
                     if(!success) {
                         ForgeFrontier.getInstance().getLogger().severe("Unable to send stash update to database. An unknown error occurred in doing so.");
                     }
-                    Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> e.getWhoClicked().openInventory(new StashInventoryHolder(stashInstance).getInventory()));
+                    Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                        if(!success)
+                            e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry, an error occurred in updating the stash.");
+                        e.getWhoClicked().openInventory(new StashInventoryHolder(stashInstance).getInventory());
+                    });
                 });
                 return;
             }
@@ -47,7 +51,11 @@ public class StashInventoryHolder extends BaseInventoryHolder {
                 if(!success) {
                     ForgeFrontier.getInstance().getLogger().severe("Unable to send stash update to database. An unknown error occurred in doing so.");
                 }
-                Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> e.getWhoClicked().openInventory(new StashInventoryHolder(stashInstance).getInventory()));
+                Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
+                    if(!success)
+                        e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Sorry, an error occurred in updating the stash.");
+                    e.getWhoClicked().openInventory(new StashInventoryHolder(stashInstance).getInventory());
+                });
             });
         });
 

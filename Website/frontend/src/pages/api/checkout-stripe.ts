@@ -28,7 +28,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     });
 
   if (method !== "post")
-    return new Response("Invalid request to payment gateway", {status: 400});
+    return res.status(405).send({error: "Invalid request to payment gateway"});
   try {
     let resp = await getResponse(tokens);
     if (!resp.ok) {
