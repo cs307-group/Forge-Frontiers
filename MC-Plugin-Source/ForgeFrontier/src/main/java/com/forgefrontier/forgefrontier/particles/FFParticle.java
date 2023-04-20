@@ -53,11 +53,11 @@ public class FFParticle {
             staticParticles = pd.getNext();
         }
         for (Vector v : staticParticles) {
-            spawnOneParticle(p.getWorld(), p.getLocation().clone().add(v));
+            spawnOneParticle(p.getWorld(), p.getLocation().clone().add(v).add(0,staticOffsetY,0));
         }
     }
     public void playParticleMob(Mob m) {
-        this.playParticleAtLocation(m.getBukkitEntity().getWorld(), m.getBukkitEntity().getLocation());
+        this.playParticleAtLocation(m.getBukkitEntity().getWorld(), m.getBukkitEntity().getLocation().clone().add(0,staticOffsetY,0));
     }
     public void playParticleAtLocation(World w, Location loc) {
 

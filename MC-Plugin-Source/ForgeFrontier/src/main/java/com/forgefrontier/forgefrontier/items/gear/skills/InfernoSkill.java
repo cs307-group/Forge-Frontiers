@@ -16,8 +16,8 @@ public class InfernoSkill extends Skill {
         super(
                 "inferno",
                 "&4Inferno",
-                "&7Burst into a fiery &4&lInferno\n&r&6Burning &7all nearby mobs in an area around you.",
-                1000*20,
+                "&eBurst into a fiery &4&lInferno\n&r&6Burning &eall nearby mobs in an area around you.",
+                1000*60,
                 SkillType.WEAPON
         );
     }
@@ -36,7 +36,7 @@ public class InfernoSkill extends Skill {
     }
     public void doInferno(Player p) {
         Collection<Entity> entityList = p.getLocation().getWorld()
-                .getNearbyEntities(p.getLocation(), 10, 5, 10);
+                .getNearbyEntities(p.getLocation(), 5, 5, 5);
         for(Entity e: entityList) {
             if(e == p)
                 continue;

@@ -47,7 +47,7 @@ public class SkillParticles {
         CubeDesignInstance infernoCubeInstance = new CubeDesignInstance(LargeCube55);
         INFERNO = new FFParticle(infernoCubeInstance);
         INFERNO.setParticle(Particle.DRIP_LAVA);
-        INFERNO.setHeightOffset(0.5F);
+        INFERNO.setHeightOffset(2.5F);
         INFERNO.delay = 5;
         INFERNO.id = "SKLInferno";
         particleManager.registerParticle(INFERNO);
