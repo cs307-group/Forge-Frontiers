@@ -27,6 +27,8 @@ public class FFParticle {
     protected float offX = 0;
     protected float offY = 0;
     protected float offZ = 0;
+
+    protected float staticOffsetY = 0;
     protected int density = 1;
     public String id = "NA";
     public int delay = 10;
@@ -63,7 +65,7 @@ public class FFParticle {
             staticParticles = pd.getNext();
         }
         for (Vector v : staticParticles) {
-            spawnOneParticle(w, loc.clone().add(v));
+            spawnOneParticle(w, loc.clone().add(v).add(0,staticOffsetY,0));
         }
     }
 
@@ -124,4 +126,9 @@ public class FFParticle {
         this.offY = y;
         this.offZ = z;
     }
+
+    public void setHeightOffset(float y) {
+        this.staticOffsetY = y;
+    }
+
 }

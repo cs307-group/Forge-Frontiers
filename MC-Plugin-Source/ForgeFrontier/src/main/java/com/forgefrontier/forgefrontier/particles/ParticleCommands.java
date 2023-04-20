@@ -1,8 +1,6 @@
 package com.forgefrontier.forgefrontier.particles;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
-import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignChain;
-import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignHalo;
-import com.forgefrontier.forgefrontier.particles.designs.ParticleDesignSphere;
+import com.forgefrontier.forgefrontier.particles.designs.*;
 import com.forgefrontier.forgefrontier.particles.gameparticles.MobParticles;
 import com.forgefrontier.forgefrontier.particles.particlespawner.SimpleRepeatParticleSpawner;
 import org.bukkit.Particle;
@@ -72,6 +70,23 @@ public class ParticleCommands {
         ffParticle.setParticle(Particle.PORTAL);
         SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
                 () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, 1000);
+        sps.run();
+        particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, "GENERIC"));
+    }
+    @Subcommand({"cube"})
+    public void testCubeParticle(CommandSender cs, @Default("20") Integer edgeParticles, @Default("2") Integer size) {
+        if (!(cs instanceof Player p)) {
+            cs.sendMessage("Only players can use this command!");
+            return;
+        }
+        ParticleDesignCube pdc = new ParticleDesignCube(edgeParticles, size);
+        pdc.createStaticPoints();
+        FFParticle ffParticle = new FFParticle(new CubeDesignInstance(pdc));
+        Particle part = particleManager.getRandomParticle();
+        p.sendMessage("Playing particle: " + part.toString());
+        ffParticle.setParticle(part);
+        SimpleRepeatParticleSpawner sps = new SimpleRepeatParticleSpawner(
+                () -> ffParticle.playParticleAtLocation(p.getWorld(), p.getEyeLocation()), 5, -1);
         sps.run();
         particleManager.addPlayerParticle(p.getUniqueId(), new PlayerParticleTask(sps.getTask(), -1, "GENERIC"));
     }
