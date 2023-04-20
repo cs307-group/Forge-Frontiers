@@ -1,7 +1,9 @@
 package com.forgefrontier.forgefrontier.items.gear.statistics;
 
+import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerStat;
+import com.forgefrontier.forgefrontier.player.StatHolder;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
@@ -17,27 +19,15 @@ public class StatCalc {
      * @param ffPlayer the player issuing the attack
      * @return the updated damage
      */
-    public static double calcOutgoingDamage(FFPlayer ffPlayer, StatEnum MAIN_STAT) {
-        // System.out.println(ffPlayer.getStatsString());
+    public static double calcOutgoingDamage(FFPlayer ffPlayer, StatHolder weaponStat, StatEnum mainStat) {
 
-        double damage = 0;
-        // System.out.println(damage);
-        int mainStatInt = StatEnum.getIntFromEnum(MAIN_STAT);
+        double damage = ffPlayer.get(StatEnum.ATK) + weaponStat.get(StatEnum.ATK);
+        damage += ffPlayer.get(mainStat) + weaponStat.get(mainStat);
 
-        damage += ffPlayer.getATK();
-        // System.out.println(damage);
-        switch (mainStatInt) {
-            case 2: damage += ffPlayer.getSTR(); break;
-            case 3: damage += ffPlayer.getDEX(); break;
-            default: break;
-        }
-        // System.out.println(damage);
-
-        if ((int) (Math.random() * 100) + 1 <= ffPlayer.getCRATE()) {
-            double critDamage = ((double) ffPlayer.getCDMG()) / 100 * damage;
+        if (Math.random() <= (ffPlayer.get(StatEnum.CRATE) + weaponStat.get(StatEnum.CRATE) ) / 100.0) {
+            double critDamage = (ffPlayer.get(StatEnum.CDMG) + weaponStat.get(StatEnum.CDMG)) / 100.0 * damage;
             damage += critDamage;
         }
-        // System.out.println(damage);
 
         return damage;
     }
@@ -72,7 +62,7 @@ public class StatCalc {
             ffPlayer.setCurrentHealth(0);
         }
         ffPlayer.setCurrentHealth(updatedHealth);
-        return mcMaxHealth * (ffDamage / ffPlayer.getHP());
+        return mcMaxHealth * (ffDamage / ffPlayer.get(StatEnum.HP));
     }
 
     /**

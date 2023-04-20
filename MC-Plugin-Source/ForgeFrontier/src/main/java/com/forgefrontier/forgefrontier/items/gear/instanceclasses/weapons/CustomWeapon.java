@@ -18,14 +18,14 @@ public abstract class CustomWeapon extends GearItem {
      */
     public abstract static class CustomWeaponInstance extends GearItemInstance {
 
-        StatEnum MAIN_STAT = StatEnum.STR;
+        StatEnum mainStat = StatEnum.STR;
 
         public CustomWeaponInstance(ItemStack itemStack) {
             super(itemStack);
         }
 
         public StatEnum getMainStat() {
-            return MAIN_STAT;
+            return mainStat;
         }
     }
 
@@ -45,16 +45,4 @@ public abstract class CustomWeapon extends GearItem {
         super(name, quality, numBaseStats, numGemSlots, GemEnum.WEAPON, material, durability, lore);
     }
 
-    /**
-     * Calculates Outgoing damage based upon player stats
-     *
-     * @param e the event details
-     * @param itemInstance the instance used
-     * @param ffPlayer the ffPlayer using the weapon
-     */
-    @Override
-    public void onAttack(EntityDamageByEntityEvent e, CustomItemInstance itemInstance, FFPlayer ffPlayer) {
-        double damage = ffPlayer.getOutgoingDamageOnAttack((CustomWeaponInstance) itemInstance);
-        e.setDamage(damage);
-    }
 }

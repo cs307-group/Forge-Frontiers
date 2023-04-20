@@ -37,4 +37,5 @@ public class BaseStatistic extends CustomStat {
     public BaseStatistic(String data) {
         super(data);
     }
+
 }
