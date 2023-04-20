@@ -31,6 +31,7 @@ export const routes = {
   adminViewShops: getApiURL("/admin/shops"),
   decodeToken: getApiURL("/users/-/decode-token"),
   getFeatures: getApiURL("/feature/list"),
+  updateFeatures: getApiURL("/feature/update"),
 };
 
 /**

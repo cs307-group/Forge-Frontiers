@@ -5,5 +5,4 @@ from sqlalchemy import or_
 
 def get_features() -> FeatureFlags:
     x = guard(FeatureFlags.query.filter_by(_id="root_config").first())
-    print(x)
-    return x.as_json
+    return x

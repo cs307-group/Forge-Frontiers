@@ -2,19 +2,14 @@ import {useState} from "react";
 
 import {Spacer} from "../Spacer";
 import {Switch} from "../Switch";
-import jsonData from "./status.json";
 
 export function FeatureToggleViewer({data}: {data: string}) {
-  const jsonString = JSON.stringify(data);
-  const [sws, setSwitches] = useState(() => JSON.parse(jsonString));
+  const [sws, setSwitches] = useState(data);
 
   const handleSwitchChange = (name: string, val: boolean) => {
     setSwitches((prevSwitches: any) => ({...prevSwitches, [name]: val}));
   };
 
-  const handleSaveClick = () => {
-    console.log(sws);
-  };
   const switches = Object.entries(sws).map(([feature, status]) => (
     <div key={feature}>
       <Spacer y={30} />
@@ -33,10 +28,13 @@ export function FeatureToggleViewer({data}: {data: string}) {
 
   return (
     <div className="mx-auto max-w-[90%] overflow-auto">
-      <Spacer y={30} />
-      {switches}
-      <Spacer y={50} />
-      <button onClick={handleSaveClick}>Save</button>
+      <form action="/api/update-features" method="post">
+        <input type="hidden" value={JSON.stringify(sws)} name="swsConfig" />
+        <Spacer y={30} />
+        {switches}
+        <Spacer y={50} />
+        <button>Save</button>
+      </form>
     </div>
   );
 }
