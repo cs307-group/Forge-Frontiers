@@ -91,7 +91,6 @@ public class ForgeFrontier extends JavaPlugin {
     private TutorialManager tutorialManager;
     private ChatManager chatManager;
     private GameManager gameManager;
-
     private SpawnerManager spawnerManager;
 
     private Shop itemShop;

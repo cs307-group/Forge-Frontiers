@@ -1,12 +1,9 @@
 {
-  "What is your return policy?": "Our return policy is to give you all of your money back",
-  "How do I track my order?": "To track your order go to your minecraft profile.",
-  "What payment methods do you accept?": "We accept all formes of money.",
-  "Do you offer international shipping?": "Yes, we offer international shipping.",
-  "Can I cancel my order?": "Yes, you can cancel if you pay extra.",
-  "What is your customer support contact information?": "You can contact our customer support team at nope.",
-  "How long does shipping take?": "Shipping usually takes 2 seconds",
-  "What is your privacy policy?": "Our privacy policy is none.",
-  "How do I place an order?": "To place an order place an order.",
-  "What are your business hours?": "Our business hours are 24/7"
+  "What happens when I try to collect my generators on the website?": "Our program will try to fill all of your current stashes with the items from the generators. If no stash(es) exist, the generators will not be collected. ",
+  "Is the market data updated in real time?": "Yes! Our website pull data frequently from the server to make sure you have the most up to date information.",
+  "What payment methods do you accept?": "We process all of our transactions through Stripe so any payment methods accepted by Stripe is good.",
+  "Where can I contact support for any questions?": "You can contact our team at ForgeFrontier@gmail.com",
+  "Can I get a refund for my rank?": "All refunds must be handled through Stripe.",
+  "How long dpes it take for a rank to show up ingame?": "Delivery can take up to several minutes. However, by running the /rank command ingame, you can get your rank much faster.",
+  "What is your privacy policy?": "Our privacy policy is none."
 }

@@ -35,7 +35,7 @@ class StashInstance(db.Model):
         self.location_y = location_y
         self.location_z = location_z
         self.location_world = location_world
-        self.contents_json = (contents_json,)
+        self.contents_json = contents_json
         self.island_id = island_id
 
     @property

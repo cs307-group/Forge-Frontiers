@@ -31,7 +31,7 @@ export default function Stash({
 }) {
   useCookieSync(cookie);
   useRefresh(3000);
-  const {stashes} = gens;
+  const {stashes, stash_config} = gens;
   return (
     <AppLayout
       active="stash-viewer"
@@ -55,7 +55,20 @@ export default function Stash({
               <TR key={stash.id_}>
                 <TD>{stash.island_id}</TD>
                 <TD>{stash.location_world}</TD>
-                <TD>{stash.contents_json}</TD>
+                <TD>
+                  {Object.entries(JSON.parse(stash.contents_json)).map(
+                    ([k, v]) => (
+                      <div>
+                        <span className="font-bold">{k}</span>: {v as any} / {" "}
+                        {
+                          stash_config
+                            .find((x) => x.stash_id == stash.stash_id)
+                            ?.contents.find((x) => x.item_id == k)?.max_amount
+                        }
+                      </div>
+                    )
+                  )}
+                </TD>
                 <TD>
                   {stash.location_x}, {stash.location_y}, {stash.location_z}
                 </TD>

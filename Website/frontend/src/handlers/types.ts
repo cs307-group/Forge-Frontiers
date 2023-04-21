@@ -84,9 +84,19 @@ export interface StashState {
   island_id: string;
 }
 
+interface StashConfig {
+  _id: string;
+  stash_id: string;
+  friendly_name: string;
+  block_material: string;
+  costs: Array<{material_type: string; item_id: string; amount: number}>;
+  contents: Array<{item_id: string; max_amount: number}>;
+}
+
 export interface GeneratorStateFetch {
   generators: GeneratorState[];
   stashes: StashState[];
+  stash_config: StashConfig[];
 }
 
 export interface GeneratorConfigStatic {

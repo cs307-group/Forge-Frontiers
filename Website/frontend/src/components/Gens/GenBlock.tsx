@@ -69,7 +69,7 @@ function __GenBlock({level, config, last_collection_time}: GenProps) {
     <div className="h-30 rounded-md border-2 p-2  dark:border-transparent dark:bg-[#171717]">
       <Spacer y={10} />
       <p>
-        Generator Type: {config.resource} level {level}
+        Generator Type: {config.resource} level {level + 1}
       </p>
       <Spacer y={10} />
       <Progress curr={count} max={config.levels[level].max_size} />
