@@ -5,11 +5,15 @@ import {useRouter} from "next/router";
 import {ShopData} from "@/handlers/types";
 
 import {ExportJSON} from "../ExportJSON";
+import {MCToPlainText} from "../MCToPlainText";
 import {Spacer} from "../Spacer";
 import {TBody, TD, TH, THead, TR, Table} from "../Table";
 
 const AP: any = AnimatePresence;
-
+const formatter = new Intl.DateTimeFormat(["en"], {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
 export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
   const {query, push} = useRouter();
   function closeModal() {
@@ -33,14 +37,17 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
                   <Link
                     href={`/control-panel/in-game-transactions/${sale.id_}`}
                   >
-                    {sale.date_sold == -1 ? "Not Sold Yet" : sale.date_sold}
+                    {sale.date_sold == -1
+                      ? "Not Sold Yet"
+                      : formatter.format(sale.date_sold)}
                   </Link>
                 </TD>
                 <TD>
                   <Link
                     href={`/control-panel/in-game-transactions/${sale.id_}`}
                   >
-                    {sale.item_name} x{sale.amount} - {sale.price}
+                    <MCToPlainText text={sale.item_name} /> x{sale.amount} -{" "}
+                    {sale.price}
                   </Link>
                 </TD>
                 <TD>
@@ -128,15 +135,21 @@ function DetailedSaleInfo({shop}: {shop: ShopData}) {
         <tbody className="text-sm text-gray-600">
           <tr>
             <td className="px-4 py-2 font-bold">Item Name:</td>
-            <td className="px-4 py-2">{item_name}</td>
+            <td className="px-4 py-2">
+              <MCToPlainText text={item_name} />
+            </td>
           </tr>
           <tr>
             <td className="px-4 py-2 font-bold">Item Material:</td>
-            <td className="px-4 py-2">{item_material}</td>
+            <td className="px-4 py-2">
+              <MCToPlainText text={item_material} />
+            </td>
           </tr>
           <tr>
             <td className="px-4 py-2 font-bold">Item Lore:</td>
-            <td className="px-4 py-2">{item_lore || "-"}</td>
+            <td className="px-4 py-2">
+              <MCToPlainText text={item_lore || "-"} />
+            </td>
           </tr>
           <tr>
             <td className="px-4 py-2 font-bold">Price:</td>

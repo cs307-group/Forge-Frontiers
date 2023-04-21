@@ -7,6 +7,7 @@ import {FormEvent, useState} from "react";
 import {Button} from "@/components/Button";
 import {BaseInput} from "@/components/Input/BaseInput";
 import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
+import {MCToPlainText} from "@/components/MCToPlainText";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
 import {getMarketState} from "@/handlers/market";
@@ -80,7 +81,9 @@ export default function Market({
               key={b.slot_id}
               className="flex h-40 flex-col rounded-md border-2 p-4 dark:bg-[#171717]"
             >
-              <div className="mx-auto text-center"> {b.item_name} </div>
+              <div className="mx-auto text-center">
+                <MCToPlainText text={b.item_name} />
+              </div>
               <div className="flex flex-1 items-center justify-between">
                 {data.cheapest[b.slot_id]?.amount ? (
                   <div>

@@ -4,6 +4,7 @@ import {PlayerStats, ShopData, UserData} from "@/handlers/types";
 import {useRefresh} from "@/hooks/use-refresh";
 import avatarImage from "@/images/avatar.png";
 
+import {MCToPlainText} from "../MCToPlainText";
 import {Spacer} from "../Spacer";
 
 const formatter = new Intl.DateTimeFormat(["en"], {
@@ -114,12 +115,14 @@ export function ProfileViewer({
           <tbody>
             {(shop || []).map((x) => (
               <tr key={x.id_}>
-                <td className="whitespace-nowrap px-6 py-4">{x.item_name}</td>
+                <td className="whitespace-nowrap px-6 py-4">
+                  <MCToPlainText text={x.item_name} />
+                </td>
                 {/* <td className="px-6 py-4 whitespace-nowrap">
                   {x.item_material}
                 </td> */}
                 <td className="whitespace-nowrap px-6 py-4">
-                  {x.item_lore || "unknown"}
+                  <MCToPlainText text={x.item_lore || "unknown"} />
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">{x.price}</td>
                 <td className="whitespace-nowrap px-6 py-4">{x.amount}</td>

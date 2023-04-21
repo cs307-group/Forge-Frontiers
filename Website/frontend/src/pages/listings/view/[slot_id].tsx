@@ -6,6 +6,7 @@ import {useMemo} from "react";
 
 import {Client} from "@/components/Client";
 import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
+import {MCToPlainText} from "@/components/MCToPlainText";
 import {Spacer} from "@/components/Spacer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
 import {isErrorResponse} from "@/handlers/fetch-util";
@@ -51,7 +52,9 @@ export default function ViewBySlotId({
             key={data.lookup.slot_id}
             className="flex flex-col items-center justify-center rounded-md p-4 dark:bg-[#171717]"
           >
-            <div className="mx-auto text-center"> {data.lookup.item_name} </div>
+            <div className="mx-auto text-center">
+              <MCToPlainText text={data.lookup.item_name} />
+            </div>
             <Image
               width={48}
               height={48}
