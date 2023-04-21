@@ -34,7 +34,8 @@ def api_get_generator_config():
 @router.get("/update/<island_id>")
 @api.strict
 def api_collect_gen(island_id: str):
-    data = update_generator_collect_time(island_id)
-    stashes = update_stash_stats(island_id, data)
+    cfg = get_generator_config()
+    data, gen_instances = update_generator_collect_time(island_id, cfg)
+    stashes = update_stash_stats(island_id, data, cfg, gen_instances)
     db.session.commit()
     return {"generators": data, "stashes": stashes}

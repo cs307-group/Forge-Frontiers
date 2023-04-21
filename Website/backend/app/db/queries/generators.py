@@ -20,5 +20,5 @@ def get_generator_config():
     ret = {}
     for item in cfg:
         ret[item.generator_id] = item.as_json
-        ret[item.generator_id]["resource"] = item.friendly_name
+        ret[item.generator_id]["resource"] = item.resource_item_id
     return ret
