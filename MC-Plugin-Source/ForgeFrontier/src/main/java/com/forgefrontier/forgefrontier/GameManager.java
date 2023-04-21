@@ -47,6 +47,7 @@ public class GameManager extends Manager {
                     plugin.getLogger().log(Level.INFO,"Disabled Bazaar");
                 });
             }
+            state = nState;
         }
                 }).start();
     }
