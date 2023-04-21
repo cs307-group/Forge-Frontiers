@@ -4,6 +4,7 @@ from app.db.queries.generators import (
     get_generators_for_island,
     get_stash_for_island,
     get_generator_config,
+    get_stash_config,
 )
 from app.db.mutations.generators import (
     update_generator_collect_time,
@@ -20,6 +21,7 @@ def api_get_gens(island_id: str):
     res = {
         "generators": get_generators_for_island(island_id),
         "stashes": get_stash_for_island(island_id),
+        "stash_config": get_stash_config(),
     }
     # print(res)
     return res
