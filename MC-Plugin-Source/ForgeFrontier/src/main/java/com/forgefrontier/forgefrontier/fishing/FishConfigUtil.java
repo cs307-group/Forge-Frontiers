@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -24,8 +25,17 @@ public class FishConfigUtil {
         FileConfiguration config = plugin.getConfig("fishing");
         List<String> r = config.getStringList("fishing-rarities");
         fm.rarities = new ArrayList<>(r);
-        List<Integer> chance = config.getIntegerList("base-rate");
-        fm.chances = new ArrayList<>(chance);
+        HashMap<String, Double> chances = fm.fishDB.getFishRarityChances();
+        fm.chances = new ArrayList<Double>();
+        fm.chances.add(chances.get("Common"));
+        fm.chances.add(chances.get("Uncommon"));
+        fm.chances.add(chances.get("Rare"));
+        fm.chances.add(chances.get("Super Rare"));
+        fm.chances.add(chances.get("Ultra Rare"));
+        fm.chances.add(chances.get("Legendary"));
+        fm.chanceRarityTotal = 0;
+        for (double k : fm.chances) fm.chanceRarityTotal += k;
+        for (int i = 0; i < fm.chances.size(); i++) fm.chances.set(i,fm.chances.get(i)/fm.chanceRarityTotal);
     }
 
     public void loadFishingDrops() {

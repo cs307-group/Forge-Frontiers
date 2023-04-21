@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -105,6 +106,22 @@ public class FishDB extends DBConnection {
         });
         this.updateThread.start();
         this.currentlyUpdating = true;
+    }
+
+    public HashMap<String, Double> getFishRarityChances() {
+        HashMap<String, Double> rarities = new HashMap<>();
+        SelectQueryWrapper wrapper = new SelectQueryWrapper();
+        wrapper.setTable("public.fishing_rarities");
+        wrapper.setFields("rarity", "chance");
+        ResultSet rs = wrapper.executeSyncQuery(dbConn);
+        try {
+            while (rs.next()) {
+                String label = rs.getString("rarity");
+                int chance = rs.getInt("chance");
+                rarities.put(label, (double) chance);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return rarities;
     }
 
 

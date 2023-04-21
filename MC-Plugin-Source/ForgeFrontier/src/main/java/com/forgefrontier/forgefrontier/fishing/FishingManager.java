@@ -35,7 +35,9 @@ public class FishingManager extends Manager implements Listener {
         super(plugin);
     }
     public ArrayList<String> rarities;
-    public ArrayList<Integer> chances;
+    public ArrayList<Double> chances;
+    int chanceRarityTotal = 1;
+
     public HashMap<Integer, ArrayList<FishingDrop>> drops;
     public FishConfigUtil configUtil;
     public FishModifier rollModifier;
@@ -46,6 +48,7 @@ public class FishingManager extends Manager implements Listener {
     @Override
     public void init() {
         rand = new Random();
+        fishDB = plugin.getDatabaseManager().getFishDB();
         clearLoad();
     }
 
@@ -57,7 +60,6 @@ public class FishingManager extends Manager implements Listener {
         configUtil.loadRarities();
         configUtil.loadFishingDrops();
         configUtil.loadFishChanceDrop();
-        fishDB = plugin.getDatabaseManager().getFishDB();
         playerFishStats = fishDB.loadFishingStats();
     }
 
@@ -112,22 +114,14 @@ public class FishingManager extends Manager implements Listener {
     }
 
     public int calculateRarity(double rod_rate, double skill_rate) {
-        int roll = Math.abs(rand.nextInt()) % 1000;
-        roll *= rod_rate * skill_rate;
-        roll = Math.min(roll, 1000);
-        int out = 0;
-        int accum = 0;
-        for (int i = 0; i < chances.size(); i++) {
-            accum += (chances.get(i));
-            if (roll <= accum) {
-                out = i;
-                break;
-            }
+        double r = Math.random() * 1;
+        r *= rod_rate * skill_rate;
+        int idx = 0;
+        for (; idx < chances.size() - 1; ++idx) {
+            r -= chances.get(idx);
+            if (r <= 0.0) break;
         }
-        if (roll == 1000) {
-            out = chances.size() - 1;
-        }
-        return out;
+        return idx;
     }
 
     public FishModifier getRollModifier() {
