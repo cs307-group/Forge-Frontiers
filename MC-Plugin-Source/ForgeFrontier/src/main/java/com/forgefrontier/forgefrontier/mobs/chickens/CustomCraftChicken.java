@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.mobs.chickens;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
+import com.forgefrontier.forgefrontier.spawners.SpawnerInstance;
 import net.minecraft.world.entity.animal.Chicken;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Class to represent the actual chicken entity in game
@@ -140,4 +142,5 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
         this.setMetadata("drop-keys", new FixedMetadataValue(ForgeFrontier.getInstance(), this.dropKeys));
         this.setMetadata("drop-table", new FixedMetadataValue(ForgeFrontier.getInstance(), this.dropTable));
     }
+
 }

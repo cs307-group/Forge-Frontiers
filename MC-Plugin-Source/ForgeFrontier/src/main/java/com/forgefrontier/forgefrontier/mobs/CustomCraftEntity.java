@@ -1,5 +1,7 @@
 package com.forgefrontier.forgefrontier.mobs;
 
+import com.forgefrontier.forgefrontier.spawners.Spawner;
+import com.forgefrontier.forgefrontier.spawners.SpawnerInstance;
 import net.minecraft.world.item.Item;
 import org.bukkit.Material;
 import org.bukkit.boss.BossBar;
