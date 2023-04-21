@@ -101,6 +101,8 @@ public class CustomEntityManager extends Manager implements Listener {
         if (mob == null) {
             return null;
         }
+        if(loc.getWorld() == null)
+            return null;
         CraftEntity ce = mob.createCustomEntity((CraftWorld)loc.getWorld());
         instanceEntityMap.put(ce.getUniqueId(), code);
         plugin.getLogger().log(Level.INFO,"Spawned Entity: " + ce.getUniqueId());

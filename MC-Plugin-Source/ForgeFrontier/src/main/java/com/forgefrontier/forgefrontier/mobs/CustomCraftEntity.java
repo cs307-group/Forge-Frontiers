@@ -19,5 +19,6 @@ public interface CustomCraftEntity {
     void initDropTable();
     void registerDropItem(String item, int chance);
     void registerDropItem(Material item, int chance);
+    void registerDropConfig();
     void saveMetaData();
 }

@@ -1,0 +1,42 @@
+spawners:
+  '0':
+    entity-code: SlimeBossSwift
+  '1':
+    entity-code: HitBox
+  '2':
+    entity-code: HostileSlime
+  '3':
+    entity-code: SlimeBossTimer
+  '4':
+    entity-code: HostileChicken
+  '5':
+    entity-code: DynamicChicken
+  '6':
+    entity-code: SlimeBoss
+  '7':
+    entity-code: SlimeBossSmall
+  '8':
+    entity-code: PoisonChicken
+  '9':
+    entity-code: ChickBoss
+  '10':
+    entity-code: Eggsplosive
+  '11':
+    entity-code: EggBox
+instances:
+  '0':
+    id: eb35d0b5-a98c-4243-b0e5-76f7820a9fda
+    spawner-id: DynamicChicken
+    spawn-delay: 100
+    world: world
+    x: -3
+    y: 131
+    z: 0
+  '1':
+    id: 98c076e6-de50-4229-9c5f-7894c04fbba1
+    spawner-id: DynamicChicken
+    spawn-delay: 100
+    world: world
+    x: 9
+    y: 131
+    z: -9

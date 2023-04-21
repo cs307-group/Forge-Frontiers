@@ -20,54 +20,28 @@ public class Spawner {
         }
     }
 
-    String id;
-    String friendlyName;
-    Material materialRepresentation;
     String entityCode;
 
     public Spawner(String entityCode) {
-        this.id = UUID.randomUUID().toString();
-        this.friendlyName = id;
-        this.materialRepresentation = Material.BARRIER;
-
         // TODO: Get the code for the entity (TBD)
         this.entityCode = entityCode;
     }
 
     //TODO: setup config constructor
     public Spawner(ConfigurationSection config) {
-
+        this.entityCode = config.getString("entity-code");
     }
 
-    public Spawner(String spawnerId, String friendlyname, Material blockMaterial, String entityCode) {
-        this.id = spawnerId;
-        this.friendlyName = friendlyname;
-        this.materialRepresentation = blockMaterial;
+    public void save(ConfigurationSection config) {
+        config.set("entity-code", this.entityCode);
+    }
 
+    public Spawner(String friendlyname, Material blockMaterial, String entityCode) {
         this.entityCode = entityCode;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getFriendlyName() {
-        return friendlyName;
-    }
-
-    public Material getMaterialRepresentation() {
-        return materialRepresentation;
     }
 
     public String getEntityCode() {
         return entityCode;
     }
 
-    public void setFriendlyName(String friendlyName) {
-        this.friendlyName = friendlyName;
-    }
-
-    public void setBlockMaterial(Material blockMaterial) {
-        this.materialRepresentation = blockMaterial;
-    }
 }

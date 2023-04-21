@@ -1,6 +1,9 @@
 package com.forgefrontier.forgefrontier.spawners;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
+import com.forgefrontier.forgefrontier.mining.MiningArea;
+import com.forgefrontier.forgefrontier.mining.MiningManager;
+import com.forgefrontier.forgefrontier.mining.MiningWandItem;
 import com.forgefrontier.forgefrontier.mobs.CustomMob;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import com.forgefrontier.forgefrontier.utils.QuadTree;
@@ -8,19 +11,23 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class SpawnerManager extends Manager implements Listener {
 
-    Map<UUID, Map<String, SpawnerInstance>> spawnerInstanceTree;
+    Map<String, Map<String, SpawnerInstance>> spawnerInstanceTree;
     Map<String, Spawner> spawners;
 
     Map<String, String> entityCodes;
@@ -36,7 +43,53 @@ public class SpawnerManager extends Manager implements Listener {
     public void init() {
         this.plugin.getCustomItemManager().registerCustomItem(new SpawnBlockItem());
 
-        //TODO: database integration
+        int spawnerInd = 0;
+        ConfigurationSection configSection;
+        while((configSection = this.plugin.getConfig("spawners").getConfigurationSection("spawners." + spawnerInd)) != null) {
+            Spawner spawner = new Spawner(configSection);
+            this.spawners.put(spawner.getEntityCode(), spawner);
+            spawnerInd += 1;
+        }
+
+        int instanceInd = 0;
+        while((configSection = this.plugin.getConfig("spawners").getConfigurationSection("instances." + instanceInd)) != null) {
+            SpawnerInstance instance = new SpawnerInstance(configSection);
+            boolean success = this.addSpawnerInstance(instance);
+            if(!success) {
+                ForgeFrontier.getInstance().getLogger().info("Unable to import spawner.");
+            }
+            instanceInd += 1;
+        }
+
+    }
+
+    @Override
+    public void disable() {
+        this.save();
+    }
+
+    public void save() {
+        FileConfiguration config = this.plugin.getConfig("spawners");
+        config.set("spawners", null);
+        int spawnerInd = 0;
+        for(String name: this.spawners.keySet()) {
+            Spawner spawner = this.spawners.get(name);
+            spawner.save(config.createSection("spawners." + spawnerInd));
+            spawnerInd += 1;
+        }
+        config.set("instances", null);
+        int instanceInd = 0;
+        for(String world: this.spawnerInstanceTree.keySet()) {
+            for(SpawnerInstance instance: this.spawnerInstanceTree.get(world).values()) {
+                instance.save(config.createSection("instances." + instanceInd));
+                instanceInd += 1;
+            }
+        }
+        try {
+            config.save(new File(plugin.getDataFolder(), "spawners.yml"));
+        } catch (IOException e) {
+            ForgeFrontier.getInstance().getLogger().severe("Unable to save spawner configuration.");
+        }
     }
 
     public Spawner getSpawner(String spawnerId) {
@@ -47,69 +100,31 @@ public class SpawnerManager extends Manager implements Listener {
         return this.entityCodes.get(id);
     }
 
-    @Override
-    public void disable() {
-        //TODO: update database on exit
-        ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "Disabling SpawnerManager");
-        ArrayList<JSONObject> jsonList = new ArrayList<>();
-        for (String key : spawners.keySet()) {
-            Spawner spawner = spawners.get(key);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", spawner.getId());
-            jsonObject.put("friendlyName", spawner.getFriendlyName());
-            jsonObject.put("materialRepresentation", spawner.getMaterialRepresentation().toString());
-            jsonObject.put("entityCode", spawner.getEntityCode());
-            jsonList.add(jsonObject);
-        }
-
-        try (FileWriter file = new FileWriter("./spawners.json")) {
-            file.write(jsonList.toString());
-            ForgeFrontier.getInstance().getLogger().log(Level.WARNING, jsonList.toString() + " | " + file.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void initializeSpawnerInstance(SpawnerInstance spawnerInstance, Consumer<Boolean> callback) {
-        boolean success = addSpawnerInstance(spawnerInstance);
-        if(!success) {
-            callback.accept(false);
-            return;
-        }
-        //TODO: implement database functionality (add spawner to database list)
-        callback.accept(true);
-    }
-
     public boolean addSpawnerInstance(SpawnerInstance spawnerInstance) {
         Location location = spawnerInstance.getLocation().clone();
-        if (location.getWorld() == null) {
-            return false;
-        }
-        Map<String, SpawnerInstance> tree = spawnerInstanceTree.get(location.getWorld().getUID());
+        Map<String, SpawnerInstance> tree = spawnerInstanceTree.get(spawnerInstance.worldName);
         if (tree == null) {
             tree = new HashMap<>();
-            spawnerInstanceTree.put(location.getWorld().getUID(), tree);
+            spawnerInstanceTree.put(spawnerInstance.worldName, tree);
         }
-        if (tree.get(spawnerInstance.getSpawner().getId()) != null) {
-            tree.remove(tree.get(spawnerInstance.getSpawner().getId()).getSpawner().getId());
+        if (tree.get(spawnerInstance.getId()) != null) {
+            tree.remove(spawnerInstance.getId());
             return true;
         }
-        tree.put(spawnerInstance.getSpawner().getId(), spawnerInstance);
-        plugin.getLogger().log(Level.WARNING, location.getBlock().getLocation().toString());
+        tree.put(spawnerInstance.getId(), spawnerInstance);
+       // plugin.getLogger().log(Level.WARNING, location.getBlock().getLocation().toString());
         return true;
     }
 
     public void removeSpawnerInstance(SpawnerInstance spawnerInstance) {
-        World world = spawnerInstance.getLocation().getWorld();
-        Map<String, SpawnerInstance> tree = spawnerInstanceTree.get(world.getUID());
+        Map<String, SpawnerInstance> tree = spawnerInstanceTree.get(spawnerInstance.worldName);
         if (tree == null) {
             ForgeFrontier.getInstance().getLogger().severe("Unable to find Spawner Instance to remove.");
             return;
         }
-        tree.remove(spawnerInstance.getSpawner().getId());
+        tree.remove(spawnerInstance.getId());
         spawnerInstance.getLocation().getBlock().setType(Material.AIR);
         spawnerInstance.destroy();
-
     }
 
     @EventHandler
@@ -125,7 +140,6 @@ public class SpawnerManager extends Manager implements Listener {
             plugin.getLogger().log(Level.WARNING, "SPAWNER BREAK EVENT COMPLETE");
             removeSpawnerInstance(instance);
         } else {
-
             plugin.getLogger().log(Level.WARNING, "NOT SPAWNER BLOCK");
         }
     }

@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.mobs.slimes;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
+import com.forgefrontier.forgefrontier.mobs.MobConfigUtil;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlimeEntity;
 import com.forgefrontier.forgefrontier.spawners.Spawner;
 import com.forgefrontier.forgefrontier.spawners.SpawnerInstance;
@@ -114,6 +115,7 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
         customDropTable = new HashMap<>();
         customDropKeys = new ArrayList<>();
         dropKeys = new ArrayList<>();
+        registerDropConfig();
     }
 
     /**
@@ -138,6 +140,12 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
     public void registerDropItem(Material item, int chance) {
         dropKeys.add(item);
         dropTable.put(item, chance);
+    }
+
+    @Override
+    public void registerDropConfig() {
+        MobConfigUtil.getMaterialDropsFromCode(dropTable, dropKeys, this.getCode());
+        MobConfigUtil.getItemDropsFromCode(customDropTable, customDropKeys, this.getCode());
     }
 
     /**
