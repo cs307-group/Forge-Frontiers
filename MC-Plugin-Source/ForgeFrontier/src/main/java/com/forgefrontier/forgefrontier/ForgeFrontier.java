@@ -43,6 +43,8 @@ import com.forgefrontier.forgefrontier.player.InspectCommandExecutor;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.shop.Shop;
 
+import com.forgefrontier.forgefrontier.spawners.Spawner;
+import com.forgefrontier.forgefrontier.spawners.SpawnerManager;
 import com.forgefrontier.forgefrontier.stashes.StashManager;
 import com.forgefrontier.forgefrontier.tutorial.TutorialManager;
 import org.bukkit.Particle;
@@ -90,6 +92,7 @@ public class ForgeFrontier extends JavaPlugin {
     private ChatManager chatManager;
     private GameManager gameManager;
 
+    private SpawnerManager spawnerManager;
 
     private Shop itemShop;
     private BazaarManager bazaarManager;
@@ -140,6 +143,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.chatManager = new ChatManager(this);
         this.gameManager = new GameManager(this);
 
+        this.spawnerManager = new SpawnerManager(this);
 
         this.databaseManager.init();
         this.customSkullManager.init();
@@ -157,6 +161,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.tutorialManager.init();
         this.chatManager.init();
         this.gameManager.init();
+        this.spawnerManager.init();
 
         // Player Shop
         this.setupPlayerShop();
@@ -259,6 +264,8 @@ public class ForgeFrontier extends JavaPlugin {
         commandHandler.register(new FishingCommands(this));
         // Auto-Completer Registrations
         AutoCompleter autoCompleter = commandHandler.getAutoCompleter();
+        autoCompleter.registerSuggestion("placeable_items", Spawner.MATERIALS.keySet());
+        autoCompleter.registerSuggestion("cspawner", this.getSpawnerManager().getSpawners().keySet());
         autoCompleter.registerSuggestion("cgive", customItemManager.getItemNames());
         autoCompleter.registerSuggestion("cspawn", this.getCustomEntityManager().getEntities().keySet());
         autoCompleter.registerSuggestion("idparticle", this.getParticleManager().getParticleMap().keySet());
@@ -267,9 +274,7 @@ public class ForgeFrontier extends JavaPlugin {
         commandHandler.register(new GeneratorCommand(this));
         commandHandler.register(new CustomSpawnCommand(this));
         commandHandler.register(new CraftingCommands(this));
-
-
-
+        commandHandler.register(new SpawnerCommandExecutor(this));
     }
 
     private boolean setupEconomy() {
@@ -361,6 +366,10 @@ public class ForgeFrontier extends JavaPlugin {
         return chatManager;
     }
 
+    public SpawnerManager getSpawnerManager() {
+        return this.spawnerManager;
+    }
+
     public Shop getPlayerShop() {
         return this.itemShop;
     }
@@ -368,6 +377,7 @@ public class ForgeFrontier extends JavaPlugin {
     public Economy getEconomy() {
         return this.econ;
     }
+
 
     // Singleton Pattern
     public static ForgeFrontier getInstance() {
