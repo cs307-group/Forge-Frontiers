@@ -5,15 +5,18 @@ import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmor;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomArmorCreator;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.LeatherHelmet;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.WoodenBow;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.ChickenWing;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.WoodenSword;
+import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
 import com.forgefrontier.forgefrontier.items.gear.skills.DashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.InfernoSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.Skill;
+import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.ParticleGem;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.SkillGem;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.UpgradeGem;
@@ -24,9 +27,11 @@ import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.EquipmentSlot;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
@@ -54,14 +59,25 @@ public class GearItemManager extends Manager implements Listener {
         this.skills = new HashMap<>();
         particleManager = ForgeFrontier.getInstance().getParticleManager();
 
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new SkillGem());
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new ParticleGem());
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new UpgradeGem());
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new WoodenSword());
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new WoodenBow());
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherHelmet());
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherChestplate());
-        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new ChickenWing());
+        CustomItemManager cim = ForgeFrontier.getInstance().getCustomItemManager();
+
+        cim.registerCustomItem(new SkillGem());
+        cim.registerCustomItem(new ParticleGem());
+        cim.registerCustomItem(new UpgradeGem());
+        cim.registerCustomItem(new WoodenSword());
+        cim.registerCustomItem(new WoodenBow());
+        cim.registerCustomItem(new LeatherHelmet());
+        cim.registerCustomItem(new LeatherChestplate());
+        cim.registerCustomItem(new ChickenWing());
+
+        registerArmorSet("Copper", QualityEnum.COMMON, 1, 0, "GOLDEN", "&7A mediocre %item% made of rusted copper.", new int[] {3, 6, 4, 2}, new int[]{0,0,0,0});
+        registerArmorSet("Refined Copper", QualityEnum.COMMON, 2, 1, "GOLDEN", "&7A copper %item% refined to be more resilient.", new int[] {7, 11, 9, 6}, new int[]{0,0,0,0});
+
+        registerArmorSet("Silver", QualityEnum.COMMON, 2, 0, "IRON", "&7Silver %item% that enhance your physical form when worn.", new int[] {1, 2, 1, 1}, new int[]{1,3,2,1});
+        registerArmorSet("Sterling Silver", QualityEnum.COMMON, 2, 1, "IRON", "&7Sterling Silver %item% that both defends and enhances you.", new int[] {5, 10, 7, 4}, new int[]{3,5,4,2});
+
+        registerArmorSet("Brass", QualityEnum.COMMON, 2, 1, "GOLDEN", "&7A durable %item% made of brass that defends well against attacks.", new int[] {8, 11, 8, 5}, new int[]{2,4,3,1});
+        //cim.registerCustomItem(new CustomArmorCreator("CopperHelmet", "Copper Helmet", QualityEnum.COMMON.getQuality(), 2, 0, Material.GOLDEN_HELMET, ));
 
         playerManager = plugin.getPlayerManager();
         statUpdateJob = plugin.getServer().getScheduler()
@@ -70,6 +86,52 @@ public class GearItemManager extends Manager implements Listener {
         this.registerSkill(new GroundSmashSkill());
         this.registerSkill(new DashSkill());
         this.registerSkill(new InfernoSkill());
+    }
+
+    public void registerArmorSet(String itemName, QualityEnum quality, int base, int gemAmt, String setPrefix, String lore,
+                                 int[] def, int[] hp) {
+        CustomItemManager cim = ForgeFrontier.getInstance().getCustomItemManager();
+
+        cim.registerCustomItem(new CustomArmorCreator(
+            itemName + "Helmet",
+            itemName + " Helmet",
+            quality.getQuality(),
+            gemAmt, Material.matchMaterial(setPrefix + "_HELMET"),
+            lore.replace("%item%", "helmet"),
+            EquipmentSlot.HEAD,
+            def[0],
+            hp[0]
+        ));
+        cim.registerCustomItem(new CustomArmorCreator(
+            itemName + "Chestplate",
+            itemName + " Chestplate",
+            quality.getQuality(),
+            gemAmt, Material.matchMaterial(setPrefix + "_CHESTPLATE"),
+            lore.replace("%item%", "chestplate"),
+            EquipmentSlot.CHEST,
+            def[1],
+            hp[1]
+        ));
+        cim.registerCustomItem(new CustomArmorCreator(
+            itemName + "Leggings",
+            itemName + " Leggings",
+            quality.getQuality(),
+            gemAmt, Material.matchMaterial(setPrefix + "_LEGGINGS"),
+            lore.replace("%item%", "pair of leggings"),
+            EquipmentSlot.LEGS,
+            def[2],
+            hp[2]
+        ));
+        cim.registerCustomItem(new CustomArmorCreator(
+            itemName + "Boots",
+            itemName + " Boots",
+            quality.getQuality(),
+            gemAmt, Material.matchMaterial(setPrefix + "_BOOTS"),
+            lore.replace("%item%", "pair of boots"),
+            EquipmentSlot.FEET,
+            def[3],
+            hp[3]
+        ));
     }
 
     @Override

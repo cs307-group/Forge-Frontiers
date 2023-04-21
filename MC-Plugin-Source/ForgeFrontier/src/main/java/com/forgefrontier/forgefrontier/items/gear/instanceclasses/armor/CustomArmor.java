@@ -56,7 +56,7 @@ public abstract class CustomArmor extends GearItem {
         this.registerInstanceAccumulator((instance, itemStack) -> {
             CustomArmorInstance armorInstance = (CustomArmorInstance) instance;
 
-            if (itemStack == null) {
+            if (itemStack == null && this.randomizeBaseStats) {
                 BaseStatistic[] baseStats = new BaseStatistic[numBaseStats];
                 armorInstance.setBaseStats(baseStats);
             }

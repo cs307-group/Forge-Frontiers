@@ -1,8 +1,11 @@
 package com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor;
 
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
+import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
+import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import org.bukkit.Material;
+import org.bukkit.inventory.EquipmentSlot;
 
 public class CustomArmorCreator extends CustomArmor {
     /**
@@ -19,7 +22,17 @@ public class CustomArmorCreator extends CustomArmor {
      * @param durability   the durability of the gear (used for cosmetics)
      * @param lore         the lore description of the gear
      */
-    public CustomArmorCreator(String code, String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum, Material material, int durability, String lore) {
-        super(code, name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
+    public CustomArmorCreator(String code, String name, Quality quality, int numGemSlots, Material material, String lore, EquipmentSlot equipSlot, int def, int hp) {
+        super(code, name, quality, 2, numGemSlots, GemEnum.ARMOR, material, 0, lore);
+
+        this.setRandomizeBaseStats(false);
+        this.registerInstanceAccumulator((__, itemStack) -> {
+            CustomArmorInstance instance = new CustomArmorInstance(itemStack, equipSlot);
+            instance.setBaseStats(new BaseStatistic[] {
+                new BaseStatistic(StatEnum.DEF, def),
+                new BaseStatistic(StatEnum.HP, hp)
+            });
+            return instance;
+        });
     }
 }

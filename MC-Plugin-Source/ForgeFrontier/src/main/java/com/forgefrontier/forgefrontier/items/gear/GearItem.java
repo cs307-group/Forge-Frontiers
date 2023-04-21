@@ -56,7 +56,7 @@ public abstract class GearItem extends UniqueCustomItem {
         registerAccumulators(name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
     }
 
-    boolean randomizeBaseStats = true;
+    public boolean randomizeBaseStats = true;
 
     public void setRandomizeBaseStats(boolean randomizeBaseStats) {
         this.randomizeBaseStats =randomizeBaseStats;

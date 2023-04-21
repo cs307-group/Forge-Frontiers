@@ -14,6 +14,8 @@ public class MobConfigUtil {
         FileConfiguration configuration = ForgeFrontier.getInstance().getConfig("entity-drops");
         ForgeFrontier.getInstance().getLogger().log(Level.WARNING, code);
         ConfigurationSection codeSection = configuration.getConfigurationSection(code);
+        if(codeSection == null)
+            return;
         ConfigurationSection matSection;
         if ((matSection = codeSection.getConfigurationSection("materials.")) != null) {
             int itemInd = 0;
@@ -32,6 +34,8 @@ public class MobConfigUtil {
     public static void getItemDropsFromCode(HashMap<String, Integer> dropTable, ArrayList<String> dropKeys, String code) {
         FileConfiguration configuration = ForgeFrontier.getInstance().getConfig("entity-drops");
         ConfigurationSection codeSection = configuration.getConfigurationSection(code);
+        if(codeSection == null)
+            return;
         ConfigurationSection matSection;
         if ((matSection = codeSection.getConfigurationSection("items.")) != null) {
             int itemInd = 0;
