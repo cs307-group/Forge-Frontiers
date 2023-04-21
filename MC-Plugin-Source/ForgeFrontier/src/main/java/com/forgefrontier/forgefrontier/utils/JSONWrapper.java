@@ -90,6 +90,16 @@ public class JSONWrapper {
         return (Integer) this.object.get(s);
     }
 
+    public Boolean getBool(String s) {
+        if(!this.has(s))
+            return null;
+        if(this.object.get(s) instanceof Boolean)
+            return (Boolean) this.object.get(s);
+        return (Boolean) this.object.get(s);
+    }
+
+
+
     public boolean has(String s) {
         return this.object.containsKey(s);
     }
