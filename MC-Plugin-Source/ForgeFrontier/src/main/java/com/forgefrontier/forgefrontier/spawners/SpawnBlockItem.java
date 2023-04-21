@@ -22,22 +22,15 @@ public class SpawnBlockItem extends UniqueCustomItem {
             SpawnBlockItemInstance spawnBlockItemInstance = (SpawnBlockItemInstance) itemInstance;
 
             // Gets spawner from manager
-            Spawner spawner = ForgeFrontier.getInstance().getSpawnerManager().getSpawner(spawnBlockItemInstance.spawnerID);
+            Spawner spawner = ForgeFrontier.getInstance().getSpawnerManager().getSpawner(spawnBlockItemInstance.entityCode);
 
             // Register metadata
-            itemInstance.getData().put("spawner-id", spawnBlockItemInstance.spawnerID);
             itemInstance.getData().put("entity-code", spawnBlockItemInstance.entityCode);
-
-            // Checks if the spawner returned from manager is valid (exists)
-            if(spawner == null) {
-                return new ItemStackBuilder(Material.RAW_IRON_BLOCK)
-                        .setDisplayName("&dUnknown Spawner &7 - Entity &f" + (spawnBlockItemInstance.entityCode))
-                        .build();
-            }
+            itemInstance.getData().put("block", spawnBlockItemInstance.block);
 
             //Builds the item stack representation of the spawner
-            return new ItemStackBuilder(spawner.getMaterialRepresentation())
-                    .setDisplayName(spawner.getFriendlyName() + "&7 - Entity &f" + (spawnBlockItemInstance.entityCode))
+            return new ItemStackBuilder(Material.matchMaterial(spawnBlockItemInstance.block))
+                    .setDisplayName("&aSpawner&7 - Entity &f" + (spawnBlockItemInstance.entityCode))
                     .addLoreLine("&7Place this spawner down into")
                     .addLoreLine("&7the world to continually spawn entities.")
                     .build();
@@ -48,15 +41,14 @@ public class SpawnBlockItem extends UniqueCustomItem {
             // Define new instance of Spawner item
             SpawnBlockItemInstance inst = new SpawnBlockItemInstance(itemStack);
             if(itemStack == null) {
-                inst.spawnerID = "";
                 inst.entityCode = "";
+                inst.block = "BARRIER";
             } else {
-                inst.spawnerID = (String) inst.getData().get("spawner-id");
                 inst.entityCode = (String) inst.getData().get("entity-code");
+                inst.block = (String) inst.getData().get("block");
             }
             return inst;
         });
-
     }
 
     /**
@@ -82,7 +74,7 @@ public class SpawnBlockItem extends UniqueCustomItem {
         // Ensures that spawner pulled from manager is valid, otherwise fill space
         if(spawner == null) {
             e.getPlayer().getInventory().setItem(e.getHand(), instance.asItemStack());
-            e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place down this spawner. It doesn't seem to exist. | " + spawnBlockItemInstance.spawnerID);
+            e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place down this spawner. It doesn't seem to exist.");
             return;
         }
 
@@ -93,16 +85,16 @@ public class SpawnBlockItem extends UniqueCustomItem {
         spawnerInstance.entityCode = spawnBlockItemInstance.entityCode;
 
         // Initializes the spawner instance
-        ForgeFrontier.getInstance().getSpawnerManager().initializeSpawnerInstance(spawnerInstance, (success) -> {
-            Bukkit.getScheduler().runTask(ForgeFrontier.getInstance(), () -> {
-                if(!success) {
-                    e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place spawner here.");
-                    return;
-                }
-                e.getItem().setAmount(e.getItem().getAmount() - 1);
-                spawnerInstance.getLocation().getBlock().setMetadata("spawner-block", new FixedMetadataValue(ForgeFrontier.getInstance(), spawnerInstance.getSpawner().getId()));
-                spawnerInstance.getLocation().getBlock().setType(spawnerInstance.spawner.getMaterialRepresentation());
-            });
-        });
+        boolean success = ForgeFrontier.getInstance().getSpawnerManager().addSpawnerInstance(spawnerInstance);
+        if(!success) {
+            e.getPlayer().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to place spawner here.");
+            return;
+        }
+        //e.getItem().setAmount(e.getItem().getAmount() - 1);
+        spawnerInstance.getLocation().getBlock().setMetadata("spawner-block", new FixedMetadataValue(ForgeFrontier.getInstance(), spawnerInstance.getId()));
+        spawnerInstance.getLocation().getBlock().setType(Material.matchMaterial(spawnBlockItemInstance.block));
+
+        ForgeFrontier.getInstance().getSpawnerManager().save();
+
     }
 }

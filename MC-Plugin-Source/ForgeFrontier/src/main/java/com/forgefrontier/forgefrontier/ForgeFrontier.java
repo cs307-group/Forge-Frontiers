@@ -116,6 +116,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.createConfig("reroll");
         this.createConfig("fishing");
         this.createConfig("entity-drops");
+        this.createConfig("spawners");
 
         if (!setupEconomy() ) {
             getLogger().severe("Disabled due to no Vault dependency found!");
