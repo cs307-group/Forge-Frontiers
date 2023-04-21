@@ -50,8 +50,8 @@ public abstract class CustomArmor extends GearItem {
      * @param durability   the durability of the gear (used for cosmetics)
      * @param lore         the lore description of the gear
      */
-    public CustomArmor(String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum, Material material, int durability, String lore) {
-        super(name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
+    public CustomArmor(String code, String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum, Material material, int durability, String lore) {
+        super(code, name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
 
         this.registerInstanceAccumulator((instance, itemStack) -> {
             CustomArmorInstance armorInstance = (CustomArmorInstance) instance;

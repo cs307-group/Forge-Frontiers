@@ -24,7 +24,7 @@ public class LeatherChestplate extends CustomArmor {
 
     /** Constructor for the leather helmet */
     public LeatherChestplate() {
-        super ("LeatherChestplate", QualityEnum.UNASSIGNED.getQuality(), 2, 1,
+        super ("LeatherChestplate", "Leather Chestplate", QualityEnum.UNASSIGNED.getQuality(), 2, 1,
                 GemEnum.ARMOR, Material.LEATHER_CHESTPLATE, Material.LEATHER_CHESTPLATE.getMaxDurability(),
                 "A scrappy leather chest piece");
 

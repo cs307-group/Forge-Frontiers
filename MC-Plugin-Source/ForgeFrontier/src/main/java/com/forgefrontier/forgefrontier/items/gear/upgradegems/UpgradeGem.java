@@ -2,7 +2,9 @@ package com.forgefrontier.forgefrontier.items.gear.upgradegems;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.items.CustomItemInstance;
+import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.items.UniqueCustomItem;
+import com.forgefrontier.forgefrontier.items.gear.GearItemInstance;
 import com.forgefrontier.forgefrontier.items.gear.quality.InvalidMaxQualityException;
 import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
@@ -10,6 +12,7 @@ import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -74,7 +77,7 @@ public class UpgradeGem extends UniqueCustomItem {
                     Arrays.asList(
                             ChatColor.GRAY + "Can be applied to your " + gemInstance.gemValues.gemType.toString()
                                     + " for stat increases",
-                            ChatColor.YELLOW + gemInstance.gemValues.stat.toString(),
+                            ChatColor.YELLOW + gemInstance.gemValues.stat.getFriendlyName(),
                             gemInstance.gemValues.quality.getColor() + gemInstance.gemValues.quality.toString()
                     )
             );
@@ -148,7 +151,32 @@ public class UpgradeGem extends UniqueCustomItem {
 
     @Override
     public void onApply(InventoryClickEvent e, CustomItemInstance itemInstance, ItemStack appliedItem) {
-        // TODO: Be able to apply gems
+        CustomItemInstance inst = CustomItemManager.asCustomItemInstance(appliedItem);
+
+        if(inst == null)
+            return;
+        if(!(inst instanceof GearItemInstance gearInstance)) {
+            return;
+        }
+
+        UpgradeGemInstance upgradeGemInstance = (UpgradeGemInstance) itemInstance;
+
+        GemValues[] gemValues = gearInstance.getGems();
+        for(int i = 0; i < gemValues.length; i++) {
+            if(gemValues[i] == null) {
+                gemValues[i] = upgradeGemInstance.gemValues;
+                upgradeGemInstance.setGemData();
+
+                e.setCancelled(true);
+                e.setCurrentItem(gearInstance.asItemStack());
+                e.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
+                e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Successfully applied the gem!");
+                ((Player) e.getWhoClicked()).updateInventory();
+                return;
+            }
+        }
+
+        e.getWhoClicked().sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to use an upgrade gem on an item that has no empty gem slots.");
     }
     
 }

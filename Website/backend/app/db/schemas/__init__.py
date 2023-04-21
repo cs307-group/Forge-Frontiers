@@ -3,6 +3,7 @@ from .bazaar_orders import BazaarOrders as BazaarOrders
 from .bazaar_redeem import BazaarRedeem as BazaarRedeem
 from .fishing_stats import FishingStats as FishingStats
 from .feature_flags import FeatureFlags as FeatureFlags
+from .fishing_rarities import FishingRarities as FishingRarities
 from .generator_config import GeneratorConfig as GeneratorConfig
 from .generator_instances import GeneratorInstances as GeneratorInstances
 from .items import Item as Item

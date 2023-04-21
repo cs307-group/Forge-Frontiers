@@ -1,6 +1,5 @@
 import json
 
-from app.db import db
 from app.db.mutations.util import commit
 from app.db.queries.feature import get_features
 

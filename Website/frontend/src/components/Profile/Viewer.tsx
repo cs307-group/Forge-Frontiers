@@ -59,26 +59,32 @@ export function ProfileViewer({
         <table className="mx-auto w-full max-w-[600px] divide-y divide-gray-200">
           <thead>
             <tr>
-              {Object.keys(stats).map((x) => (
-                <th
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                  key={x}
-                >
-                  {keyToTableMap[x as keyof PlayerStats]}
-                </th>
-              ))}
+              {Object.keys(stats).map(
+                (x) =>
+                  x in keyToTableMap && (
+                    <th
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      key={x}
+                    >
+                      {keyToTableMap[x as keyof PlayerStats]}
+                    </th>
+                  )
+              )}
             </tr>
           </thead>
           <tbody>
             <tr>
-              {Object.entries(stats).map((x) => (
-                <td
-                  className="whitespace-nowrap px-6 py-4"
-                  key={`${x[0]}-${x[1]}`}
-                >
-                  <span>{x[1] as any}</span>
-                </td>
-              ))}
+              {Object.entries(stats).map(
+                (x) =>
+                  x[0] in keyToTableMap && (
+                    <td
+                      className="whitespace-nowrap px-6 py-4"
+                      key={`${x[0]}-${x[1]}`}
+                    >
+                      <span>{x[1] as any}</span>
+                    </td>
+                  )
+              )}
             </tr>
           </tbody>
         </table>

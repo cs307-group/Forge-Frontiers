@@ -16,9 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -260,6 +258,26 @@ public class PlayerDB extends DBConnection {
             } catch(SQLException e) {
                 e.printStackTrace();
                 callback.accept(null);
+            }
+        });
+    }
+
+    public void getRanks(UUID playerId, Consumer<List<String>> callback) {
+        SelectQueryWrapper wrapper = new SelectQueryWrapper();
+        wrapper.setTable("public.user");
+        wrapper.setFields("purchased_ranks");
+        wrapper.addCondition("mc_user = %uuid%", "uuid");
+        wrapper.addValue("uuid", playerId.toString());
+        wrapper.executeAsyncQuery(dbConn, (resultSet) -> {
+            try {
+                String json;
+                if(!resultSet.next() || (json = resultSet.getString("purchased_ranks")) == null) {
+                    callback.accept(new ArrayList<>());
+                    return;
+                }
+                callback.accept(JSONWrapper.parseArray(json).stream().toList());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         });
     }

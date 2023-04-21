@@ -17,23 +17,14 @@ import org.bukkit.inventory.ItemStack;
 public class WoodenSword extends CustomWeapon {
 
     /**
-     * Instance class extends GearItemInstance for the WoodenSword class
-     */
-    public static class WoodenSwordInstance extends CustomWeaponInstance {
-        public WoodenSwordInstance(ItemStack itemStack) {
-            super(itemStack);
-        }
-    }
-
-    /**
      * Default constructor for the wooden sword weapon
      */
     public WoodenSword() {
-        super ("WoodenSword", QualityEnum.UNASSIGNED.getQuality(), 2, 1, Material.WOODEN_SWORD, Material.WOODEN_SWORD.getMaxDurability() - 1,
+        super ("WoodenSword", "Wooden Sword", QualityEnum.UNASSIGNED.getQuality(), 2, 1, Material.WOODEN_SWORD, Material.WOODEN_SWORD.getMaxDurability() - 1,
                 "A handy wooden sword, crafted with oak");
 
         this.registerInstanceAccumulator((__, itemStack) -> {
-            return new WoodenSwordInstance(itemStack);
+            return new CustomWeaponInstance(itemStack);
         });
     }
 

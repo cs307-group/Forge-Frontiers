@@ -3,6 +3,7 @@ package com.forgefrontier.forgefrontier.utils;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.tutorial.TaskStatus;
 import org.checkerframework.checker.units.qual.A;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -37,6 +38,15 @@ public class JSONWrapper {
     public static JSONObject parse(String json) {
         try {
             return (JSONObject) parser.parse(json);
+        } catch(ParseException e) {
+            ForgeFrontier.getInstance().getLogger().severe("Unable to parse json string: " + json);
+            return null;
+        }
+    }
+
+    public static JSONArray parseArray(String json) {
+        try {
+            return (JSONArray) parser.parse(json);
         } catch(ParseException e) {
             ForgeFrontier.getInstance().getLogger().severe("Unable to parse json string: " + json);
             return null;

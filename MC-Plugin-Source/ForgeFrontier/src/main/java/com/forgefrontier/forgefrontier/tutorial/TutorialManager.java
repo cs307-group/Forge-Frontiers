@@ -162,7 +162,8 @@ public class TutorialManager extends Manager implements Listener {
                     JSONWrapper wrapper = state.getJson(key);
                     TaskStatus status = new TaskStatus(p, this.taskMap.get(key), wrapper.getInt("step"));
                     statuses.put(key, status);
-                    this.nextStepsMap.get(status.getStep().getType()).add(status);
+                    if(!status.isCompleted())
+                        this.nextStepsMap.get(status.getStep().getType()).add(status);
                 }
             }
             for(String key: taskMap.keySet()) {
@@ -171,6 +172,8 @@ public class TutorialManager extends Manager implements Listener {
                 TutorialTask task = taskMap.get(key);
                 TaskStatus status = new TaskStatus(p, task, 0);
                 statuses.put(key, status);
+                if(!status.isCompleted())
+                    this.nextStepsMap.get(status.getStep().getType()).add(status);
                 this.nextStepsMap.get(status.getStep().getType()).add(status);
             };
         });

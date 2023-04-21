@@ -8,6 +8,7 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomAr
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.LeatherHelmet;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.WoodenBow;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.ChickenWing;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.WoodenSword;
 import com.forgefrontier.forgefrontier.items.gear.skills.DashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
@@ -52,6 +53,7 @@ public class GearItemManager extends Manager implements Listener {
     public void init() {
         this.skills = new HashMap<>();
         particleManager = ForgeFrontier.getInstance().getParticleManager();
+
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new SkillGem());
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new ParticleGem());
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new UpgradeGem());
@@ -59,6 +61,7 @@ public class GearItemManager extends Manager implements Listener {
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new WoodenBow());
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherHelmet());
         ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new LeatherChestplate());
+        ForgeFrontier.getInstance().getCustomItemManager().registerCustomItem(new ChickenWing());
 
         playerManager = plugin.getPlayerManager();
         statUpdateJob = plugin.getServer().getScheduler()
