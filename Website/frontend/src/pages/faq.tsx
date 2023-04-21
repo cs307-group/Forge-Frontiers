@@ -2,12 +2,15 @@ import {useState} from "react";
 
 import {Button} from "@/components/Button";
 import {BaseInput} from "@/components/Input/BaseInput";
-import {AppLayout} from "@/components/Layout/AppLayout";
+import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {Spacer} from "@/components/Spacer";
 import {QBlock} from "@/components/faq-questions/QBlock";
 import faqData from "@/components/faq-questions/questions.json";
+import {UserDataSecure} from "@/handlers/types";
+import {fetchUserData} from "@/handlers/user-data";
+import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 
-export default function Faq() {
+export default function Faq({user}: {user?: UserDataSecure}) {
   const [q, setQ] = useState("");
 
   const filteredData = Object.fromEntries(
@@ -24,7 +27,11 @@ export default function Faq() {
   ));
 
   return (
-    <AppLayout active="faq" title="FAQ">
+    <AppLayout
+      active="faq"
+      title="FAQ"
+      extraNavItems={user?.is_admin ? CONTROL_PANEL : {}}
+    >
       <Spacer y={30} />
       <div className="mx-auto w-[95%] max-w-[400px]">
         <BaseInput
@@ -45,6 +52,8 @@ export default function Faq() {
   );
 }
 
-export const getServerSideProps = () => {
-  return {props: {}};
+export const getServerSideProps = async (c: any) => {
+  if (!c.req.cookies.token) return {props: {}};
+  const user = await fetchUserData(c);
+  return {props: {...userResponseToCustomData(user)}};
 };

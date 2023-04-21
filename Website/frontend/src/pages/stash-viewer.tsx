@@ -31,7 +31,7 @@ export default function Stash({
 }) {
   useCookieSync(cookie);
   useRefresh(3000);
-  const {stashes, stash_config} = gens;
+  const {stashes, stash_config} = gens || {};
   return (
     <AppLayout
       active="stash-viewer"
@@ -59,7 +59,7 @@ export default function Stash({
                   {Object.entries(JSON.parse(stash.contents_json)).map(
                     ([k, v]) => (
                       <div>
-                        <span className="font-bold">{k}</span>: {v as any} / {" "}
+                        <span className="font-bold">{k}</span>: {v as any} /{" "}
                         {
                           stash_config
                             .find((x) => x.stash_id == stash.stash_id)

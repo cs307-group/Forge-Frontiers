@@ -20,12 +20,6 @@ Migrate(app, db)
 app.url_map.strict_slashes = False
 
 
-@app.before_request
-@guard(ban_time=5, ip_resolver=ip_resolver, request_count=50, per=15)
-def gate_check():
-    pass
-
-
 app.register_blueprint(common.router)
 app.register_blueprint(user.router)
 app.register_blueprint(market.router)
