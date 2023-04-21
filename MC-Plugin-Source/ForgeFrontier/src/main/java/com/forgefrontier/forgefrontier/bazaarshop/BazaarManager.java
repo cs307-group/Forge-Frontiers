@@ -6,6 +6,7 @@ import com.forgefrontier.forgefrontier.events.PurchaseEvent;
 import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.ItemUtil;
+import com.forgefrontier.forgefrontier.utils.Manager;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -21,7 +22,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-public class BazaarManager {
+public class BazaarManager extends Manager {
     private final ForgeFrontier plugin;
     private BazaarDB bazaarDB;
     private final int MIN_SLOT = 0;
@@ -50,6 +51,7 @@ public class BazaarManager {
     public static Economy econ;
     private final int REFRESH_AMT = 128;
     public BazaarManager(ForgeFrontier plugin) {
+        super(plugin);
         this.plugin = plugin;
         econ = plugin.getEconomy();
         DEFAULT_NULL_ITEM = (new ItemStackBuilder(Material.BARRIER).setDisplayName("" + ChatColor.RED + "N/A").build());
@@ -79,6 +81,12 @@ public class BazaarManager {
         refreshListingDisplay(REFRESH_AMT);
         enabled = true;
     }
+
+    public void disable() {
+        enabled = false;
+        clear();
+    }
+
 
     public int loadListings() {
         ArrayList<BazaarEntry> listings = bazaarDB.loadListings();
@@ -216,7 +224,7 @@ public class BazaarManager {
      */
     public double execBuyOrder(Player p, int itmIdx, int amount) {
         ItemStack itm = getRealItem(itmIdx);
-        if (!ItemUtil.hasItem(p, itm, amount)) {
+        if (!ItemUtil.hasItem(p, itm, amount) || !enabled) {
             return -2;
         }
         // Amount - Total money gained
@@ -308,7 +316,7 @@ public class BazaarManager {
         // amt < top -> exec, modify
         // amt == top -> exec, remove
         double cost = walkSellPrice(item, amount, pbal);
-        if (cost == -1) return false;   // cannot afford
+        if (cost == -1 || !enabled) return false;   // cannot afford
         PriorityQueue<BazaarEntry> lkup = sellLookup.get(item);
         int amt = amount;
         ArrayList<BazaarEntry> removed = new ArrayList<>();
@@ -419,6 +427,8 @@ public class BazaarManager {
 
 
     public boolean createBuyListing(Player p, int idx, int amount, double price) {
+        if (!enabled) return false;
+
         double bal = econ.getBalance(p);
 
         if (bal >= amount * price) {
@@ -443,6 +453,7 @@ public class BazaarManager {
     }
 
     public boolean createSellListing(Player p, ItemStack itm, int amount, double price) {
+        if (!enabled) return false;
         int idx = 0;
         for (idx = 0; idx < lookupItems.size(); idx++) {
             if (ItemUtil.customCompare(itm, lookupItems.get(idx)))
@@ -483,6 +494,7 @@ public class BazaarManager {
     }
 
     public void localInsertListing(BazaarEntry be) {
+        if (!enabled) return;
         // player uuid -> listings
         if (!playerListings.containsKey(be.getListerID().toString()))
             playerListings.put(be.getListerID().toString(),new ArrayList<>());

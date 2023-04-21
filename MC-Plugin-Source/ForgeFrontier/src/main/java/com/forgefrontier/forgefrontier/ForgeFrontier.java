@@ -88,6 +88,8 @@ public class ForgeFrontier extends JavaPlugin {
     private CustomSkullManager customSkullManager;
     private TutorialManager tutorialManager;
     private ChatManager chatManager;
+    private GameManager gameManager;
+
 
     private Shop itemShop;
     private BazaarManager bazaarManager;
@@ -136,6 +138,8 @@ public class ForgeFrontier extends JavaPlugin {
         this.customSkullManager = new CustomSkullManager(this);
         this.tutorialManager = new TutorialManager(this);
         this.chatManager = new ChatManager(this);
+        this.gameManager = new GameManager(this);
+
 
         this.databaseManager.init();
         this.customSkullManager.init();
@@ -152,6 +156,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.craftingManager.init();
         this.tutorialManager.init();
         this.chatManager.init();
+        this.gameManager.init();
 
         // Player Shop
         this.setupPlayerShop();

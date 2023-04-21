@@ -23,6 +23,7 @@ public class DatabaseManager extends Manager {
     FishDB fishDB;
     ConfigDB configDB;
     CraftingRecipeDB recipeDB;
+    ManagementDB managementDB;
 
 
     public DatabaseManager(ForgeFrontier plugin) {
@@ -42,6 +43,7 @@ public class DatabaseManager extends Manager {
         this.fishDB = new FishDB(dbConn);
         this.configDB = new ConfigDB(dbConn);
         this.recipeDB = new CraftingRecipeDB(dbConn);
+        this.managementDB = new ManagementDB(dbConn);
     }
 
     @Override
@@ -158,4 +160,5 @@ public class DatabaseManager extends Manager {
 
     public CraftingRecipeDB getRecipeDB() { return recipeDB; }
 
+    public ManagementDB getManagementDB() { return managementDB; }
 }

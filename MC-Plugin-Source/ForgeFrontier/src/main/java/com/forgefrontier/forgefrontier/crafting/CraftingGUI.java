@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.logging.Level;
@@ -52,9 +53,14 @@ public class CraftingGUI extends BaseInventoryHolder {
     ForgeFrontier plugin;
     public CraftingGUI() {
         super(54, "Crafting Table");
+
+
+
         fillPanes();
         this.plugin = ForgeFrontier.getInstance();
         this.craftingManager = ForgeFrontier.getInstance().getCraftingManager();
+
+
         this.setDefaultCancelInteraction(false);
         // Exit item
         ItemStack exitItem = new ItemStackBuilder(Material.BARRIER).setDisplayName(ChatColor.RED + "Close").build();
