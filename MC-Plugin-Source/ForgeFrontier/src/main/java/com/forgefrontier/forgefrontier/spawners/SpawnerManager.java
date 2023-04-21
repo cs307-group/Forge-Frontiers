@@ -50,7 +50,6 @@ public class SpawnerManager extends Manager implements Listener {
     @Override
     public void disable() {
         //TODO: update database on exit
-        /*
         ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "Disabling SpawnerManager");
         ArrayList<JSONObject> jsonList = new ArrayList<>();
         for (String key : spawners.keySet()) {
@@ -63,13 +62,12 @@ public class SpawnerManager extends Manager implements Listener {
             jsonList.add(jsonObject);
         }
 
-        try (FileWriter file = new FileWriter("src\\main\\resources\\spawners.json")) {
+        try (FileWriter file = new FileWriter("./spawners.json")) {
             file.write(jsonList.toString());
             ForgeFrontier.getInstance().getLogger().log(Level.WARNING, jsonList.toString() + " | " + file.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
-         */
     }
 
     public void initializeSpawnerInstance(SpawnerInstance spawnerInstance, Consumer<Boolean> callback) {
