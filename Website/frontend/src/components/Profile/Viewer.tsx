@@ -90,9 +90,9 @@ export function ProfileViewer({
           </tbody>
         </table>
       </div>
-      <div className="item-center flex justify-between">
+      {/* <div className="item-center flex justify-between">
         <h2 className="text-xl">Inventory</h2>
-      </div>
+      </div> */}
       <div className="item-center flex justify-between">
         <div></div>
       </div>
