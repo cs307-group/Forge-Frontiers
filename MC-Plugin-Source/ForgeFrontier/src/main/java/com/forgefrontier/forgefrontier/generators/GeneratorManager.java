@@ -116,7 +116,6 @@ public class GeneratorManager extends Manager implements Listener {
                 }
             });
         });
-
     }
 
     public void initializeGeneratorInstance(GeneratorInstance generatorInstance, Consumer<Boolean> callback) {

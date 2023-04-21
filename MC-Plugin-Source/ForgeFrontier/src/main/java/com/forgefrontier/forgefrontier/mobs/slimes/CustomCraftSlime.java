@@ -3,6 +3,8 @@ package com.forgefrontier.forgefrontier.mobs.slimes;
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
 import com.forgefrontier.forgefrontier.mobs.slimes.hostile.HostileSlimeEntity;
+import com.forgefrontier.forgefrontier.spawners.Spawner;
+import com.forgefrontier.forgefrontier.spawners.SpawnerInstance;
 import net.minecraft.world.entity.monster.Slime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,6 +28,7 @@ public abstract class CustomCraftSlime extends CraftSlime implements CustomCraft
     public HashMap<Material, Integer> dropTable;
     public ArrayList<String> customDropKeys;
     public ArrayList<Material> dropKeys;
+
 
     /**
      * Constructor
