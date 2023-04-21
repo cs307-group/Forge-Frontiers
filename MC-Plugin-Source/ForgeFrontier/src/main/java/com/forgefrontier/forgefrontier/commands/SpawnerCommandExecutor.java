@@ -47,7 +47,9 @@ public class SpawnerCommandExecutor {
             sender.sendMessage(ForgeFrontier.CHAT_PREFIX + "Unable to find spawner \"" + spawnerId + "\".");
             return;
         }
-        spawner.setBlockMaterial(Material.getMaterial(material));
+        if (material != null) {
+            spawner.setBlockMaterial(Material.getMaterial(material));
+        }
         SpawnBlockItemInstance spawnBlockItemInstance = (SpawnBlockItemInstance) CustomItemManager.getCustomItem("PlaceSpawnerBlock").asInstance(null);
         spawnBlockItemInstance.setSpawnerData(spawner.getId(), spawnerId);
         ItemStack spawnerItem = spawnBlockItemInstance.asItemStack();
