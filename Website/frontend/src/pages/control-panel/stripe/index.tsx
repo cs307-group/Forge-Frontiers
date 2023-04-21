@@ -5,6 +5,7 @@ import {StripeViewer} from "@/components/ControlPanel/StripeViewer";
 import {requireAdminPageView} from "@/handlers/auth";
 import {UserDataSecure} from "@/handlers/types";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
+import { useRefresh } from "@/hooks/use-refresh";
 
 export default function ControlPanel({
   error,
@@ -23,6 +24,7 @@ export default function ControlPanel({
   cookie: any;
 }) {
   useCookieSync(cookie);
+  useRefresh(5000);
   return (
     <ControlPanelRenderer error={error} active="/stripe">
       <StripeViewer data={data} />

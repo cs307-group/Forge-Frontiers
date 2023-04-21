@@ -36,6 +36,7 @@ import java.util.logging.Level;
 public class CustomEntityManager extends Manager implements Listener {
 
     Map<String, CustomMob> entities;
+    List<String> entityCodes;
     private final HashMap<UUID, String> instanceEntityMap;
 
     /**
@@ -47,7 +48,7 @@ public class CustomEntityManager extends Manager implements Listener {
         super(plugin);
         this.entities = new HashMap<>();
         this.instanceEntityMap = new HashMap<>();
-
+        this.entityCodes = new ArrayList<>();
     }
 
     @Override
@@ -63,6 +64,8 @@ public class CustomEntityManager extends Manager implements Listener {
     /** Method to run to register a new CustomItem. If not run, the custom item will not be able to be identified. */
     public void registerCustomEntity(CustomMob mob) {
         this.entities.put(mob.getCode(), mob);
+        this.entityCodes.add(mob.getCode());
+        ForgeFrontier.getInstance().getSpawnerManager().registerSpawner(mob.getCode());
     }
 
     /**
@@ -248,11 +251,20 @@ public class CustomEntityManager extends Manager implements Listener {
                 slime.setGravity(true);
             }
         }
+
+        ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "IS CUSTOMCRAFTENTITY: " + (entity.getHandle() instanceof CustomEntity));
+        if (entity.getHandle() instanceof CustomEntity customEntity) {
+            customEntity.updateSpawnerOnDeath();
+        }
     }
 
     /** getter for the entities hashmap in the manager */
     public Map<String, CustomMob> getEntities() {
         return entities;
+    }
+
+    public List<String> getEntityCodes() {
+        return entityCodes;
     }
 
     public void insertEntityInstance(UUID entityID, String entityCode) {

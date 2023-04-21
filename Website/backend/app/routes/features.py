@@ -1,6 +1,4 @@
-import json
-
-from flask import Blueprint, request
+from flask import Blueprint
 
 from app.internal.context import Context
 from app.db.queries.feature import get_features

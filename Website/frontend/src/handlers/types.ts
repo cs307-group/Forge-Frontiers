@@ -113,6 +113,12 @@ export interface ShopData {
   custom_data: string;
 }
 
+export interface FishingRoll {
+  _id: string;
+  rarity: string;
+  chance: number;
+}
+
 export type StripeProductResponse = (Stripe.Product & {
   default_price: Stripe.Price;
 })[];

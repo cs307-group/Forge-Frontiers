@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.mobs.slimes;
 
 import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntity;
+import com.forgefrontier.forgefrontier.spawners.SpawnerInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
@@ -24,6 +25,7 @@ public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
     public HashMap<Material, Integer> dropTable;
     public ArrayList<Material> dropKeys;
     public World world;
+    public SpawnerInstance spawner;
 
     public CustomSlimeEntity(EntityType<? extends Slime> entityTypes, Level world) {
         super(entityTypes, world);
@@ -97,6 +99,18 @@ public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
                 System.out.println("DROP: " + customDropKey);
                 world.dropItem(loc, item);
             }
+        }
+    }
+
+    @Override
+    public void registerSpawner(SpawnerInstance spawner) {
+        this.spawner = spawner;
+    }
+
+    @Override
+    public void updateSpawnerOnDeath() {
+        if (this.spawner != null) {
+            this.spawner.entityDeath();
         }
     }
 }

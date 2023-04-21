@@ -10,6 +10,7 @@ import {isErrorResponse} from "@/handlers/fetch-util";
 import {StripeProductResponse, UserDataSecure} from "@/handlers/types";
 import {fetchUserData} from "@/handlers/user-data";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {useRefresh} from "@/hooks/use-refresh";
 import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
 
 if (![].at) {
@@ -31,7 +32,7 @@ export default function Marketplace({
   useCookieSync(cookie);
   const ref = useRef<HTMLFormElement>();
   const [count, s] = useState<number>(0);
-
+  useRefresh(5000);
   return (
     <>
       <Head>
