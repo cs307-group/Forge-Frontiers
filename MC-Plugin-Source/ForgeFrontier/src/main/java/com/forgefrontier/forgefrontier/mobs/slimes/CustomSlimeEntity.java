@@ -67,11 +67,13 @@ public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
     public void registerDropItem(String item, int chance) {
         customDropKeys.add(item);
         customDropTable.put(item, chance);
+        //TODO: Get Config from code
     }
 
     public void registerDropItem(Material item, int chance) {
         dropKeys.add(item);
         dropTable.put(item, chance);
+        //TODO: Get Config from code
     }
 
     public void setLoc(Location loc) {

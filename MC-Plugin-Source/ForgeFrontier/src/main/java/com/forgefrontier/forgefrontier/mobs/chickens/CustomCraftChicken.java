@@ -2,6 +2,7 @@ package com.forgefrontier.forgefrontier.mobs.chickens;
 
 import com.forgefrontier.forgefrontier.ForgeFrontier;
 import com.forgefrontier.forgefrontier.mobs.CustomCraftEntity;
+import com.forgefrontier.forgefrontier.mobs.MobConfigUtil;
 import com.forgefrontier.forgefrontier.spawners.SpawnerInstance;
 import net.minecraft.world.entity.animal.Chicken;
 import org.bukkit.Bukkit;
@@ -105,6 +106,7 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
         customDropTable = new HashMap<>();
         customDropKeys = new ArrayList<>();
         dropKeys = new ArrayList<>();
+        registerDropConfig();
     }
 
     /**
@@ -117,6 +119,7 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
     public void registerDropItem(String item, int chance) {
         customDropKeys.add(item);
         customDropTable.put(item, chance);
+        //TODO: Get Config from code
     }
 
     /**
@@ -129,6 +132,13 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
     public void registerDropItem(Material item, int chance) {
         dropKeys.add(item);
         dropTable.put(item, chance);
+        //TODO: Get Config from code
+    }
+
+    @Override
+    public void registerDropConfig() {
+        MobConfigUtil.getMaterialDropsFromCode(dropTable, dropKeys, this.getCode());
+        MobConfigUtil.getItemDropsFromCode(customDropTable, customDropKeys, this.getCode());
     }
 
     /**

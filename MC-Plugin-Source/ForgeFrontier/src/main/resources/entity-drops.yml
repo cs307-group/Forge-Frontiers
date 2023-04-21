@@ -1,0 +1,25 @@
+HostileSlime:
+  items:
+    0:
+      chance: 100
+      code: "SilverIngot"
+  materials:
+    0:
+      chance: 100
+      code: SLIME_BLOCK
+
+HostileChicken:
+  items:
+    0:
+      chance: 100
+      code: "SkillGem"
+    1:
+      chance: 100
+      code: "WoodenBow"
+  materials:
+    0:
+      chance: 100
+      code: RED_WOOL
+    1:
+      chance: 100
+      code: GREEN_WOOL
