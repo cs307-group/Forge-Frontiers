@@ -32,6 +32,9 @@ export const routes = {
   decodeToken: getApiURL("/users/-/decode-token"),
   getFeatures: getApiURL("/feature/list"),
   updateFeatures: getApiURL("/feature/update"),
+
+  viewFishingRollStats: getApiURL("/admin/fishing-roll-chances"),
+  updateFishingRollStats: getApiURL("/admin/update-fishing-roll-chances"),
 };
 
 /**

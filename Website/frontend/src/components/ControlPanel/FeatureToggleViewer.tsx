@@ -1,5 +1,6 @@
 import {useState} from "react";
 
+import {Button} from "../Button";
 import {Spacer} from "../Spacer";
 import {Switch} from "../Switch";
 
@@ -33,7 +34,7 @@ export function FeatureToggleViewer({data}: {data: string}) {
         <Spacer y={30} />
         {switches}
         <Spacer y={50} />
-        <button>Save</button>
+        <Button className="p-2">Save</Button>
       </form>
     </div>
   );

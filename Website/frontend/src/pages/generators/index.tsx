@@ -30,12 +30,12 @@ export default function Generators({
   error: string;
 }) {
   useCookieSync(cookie);
-
+  useRefresh(5000);
   if (error)
     return <div className="flex items-center justify-center">{error}</div>;
   const updateActionURL = "/api/generator-collect";
 
-  useRefresh(5000);
+
   return (
     <>
       <Head>

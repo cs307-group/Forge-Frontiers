@@ -4,21 +4,24 @@ import {
   EdgeFunctionResponse,
   handleAuthRefresh,
 } from "./fetch-util";
-import {ShopData, Tokens} from "./types";
+import {FishingRoll, ShopData, Tokens} from "./types";
 
-export async function fetchShopStatus(c: AuthReqContext) {
+async function authenticatedGetRequest<T extends object>(
+  c: AuthReqContext,
+  route: string
+) {
   const {req} = c;
 
   const getResponse = ($tokens: Tokens) =>
-    jsonRequest(routes.adminViewShops, {
+    jsonRequest(route, {
       method: "get",
       headers: getAuthenticationHeaders($tokens),
     });
   const result = await handleAuthRefresh(req, getResponse);
   if (Array.isArray(result)) {
     const [newResp, newTokens] = result;
-    const shop: ShopData[] = (await newResp.json()).data;
-    const ret = new EdgeFunctionResponse(shop);
+    const r: T = (await newResp.json()).data;
+    const ret = new EdgeFunctionResponse(r);
     if (newTokens == null) {
       return ret;
     } else {
@@ -26,4 +29,12 @@ export async function fetchShopStatus(c: AuthReqContext) {
     }
   }
   return result;
+}
+
+export async function fetchShopStatus(c: AuthReqContext) {
+  return authenticatedGetRequest<ShopData[]>(c, routes.adminViewShops);
+}
+
+export function fetchFishingRolls(c: AuthReqContext) {
+  return authenticatedGetRequest<FishingRoll[]>(c, routes.viewFishingRollStats);
 }

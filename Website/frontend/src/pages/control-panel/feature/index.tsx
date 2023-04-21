@@ -5,6 +5,7 @@ import {fetchFeatures} from "@/handlers/features";
 import {isErrorResponse} from "@/handlers/fetch-util";
 import {FeatureList, UserDataSecure} from "@/handlers/types";
 import {useCookieSync} from "@/hooks/use-cookie-sync";
+import {useRefresh} from "@/hooks/use-refresh";
 
 export default function ControlPanel({
   data,
@@ -18,10 +19,10 @@ export default function ControlPanel({
   cookie: any;
 }) {
   useCookieSync(cookie);
-
+  useRefresh(5000);
   return (
     <ControlPanelRenderer error={error} active="/feature">
-      <FeatureToggleViewer data={data.value}/>
+      <FeatureToggleViewer data={data.value} />
     </ControlPanelRenderer>
   );
 }

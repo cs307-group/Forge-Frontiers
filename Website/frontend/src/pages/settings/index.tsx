@@ -14,6 +14,7 @@ import {
 import {useCookieSync} from "@/hooks/use-cookie-sync";
 import {DEFAULT_STATS} from "@/util/default-stats";
 import {Button} from "@/components/Button";
+import { useRefresh } from "@/hooks/use-refresh";
 
 export default function Settings({
   data,
@@ -27,6 +28,7 @@ export default function Settings({
   cookie?: object;
 }) {
   useCookieSync(cookie);
+  useRefresh(5000);
   if (!data) return <div>User not found!</div>;
   const config = data.secure?.config || {};
 

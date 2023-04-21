@@ -20,6 +20,9 @@ export function TabLinks({active}: {active: string}) {
       <Tab id="/rank-editor" active={active}>
         Rank Editor
       </Tab>
+      <Tab id="/fishing-roll-config" active={active}>
+        Fishing Roll Chances
+      </Tab>
     </div>
   );
 }

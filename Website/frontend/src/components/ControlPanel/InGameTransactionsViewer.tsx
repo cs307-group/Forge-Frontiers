@@ -6,6 +6,7 @@ import {ShopData} from "@/handlers/types";
 
 import {ExportJSON} from "../ExportJSON";
 import {Spacer} from "../Spacer";
+import {TBody, TD, TH, THead, TR, Table} from "../Table";
 
 const AP: any = AnimatePresence;
 
@@ -18,44 +19,39 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
   return (
     <>
       <div className="mx-auto w-[90%] overflow-auto">
-        <table className="mx-auto w-full max-w-[1000px] table-auto border-separate rounded-lg border border-gray-200 bg-white shadow-lg">
-          <thead>
-            <tr className="bg-gray-100 text-xs uppercase leading-normal text-gray-600">
-              <th className="px-4 py-3 text-left">Date</th>
-              <th className="px-4 py-3 text-left">Item Price</th>
-              <th className="px-4 py-3 text-left">Seller ID</th>
-              <th className="px-4 py-3 text-left">Buyer ID</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm text-gray-600">
+        <Table>
+          <THead>
+            <TH>Date</TH>
+            <TH>Item Price</TH>
+            <TH>Seller ID</TH>
+            <TH>Buyer ID</TH>
+          </THead>
+          <TBody>
             {shop.map((sale) => (
-              <tr
-                key={sale.id_}
-                className="border-b border-gray-200 hover:bg-gray-50"
-              >
-                <td className="px-4 py-3">
+              <TR key={sale.id_}>
+                <TD>
                   <Link
                     href={`/control-panel/in-game-transactions/${sale.id_}`}
                   >
                     {sale.date_sold == -1 ? "Not Sold Yet" : sale.date_sold}
                   </Link>
-                </td>
-                <td className="px-4 py-3">
+                </TD>
+                <TD>
                   <Link
                     href={`/control-panel/in-game-transactions/${sale.id_}`}
                   >
                     {sale.item_name} x{sale.amount} - {sale.price}
                   </Link>
-                </td>
-                <td className="px-4 py-3">
+                </TD>
+                <TD>
                   <Link
                     href={"/profile/mc?q=" + sale.lister_player_id}
                     className="underline"
                   >
                     {sale.lister_player_id}
                   </Link>
-                </td>
-                <td className="px-4 py-3">
+                </TD>
+                <TD>
                   {sale.buyer_id ? (
                     <Link
                       href={"/profile/mc?q=" + sale.buyer_id}
@@ -66,10 +62,14 @@ export function InGameTransactionsViewer({shop}: {shop: ShopData[]}) {
                   ) : (
                     "-"
                   )}
-                </td>
-              </tr>
+                </TD>
+              </TR>
             ))}
-          </tbody>
+          </TBody>
+        </Table>
+        <table className="mx-auto w-full max-w-[1000px] table-auto border-separate rounded-lg border border-gray-200 bg-white shadow-lg">
+          <thead></thead>
+          <tbody className="text-sm text-gray-600"></tbody>
         </table>
       </div>
       <Spacer y={24} />
