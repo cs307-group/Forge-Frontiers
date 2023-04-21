@@ -199,6 +199,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.craftingManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.tutorialManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.chatManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.spawnerManager, this);
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
@@ -221,6 +222,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.databaseManager.disable();
         this.tutorialManager.disable();
         this.chatManager.disable();
+        this.spawnerManager.disable();
     }
 
     private void createConfig(String name) {
