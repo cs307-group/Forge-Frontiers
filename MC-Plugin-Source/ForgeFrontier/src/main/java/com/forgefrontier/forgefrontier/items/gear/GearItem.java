@@ -50,10 +50,16 @@ public abstract class GearItem extends UniqueCustomItem {
      * @param durability the durability of the gear (used for cosmetics)
      * @param lore the lore description of the gear
      */
-    public GearItem(String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum,
+    public GearItem(String code, String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum,
                     Material material, int durability, String lore) {
-        super(name);
+        super(code);
         registerAccumulators(name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
+    }
+
+    boolean randomizeBaseStats = true;
+
+    public void setRandomizeBaseStats(boolean randomizeBaseStats) {
+        this.randomizeBaseStats =randomizeBaseStats;
     }
 
     /**
@@ -107,7 +113,8 @@ public abstract class GearItem extends UniqueCustomItem {
                 for (int i = 0; i < 3; i++) {
                     gearItemInstance.reforgeStats[i] = new ReforgeStatistic(gearItemInstance.quality, gearItemInstance.gemEnum);
                 }
-                initBaseStatSlots(gearItemInstance, numBaseStats);
+                if(this.randomizeBaseStats)
+                    initBaseStatSlots(gearItemInstance, numBaseStats);
 
                 gearItemInstance.numGemSlots = numGemSlots;
                 gearItemInstance.gems = new GemValues[gearItemInstance.numGemSlots];
@@ -131,7 +138,7 @@ public abstract class GearItem extends UniqueCustomItem {
             return gearItemInstance;
         });
 
-        this.registerItemStackAccumulator((customItemInstance, itemStack) -> {
+        this.registerItemStackAccumulator((customItemInstance, __) -> {
             GearItemInstance gearItemInstance = (GearItemInstance) customItemInstance;
 
             ChatColor qualityColor = gearItemInstance.getQuality().getColor();

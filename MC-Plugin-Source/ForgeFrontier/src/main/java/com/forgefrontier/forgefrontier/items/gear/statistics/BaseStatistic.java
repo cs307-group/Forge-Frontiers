@@ -28,6 +28,15 @@ public class BaseStatistic extends CustomStat {
     public BaseStatistic(int statValue, StatEnum statType) {
         super(statValue, statType);
     }
+    /**
+     * Constructor with every attribute specified
+     *
+     * @param statValue to be assigned to corresponding attribute
+     * @param statType to be assigned to corresponding attribute
+     */
+    public BaseStatistic(StatEnum statType, int statValue) {
+        super(statValue, statType);
+    }
 
     /**
      * Constructor given a string to specify data

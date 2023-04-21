@@ -39,6 +39,7 @@ public class ChickBoss extends HostileChicken {
                 registerDropItem("SilverIngot", 100);
             }
             registerDropItem("LeatherHelmet", 100);
+            registerDropItem("ChickenWing", 100);
         }
 
         @Override

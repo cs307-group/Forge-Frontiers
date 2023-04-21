@@ -16,7 +16,7 @@ public abstract class CustomWeapon extends GearItem {
     /**
      * Class for CustomSwordInstance
      */
-    public abstract static class CustomWeaponInstance extends GearItemInstance {
+    public static class CustomWeaponInstance extends GearItemInstance {
 
         StatEnum mainStat = StatEnum.STR;
 
@@ -41,8 +41,8 @@ public abstract class CustomWeapon extends GearItem {
      * @param durability   the durability of the gear (used for cosmetics)
      * @param lore         the lore description of the gear
      */
-    public CustomWeapon(String name, Quality quality, int numBaseStats, int numGemSlots, Material material, int durability, String lore) {
-        super(name, quality, numBaseStats, numGemSlots, GemEnum.WEAPON, material, durability, lore);
+    public CustomWeapon(String code, String name, Quality quality, int numBaseStats, int numGemSlots, Material material, int durability, String lore) {
+        super(code, name, quality, numBaseStats, numGemSlots, GemEnum.WEAPON, material, durability, lore);
     }
 
 }

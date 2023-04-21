@@ -27,7 +27,7 @@ public class LeatherHelmet extends CustomArmor {
 
     /** Constructor for the leather helmet */
     public LeatherHelmet() {
-        super ("LeatherHelmet", QualityEnum.UNASSIGNED.getQuality(), 2, 1,
+        super ("LeatherHelmet", "Leather Helmet", QualityEnum.UNASSIGNED.getQuality(), 2, 1,
                 GemEnum.ARMOR, Material.LEATHER_HELMET, Material.LEATHER_HELMET.getMaxDurability(),
                 "A scrappy leather helm");
 

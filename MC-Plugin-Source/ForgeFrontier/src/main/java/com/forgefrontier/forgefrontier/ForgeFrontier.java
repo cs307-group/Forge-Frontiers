@@ -20,6 +20,7 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.*
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.*;
 import com.forgefrontier.forgefrontier.listeners.BentoBoxListener;
+import com.forgefrontier.forgefrontier.listeners.ChatManager;
 import com.forgefrontier.forgefrontier.mining.MiningCommandExecutor;
 import com.forgefrontier.forgefrontier.mining.MiningManager;
 import com.forgefrontier.forgefrontier.mobs.CustomEntityManager;
@@ -86,6 +87,7 @@ public class ForgeFrontier extends JavaPlugin {
     private CraftingManager craftingManager;
     private CustomSkullManager customSkullManager;
     private TutorialManager tutorialManager;
+    private ChatManager chatManager;
 
     private Shop itemShop;
     private BazaarManager bazaarManager;
@@ -133,6 +135,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.craftingManager = new CraftingManager(this);
         this.customSkullManager = new CustomSkullManager(this);
         this.tutorialManager = new TutorialManager(this);
+        this.chatManager = new ChatManager(this);
 
         this.databaseManager.init();
         this.customSkullManager.init();
@@ -148,6 +151,7 @@ public class ForgeFrontier extends JavaPlugin {
         this.particleManager.init();
         this.craftingManager.init();
         this.tutorialManager.init();
+        this.chatManager.init();
 
         // Player Shop
         this.setupPlayerShop();
@@ -185,6 +189,7 @@ public class ForgeFrontier extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(this.fishingManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.craftingManager, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.tutorialManager, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.chatManager, this);
 
         // General Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new GuiListener(), this);
@@ -205,6 +210,8 @@ public class ForgeFrontier extends JavaPlugin {
         this.customEntityManager.disable();
         this.miningManager.disable();
         this.databaseManager.disable();
+        this.tutorialManager.disable();
+        this.chatManager.disable();
     }
 
     private void createConfig(String name) {
@@ -230,7 +237,7 @@ public class ForgeFrontier extends JavaPlugin {
         // Bukkit-Registered Commands
         registerCommand("genshop"      , new GeneratorShopCommandExecutor());
         registerCommand("gearshop"     , new GearShopCommandExecutor());
-        registerCommand("pshop"         , itemShop.getCommandExecutor());
+        registerCommand("pshop"        , itemShop.getCommandExecutor());
         registerCommand("inspect"      , new InspectCommandExecutor());
         registerCommand("island"       , new IslandCommandExecutor());
         registerCommand("link"         , new LinkCommandExecutor());
@@ -239,6 +246,7 @@ public class ForgeFrontier extends JavaPlugin {
         registerCommand("customspawn"  , new EntityCommandExecutor());
         registerCommand("mining"       , new MiningCommandExecutor());
         registerCommand("tutorial"     , new TutorialCommandExecutor());
+        registerCommand("rank"         , new RankCommandExecutor());
 
         // Wrapper-Registered Commands
         BukkitCommandHandler commandHandler = BukkitCommandHandler.create(this);
@@ -342,6 +350,10 @@ public class ForgeFrontier extends JavaPlugin {
 
     public TutorialManager getTutorialManager() {
         return tutorialManager;
+    }
+
+    public ChatManager getChatManager() {
+        return chatManager;
     }
 
     public Shop getPlayerShop() {

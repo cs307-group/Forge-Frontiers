@@ -41,9 +41,12 @@ public class GemValues {
         // removes curly brackets
         data = data.substring(1, data.length() - 1);
 
+        System.out.println(data);
+
         this.quality = QualityEnum.getQualityEnumFromString(data.substring(0, data.indexOf(":"))).getQuality();
         data = data.substring(data.indexOf(":") + 1);
-        String baseStats = data.substring(data.indexOf("{") + 1, data.lastIndexOf("}"));
+        String baseStats = data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1);
+        System.out.println(baseStats);
         this.stat = new BaseStatistic(baseStats);
         data = data.replace(baseStats, "");
         data = data.substring(data.indexOf(":") + 1);
