@@ -12,7 +12,7 @@ import java.util.logging.Level;
 public class MobConfigUtil {
     public static void getMaterialDropsFromCode(HashMap<Material, Integer> dropTable, ArrayList<Material> dropKeys, String code) {
         FileConfiguration configuration = ForgeFrontier.getInstance().getConfig("entity-drops");
-        ForgeFrontier.getInstance().getLogger().log(Level.WARNING, code);
+        ForgeFrontier.getInstance().getLogger().log(Level.WARNING, code + "| " + configuration.getKeys(false));
         ConfigurationSection codeSection = configuration.getConfigurationSection(code);
         if(codeSection == null)
             return;

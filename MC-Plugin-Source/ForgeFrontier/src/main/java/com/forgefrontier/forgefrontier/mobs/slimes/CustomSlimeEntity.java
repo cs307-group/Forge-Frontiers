@@ -85,20 +85,16 @@ public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
 
         for (Material dropKey : dropKeys) {
             int rand = (int) (Math.random() * 100) + 1;
-            System.out.println("Rand: " + rand + " | Chance: " + dropTable.get(dropKey));
             if (rand <= dropTable.get(dropKey)) {
                 ItemStack item = new ItemStack(dropKey);
-                System.out.println("DROP: " + item);
                 world.dropItem(loc, item);
             }
         }
 
         for (String customDropKey : customDropKeys) {
             int rand = (int) (Math.random() * 100) + 1;
-            System.out.println("Rand: " + rand + " | Chance: " + customDropTable.get(customDropKey));
             if (rand <= customDropTable.get(customDropKey)) {
                 ItemStack item = new ItemStack(CustomItemManager.getCustomItem(customDropKey).asInstance(null).asItemStack());
-                System.out.println("DROP: " + customDropKey);
                 world.dropItem(loc, item);
             }
         }
