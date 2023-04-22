@@ -1,6 +1,6 @@
 {
   "What happens when I try to collect my generators on the website?": "Our program will try to fill all of your current stashes with the items from the generators. If no stash(es) exist, the generators will not be collected. ",
-  "Is the market data updated in real time?": "Yes! Our website pull data frequently from the server to make sure you have the most up to date information.",
+  "Is the market data updated in real time?": "Yes! Our website pulls data frequently from the server to make sure you have the most up to date information.",
   "What payment methods do you accept?": "We process all of our transactions through Stripe so any payment methods accepted by Stripe is good.",
   "Where can I contact support for any questions?": "You can contact our team at ForgeFrontier@gmail.com",
   "Can I get a refund for my rank?": "All refunds must be handled through Stripe.",
