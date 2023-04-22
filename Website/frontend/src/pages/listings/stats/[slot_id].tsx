@@ -7,16 +7,14 @@ import {useMemo, useState} from "react";
 import {AppLayout, CONTROL_PANEL} from "@/components/Layout/AppLayout";
 import {Spacer} from "@/components/Spacer";
 import {requireAuthenticatedPageView} from "@/handlers/auth";
-import {isErrorResponse} from "@/handlers/fetch-util";
 import {getOrdersForSlotId} from "@/handlers/market";
 import {BazaarLookup, MarketState, UserDataSecure} from "@/handlers/types";
 import {fetchUserData} from "@/handlers/user-data";
 import {useRefresh} from "@/hooks/use-refresh";
 import {userResponseToCustomData} from "@/util/user-response-to-custom-data";
-import {faker} from "@faker-js/faker";
 
 const FAKE = false;
-const HARD_CODE = true;
+const HARD_CODE = false;
 function useChartOptions(buyData: any, sellData: any) {
   return useMemo(() => {
     const options: Highcharts.Options = {
@@ -46,29 +44,14 @@ function useChartOptions(buyData: any, sellData: any) {
     return options;
   }, [buyData, sellData]);
 }
-const fakeData = () =>
-  Array.from({length: 10})
-    .map(() => {
-      return {
-        x: faker.date.between(new Date("2020-01-01T00:00:00.000Z"), new Date()), // .toISOString(),
-        y: faker.datatype.number({min: 1, max: 1000}),
-      };
-    })
-    .sort((a, b) => {
-      const x = +new Date(a.x);
-      const y = +new Date(b.x);
-      return x - y;
-    });
 
 function useParsedData(data: MarketState[]) {
   return useMemo(
     () =>
-      FAKE
-        ? fakeData()
-        : data.map((bid) => ({
-            x: new Date(bid.listdate),
-            y: bid.price,
-          })),
+      data.map((bid) => ({
+        x: new Date(bid.listdate),
+        y: bid.price,
+      })),
     [data]
   );
 }
