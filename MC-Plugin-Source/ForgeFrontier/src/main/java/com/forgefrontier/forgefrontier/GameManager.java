@@ -30,7 +30,6 @@ public class GameManager extends Manager {
     }
 
     public void refreshStates() {
-        plugin.getLogger().log(Level.INFO, "Refreshing Game State...");
         new Thread(
                 () -> {
         HashMap<String, Boolean> nState = plugin.getDatabaseManager().getManagementDB().getSyncFeatureStates();

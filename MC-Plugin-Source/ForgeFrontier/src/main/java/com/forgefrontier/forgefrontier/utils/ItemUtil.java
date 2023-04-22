@@ -8,6 +8,7 @@ import com.forgefrontier.forgefrontier.items.ItemStackBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -36,6 +37,24 @@ public class ItemUtil {
         }
         return customData;
     }
+
+    public static String colorToStr(Color c) {
+        if (c == null) return "NA";
+
+        return "" + c.getRed() + "," + c.getGreen() + "," + c.getBlue();
+    }
+
+    public static Color strToColor(String s) {
+        if (s == null) return null;
+        Color c = Color.BLACK;
+        String[] parts = s.split(",");
+        if (parts.length != 3) return null;
+        c = c.setRed(Integer.parseInt(parts[0]));
+        c = c.setBlue(Integer.parseInt(parts[0]));
+        c = c.setGreen(Integer.parseInt(parts[0]));
+        return c;
+    }
+
 
     /** https://www.spigotmc.org/threads/wishing-to-share-my-method-for-custom-textured-player-head-itemstacks.445763/#post-3861173 */
     private static byte[] longToBytes(long x) {

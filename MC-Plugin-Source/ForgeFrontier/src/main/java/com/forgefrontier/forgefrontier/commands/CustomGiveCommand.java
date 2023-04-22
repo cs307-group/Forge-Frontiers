@@ -7,6 +7,7 @@ import com.forgefrontier.forgefrontier.items.CustomItemManager;
 import com.forgefrontier.forgefrontier.utils.ItemGiver;
 import com.forgefrontier.forgefrontier.utils.JSONWrapper;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -60,7 +61,6 @@ public class CustomGiveCommand {
             ItemGiver.giveItem(p,skullItm);
         }
     }
-
 
     /**
      * Attempts to add the itemType specified to the player's inventory

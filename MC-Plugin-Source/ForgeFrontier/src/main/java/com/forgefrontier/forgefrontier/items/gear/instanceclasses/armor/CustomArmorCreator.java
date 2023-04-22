@@ -4,6 +4,7 @@ import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.EquipmentSlot;
 
@@ -35,4 +36,22 @@ public class CustomArmorCreator extends CustomArmor {
             return instance;
         });
     }
+
+
+    // For Leather items
+    public CustomArmorCreator(String code, String name, Quality quality, int numGemSlots, Material material, Color col, String lore, EquipmentSlot equipSlot, int def, int hp) {
+        super(code, name, quality, 2, numGemSlots, GemEnum.ARMOR, material, col, 0, lore);
+        this.setRandomizeBaseStats(false);
+        this.registerInstanceAccumulator((__, itemStack) -> {
+            CustomArmorInstance instance = new CustomArmorInstance(itemStack, equipSlot);
+            instance.setBaseStats(new BaseStatistic[] {
+                    new BaseStatistic(StatEnum.DEF, def),
+                    new BaseStatistic(StatEnum.HP, hp)
+            });
+            return instance;
+        });
+    }
+
+
+
 }

@@ -11,6 +11,8 @@ import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
 import com.forgefrontier.forgefrontier.particles.FFCosmeticParticle;
 import com.forgefrontier.forgefrontier.particles.PlayerParticle;
+import com.forgefrontier.forgefrontier.utils.ItemUtil;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -50,6 +52,9 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
 
     /** The skill of the item. Can be null. */
     Skill skill;
+
+    /** Color of gear (only applies to leather) */
+    Color color = null;
 
     /** Particle effect that plays upon this item's equip */
     FFCosmeticParticle particleEffect;
@@ -98,8 +103,9 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
                 gemsArrayString.append(gems[i].toString());
             }
         }
-        gearData.put("gems", gemsArrayString.toString());
+        gearData.put("leather-color", ItemUtil.colorToStr(color));
 
+        gearData.put("gems", gemsArrayString.toString());
         gearData.put("gem-enum", gemEnum.toString());
         gearData.put("material", material.toString());
         gearData.put("durability", Integer.toString(durability));
@@ -149,7 +155,7 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
             }
             gemsString = gemsString.substring(gemsString.indexOf("}") + 1);
         }
-
+        color = ItemUtil.strToColor(gearData.get("leather-color"));
         gemEnum = GemEnum.valueOf(gearData.get("gem-enum"));
         material = Material.valueOf(gearData.get("material"));
         durability = Integer.parseInt(gearData.get("durability"));
@@ -172,6 +178,9 @@ public abstract class GearItemInstance extends UniqueCustomItemInstance {
         this.numBaseStats = baseStats.length;
         this.baseStats = baseStats;
     }
+
+    public Color getColor() { return color; }
+    public void setColor(Color c) { this.color = c; }
 
     /**
      * @return the quality of the instance

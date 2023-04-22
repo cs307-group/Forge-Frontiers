@@ -34,9 +34,10 @@ public class ItemStackBuilder {
     }
     /** Copies some references from itemstack */
     public ItemStackBuilder(ItemStack m) {
-        copy = m;
+        copy = m.clone();
         this.displayName = ItemUtil.itemName(m);
         this.lore = m.getItemMeta().getLore();
+        if (lore == null) lore = new ArrayList<>();
         amt = m.getAmount();
         copyBuild = true;
     }
@@ -49,6 +50,12 @@ public class ItemStackBuilder {
 
     /** Set the display name of the generated item */
     public ItemStackBuilder setDisplayName(String name) {
+        if (copyBuild) {
+            ItemMeta m = copy.getItemMeta();
+            m.setDisplayName(name);
+            copy.setItemMeta(m);
+            return this;
+        }
         if (name.equals(ItemUtil.simpleRename(m))) {
             displayName = null;
         } else {
@@ -59,11 +66,18 @@ public class ItemStackBuilder {
 
     /** Set the amount of the generated item stack */
     public ItemStackBuilder setAmount(int amt) {
+        if (copyBuild) {copy.setAmount(amt);}
         this.amt = amt;
         return this;
     }
 
     public ItemStackBuilder setFullLore(String newlineSepLore) {
+//        if (copyBuild) {
+//            ItemMeta m = copy.getItemMeta();
+//            m.setLore((List.of(newlineSepLore.split("\n"))));
+//            copy.setItemMeta(m);
+//            return this;
+//        }
         isloreModified = true;
         if (newlineSepLore.isEmpty()) {
             return this;
@@ -73,6 +87,12 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder setFullLore(List<String> lore) {
+//        if (copyBuild) {
+//            ItemMeta m = copy.getItemMeta();
+//            m.setLore(lore);
+//            copy.setItemMeta(m);
+//            return this;
+//        }
         isloreModified = true;
         this.lore = new ArrayList<>(lore);
         return this;
@@ -80,9 +100,18 @@ public class ItemStackBuilder {
 
     /** Add a new line to the lore of the generated item */
     public ItemStackBuilder addLoreLine(String loreLine) {
+//        if (copyBuild) {
+//            ItemMeta m = copy.getItemMeta();
+//            List<String> lore = m.getLore();
+//            if (lore == null) lore = new ArrayList<>();
+//            lore.add(loreLine);
+//            m.setLore(lore);
+//            return this;
+//        }
         isloreModified = true;
-        if(this.lore == null)
+        if(this.lore == null) {
             this.lore = new ArrayList<>();
+        }
         List<String> str = Arrays.asList(
             ChatColor.translateAlternateColorCodes('&', loreLine).split("\n")
         );
@@ -96,7 +125,7 @@ public class ItemStackBuilder {
      *
      */
     public ItemStack build() {
-        if (copyBuild) return copy(copy, amt);
+        if (copyBuild) return copy(copy);
 
         ItemStack itm = new ItemStack(m);
         itm.setAmount(amt);
@@ -121,26 +150,37 @@ public class ItemStackBuilder {
      * @return  New Itemstack
      */
     public ItemStack copy(ItemStack other, int amt) {
-        ItemStack i = new ItemStack(other.getType());
-        i.setItemMeta(other.getItemMeta());
-        if (lore != null && isloreModified && i.getItemMeta() != null) {
-            ItemMeta imeta = i.getItemMeta();
-            imeta.setLore(lore);
-            i.setItemMeta(imeta);
+        if (isloreModified) {
+            copy.getItemMeta().setLore(lore);
         }
-        i.setAmount(amt);
-        return i;
+        copy.setAmount(amt);
+        return copy;
+//        ItemStack i = new ItemStack(other.getType());
+//        i.setItemMeta(other.getItemMeta());
+//        if (lore != null && isloreModified && i.getItemMeta() != null) {
+//            ItemMeta imeta = i.getItemMeta();
+//            imeta.setLore(lore);
+//            i.setItemMeta(imeta);
+//        }
+//        i.setAmount(amt);
+//        return i;
     }
 
     public ItemStack copy(ItemStack other) {
-        ItemStack i = new ItemStack(other.getType());
-        i.setItemMeta(other.getItemMeta());
-        if (lore != null && isloreModified && i.getItemMeta() != null) {
-            ItemMeta imeta = i.getItemMeta();
-            imeta.setLore(lore);
-            i.setItemMeta(imeta);
+        if (isloreModified) {
+            ItemMeta m = copy.getItemMeta();
+            m.setLore(lore);
+            copy.setItemMeta(m);
         }
-        return i;
+        return copy;
+//        ItemStack i = new ItemStack(other.getType());
+//        i.setItemMeta(other.getItemMeta());
+//        if (lore != null && isloreModified && i.getItemMeta() != null) {
+//            ItemMeta imeta = i.getItemMeta();
+//            imeta.setLore(lore);
+//            i.setItemMeta(imeta);
+//        }
+//        return i;
     }
 
     public String getDisplayName() {

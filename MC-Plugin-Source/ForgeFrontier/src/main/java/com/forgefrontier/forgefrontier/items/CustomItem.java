@@ -20,7 +20,7 @@ import java.util.logging.Level;
 public abstract class CustomItem {
 
     /** The base code for determining the type of item it is. */
-    private final String code;
+    protected final String code;
 
     /** Accumulator functions that create an ItemStack incrementally through data in a CustomItemInstance. */
     private final List<ItemStackAccumulator> itemStackAccumulators;

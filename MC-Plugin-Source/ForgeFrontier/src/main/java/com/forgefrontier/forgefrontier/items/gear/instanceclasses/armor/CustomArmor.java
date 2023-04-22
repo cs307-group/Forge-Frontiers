@@ -6,6 +6,7 @@ import com.forgefrontier.forgefrontier.items.gear.quality.Quality;
 import com.forgefrontier.forgefrontier.items.gear.statistics.BaseStatistic;
 import com.forgefrontier.forgefrontier.items.gear.statistics.StatEnum;
 import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemEnum;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -64,4 +65,34 @@ public abstract class CustomArmor extends GearItem {
             return armorInstance;
         });
     }
+
+    /**
+     * FOR LEATHER
+     * @param code
+     * @param name
+     * @param quality
+     * @param numBaseStats
+     * @param numGemSlots
+     * @param gemEnum
+     * @param material
+     * @param color         COLOR FOR LEATHER
+     * @param durability
+     * @param lore
+     */
+    public CustomArmor(String code, String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum, Material material, Color color, int durability, String lore) {
+        super(code, name, quality, numBaseStats, numGemSlots, gemEnum, material, color, durability, lore);
+        this.registerInstanceAccumulator((instance, itemStack) -> {
+            CustomArmorInstance armorInstance = (CustomArmorInstance) instance;
+
+            if (itemStack == null && this.randomizeBaseStats) {
+                BaseStatistic[] baseStats = new BaseStatistic[numBaseStats];
+                armorInstance.setBaseStats(baseStats);
+            }
+
+            return armorInstance;
+        });
+    }
+
+
+
 }

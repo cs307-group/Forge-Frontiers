@@ -14,6 +14,7 @@ import com.forgefrontier.forgefrontier.items.gear.upgradegems.GemValues;
 import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.google.common.collect.Multimap;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -23,6 +24,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.json.simple.JSONObject;
 
 import java.util.*;
@@ -53,7 +55,13 @@ public abstract class GearItem extends UniqueCustomItem {
     public GearItem(String code, String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum,
                     Material material, int durability, String lore) {
         super(code);
-        registerAccumulators(name, quality, numBaseStats, numGemSlots, gemEnum, material, durability, lore);
+        registerAccumulators(name, quality, numBaseStats, numGemSlots, gemEnum, material, null, durability, lore);
+    }
+
+    public GearItem(String code, String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum,
+                    Material material, Color color, int durability, String lore) {
+        super(code);
+        registerAccumulators(name, quality, numBaseStats, numGemSlots, gemEnum, material, color, durability, lore);
     }
 
     public boolean randomizeBaseStats = true;
@@ -95,7 +103,7 @@ public abstract class GearItem extends UniqueCustomItem {
      * @param lore the lore description of the gear
      */
     private void registerAccumulators(String name, Quality quality, int numBaseStats, int numGemSlots, GemEnum gemEnum,
-                                      Material material, int durability, String lore) {
+                                      Material material, Color color, int durability, String lore) {
         this.registerInstanceAccumulator((instance, itemStack) -> {
             GearItemInstance gearItemInstance = (GearItemInstance) instance;
 
@@ -121,9 +129,8 @@ public abstract class GearItem extends UniqueCustomItem {
 
                 gearItemInstance.material = material;
                 gearItemInstance.durability = durability;
-
+                gearItemInstance.color = color;
                 gearItemInstance.lore = lore;
-
                 gearItemInstance.setGearData();
             } else {
                 // System.out.println("LOADING GEAR FROM PREVIOUS DATA");
@@ -143,11 +150,19 @@ public abstract class GearItem extends UniqueCustomItem {
 
             ChatColor qualityColor = gearItemInstance.getQuality().getColor();
 
-            ItemStackBuilder builder = new ItemStackBuilder(gearItemInstance.material)
-                .setDisplayName(qualityColor + gearItemInstance.name)
-                .addLoreLine(ChatColor.GRAY + gearItemInstance.lore)
-                .addLoreLine(qualityColor + gearItemInstance.quality.toString())
-                .addLoreLine("");
+            ItemStackBuilder builder;
+            if (gearItemInstance.material == Material.PLAYER_HEAD) {
+                ItemStack skull = ForgeFrontier.getInstance().getCustomSkullManager()
+                        .getSkullItem(this.code + "Skull");
+                builder = new ItemStackBuilder(skull);
+            } else {
+                builder = new ItemStackBuilder(gearItemInstance.material);
+            }
+
+             builder.setDisplayName(qualityColor + gearItemInstance.name)
+                    .addLoreLine(ChatColor.GRAY + gearItemInstance.lore)
+                    .addLoreLine(qualityColor + gearItemInstance.quality.toString())
+                    .addLoreLine("");
 
             if(gearItemInstance.skill != null) {
                 builder
@@ -184,6 +199,11 @@ public abstract class GearItem extends UniqueCustomItem {
             builder.setUnbreakable(true);
 
             ItemStack item = builder.build();
+            if (color != null) {
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) item.getItemMeta();
+                leatherArmorMeta.setColor(color);
+                item.setItemMeta(leatherArmorMeta);
+            }
             ItemMeta meta = item.getItemMeta();
 
             // sets the durability of the item to the specified durability

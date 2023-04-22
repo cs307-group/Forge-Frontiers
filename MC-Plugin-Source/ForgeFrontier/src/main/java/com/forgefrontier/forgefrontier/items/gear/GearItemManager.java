@@ -27,6 +27,7 @@ import com.forgefrontier.forgefrontier.player.FFPlayer;
 import com.forgefrontier.forgefrontier.player.PlayerManager;
 import com.forgefrontier.forgefrontier.utils.Manager;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -77,6 +78,13 @@ public class GearItemManager extends Manager implements Listener {
         registerArmorSet("Sterling Silver", QualityEnum.COMMON, 2, 1, "IRON", "&7Sterling Silver %item% that both defends and enhances you.", new int[] {5, 10, 7, 4}, new int[]{3,5,4,2});
 
         registerArmorSet("Brass", QualityEnum.COMMON, 2, 1, "GOLDEN", "&7A durable %item% made of brass that defends well against attacks.", new int[] {8, 11, 8, 5}, new int[]{2,4,3,1});
+
+        registerLeatherArmorSet("Featherwoven", QualityEnum.RARE, 2, 1, Color.WHITE, "&7Lightweight %item% made from magical feather", new int[] {8, 11, 8, 5}, new int[]{2,4,3,1});
+        registerSkullHelmet("ZephyrHelmet", "Zephyr Helmet", QualityEnum.UNIQUE, 3, 3,
+                "&7The &fZephyr Helmet &7is a symbol of speed and agility,\n" +
+                "&7crafted with the power of &fwind.", new int[] {20, 11, 8, 20}, new int[]{5,6,8,4});
+        registerLeatherArmorSet("Ooze", QualityEnum.RARE, 2, 1, Color.GREEN, "&2Adaptable %item% reinforced with magical slime material.", new int[] {8, 11, 8, 5}, new int[]{2,4,3,1});
+
         //cim.registerCustomItem(new CustomArmorCreator("CopperHelmet", "Copper Helmet", QualityEnum.COMMON.getQuality(), 2, 0, Material.GOLDEN_HELMET, ));
 
         playerManager = plugin.getPlayerManager();
@@ -86,6 +94,21 @@ public class GearItemManager extends Manager implements Listener {
         this.registerSkill(new GroundSmashSkill());
         this.registerSkill(new DashSkill());
         this.registerSkill(new InfernoSkill());
+    }
+
+    public void registerSkullHelmet(String skullCode, String itemName, QualityEnum quality, int base, int gemAmt, String lore,
+                              int[] def, int[] hp) {
+        CustomItemManager cim = ForgeFrontier.getInstance().getCustomItemManager();
+        cim.registerCustomItem(new CustomArmorCreator(
+                skullCode,
+                itemName,
+                quality.getQuality(),
+                gemAmt, Material.PLAYER_HEAD,
+                lore.replace("%item%", "helmet"),
+                EquipmentSlot.HEAD,
+                def[0],
+                hp[0]
+        ));
     }
 
     public void registerArmorSet(String itemName, QualityEnum quality, int base, int gemAmt, String setPrefix, String lore,
@@ -133,6 +156,57 @@ public class GearItemManager extends Manager implements Listener {
             hp[3]
         ));
     }
+
+    public void registerLeatherArmorSet(String itemName, QualityEnum quality, int base, int gemAmt, Color leatherColor, String lore,
+                                        int[] def, int[] hp) {
+        CustomItemManager cim = ForgeFrontier.getInstance().getCustomItemManager();
+
+        cim.registerCustomItem(new CustomArmorCreator(
+                itemName + "Helmet",
+                itemName + " Helmet",
+                quality.getQuality(),
+                gemAmt, Material.matchMaterial("LEATHER_HELMET"),
+                leatherColor,
+                lore.replace("%item%", "helmet"),
+                EquipmentSlot.HEAD,
+                def[0],
+                hp[0]
+        ));
+        cim.registerCustomItem(new CustomArmorCreator(
+                itemName + "Chestplate",
+                itemName + " Chestplate",
+                quality.getQuality(),
+                gemAmt, Material.matchMaterial("LEATHER_CHESTPLATE"),
+                leatherColor,
+                lore.replace("%item%", "chestplate"),
+                EquipmentSlot.CHEST,
+                def[1],
+                hp[1]
+        ));
+        cim.registerCustomItem(new CustomArmorCreator(
+                itemName + "Leggings",
+                itemName + " Leggings",
+                quality.getQuality(),
+                gemAmt, Material.matchMaterial("LEATHER_LEGGINGS"),
+                leatherColor,
+                lore.replace("%item%", "pair of leggings"),
+                EquipmentSlot.LEGS,
+                def[2],
+                hp[2]
+        ));
+        cim.registerCustomItem(new CustomArmorCreator(
+                itemName + "Boots",
+                itemName + " Boots",
+                quality.getQuality(),
+                gemAmt, Material.matchMaterial("LEATHER_BOOTS"),
+                leatherColor,
+                lore.replace("%item%", "pair of boots"),
+                EquipmentSlot.FEET,
+                def[3],
+                hp[3]
+        ));
+    }
+
 
     @Override
     public void disable() {
