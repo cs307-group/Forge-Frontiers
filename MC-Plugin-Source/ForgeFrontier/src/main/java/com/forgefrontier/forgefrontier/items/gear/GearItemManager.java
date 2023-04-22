@@ -9,8 +9,7 @@ import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.CustomAr
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.chestpiece.LeatherChestplate;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.armor.helmet.LeatherHelmet;
 import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.bows.WoodenBow;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.ChickenWing;
-import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.WoodenSword;
+import com.forgefrontier.forgefrontier.items.gear.instanceclasses.weapons.swords.*;
 import com.forgefrontier.forgefrontier.items.gear.quality.QualityEnum;
 import com.forgefrontier.forgefrontier.items.gear.skills.DashSkill;
 import com.forgefrontier.forgefrontier.items.gear.skills.GroundSmashSkill;
@@ -70,7 +69,10 @@ public class GearItemManager extends Manager implements Listener {
         cim.registerCustomItem(new LeatherHelmet());
         cim.registerCustomItem(new LeatherChestplate());
         cim.registerCustomItem(new ChickenWing());
-
+        cim.registerCustomItem(new SilverSword());
+        cim.registerCustomItem(new CobaltHammer());
+        cim.registerCustomItem(new WindEdge());
+        cim.registerCustomItem(new CobaltSword());
         registerArmorSet("Copper", QualityEnum.COMMON, 1, 0, "GOLDEN", "&7A mediocre %item% made of rusted copper.", new int[] {3, 6, 4, 2}, new int[]{0,0,0,0});
         registerArmorSet("Refined Copper", QualityEnum.COMMON, 2, 1, "GOLDEN", "&7A copper %item% refined to be more resilient.", new int[] {7, 11, 9, 6}, new int[]{0,0,0,0});
 
@@ -84,6 +86,10 @@ public class GearItemManager extends Manager implements Listener {
                 "&7The &fZephyr Helmet &7is a symbol of speed and agility,\n" +
                 "&7crafted with the power of &fwind.", new int[] {20, 11, 8, 20}, new int[]{5,6,8,4});
         registerLeatherArmorSet("Ooze", QualityEnum.RARE, 2, 1, Color.GREEN, "&2Adaptable %item% reinforced with magical slime material.", new int[] {8, 11, 8, 5}, new int[]{2,4,3,1});
+
+        registerSkullHelmet("SteelGuard", "Steel Face Guard", QualityEnum.RARE, 3, 1,
+                "&fSteel Helm &7forged from the finest steel.", new int[] {10, 7, 15, 11}, new int[]{10,2,13,5});
+        registerArmorSet("Steel", QualityEnum.RARE, 2, 1, "IRON", "&fSteel %item% &7forged from the finest steel.", new int[] {10, 7, 14, 9}, new int[]{6,4,4,3});
 
         //cim.registerCustomItem(new CustomArmorCreator("CopperHelmet", "Copper Helmet", QualityEnum.COMMON.getQuality(), 2, 0, Material.GOLDEN_HELMET, ));
 
