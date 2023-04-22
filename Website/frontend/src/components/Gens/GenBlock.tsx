@@ -66,19 +66,14 @@ function __GenBlock({level, config, last_collection_time}: GenProps) {
     count >= config.levels[level].max_size ? null : 100
   );
   return (
-    <div className="h-30 rounded-md border-2 p-2  dark:border-transparent dark:bg-[#171717]">
+    <div className="h-30 rounded-md border-2 p-8 dark:bg-[#252525]">
       <Spacer y={10} />
       <p>
         Generator Type: {config.resource} level {level + 1}
       </p>
-      <Spacer y={10} />
+      <Spacer y={20} />
       <Progress curr={count} max={config.levels[level].max_size} />
-      <Spacer y={10} />
-      {/* <ProgressBar
-        variant="warning"
-        animated
-        now={(count / config.levels[level].max_size) * 100}
-      /> */}
+      <Spacer y={20} />
       <p>Current: {`${count.toFixed(2)}/${config.levels[level].max_size}`}</p>
     </div>
   );
@@ -86,12 +81,16 @@ function __GenBlock({level, config, last_collection_time}: GenProps) {
 
 function Progress({curr, max}: {curr: number; max: number}) {
   return (
+    <div className="border-2 rounded-md">
     <div
-      style={{"--x-scale": curr / max} as any}
-      className="h-4 w-full origin-left scale-x-[var(--x-scale)] transform-gpu rounded-xl bg-[#0070f3]"
+      style={{"--x-scale": curr / max, "background": "linear-gradient(to right, rgb(254, 240, 138), rgb(250, 204, 21), rgb(161, 98, 7))"} as any}
+      className="h-4 w-full origin-left scale-x-[var(--x-scale)] transform-gpu rounded-md"
+
     ></div>
+    </div>
   );
 }
+
 export function GenBlock(gen: GenProps) {
   return (
     <Client>
