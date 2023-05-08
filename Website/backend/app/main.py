@@ -1,6 +1,6 @@
 from flask import Flask
 from floodgate.flask import guard
-
+from app.set_timeout import Timeout
 from app.db import db
 import app.db.schemas
 from app.internal.constants import DATABASE_URL
@@ -18,6 +18,22 @@ db.init_app(app)
 Migrate(app, db)
 
 app.url_map.strict_slashes = False
+
+
+def exit_server():
+    import os
+
+    print("[debug] Exiting Server (inactive)")
+    os._exit(4)
+
+
+reset_timeout = Timeout(600, exit_server)
+reset_timeout.start()
+
+@app.before_request
+def gate_check():
+    reset_timeout.restart()
+    pass
 
 
 app.register_blueprint(common.router)
