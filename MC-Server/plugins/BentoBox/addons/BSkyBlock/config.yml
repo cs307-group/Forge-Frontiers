@@ -55,7 +55,7 @@ world:
   # Default protection range radius in blocks. Cannot be larger than distance.
   # Admins can change protection sizes for players individually using /bsbadmin range set <player> <new range>
   # or set this permission: bskyblock.island.range.<number>
-  protection-range: 150
+  protection-range: 50
   # Start islands at these coordinates. This is where new islands will start in the
   # world. These must be a factor of your island distance, but the plugin will auto
   # calculate the closest location on the grid. Islands develop around this location
@@ -141,19 +141,12 @@ world:
   # World flags. These are boolean settings for various flags for this world
   flags:
     OBSIDIAN_SCOOPING: true
-    CREEPER_DAMAGE: true
-    ISLAND_RESPAWN: true
-    CREEPER_GRIEFING: false
-    VISITOR_KEEP_INVENTORY: false
+    ENTER_EXIT_MESSAGES: true
+    LIQUIDS_FLOWING_OUT: false
+    REMOVE_MOBS: true
     CLEAN_SUPER_FLAT: false
-    CHEST_DAMAGE: false
     PREVENT_TELEPORT_WHEN_FALLING: false
     NATURAL_SPAWNING_OUTSIDE_RANGE: true
-    ENTER_EXIT_MESSAGES: true
-    OFFLINE_REDSTONE: true
-    OFFLINE_GROWTH: true
-    REMOVE_MOBS: true
-    TREES_GROWING_OUTSIDE_RANGE: false
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
   # Ranks are the following:

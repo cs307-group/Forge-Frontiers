@@ -23,6 +23,7 @@ public class MiningManager extends Manager implements Listener {
 
     String miningWorld;
     HashMap<String, MiningArea> miningAreas;
+    boolean isInit = false;
 
     public MiningManager(ForgeFrontier plugin) {
         super(plugin);
@@ -31,6 +32,7 @@ public class MiningManager extends Manager implements Listener {
 
     @Override
     public void init() {
+        if (!ForgeFrontier.isDBConn()) return;
         plugin.getCustomItemManager().registerCustomItem(new MiningWandItem());
 
         String world = plugin.getConfig("mining").getString("world");
@@ -47,6 +49,7 @@ public class MiningManager extends Manager implements Listener {
         MiningRunnable mainMiningRunnable = new MiningRunnable();
         mainMiningRunnable.runTaskTimer(this.plugin, 0, 20);
 
+        isInit = true;
     }
 
     @Override

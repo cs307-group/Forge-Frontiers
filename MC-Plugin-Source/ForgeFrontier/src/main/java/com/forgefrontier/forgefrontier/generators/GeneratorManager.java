@@ -33,6 +33,8 @@ public class GeneratorManager extends Manager implements Listener {
 
     List<CustomMaterial> materials;
 
+    public boolean isInit = false;
+
     public GeneratorManager(ForgeFrontier plugin) {
         super(plugin);
         this.generatorInstanceTree = new HashMap<>();
@@ -42,6 +44,9 @@ public class GeneratorManager extends Manager implements Listener {
 
     @Override
     public void init() {
+
+
+        if (!ForgeFrontier.isDBConn()) return;
 
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceGeneratorItem());
 
@@ -62,12 +67,14 @@ public class GeneratorManager extends Manager implements Listener {
                 genIndex += 1;
             }
         });
+        isInit = true;
 
     }
 
     @EventHandler
     public void onBentoBoxReady(BentoBoxReadyEvent e) {
-        plugin.getDatabaseManager().getGeneratorDB().importGenerators();
+        if (ForgeFrontier.isDBConn())
+            plugin.getDatabaseManager().getGeneratorDB().importGenerators();
     }
 
     public Generator getGenerator(String generatorId) {
@@ -86,7 +93,7 @@ public class GeneratorManager extends Manager implements Listener {
 
     @Override
     public void disable() {
-        plugin.getDatabaseManager().getConfigDB().updateGenerators();
+        if (ForgeFrontier.isDBConn()) plugin.getDatabaseManager().getConfigDB().updateGenerators();
     }
 
     @EventHandler

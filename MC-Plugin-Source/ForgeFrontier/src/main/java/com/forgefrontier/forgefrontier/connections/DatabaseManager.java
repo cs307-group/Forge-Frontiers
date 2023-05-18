@@ -25,14 +25,14 @@ public class DatabaseManager extends Manager {
     CraftingRecipeDB recipeDB;
     ManagementDB managementDB;
 
-
+    public boolean connected = false;
     public DatabaseManager(ForgeFrontier plugin) {
         super(plugin);
     }
 
     @Override
     public void init() {
-        boolean connected = this.setupDatabaseConnection();
+        connected = this.setupDatabaseConnection();
         if (!connected)
             return;
         this.shopDB = new ShopDB(dbConn);

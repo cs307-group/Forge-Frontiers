@@ -26,16 +26,3 @@ tasks:
         completion-message: "&eYou have completed the basics of the crafting system by crafting a &6&lLeather Helmet&e. Congratulations!"
         data:
           item_type: "LeatherHelmet"
-  1:
-    id: "craft-sword"
-    material: "IRON_SWORD"
-    name: "&eCraft an Iron Sword"
-    description: "&7Craft a vanilla Iron Sword using a crafting table"
-    steps:
-      0:
-        type: "CRAFT"
-        quick-description: "&eCraft a Iron Sword"
-        full-description: "&7Using a crafting table, use 2 iron ingots and a stick to craft an iron sword."
-        completion-message: "&eYou have successfully completed the task to craft an Iron Sword!"
-        data:
-          material: "IRON_SWORD"

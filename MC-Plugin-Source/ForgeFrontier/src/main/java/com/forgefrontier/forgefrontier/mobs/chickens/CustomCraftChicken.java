@@ -133,6 +133,7 @@ public abstract class CustomCraftChicken extends CraftChicken implements CustomC
         dropKeys.add(item);
         dropTable.put(item, chance);
         //TODO: Get Config from code
+
     }
 
     @Override

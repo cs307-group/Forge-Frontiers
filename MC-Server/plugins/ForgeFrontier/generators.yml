@@ -1,4 +1,54 @@
 generator-shop:
-  0: "silver-gen"
-  1: "cobalt-gen"
+  0: "copper-gen"
+  1: "silver-gen"
+  2: "zinc-gen"
+  3: "tin-gen"
+  4: "iron-gen"
+  5: "gold-gen"
+  6: "coal-gen"
 
+
+
+
+
+generators:
+  0:
+    id: "copper-gen"
+    friendly_name: "&6Copper Generator"
+    representation_material: "RAW_COPPER_BLOCK"
+    material_type: "item"
+    item_id: "RustedCopper"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 5000
+  1:
+    id: "silver-gen"
+    friendly_name: "&fSilver Generator"
+    representation_material: "RAW_IRON_BLOCK"
+    material_type: "item"
+    item_id: "SilverIngot"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 10000
+  0:
+    id: "copper-gen"
+    friendly_name: "&6Copper Generator"
+    representation_material: "RAW_COPPER_BLOCK"
+    material_type: "item"
+    item_id: "RustedCopper"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 5000
+  2:
+    id: "cobalt-gen"
+    friendly_name: "&3Cobalt Generator"
+    representation_material: "DEEPSLATE_LAPIS_ORE"
+    material_type: "item"
+    item_id: "CobaltMix"
+    costs:
+      0:
+        material_type: "coin"
+        amount: 10000

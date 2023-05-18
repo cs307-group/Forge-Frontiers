@@ -29,7 +29,7 @@ public class StashManager extends Manager implements Listener {
     Map<String, QuadTree<StashInstance>> stashInstances;
     Map<String, Stash> stashes;
     List<Stash> shopStashesList;
-
+    public boolean isInit = false;
     public StashManager(ForgeFrontier plugin) {
         super(plugin);
         this.stashInstances = new HashMap<>();
@@ -39,6 +39,7 @@ public class StashManager extends Manager implements Listener {
 
     @Override
     public void init() {
+        if (!ForgeFrontier.isDBConn()) return;
 
         this.plugin.getCustomItemManager().registerCustomItem(new PlaceStashItem());
 
@@ -65,11 +66,12 @@ public class StashManager extends Manager implements Listener {
         }*/
 
 
-
+        isInit = true;
     }
 
     @EventHandler
     public void onBentoBoxReady(BentoBoxReadyEvent e) {
+        if (!isInit) return;
         plugin.getDatabaseManager().getStashDB().importStashes();
     }
 

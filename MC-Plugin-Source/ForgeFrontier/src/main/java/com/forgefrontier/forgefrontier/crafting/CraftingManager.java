@@ -35,6 +35,7 @@ public class CraftingManager extends Manager implements Listener {
      */
     @Override
     public void init() {
+        if (!ForgeFrontier.isDBConn()) return;
         ItemStack itm = new ItemStack(Material.IRON_INGOT);
         ItemStack itm2 = new ItemStack(Material.GLOWSTONE_DUST);
         ItemStack[] testRecipe = new ItemStack[9];
@@ -55,8 +56,8 @@ public class CraftingManager extends Manager implements Listener {
                  FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.VANILLA, FFRecipe.SLOT_META.CUSTOM,
                  FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM, FFRecipe.SLOT_META.CUSTOM});
         ffRecipes.add(airOrbRecipe);
+            plugin.getDatabaseManager().getRecipeDB().loadRecipes();
 
-        plugin.getDatabaseManager().getRecipeDB().loadRecipes();
     }
 
     @Override

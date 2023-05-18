@@ -25,18 +25,162 @@ spawners:
     entity-code: EggBox
 instances:
   '0':
-    id: eb35d0b5-a98c-4243-b0e5-76f7820a9fda
-    spawner-id: DynamicChicken
+    id: d42d4101-550e-41ee-86de-6389db27ee32
+    spawner-id: PoisonChicken
     spawn-delay: 100
     world: world
-    x: -3
-    y: 131
-    z: 0
+    x: 164
+    y: 150
+    z: -19
   '1':
-    id: 98c076e6-de50-4229-9c5f-7894c04fbba1
-    spawner-id: DynamicChicken
+    id: 3696ed1d-02ea-4919-9889-b98559af496e
+    spawner-id: HostileChicken
     spawn-delay: 100
     world: world
-    x: 9
-    y: 131
-    z: -9
+    x: 101
+    y: 151
+    z: -14
+  '2':
+    id: 7e9219f2-e053-4d13-9c9f-d27a02eedb41
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 106
+    y: 150
+    z: -25
+  '3':
+    id: cb924cda-0d95-4f02-b602-d022c484cd86
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 134
+    y: 150
+    z: -15
+  '4':
+    id: eda9fe38-dab0-4517-b1d4-e2883c903b0e
+    spawner-id: PoisonChicken
+    spawn-delay: 100
+    world: world
+    x: 151
+    y: 150
+    z: -38
+  '5':
+    id: 4bb11291-bfac-45fa-9ae5-abe86ebe96ee
+    spawner-id: PoisonChicken
+    spawn-delay: 100
+    world: world
+    x: 120
+    y: 150
+    z: -36
+  '6':
+    id: ea395d55-4f55-4b8b-b37c-80219474b052
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 140
+    y: 150
+    z: -40
+  '7':
+    id: f68950ed-560a-4c25-bbcb-58de379637eb
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 108
+    y: 150
+    z: -14
+  '8':
+    id: 606ee629-0e75-427e-946b-d74d5811626e
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 162
+    y: 150
+    z: -35
+  '9':
+    id: 553f3671-866e-4114-8961-89b12607c8bd
+    spawner-id: PoisonChicken
+    spawn-delay: 100
+    world: world
+    x: 119
+    y: 150
+    z: -16
+  '10':
+    id: ff70aba1-94d4-4b22-a9fa-29676d4ab6db
+    spawner-id: PoisonChicken
+    spawn-delay: 100
+    world: world
+    x: 141
+    y: 150
+    z: -12
+  '11':
+    id: 65ce2691-2cc4-4c79-a7d0-baa04cab2acb
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 147
+    y: 150
+    z: -15
+  '12':
+    id: e987c746-c4ef-4d80-9861-41ed5aa5e9af
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 160
+    y: 150
+    z: -25
+  '13':
+    id: cd8fbd69-832b-4c21-a82c-3c6dced814b2
+    spawner-id: PoisonChicken
+    spawn-delay: 100
+    world: world
+    x: 162
+    y: 150
+    z: -39
+  '14':
+    id: 22eae2e7-e20e-4ce3-8680-f2fcb28fe5ee
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 145
+    y: 150
+    z: -36
+  '15':
+    id: b9c87f02-5c70-402c-9292-5a522e871e39
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 118
+    y: 150
+    z: -36
+  '16':
+    id: d9570908-01bf-4c66-80f7-6a916381b2e1
+    spawner-id: PoisonChicken
+    spawn-delay: 100
+    world: world
+    x: 95
+    y: 150
+    z: -13
+  '17':
+    id: 07dae269-bff0-4760-ad68-717ebbc83841
+    spawner-id: PoisonChicken
+    spawn-delay: 100
+    world: world
+    x: 141
+    y: 150
+    z: -18
+  '18':
+    id: 26f0c6d9-1fa1-43d9-a62c-33b8737e1636
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 95
+    y: 150
+    z: -16
+  '19':
+    id: 5393c0bf-5ba6-4ba4-b8fe-338c5f83392f
+    spawner-id: HostileChicken
+    spawn-delay: 100
+    world: world
+    x: 102
+    y: 150
+    z: -14

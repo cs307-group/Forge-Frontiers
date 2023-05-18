@@ -1,5 +1,7 @@
 stash-shop:
   0: "basic-stash"
+  1: "beginner-stash"
+  2: "advanced-stash"
 
 stashes:
   0:

@@ -19,6 +19,7 @@ public class GameManager extends Manager {
 
     @Override
     public void init() {
+        if (!ForgeFrontier.isDBConn()) return;
         // Read load states from DB
         state = plugin.getDatabaseManager().getManagementDB().getSyncFeatureStates();
         if (state.containsKey("Bazaar") && !state.get("Bazaar")) {

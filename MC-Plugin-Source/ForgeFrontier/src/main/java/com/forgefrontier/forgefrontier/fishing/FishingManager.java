@@ -45,11 +45,17 @@ public class FishingManager extends Manager implements Listener {
     public FishDB fishDB;
     public long lastSave;
     Random rand;
+
+    boolean enabled = false;
+
     @Override
     public void init() {
+        if (!ForgeFrontier.isDBConn()) return;
         rand = new Random();
-        fishDB = plugin.getDatabaseManager().getFishDB();
+
+        if (ForgeFrontier.isDBConn()) fishDB = plugin.getDatabaseManager().getFishDB();
         clearLoad();
+        enabled = true;
     }
 
     public void clearLoad() {
@@ -65,12 +71,17 @@ public class FishingManager extends Manager implements Listener {
 
     @Override
     public void disable() {
-        fishDB.saveFishJob(playerFishStats);
+        enabled = false;
+
         try {
             this.plugin.getConfig("fishing").save(new File(plugin.getDataFolder(), "fishing.yml"));
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE,"Failed saving fishing config");
         }
+
+        if (!ForgeFrontier.isDBConn()) { return; }
+
+        fishDB.saveFishJob(playerFishStats);
         int wait = 0;
         while (fishDB.stillUpdating() && wait < 40) {
             try {

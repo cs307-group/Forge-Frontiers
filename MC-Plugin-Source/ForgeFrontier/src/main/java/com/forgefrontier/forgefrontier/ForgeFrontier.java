@@ -250,7 +250,7 @@ public class ForgeFrontier extends JavaPlugin {
         // Bukkit-Registered Commands
         registerCommand("genshop"      , new GeneratorShopCommandExecutor());
         registerCommand("gearshop"     , new GearShopCommandExecutor());
-        registerCommand("pshop"        , itemShop.getCommandExecutor());
+        if (itemShop != null) registerCommand("pshop", itemShop.getCommandExecutor());
         registerCommand("inspect"      , new InspectCommandExecutor());
         registerCommand("island"       , new IslandCommandExecutor());
         registerCommand("link"         , new LinkCommandExecutor());
@@ -303,6 +303,7 @@ public class ForgeFrontier extends JavaPlugin {
     }
 
     public void setupPlayerShop() {
+        if (!ForgeFrontier.isDBConn()) return;
         this.itemShop = new Shop();
         this.getDatabaseManager().getShopDB().loadListings();
     }
@@ -385,6 +386,12 @@ public class ForgeFrontier extends JavaPlugin {
     // Singleton Pattern
     public static ForgeFrontier getInstance() {
         return inst;
+    }
+
+    public static boolean isDBConn() {
+        if (ForgeFrontier.getInstance() == null) return false;
+        if (ForgeFrontier.getInstance().getDatabaseManager() == null) return false;
+        return (ForgeFrontier.getInstance().getDatabaseManager().connected);
     }
 
 }

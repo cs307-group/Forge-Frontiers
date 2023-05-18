@@ -222,6 +222,8 @@ public class GearItemManager extends Manager implements Listener {
     }
 
     public void updateAllPlayerStats() {
+        if (!ForgeFrontier.isDBConn()) return;
+
         java.util.Collection<? extends org.bukkit.entity.Player> onlinePlayers = Bukkit.getOnlinePlayers();
         Collection<FFPlayer> ffPlayers = playerManager.getFFPlayers().values();
         ArrayList<FFPlayer> notOnline = new ArrayList<>();

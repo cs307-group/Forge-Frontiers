@@ -1,0 +1,213 @@
+# Citizens NPC Storage
+
+last-created-npc-id: 2
+npc:
+  '1':
+    metadata:
+      cached-skin-uuid: 7f6d4be3-e490-41e0-9ea0-a7c3f40acbb9
+      cached-skin-uuid-name: 82447003-69df-4b74-9372-08eb3ac1b9bb
+    name: '&6Bashir'
+    uuid: 225e1f92-b0cf-4656-997d-0a020d8d90a5
+    traits:
+      owner:
+        uuid: 5bf1dfdb-0dca-4123-9ce1-020f781be1ad
+      spawned: true
+      location:
+        bodyYaw: -176.75038
+        world: world
+        x: '37.9258'
+        y: '153.0'
+        z: '11.6801'
+        yaw: '-176.7504'
+        pitch: '-11.8153'
+      commandtrait:
+        cost: -1.0
+        executionMode: LINEAR
+        experienceCost: -1
+        hideErrorMessages: false
+        persistSequence: false
+        commands:
+          '0':
+            command: bazaar
+            hand: RIGHT
+            player: true
+            op: false
+            cooldown: 0
+            globalcooldown: 0
+            n: -1
+            delay: 0
+          '1':
+            command: /bazaar
+            hand: RIGHT
+            player: false
+            op: false
+            cooldown: 0
+            globalcooldown: 0
+            n: -1
+            delay: 0
+      skintrait:
+        fetchDefaultSkin: true
+        signature: axLsLQBddolG5PIdoi1eUsq8K9MgAr8oUDpT0hScNt6fNNBtB36JpagtJI5Nk5VrxDMcTwR7ZDSQYzpR14cQ5hW86ihI8WfQIx3qPedmbiz/57tbUH+WxgzjD7c0uUOR3oArp7TSfvOb4FB/8TVhmO3W1IEwBJkhjxkq49eC8CPkgtuAkr+pwLGzZzkCcTQl2jiC7C6Tu5LpGGZdjVl/4QjLGWRd1CoLYNnAhDtukr1weGm2Lb0snf6pp0zh0nb4eIDmGjnTFQG/dF07xRLERMYRb2aCbJe3/jd2L1tgZXYSZpxv5EgRYVpOmD3nR/UDBEQtxYTzbI+liSq/yfZDKZnjcxfesVolvI/2WvQ2/8wFYsUQb0jgrCOToRdk4Hd+YPFOk6PoJcYIlm/KCfFh1aLyszffm8bWtH2sTl+RuJINf6wn4negqMhFtD+hUtymXqfarp7yMCdJwWMr0buOGGh2tQHBh0cVSf0o8BwuVp+Q57NL8ZCbA20pckp/K/Mc3nJkRl0aBGPLIm5C011bApxGZWldGzNMkEDKRABqDGQs7Z6xD0HXfVXOElerAbaogPTqFrh+qARrCV6Y4Bvv2Yj+aesweGene5lBVhEPehB1aD704qvhRzZhpihSJ2gzaKleRDM+ZWa9jdze42lpEkOh2801LxFdE01a/X0LfTQ=
+        skinName: 82447003-69df-4b74-9372-08eb3ac1b9bb
+        textureRaw: ewogICJ0aW1lc3RhbXAiIDogMTU5NDkxNDk1NDgyNSwKICAicHJvZmlsZUlkIiA6ICI5YzQ5YjU0YjFjZjU0NjZjYjRhNzA4M2JmZGQ4MDIxNSIsCiAgInByb2ZpbGVOYW1lIiA6ICI5c2kiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzNjMTIxMjEwZjgxYjNiZThjMmYzMzg4ODQxMzJjOWI4MjMxMzZiY2QzNWIxZWE5NDVjODQwYzUwNGQ2NjUwZSIKICAgIH0KICB9Cn0=
+        updateSkins: false
+      lookclose:
+        range: '5.0'
+        disablewhilenavigating: true
+        enabled: true
+        enableRandomLook: false
+        headonly: false
+        perplayer: false
+        randomLookDelay: 60
+        randomSwitchTargets: false
+        realisticlooking: false
+        targetnpcs: false
+        randomPitchRange:
+          '0': 0.0
+          '1': 0.0
+        randomYawRange:
+          '0': 0.0
+          '1': 360.0
+      type: PLAYER
+    traitnames: type,mounttrait,spawned,inventory,scoreboardtrait,skintrait,owner,location,lookclose,rotationtrait,commandtrait
+    navigator:
+      speedmodifier: '1.0'
+      avoidwater: false
+      usedefaultstuckaction: true
+  '0':
+    metadata:
+      cached-skin-uuid: c87d6c8a-a3da-49b3-96be-87b9baa43b64
+      cached-skin-uuid-name: salfurond
+    name: '&7Salfuron'
+    uuid: bb6d3962-1bfb-47e0-9977-8cb093b4a086
+    traits:
+      owner:
+        uuid: 5bf1dfdb-0dca-4123-9ce1-020f781be1ad
+      spawned: true
+      location:
+        bodyYaw: -30.540962
+        world: world
+        x: '0.5'
+        y: '140.0'
+        z: '-2.566'
+        yaw: '-30.541'
+        pitch: '0.0'
+      skintrait:
+        fetchDefaultSkin: true
+        signature: tiGDNGj1X8EI1Xy+/LzvrovbxS9Fu2P3HE17lB6Shs2S/mmq8/NHYueNgXGDvUCyn/kvRx/JbOn+IfI9h9Mopt/xfsd9AnroQVtO+o8rlI0IDkAPwaev3tDa24P311twZtMf2rQdMNgR+YdKXySyHIB2mYSTPFPBFKhSI2x2GgFDhI2DSerBMW+GR5qn6OHMepXbs4nbAAaixjnfcKusOvCbFHHSnX0wCVEY1rAQRUFK1g86HsSukURV0bIF4HfEu1RfNBbmrzVN0lP88piVp09bZSAFH3PlJCeZNnkQ2kfhI+nqJIQbmW88/LGQNr+5/7ZwAJhj7DjwK+YPT6HD6flS7lX6oFtw9Mx4cpLWParVt4wyj3VhJ3bwVrmRNQy3KiXWAQLGLTJqbXyW4nW9vCPTYVkJfjE/zGjQqb9/UCioymO51G6W0r6E3ux0WbhzeElJ1dlgdx+k4XIpiVg8YG8EVJCUKK8jlRuXX1JgDjTgd8SPTJ9Pq/mvMNyyyvZBMqjPxGS+6Hf4YEF6x3qxPp6NW0ni6mSaDBIIVDiJkdZakuyYfQrYeqBmjgg/Jy+RHhzo0vTmr5S6IcSH2Kwfbcd4nVYpC3Sy9BwXvqDrQ3YYOgt/f7GZh1AKUkfeFZIdyCs/gRQRuiHT4U3KKzjDVSNf+oWjX4Dzuz+t1r/c1uE=
+        skinName: SalfuronD
+        textureRaw: ewogICJ0aW1lc3RhbXAiIDogMTY4MjQ0MTg4MTcwOCwKICAicHJvZmlsZUlkIiA6ICJjODdkNmM4YWEzZGE0OWIzOTZiZTg3YjliYWE0M2I2NCIsCiAgInByb2ZpbGVOYW1lIiA6ICJTYWxmdXJvbkQiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGYwNzkwZDk3NThiMTRjZTVmNDE3ODE2YzAxNTcyODc0NWE1ZDhhNDMwNDhhOWQwYTQxZDBlMTY4ZWQyN2Q2MCIKICAgIH0KICB9Cn0=
+        updateSkins: false
+      lookclose:
+        range: '5.0'
+        disablewhilenavigating: true
+        enabled: true
+        enableRandomLook: false
+        headonly: false
+        perplayer: false
+        randomLookDelay: 60
+        randomSwitchTargets: false
+        realisticlooking: false
+        targetnpcs: false
+        randomPitchRange:
+          '0': 0.0
+          '1': 0.0
+        randomYawRange:
+          '0': 0.0
+          '1': 360.0
+      hologramtrait:
+        direction: BOTTOM_UP
+        lineHeight: -1.0
+      type: PLAYER
+      text:
+        delay: 10
+        talk-close: false
+        random-talker: false
+        realistic-looking: false
+        range: '5.0'
+        talkitem: default
+        speech-bubbles: true
+        text:
+          '0': Hello <player>, welcome to &4Forge Frontiers&r!
+          '1': Type &l&6/tutorial&r to get started!
+    traitnames: type,mounttrait,text,scoreboardtrait,inventory,spawned,skintrait,owner,location,lookclose,rotationtrait,hologramtrait
+    navigator:
+      speedmodifier: '1.0'
+      avoidwater: false
+      usedefaultstuckaction: true
+  '2':
+    metadata:
+      cached-skin-uuid: 2ead3cd2-65ff-4b7e-8e8a-c0d69e1c2014
+      cached-skin-uuid-name: ohgingersnap
+    name: '&aDryad'
+    uuid: 4a945821-8792-4920-b2f8-f2d2528374fd
+    traits:
+      location:
+        bodyYaw: 12.514076
+        world: world
+        x: '2.4111'
+        y: '148.0'
+        z: '-165.4413'
+        yaw: '12.5141'
+        pitch: '-2.7893'
+      text:
+        delay: -1
+        talk-close: false
+        random-talker: false
+        realistic-looking: false
+        range: '5.0'
+        talkitem: default
+        speech-bubbles: true
+        text:
+          '0': Hi, I'm <npc>!
+      skintrait:
+        fetchDefaultSkin: true
+        signature: mWbLgKjug7bkDwujAhT1REjlpeLN+50l7a/PBWp+Oz2QItJ/IJ9dErZxJQjXv7UMKdDIB7AZrcqLS0D8BLMoqjzlYvNmUfGSB6wft44TeWYWIDagzHE5mEb+n3hZ1ae1dITjmGdVo+nmNC92RfqKBv4chuRtBky51boSqmYiVEyASNxn6OdThpDe8H94QMyyMUJKEujlgL5QeTn+HRDmNg0ZthsCG3AlSoewUIuCKkKbCJ9hPXk73H1XTuJgR+N0JNCQeDm/hObT2/nKYuuQcQUENp61CwXIiz/WIBC1ZwU3+v/L46OM+YMBtrF9LrFjgU98k7jCN3+bsThbZX8XY8XVNnYcguCklt/nJ78JpDNYhgzQ5gHQpZMKR6B0OR6qojCi86y5J9UlH/z+eFb70NWzpup5VgBkqHJ/r2zqwrie2EAHWtPHsKrTSx+sRZQzgjzpB87je+/JX0H8ADYwEVFH1DW2HVrR8CpFJzNeeKWFc0FjZZv4bKb/6VP0u2lgRsW2FJA7wKjO4lt73L1W3qSXnejNZjT7mnxU0dQdZmQ0SDDlPrDG1iP8b1cEM1hZyppGnxRRgaFsFYjBiTnnhhL4y0Db8rBf9QnsiSx8igzjFlng8+y+68w9oDJ4nGVPWeuQrwpZGoZ7HuVgkJmr9ifzk2x4aLawyNHWnSF+5l4=
+        skinName: OhGingerSnap
+        textureRaw: ewogICJ0aW1lc3RhbXAiIDogMTY4MjU2NDUxODgzMCwKICAicHJvZmlsZUlkIiA6ICIyZWFkM2NkMjY1ZmY0YjdlOGU4YWMwZDY5ZTFjMjAxNCIsCiAgInByb2ZpbGVOYW1lIiA6ICJPaEdpbmdlclNuYXAiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjkyMWRkZWNhNjJmZGE4NGRkYzNkZWJlOGYzYjcyMTI1NTVmMWUxZjM5MzBmMjhmNTMyMWMwOWYxMmFjOTI2YiIsCiAgICAgICJtZXRhZGF0YSIgOiB7CiAgICAgICAgIm1vZGVsIiA6ICJzbGltIgogICAgICB9CiAgICB9CiAgfQp9
+        updateSkins: false
+      type: PLAYER
+      owner:
+        uuid: 5bf1dfdb-0dca-4123-9ce1-020f781be1ad
+      commandtrait:
+        cost: -1.0
+        executionMode: LINEAR
+        experienceCost: -1
+        hideErrorMessages: false
+        persistSequence: false
+        commands:
+          '0':
+            command: cspawn SlimeBoss
+            hand: RIGHT
+            player: true
+            op: false
+            cooldown: 0
+            globalcooldown: 0
+            n: -1
+            delay: 0
+      spawned: true
+      lookclose:
+        range: '5.0'
+        disablewhilenavigating: true
+        enabled: true
+        enableRandomLook: false
+        headonly: false
+        perplayer: false
+        randomLookDelay: 60
+        randomSwitchTargets: false
+        realisticlooking: false
+        targetnpcs: false
+        randomPitchRange:
+          '0': 0.0
+          '1': 0.0
+        randomYawRange:
+          '0': 0.0
+          '1': 360.0
+      hologramtrait:
+        direction: BOTTOM_UP
+        lineHeight: -1.0
+    traitnames: type,mounttrait,inventory,scoreboardtrait,skintrait,owner,location,lookclose,rotationtrait,hologramtrait,commandtrait,text,spawned
+    navigator:
+      speedmodifier: '1.0'
+      avoidwater: false
+      usedefaultstuckaction: true

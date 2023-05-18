@@ -62,6 +62,8 @@ public class BazaarManager extends Manager {
 
 
     public void init() {
+        if (!ForgeFrontier.isDBConn()) return;
+
         enabled = false;
         this.bazaarDB = plugin.getDatabaseManager().getBazaarDB();
         // Pull Bazaar items from database
