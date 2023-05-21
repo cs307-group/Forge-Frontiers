@@ -12,7 +12,7 @@ import java.util.logging.Level;
 public class MobConfigUtil {
     public static void getMaterialDropsFromCode(HashMap<Material, Integer> dropTable, ArrayList<Material> dropKeys, String code) {
         FileConfiguration configuration = ForgeFrontier.getInstance().getConfig("entity-drops");
-        ForgeFrontier.getInstance().getLogger().log(Level.WARNING, code + "| " + configuration.getKeys(false));
+        //ForgeFrontier.getInstance().getLogger().log(Level.WARNING, code + "| " + configuration.getKeys(false));
         ConfigurationSection codeSection = configuration.getConfigurationSection(code);
         if(codeSection == null)
             return;
@@ -23,7 +23,7 @@ public class MobConfigUtil {
             while ((isec = matSection.getConfigurationSection("" + itemInd)) != null) {
                 int chance = isec.getInt("chance");
                 Material material = Material.getMaterial(isec.getString("code"));
-                ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "Chance: " + chance + " | Material: " + material.toString());
+                //ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "Chance: " + chance + " | Material: " + material.toString());
                 dropTable.put(material, chance);
                 dropKeys.add(material);
                 itemInd++;
@@ -43,7 +43,7 @@ public class MobConfigUtil {
             while ((isec = matSection.getConfigurationSection("" + itemInd)) != null) {
                 int chance = isec.getInt("chance");
                 String item = isec.getString("code");
-                ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "Chance: " + chance + " | Item: " + item);
+                //ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "Chance: " + chance + " | Item: " + item);
                 dropTable.put(item, chance);
                 dropKeys.add(item);
                 itemInd++;

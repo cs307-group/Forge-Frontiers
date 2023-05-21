@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import com.forgefrontier.forgefrontier.custommobs.EntityManager;
 
 /**
  * Handles commands used to spawn in custom mobs manually
@@ -38,6 +39,12 @@ public class EntityCommandExecutor implements CommandExecutor {
 
     /** executes the spawning of the mob specified by the command sender) */
     private void spawnMob(String mobName, Player player, CommandSender sender) {
+
+        if(mobName.equals("Test")) {
+            EntityManager.spawn(player.getLocation());
+            return;
+        }
+
         if (ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity(mobName, player)) {
             sender.sendMessage("Successfully spawned the " + mobName);
         } else {

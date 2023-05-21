@@ -131,16 +131,16 @@ public class SpawnerManager extends Manager implements Listener {
     public void onBlockBreakEvent(BlockBreakEvent event) {
         Block block = event.getBlock();
         if (block.hasMetadata("spawner-block")) {
-            plugin.getLogger().log(Level.WARNING, "IS SPAWNER BLOCK");
+            //plugin.getLogger().log(Level.WARNING, "IS SPAWNER BLOCK");
             Map<String, SpawnerInstance> insts = spawnerInstanceTree.get(event.getBlock().getWorld().getUID());
             if (insts == null) return;
-            plugin.getLogger().log(Level.WARNING, "NON-NULL INSTS");
+            //plugin.getLogger().log(Level.WARNING, "NON-NULL INSTS");
             SpawnerInstance instance = insts.get((String) block.getMetadata("spawner-block").get(0).value());
             if (instance == null) return;
-            plugin.getLogger().log(Level.WARNING, "SPAWNER BREAK EVENT COMPLETE");
+            //plugin.getLogger().log(Level.WARNING, "SPAWNER BREAK EVENT COMPLETE");
             removeSpawnerInstance(instance);
         } else {
-            plugin.getLogger().log(Level.WARNING, "NOT SPAWNER BLOCK");
+            //plugin.getLogger().log(Level.WARNING, "NOT SPAWNER BLOCK");
         }
     }
 

@@ -41,7 +41,7 @@ public class SpawnerInstance implements Locatable {
         self = this;
         CraftEntity craftEntity = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity(entityCode, spawnLoc);
         if (craftEntity.getHandle() instanceof CustomEntity customEntity) {
-            ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "SUCCESSFULLY SET MOB");
+            //ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "SUCCESSFULLY SET MOB");
             mob = customEntity;
             mob.registerSpawner(this);
         }
@@ -71,7 +71,7 @@ public class SpawnerInstance implements Locatable {
             return;
         }
         if (craftEntity.getHandle() instanceof CustomEntity customEntity) {
-            ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "SUCCESSFULLY SET MOB");
+            //ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "SUCCESSFULLY SET MOB");
             mob = customEntity;
             mob.registerSpawner(this);
         }
@@ -88,7 +88,7 @@ public class SpawnerInstance implements Locatable {
     }
 
     public void entityDeath() {
-        ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "SPAWNER ENTITY DEATH");
+        //ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "SPAWNER ENTITY DEATH");
         this.mob = null;
         Runnable runnable = () -> {
             CraftEntity craftEntity = ForgeFrontier.getInstance().getCustomEntityManager().spawnEntity(entityCode, spawnLoc);

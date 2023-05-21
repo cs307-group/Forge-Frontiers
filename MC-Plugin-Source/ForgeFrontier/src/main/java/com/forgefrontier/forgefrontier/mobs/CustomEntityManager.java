@@ -83,11 +83,10 @@ public class CustomEntityManager extends Manager implements Listener {
         CraftEntity ce = mob.createCustomEntity((CraftWorld)player.getWorld());
 
         instanceEntityMap.put(ce.getUniqueId(), code);
-        plugin.getLogger().log(Level.INFO,"Spawned Entity: " + ce.getUniqueId());
+        //plugin.getLogger().log(Level.INFO,"Spawned Entity: " + ce.getUniqueId());
         mob.spawnCustomEntity(player.getLocation(), ce);
         return true;
     }
-
 
     /**
      * Spawns an entity with the specified code
@@ -105,7 +104,7 @@ public class CustomEntityManager extends Manager implements Listener {
             return null;
         CraftEntity ce = mob.createCustomEntity((CraftWorld)loc.getWorld());
         instanceEntityMap.put(ce.getUniqueId(), code);
-        plugin.getLogger().log(Level.INFO,"Spawned Entity: " + ce.getUniqueId());
+        //plugin.getLogger().log(Level.INFO,"Spawned Entity: " + ce.getUniqueId());
 
         return mob.spawnCustomEntity(loc, ce);
     }
@@ -169,10 +168,10 @@ public class CustomEntityManager extends Manager implements Listener {
         CustomMob cm = getMobFromID(entity.getUniqueId());
 
         if (cm != null) {
-            plugin.getLogger().log(Level.INFO,"Entity Death: " + cm.getCode());
+            //plugin.getLogger().log(Level.INFO,"Entity Death: " + cm.getCode());
             handleCustomDeath(entity, cm);
         } else {
-            plugin.getLogger().log(Level.INFO,"Non Custom Death: " + entity.getUniqueId());
+            //plugin.getLogger().log(Level.INFO,"Non Custom Death: " + entity.getUniqueId());
         }
         // handles custom item drops
         if (entity.hasMetadata("custom-drop-keys") && entity.hasMetadata("custom-drop-table")) {
@@ -254,7 +253,7 @@ public class CustomEntityManager extends Manager implements Listener {
             }
         }
 
-        ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "IS CUSTOMCRAFTENTITY: " + (entity.getHandle() instanceof CustomEntity));
+        //ForgeFrontier.getInstance().getLogger().log(Level.WARNING, "IS CUSTOMCRAFTENTITY: " + (entity.getHandle() instanceof CustomEntity));
         if (entity.getHandle() instanceof CustomEntity customEntity) {
             customEntity.updateSpawnerOnDeath();
         }
@@ -283,7 +282,7 @@ public class CustomEntityManager extends Manager implements Listener {
             MobParticles.POISON_CHICKEN_DEATH_PARTICLE.playParticleAtLocation(e.getWorld(),e.getLocation());
             return;
         } else if (cm.getCode().equals("SlimeBossTimer")) {
-            ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.INFO, "Playing Core Slime Particle");
+            //ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.INFO, "Playing Core Slime Particle");
             new SimpleRepeatParticleSpawner(
                     ()->MobParticles.SLIME_JUMP_CHARGE2.playParticleAtLocation(e.getWorld(), e.getLocation().clone())
                     , 3, 60).run();

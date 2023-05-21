@@ -59,7 +59,7 @@ public class SlimeBossTimer extends CustomSlime {
         @Override
         public void updateNamePlate(String name) {
             super.updateNamePlate(name);
-            System.out.println("UPDATE NAME PLATE: " + this.getCustomName());
+            //System.out.println("UPDATE NAME PLATE: " + this.getCustomName());
         }
 
         @Override
@@ -83,7 +83,7 @@ public class SlimeBossTimer extends CustomSlime {
         }
 
         public void removeBossBar() {
-            System.out.println("REMOVE BAR");
+            //System.out.println("REMOVE BAR");
             bossBar.setProgress(0);
             bossBar.removeAll();
         }

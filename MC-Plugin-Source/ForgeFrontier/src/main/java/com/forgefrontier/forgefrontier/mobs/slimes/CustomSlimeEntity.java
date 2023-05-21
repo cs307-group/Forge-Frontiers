@@ -81,7 +81,7 @@ public abstract class CustomSlimeEntity extends Slime implements CustomEntity {
     }
 
     public void dropItems() {
-        System.out.println(loc.toString() + "dropkeys: " + dropKeys.size() + " | customDropKeys: " + customDropKeys.size());
+        //System.out.println(loc.toString() + "dropkeys: " + dropKeys.size() + " | customDropKeys: " + customDropKeys.size());
 
         for (Material dropKey : dropKeys) {
             int rand = (int) (Math.random() * 100) + 1;

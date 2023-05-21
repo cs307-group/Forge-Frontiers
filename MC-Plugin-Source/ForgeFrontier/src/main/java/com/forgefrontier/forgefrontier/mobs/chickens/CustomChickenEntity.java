@@ -56,13 +56,13 @@ public abstract class CustomChickenEntity extends Chicken implements CustomEntit
     @Override
     public void registerSpawner(SpawnerInstance spawner) {
         this.spawner = spawner;
-        ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.WARNING, "REGISTER SPAWNER: CHICKEN");
+        //ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.WARNING, "REGISTER SPAWNER: CHICKEN");
     }
 
     @Override
     public void updateSpawnerOnDeath() {
         if (this.spawner != null) {
-            ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.WARNING, "UPDATE SPAWNER ON DEATH (NON-NULL): CHICKEN");
+            //ForgeFrontier.getInstance().getLogger().log(java.util.logging.Level.WARNING, "UPDATE SPAWNER ON DEATH (NON-NULL): CHICKEN");
             this.spawner.entityDeath();
             this.spawner = null;
         } else {

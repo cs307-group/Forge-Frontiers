@@ -16,7 +16,7 @@ public class SlimeBossSmallEntity extends SlimeBossEntity {
 
     @Override
     public void onDeath() {
-        System.out.println("SMALL ON DEATH");
+        //System.out.println("SMALL ON DEATH");
         MobParticles.SLIME_DEATH_PARTICLE.playParticleMob(this);
         owner.removeSubEntity(this);
     }
