@@ -7,7 +7,7 @@ Gameplay Features
 - Mining
 - Farming
 - Fighting
-- Fishing (Maybe)
+- Fishing
 - Trading & Selling
 - Website Integration
 
